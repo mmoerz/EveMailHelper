@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EveMailHelper.DataAccessLayer.Configuration
 {
-    public partial class EveMailConfiguration : IEntityTypeConfiguration<EveMail>
+    public partial class EveMailTemplateConfiguration : IEntityTypeConfiguration<EveMailTemplate>
     {
-        public void Configure(EntityTypeBuilder<EveMail> builder)
+        public void Configure(EntityTypeBuilder<EveMailTemplate> builder)
         {
             builder.Property(e => e.Subject)
                 .IsRequired()

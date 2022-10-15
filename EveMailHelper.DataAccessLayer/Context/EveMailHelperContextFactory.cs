@@ -18,7 +18,7 @@ namespace EveMailHelper.DataAccessLayer.Context
             var builder = new DbContextOptionsBuilder<EveMailHelperContext>();
             builder.UseSqlServer(Configuration.GetConnectionString("Default"));
 
-            return new EveMailHelperContext(Configuration, builder.Options);
+            return new EveMailHelperContext(builder.Options);
         }
     }
 }

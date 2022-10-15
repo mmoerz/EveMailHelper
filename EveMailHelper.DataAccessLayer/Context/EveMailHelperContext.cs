@@ -14,11 +14,11 @@ namespace EveMailHelper.DataAccessLayer.Context
             Configuration = SetupConfiguration();
         }
 
-        public EveMailHelperContext(IConfiguration config, DbContextOptions<EveMailHelperContext> options)
-            : base(options)
-        {
-            Configuration = config;
-        }
+        //public EveMailHelperContext(IConfiguration config, DbContextOptions<EveMailHelperContext> options)
+        //    : base(options)
+        //{
+        //    Configuration = config;
+        //}
 
         public EveMailHelperContext(DbContextOptions<EveMailHelperContext> options)
            : base(options)

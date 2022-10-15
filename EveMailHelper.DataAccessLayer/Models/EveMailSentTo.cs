@@ -15,5 +15,6 @@ namespace EveMailHelper.DataAccessLayer.Models
 
         public virtual EveMail EveMail { get; set; } = null!;
         public virtual Character Character { get; set; } = null!;
+
     }
 }

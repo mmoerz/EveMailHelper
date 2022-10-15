@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace EveMailHelper.DataAccessLayer.Models
 {
-    public partial class EveMail
+    public partial class EveMailTemplate
     {
-        public EveMail()
+        public EveMailTemplate()
         {
-            SentTo = new HashSet<EveMailSentTo>();
+            EveMailsGenerated = new HashSet<EveMail>();
         }
 
         public Guid Id { get; set; }
@@ -18,10 +18,6 @@ namespace EveMailHelper.DataAccessLayer.Models
         public string Content { get; set; } = null!;
         public DateTime CreatedDate { get; set; }
 
-        public Guid? EveMailTemplateId { get; set; }
-        public virtual EveMailTemplate? EveMailTemplate { get; set; } = null!;
-
-
-        public virtual ICollection<EveMailSentTo> SentTo { get; set; }
+        public virtual ICollection<EveMail> EveMailsGenerated { get; set; }
     }
 }

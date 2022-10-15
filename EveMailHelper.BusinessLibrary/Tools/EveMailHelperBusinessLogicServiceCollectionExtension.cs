@@ -10,12 +10,12 @@ namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools
         /// <summary>
         /// provides the business logic services for factotum (NG)
         /// </summary>
-        public static void AddFactotumBusinessLogic(this IServiceCollection services)
+        public static void AddEveMailHelperBusinessLogic(this IServiceCollection services)
         {
             services.AddTransient<ICharacterService, CharacterService>();
-            
+            services.AddTransient<IEveMailService, EveMailService>();
 
-            
+
         }
 
     }

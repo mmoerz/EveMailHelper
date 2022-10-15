@@ -1,3 +1,5 @@
+using at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools;
+
 using EveMailHelper.DataAccessLayer.Context;
 
 using Microsoft.AspNetCore.Components;
@@ -31,6 +33,7 @@ builder.Host.UseNLog();
 #endregion
 
 #region internal Services
+builder.Services.AddEveMailHelperBusinessLogic();
 #endregion
 
 var app = builder.Build();
