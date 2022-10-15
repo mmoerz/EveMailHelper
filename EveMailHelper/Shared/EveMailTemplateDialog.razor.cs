@@ -17,7 +17,7 @@ namespace EveMailHelper.Shared
         [CascadingParameter]
         MudDialogInstance MudDialog { get; set; } = null!;
         [Parameter]
-        public EveMailTemplate model { get; set; } = new();
+        public EveMailTemplate Model { get; set; } = new();
         [Parameter]
         public EventCallback<EveMailTemplate> DialogSaved { get; set; }
         #endregion
@@ -32,8 +32,8 @@ namespace EveMailHelper.Shared
             {
                 // Notify parent component to
                 // submit the changed Analysisrequest
-                await EveMailTemplateService.AddOrUpdate(model);
-                await DialogSaved.InvokeAsync(model);
+                EveMailTemplateService.AddOrUpdate(Model);
+                await DialogSaved.InvokeAsync(Model);
             }
             
             MudDialog.Close();

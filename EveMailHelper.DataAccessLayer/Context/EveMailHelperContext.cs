@@ -45,7 +45,7 @@ namespace EveMailHelper.DataAccessLayer.Context
         public virtual DbSet<Character> Characters { get; set; } = null!;
         public virtual DbSet<EveMail> EveMails { get; set; } = null!;
         public virtual DbSet<EveMailSentTo> EveMailSentTos { get; set; } = null!;
-        public virtual DbSet<EveMailTemplate> EveMailTemplates2 { get; set; } = null!;
+        public virtual DbSet<EveMailTemplate> EveMailTemplates { get; set; } = null!;
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -1,15 +1,11 @@
-﻿using EveMailHelper.DataAccessLayer.Context;
-using EveMailHelper.DataAccessLayer.Models;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 using MudBlazor;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EveMailHelper.BusinessLibrary.Complex;
+using EveMailHelper.BusinessLibrary.Complex.dbAccess;
+using EveMailHelper.DataAccessLayer.Context;
+using EveMailHelper.DataAccessLayer.Models;
 
 namespace EveMailHelper.BusinessLibrary.Services
 {
@@ -19,39 +15,21 @@ namespace EveMailHelper.BusinessLibrary.Services
         private readonly IDbContextFactory<EveMailHelperContext> dbFactory = null!;
         #endregion
         private readonly EveMailHelperContext dbContext = null!;
+        private readonly CharacterDbAccess _characterDbAccess;
+        //private readonly RunnerWriteDb<ICollection<string>, ICollection<Character>> _addCharRunner;
 
         public CharacterService(IDbContextFactory<EveMailHelperContext> dbContextFactory)
         {
             dbFactory = dbContextFactory;
             dbContext = dbFactory.CreateDbContext();
+            _characterDbAccess = new CharacterDbAccess(dbContext);
+            //_addCharRunner = new RunnerWriteDb<ICollection<string>, ICollection<Character>>
+            //    (new AddCharactersAction(_characterDbAccess), dbContext);
         }
 
         public ICollection<Character> GetCharactersByName(ICollection<string> characterNames)
         {
-            IQueryable<Character> query = from character in dbContext.Characters
-                                          select character;
-
-            query = query.Where(x => characterNames.Contains(x.Name));
-
-            return query.ToList();
-        }
-
-        public ICollection<Character> CreateOrRetrieveExisting(ICollection<string> characterNames)
-        {
-            ICollection<Character> characterList = GetCharactersByName(characterNames);
-
-            foreach (string charName in characterNames)
-            {
-                if (!characterList.Any(x => x.Name == charName))
-                {
-                    Character character = new();
-                    character.Name = charName;
-                    dbContext.Characters.Add(character);
-                    characterList.Add(character);
-                }
-            }
-            dbContext.SaveChanges();
-            return characterList;
+            return _characterDbAccess.GetCharactersByName(characterNames);
         }
 
         public async Task<TableData<Character>> GetPaginated(string searchString, TableState state)
@@ -84,5 +62,7 @@ namespace EveMailHelper.BusinessLibrary.Services
                 TotalItems = totalItems,
             };
         }
+
+
     }
 }

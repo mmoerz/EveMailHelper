@@ -1,4 +1,6 @@
-﻿using EveMailHelper.DataAccessLayer.Context;
+﻿using EveMailHelper.BusinessLibrary.Complex;
+using EveMailHelper.BusinessLibrary.Complex.dbAccess;
+using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataAccessLayer.Models;
 
 using Microsoft.EntityFrameworkCore;
@@ -16,54 +18,39 @@ namespace EveMailHelper.BusinessLibrary.Services
     public class EveMailTemplateService : IEveMailTemplateService
     {
         #region injected
-        private readonly IDbContextFactory<EveMailHelperContext> dbFactory = null!;
         #endregion
-        private readonly EveMailHelperContext dbContext = null!;
+        //private readonly EveMailHelperContext dbContext = null!;
+        private readonly EveMailTemplateDbAccess _dbAccess;
+        private readonly RunnerWriteDb<EveMailTemplate, EveMailTemplate> _addTemplateRunner;
 
         public EveMailTemplateService(IDbContextFactory<EveMailHelperContext> dbContextFactory)
         {
-            dbFactory = dbContextFactory;
-            dbContext = dbFactory.CreateDbContext();
+            var dbContext = dbContextFactory.CreateDbContext();
+            _dbAccess = new(dbContext);
+            _addTemplateRunner = new RunnerWriteDb<EveMailTemplate, EveMailTemplate>
+                (new UpdateEveMailTemplateAction(_dbAccess), dbContext);
         }
 
-        public async Task<EveMailTemplate> AddOrUpdate(EveMailTemplate eveMail)
+        public EveMailTemplate AddOrUpdate(EveMailTemplate eveMail)
         {
             _ = eveMail ?? throw new ArgumentNullException(nameof(eveMail));
 
-            dbContext.Update(eveMail);
-            await dbContext.SaveChangesAsync();
-            return eveMail;
+            return _addTemplateRunner.RunAction(eveMail);
         }
 
         public async Task<TableData<EveMailTemplate>> GetPaginated(string searchString, TableState state)
         {
-            IQueryable<EveMailTemplate> query = from mail in dbContext.EveMailTemplates2
-                                                select mail;
+            return await _dbAccess.GetPaginated(searchString, state);
+        }
 
-            if (!string.IsNullOrWhiteSpace(searchString))
-            {
-                query = query.Where(x => x.Subject.Contains(searchString));
-            }
+        public async Task<ICollection<EveMailTemplate>> GetAll()
+        {
+            return await _dbAccess.GetAll();
+        }
 
-            query = state.SortLabel switch
-            {
-                "Content" => query.OrderByDirection(state.SortDirection, x => x.Content),
-                _ => query.OrderByDirection(state.SortDirection, x => x.Subject),
-            };
-            var totalItems = query.Count();
-
-            if (state.Page > 0)
-                query = query.Skip(state.Page * state.PageSize);
-            query = query.Take(state.PageSize);
-
-            return new TableData<EveMailTemplate>()
-            {
-                Items = await query
-                .AsNoTracking()
-                .Include(emt => emt.EveMailsGenerated)
-                .ToListAsync(),
-                TotalItems = totalItems,
-            };
+        public async Task<EveMailTemplate?> GetById(Guid id)
+        {
+            return await _dbAccess.GetById(id);
         }
     }
 }

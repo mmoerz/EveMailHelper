@@ -1,4 +1,7 @@
-﻿using EveMailHelper.DataAccessLayer.Context;
+﻿using EveMailHelper.BusinessLibrary.Complex;
+using EveMailHelper.BusinessLibrary.Complex.dbAccess;
+using EveMailHelper.BusinessLibrary.Complex.dto;
+using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataAccessLayer.Models;
 
 using Microsoft.EntityFrameworkCore;
@@ -16,28 +19,38 @@ namespace EveMailHelper.BusinessLibrary.Services
     public class EveMailService : IEveMailService
     {
         #region injected
-        private readonly IDbContextFactory<EveMailHelperContext> dbFactory = null!;
         #endregion
-        private readonly EveMailHelperContext dbContext = null!;
+        private readonly EveMailHelperContext _context = null!;
+        private readonly CharacterDbAccess _characterDbAccess;
+        private readonly EveMailTemplateDbAccess _templateDbAccess;
+        private readonly EveMailDbAccess _evemailDbAccess;
+        private readonly RunnerWriteDb<ICollection<string>, ICollection<Character>> _addCharRunner;
+        private readonly RunnerWriteDbAsync<SendTemplateToDto, EveMail> _sendTemplateToRunner;
+        private readonly RunnerWriteDb<EveMail, EveMail> _updateMailRunner;
 
         public EveMailService(IDbContextFactory<EveMailHelperContext> dbContextFactory)
         {
-            dbFactory = dbContextFactory;
-            dbContext = dbFactory.CreateDbContext();
+            var factory = dbContextFactory;
+            _context = factory.CreateDbContext();
+            _characterDbAccess = new CharacterDbAccess(_context);
+            _templateDbAccess = new EveMailTemplateDbAccess(_context);
+            _evemailDbAccess = new EveMailDbAccess(_context);
+            _addCharRunner = new RunnerWriteDb<ICollection<string>, ICollection<Character>>
+                (new AddCharactersAction(_characterDbAccess), _context);
+            _sendTemplateToRunner = new RunnerWriteDbAsync<SendTemplateToDto, EveMail>
+                (new SendEveMailBasedOnTemplateAction(_evemailDbAccess), _context);
+            _updateMailRunner = new RunnerWriteDb<EveMail, EveMail>
+                (new UpdateEveMailAction(_evemailDbAccess), _context);
         }
 
-        public async Task<EveMail> AddOrUpdate(EveMail eveMail)
+        public EveMail Update(EveMail eveMail)
         {
-            _ = eveMail ?? throw new ArgumentNullException(nameof(eveMail));
-
-            dbContext.Update(eveMail);
-            await dbContext.SaveChangesAsync();
-            return eveMail;
+            return _updateMailRunner.RunAction(eveMail);
         }
 
         public async Task<TableData<EveMail>> GetPaginated(string searchString, TableState state)
         {
-            IQueryable<EveMail> query = from mail in dbContext.EveMails
+            IQueryable<EveMail> query = from mail in _context.EveMails
                                         select mail;
 
             if (!string.IsNullOrWhiteSpace(searchString))
@@ -63,6 +76,26 @@ namespace EveMailHelper.BusinessLibrary.Services
                 .ToListAsync(),
                 TotalItems = totalItems,
             };
+        }
+
+        public async Task SendTo(Guid templateId, ICollection<string> receiverNames)
+        {
+            using var transaction = _context.Database.BeginTransaction();
+            var template = await _templateDbAccess.GetById(templateId);
+
+            if (template == null)
+                throw new Exception($"cannot find template with id {templateId}");
+
+            var characters = _addCharRunner.RunAction(receiverNames);
+            SendTemplateToDto dto = new()
+            {
+                Template = template,
+                Characters = characters
+            };
+
+            var mail = await _sendTemplateToRunner.RunAction(dto);
+
+            await transaction.CommitAsync();
         }
     }
 }

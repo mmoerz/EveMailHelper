@@ -12,6 +12,8 @@ namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools
         /// </summary>
         public static void AddEveMailHelperBusinessLogic(this IServiceCollection services)
         {
+            //services.AddTransient<>
+
             services.AddTransient<ICharacterService, CharacterService>();
             services.AddTransient<IEveMailService, EveMailService>();
             services.AddTransient<IEveMailTemplateService, EveMailTemplateService>();

@@ -8,6 +8,10 @@ namespace EveMailHelper.DataAccessLayer.Models
 {
     public partial class EveMailSentTo
     {
+        public EveMailSentTo()
+        {
+            SentDate = DateTime.Now;
+        }
         public Guid Id { get; set; }
         public Guid EveMailId { get; set; }
         public Guid CharacterId { get; set; }

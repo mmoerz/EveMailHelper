@@ -11,6 +11,7 @@ namespace EveMailHelper.DataAccessLayer.Models
         public EveMailTemplate()
         {
             EveMailsGenerated = new HashSet<EveMail>();
+            CreatedDate = DateTime.Now;
         }
 
         public Guid Id { get; set; }

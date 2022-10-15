@@ -6,7 +6,9 @@ namespace EveMailHelper.BusinessLibrary.Services
 {
     public interface IEveMailTemplateService
     {
-        Task<EveMailTemplate> AddOrUpdate(EveMailTemplate eveMail);
+        EveMailTemplate AddOrUpdate(EveMailTemplate eveMail);
+        Task<ICollection<EveMailTemplate>> GetAll();
+        Task<EveMailTemplate?> GetById(Guid id);
         Task<TableData<EveMailTemplate>> GetPaginated(string searchString, TableState state);
     }
 }
