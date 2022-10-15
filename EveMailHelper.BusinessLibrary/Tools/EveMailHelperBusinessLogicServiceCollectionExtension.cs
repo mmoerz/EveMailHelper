@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using EveMailHelper.BusinessLibrary.Services;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools
 {
@@ -10,7 +12,7 @@ namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools
         /// </summary>
         public static void AddFactotumBusinessLogic(this IServiceCollection services)
         {
-            services.AddTransient<IAccountsUserService, AccountsUserService>();
+            services.AddTransient<ICharacterService, CharacterService>();
             
 
             

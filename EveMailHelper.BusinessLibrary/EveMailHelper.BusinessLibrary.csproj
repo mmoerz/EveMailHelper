@@ -8,12 +8,12 @@
 
   <ItemGroup>
     <Folder Include="Complex\" />
-    <Folder Include="Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
+    <PackageReference Include="MudBlazor" Version="6.0.17" />
   </ItemGroup>
 
   <ItemGroup>
