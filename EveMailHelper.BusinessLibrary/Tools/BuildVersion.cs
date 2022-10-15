@@ -9,6 +9,6 @@ namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools
 {
     static class BuildInformation
     {
-        public static readonly Version Version = Assembly.GetExecutingAssembly().GetName().Version;
+        public static readonly Version Version = Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0, 0);
     }
 }
