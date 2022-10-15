@@ -91,7 +91,7 @@ namespace EveMailHelper.Shared
         {
             model = new();
 
-            var options = new DialogOptions { CloseOnEscapeKey = true };
+            var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth=MaxWidth.Large, FullWidth = true };
             var parameters = new DialogParameters();
             parameters.Add("model", model);
             parameters.Add("DialogSaved", new EventCallback<EveMailTemplate>(this, new Action<EveMailTemplate>(DialogWasSaved)));
