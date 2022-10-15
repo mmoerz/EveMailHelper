@@ -1,0 +1,13 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudForm @ref="form">
+            <MudTextField T="string" @bind-Value="@model.Subject" Label="Subject" HelperText="Email Subject"></MudTextField>
+            <MudTextField T="string" @bind-Value="@model.Content" Label="Content" HelperText="Email Content"></MudTextField>
+
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" OnClick="Save">Save</MudButton>
+    </DialogActions>
+</MudDialog>

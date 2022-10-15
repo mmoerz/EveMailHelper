@@ -14,6 +14,7 @@ namespace EveMailHelper.Shared
         #region injections
         [Inject] IEveMailTemplateService EveMailTemplateService { get; set; } = null!;
 
+        [Inject] IDialogService DialogService { get; set; } = null!;
         #endregion
 
         #region parameters
@@ -62,6 +63,11 @@ namespace EveMailHelper.Shared
 
         private void RowClickEvent(TableRowClickEventArgs<EveMailTemplate> tableRowClickEventArgs)
         {
+            if (selectedRowNumber != -1)
+            {
+                var options = new DialogOptions { CloseOnEscapeKey = true };
+                DialogService.Show<EveMailTemplateDialog>("Edit Eve Mail Template", options);
+            }
         }
 
         private string SelectedRowClassFunc(EveMailTemplate rmodel, int rowNumber)
@@ -80,7 +86,21 @@ namespace EveMailHelper.Shared
             }
             return string.Empty;
         }
-    }
 
-    
+        private void AddNew()
+        {
+            model = new();
+
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            var parameters = new DialogParameters();
+            parameters.Add("model", model);
+            parameters.Add("DialogSaved", new EventCallback<EveMailTemplate>(this, new Action<EveMailTemplate>(DialogWasSaved)));
+            var dialog = DialogService.Show<EveMailTemplateDialog>("Edit Eve Mail Template", parameters, options);
+        }
+
+        private void DialogWasSaved(EveMailTemplate eveMailTemplate)
+        {
+            table.ReloadServerData();
+        }
+    }
 }
