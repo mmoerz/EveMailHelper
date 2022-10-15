@@ -49,7 +49,7 @@ namespace EveMailHelper.Shared
             TableData<Character> onePage =
                 await CharacterService.GetPaginated(searchString, state);
 
-            await Task.Delay(300);
+            //await Task.Delay(300);
 
             return onePage;
         }

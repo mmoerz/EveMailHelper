@@ -9,10 +9,10 @@ using MudBlazor;
 
 namespace EveMailHelper.Shared
 {
-    public partial class EveMailTemplateList : ComponentBase
+    public partial class EveMailList : ComponentBase
     {
         #region injections
-        [Inject] IEveMailTemplateService EveMailTemplateService { get; set; } = null!;
+        [Inject] IEveMailService EveMailService { get; set; } = null!;
 
         [Inject] IDialogService DialogService { get; set; } = null!;
         #endregion
@@ -28,14 +28,14 @@ namespace EveMailHelper.Shared
         private bool fixed_footer = true;
 
         //private IEnumerable<Report> pagedData = null!;
-        private MudTable<EveMailTemplate> table = null!;
+        private MudTable<EveMail> table = null!;
         //private int totalItems;
         private string searchString = "";
         #endregion
 
         #region rowselection
         private int selectedRowNumber = -1;
-        private EveMailTemplate model = null!;
+        private EveMail model = null!;
         #endregion
 
         //protected override async Task OnInitializedAsync()
@@ -45,10 +45,10 @@ namespace EveMailHelper.Shared
         /// <summary>
         /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>
-        private async Task<TableData<EveMailTemplate>> ServerReload(TableState state)
+        private async Task<TableData<EveMail>> ServerReload(TableState state)
         {
-            TableData<EveMailTemplate> onePage =
-                await EveMailTemplateService.GetPaginated(searchString, state);
+            TableData<EveMail> onePage =
+                await EveMailService.GetPaginated(searchString, state);
 
             //await Task.Delay(300);
 
@@ -61,22 +61,16 @@ namespace EveMailHelper.Shared
             table.ReloadServerData();
         }
 
-        private void RowClickEvent(TableRowClickEventArgs<EveMailTemplate> tableRowClickEventArgs)
+        private void RowClickEvent(TableRowClickEventArgs<EveMail> tableRowClickEventArgs)
         {
             if (selectedRowNumber != -1)
             {
-                
-                var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
-                var parameters = new DialogParameters
-                {
-                    { "model", tableRowClickEventArgs.Item },
-                    { "DialogSaved", new EventCallback<EveMailTemplate>(this, new Action<EveMailTemplate>(DialogWasSaved)) }
-                };
-                var dialog = DialogService.Show<EveMailTemplateDialog>("Edit Eve Mail Template", parameters, options);
+                var options = new DialogOptions { CloseOnEscapeKey = true };
+                DialogService.Show<EveMailDialog>("Edit Eve Mail", options);
             }
         }
 
-        private string SelectedRowClassFunc(EveMailTemplate rmodel, int rowNumber)
+        private string SelectedRowClassFunc(EveMail rmodel, int rowNumber)
         {
             if (selectedRowNumber == rowNumber)
             {
@@ -97,16 +91,16 @@ namespace EveMailHelper.Shared
         {
             model = new();
 
-            var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+            var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth=MaxWidth.Large, FullWidth = true };
             var parameters = new DialogParameters
             {
                 { "model", model },
-                { "DialogSaved", new EventCallback<EveMailTemplate>(this, new Action<EveMailTemplate>(DialogWasSaved)) }
+                { "DialogSaved", new EventCallback<EveMail>(this, new Action<EveMail>(DialogWasSaved)) }
             };
-            var dialog = DialogService.Show<EveMailTemplateDialog>("Edit Eve Mail Template", parameters, options);
+            var dialog = DialogService.Show<EveMailDialog>("Edit Eve Mail Template", parameters, options);
         }
 
-        private void DialogWasSaved(EveMailTemplate eveMailTemplate)
+        private void DialogWasSaved(EveMail eveMailTemplate)
         {
             table.ReloadServerData();
         }
