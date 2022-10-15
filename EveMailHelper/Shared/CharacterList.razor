@@ -1,0 +1,48 @@
+﻿<MudTable Dense="@dense"
+          Hover="@hover"
+          FixedHeader="@fixed_heaer"
+          FixedFooter="@fixed_footer"
+          ReadOnly="@readOnly"
+          OnRowClick="RowClickEvent"
+          RowClassFunc="@SelectedRowClassFunc"
+          ServerData=@(new Func<TableState, Task<TableData<Character>>>(ServerReload))
+          SortLabel="Sortierung"
+          T="Character"
+          @ref="table">
+    <!-- IsEditRowSwitchingBlocked="" -->
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Character List</MudText>
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))"
+                      Placeholder="Suche"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium"
+                      Class="mt-0">
+        </MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width:100px;" />
+        <col style="width:250px" />
+        <col style="width:25px" />
+        <col style="width:25px" />
+        <col />
+        <col />
+    </ColGroup>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortLabel="Name" T="Character">Character Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Description" T="Character">Description</MudTableSortLabel> </MudTh>
+        <MudTh><MudTableSortLabel SortLabel="EmailCount" T="Character">Emails count</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Other" T="Character">other count</MudTableSortLabel></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Description">@context.Description</MudTd>
+        <MudTd DataLabel="EmailCount">@context.EveMailReceived.Count()</MudTd>
+        <MudTd DataLabel="Other">none</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager HidePageNumber="false" />
+    </PagerContent>
+</MudTable>

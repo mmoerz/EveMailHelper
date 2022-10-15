@@ -9,6 +9,8 @@ namespace EveMailHelper.DataAccessLayer.Configuration
     {
         public void Configure(EntityTypeBuilder<EveMailTemplate> builder)
         {
+            builder.ToTable("EveMailTemplate");
+
             builder.Property(e => e.Subject)
                 .IsRequired()
                 .HasMaxLength(150);

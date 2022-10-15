@@ -11,7 +11,7 @@ namespace EveMailHelper.DataAccessLayer.Context
     /// </summary>
     public class EveMailHelperContextFactory : IDesignTimeDbContextFactory<EveMailHelperContext>
     {
-        private IConfiguration Configuration => EveMailHelperContext.SetupConfiguration();
+        private static IConfiguration Configuration => EveMailHelperContext.SetupConfiguration();
 
         public EveMailHelperContext CreateDbContext(string[] args)
         {

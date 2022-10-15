@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 using MudBlazor;
 
-namespace EveMailHelper
+namespace EveMailHelper.Shared
 {
-    public partial class CharacterList : ComponentBase
+    public partial class EveMailTemplateList : ComponentBase
     {
         #region injections
-        [Inject] ICharacterService CharacterService { get; set; } = null!;
+        [Inject] IEveMailTemplateService EveMailTemplateService { get; set; } = null!;
 
         #endregion
 
@@ -27,14 +27,14 @@ namespace EveMailHelper
         private bool fixed_footer = true;
 
         //private IEnumerable<Report> pagedData = null!;
-        private MudTable<Character> table = null!;
+        private MudTable<EveMailTemplate> table = null!;
         //private int totalItems;
         private string searchString = "";
         #endregion
 
         #region rowselection
         private int selectedRowNumber = -1;
-        private Character model = null!;
+        private EveMailTemplate model = null!;
         #endregion
 
         //protected override async Task OnInitializedAsync()
@@ -44,10 +44,10 @@ namespace EveMailHelper
         /// <summary>
         /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>
-        private async Task<TableData<Character>> ServerReload(TableState state)
+        private async Task<TableData<EveMailTemplate>> ServerReload(TableState state)
         {
-            TableData<Character> onePage =
-                await CharacterService.GetPaginated(searchString, state);
+            TableData<EveMailTemplate> onePage =
+                await EveMailTemplateService.GetPaginated(searchString, state);
 
             await Task.Delay(300);
 
@@ -60,11 +60,11 @@ namespace EveMailHelper
             table.ReloadServerData();
         }
 
-        private void RowClickEvent(TableRowClickEventArgs<Character> tableRowClickEventArgs)
+        private void RowClickEvent(TableRowClickEventArgs<EveMailTemplate> tableRowClickEventArgs)
         {
         }
 
-        private string SelectedRowClassFunc(Character rmodel, int rowNumber)
+        private string SelectedRowClassFunc(EveMailTemplate rmodel, int rowNumber)
         {
             if (selectedRowNumber == rowNumber)
             {
@@ -81,4 +81,6 @@ namespace EveMailHelper
             return string.Empty;
         }
     }
+
+    
 }

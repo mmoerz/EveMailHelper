@@ -16,9 +16,9 @@ namespace EveMailHelper.BusinessLibrary.Services
     public class CharacterService : ICharacterService
     {
         #region injected
-        private IDbContextFactory<EveMailHelperContext> dbFactory = null!;
+        private readonly IDbContextFactory<EveMailHelperContext> dbFactory = null!;
         #endregion
-        private EveMailHelperContext dbContext = null!;
+        private readonly EveMailHelperContext dbContext = null!;
 
         public CharacterService(IDbContextFactory<EveMailHelperContext> dbContextFactory)
         {
@@ -64,17 +64,11 @@ namespace EveMailHelper.BusinessLibrary.Services
                 query = query.Where(x => x.Name.Contains(searchString));
             }
 
-            switch (state.SortLabel)
+            query = state.SortLabel switch
             {
-                default:
-                case "Name":
-                    query = query.OrderByDirection(state.SortDirection, x => x.Name);
-                    break;
-                case "Description":
-                    query = query.OrderByDirection(state.SortDirection, x => x.Description);
-                    break;
-            }
-
+                "Description" => query.OrderByDirection(state.SortDirection, x => x.Description),
+                _ => query.OrderByDirection(state.SortDirection, x => x.Name),
+            };
             var totalItems = query.Count();
 
             if (state.Page > 0)
@@ -85,6 +79,7 @@ namespace EveMailHelper.BusinessLibrary.Services
             {
                 Items = await query
                 .AsNoTracking()
+                .Include(c => c.EveMailReceived)
                 .ToListAsync(),
                 TotalItems = totalItems,
             };

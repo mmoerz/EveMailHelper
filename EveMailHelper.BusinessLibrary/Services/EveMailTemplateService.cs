@@ -13,20 +13,20 @@ using System.Threading.Tasks;
 
 namespace EveMailHelper.BusinessLibrary.Services
 {
-    public class EveMailService : IEveMailService
+    public class EveMailTemplateService : IEveMailTemplateService
     {
         #region injected
         private readonly IDbContextFactory<EveMailHelperContext> dbFactory = null!;
         #endregion
         private readonly EveMailHelperContext dbContext = null!;
 
-        public EveMailService(IDbContextFactory<EveMailHelperContext> dbContextFactory)
+        public EveMailTemplateService(IDbContextFactory<EveMailHelperContext> dbContextFactory)
         {
             dbFactory = dbContextFactory;
             dbContext = dbFactory.CreateDbContext();
         }
 
-        public async Task<EveMail> AddOrUpdate(EveMail eveMail)
+        public async Task<EveMailTemplate> AddOrUpdate(EveMailTemplate eveMail)
         {
             _ = eveMail ?? throw new ArgumentNullException(nameof(eveMail));
 
@@ -35,10 +35,10 @@ namespace EveMailHelper.BusinessLibrary.Services
             return eveMail;
         }
 
-        public async Task<TableData<EveMail>> GetPaginated(string searchString, TableState state)
+        public async Task<TableData<EveMailTemplate>> GetPaginated(string searchString, TableState state)
         {
-            IQueryable<EveMail> query = from mail in dbContext.EveMails
-                                        select mail;
+            IQueryable<EveMailTemplate> query = from mail in dbContext.EveMailTemplates2
+                                                select mail;
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
@@ -56,10 +56,11 @@ namespace EveMailHelper.BusinessLibrary.Services
                 query = query.Skip(state.Page * state.PageSize);
             query = query.Take(state.PageSize);
 
-            return new TableData<EveMail>()
+            return new TableData<EveMailTemplate>()
             {
                 Items = await query
                 .AsNoTracking()
+                .Include(emt => emt.EveMailsGenerated)
                 .ToListAsync(),
                 TotalItems = totalItems,
             };

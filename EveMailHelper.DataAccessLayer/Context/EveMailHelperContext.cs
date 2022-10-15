@@ -7,7 +7,7 @@ namespace EveMailHelper.DataAccessLayer.Context
 {
     public partial class EveMailHelperContext : DbContext
     {
-        private IConfiguration Configuration = null!;
+        private readonly IConfiguration Configuration = null!;
 
         public EveMailHelperContext() 
         {
@@ -45,13 +45,14 @@ namespace EveMailHelper.DataAccessLayer.Context
         public virtual DbSet<Character> Characters { get; set; } = null!;
         public virtual DbSet<EveMail> EveMails { get; set; } = null!;
         public virtual DbSet<EveMailSentTo> EveMailSentTos { get; set; } = null!;
-        
+        public virtual DbSet<EveMailTemplate> EveMailTemplates2 { get; set; } = null!;
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=EveMailHelper;User ID=sa;Password=I3l5M74e;");
+                optionsBuilder.UseSqlServer(Configuration.GetConnectionString("Default"));
             }
         }
 
