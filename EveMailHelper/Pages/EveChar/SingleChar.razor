@@ -1,0 +1,16 @@
+﻿@page "/EveChar/SingleChar/{CharacterId}"
+
+<MudCard Elevation="4" Class="mt-4">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Character Details</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <CharacterDetails Model="Character" OnCharacterSave="CharacterChanged"></CharacterDetails>
+    </MudCardContent>
+    <MudCardContent>
+        <ChatLogDragnDropUpload Character="Character"></ChatLogDragnDropUpload>
+    </MudCardContent>
+</MudCard>
+
+
+<CharacterCommunicationList Character="Character" @ref="CommunicationList"></CharacterCommunicationList>

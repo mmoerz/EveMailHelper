@@ -49,6 +49,11 @@ namespace EveMailHelper.BusinessLibrary.Services
             await _context.SaveChangesAsync();
         }
 
+        public Character GetCharactersById(Guid id)
+        {
+            return _characterDbAccess.GetCharactersById(id);
+        }
+
         public ICollection<Character> GetCharactersByName(ICollection<string> characterNames)
         {
             return _characterDbAccess.GetCharactersByName(characterNames);

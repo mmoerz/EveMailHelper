@@ -12,6 +12,7 @@ namespace EveMailHelper.Shared
     public partial class CharacterList : ComponentBase
     {
         #region injections
+        [Inject] NavigationManager Navigation { get; set; } = null!;
         [Inject] ICharacterService CharacterService { get; set; } = null!;
 
         #endregion
@@ -95,6 +96,11 @@ namespace EveMailHelper.Shared
         {
             CharacterService.Delete(character);
             table.ReloadServerData();
+        }
+
+        private void NavigateToCharacter(Character character)
+        {
+            Navigation.NavigateTo($"/EveChar/SingleChar/{character.Id}");
         }
     }
 }

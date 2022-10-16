@@ -19,6 +19,11 @@ namespace EveMailHelper.BusinessLibrary.Complex.dbAccess
             _context = context;
         }
 
+        public Character GetCharactersById(Guid id)
+        {
+            return _context.Characters.Where(character => character.Id == id).First();
+        }
+
         public ICollection<Character> GetCharactersByName(ICollection<string> characterNames)
         {
             IQueryable<Character> query = from character in _context.Characters
