@@ -65,7 +65,6 @@ namespace EveMailHelper.Shared
         {
             if (selectedRowNumber != -1)
             {
-                
                 var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
                 var parameters = new DialogParameters
                 {

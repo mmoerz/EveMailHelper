@@ -65,8 +65,13 @@ namespace EveMailHelper.Shared
         {
             if (selectedRowNumber != -1)
             {
-                var options = new DialogOptions { CloseOnEscapeKey = true };
-                DialogService.Show<EveMailDialog>("Edit Eve Mail", options);
+                var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+                var parameters = new DialogParameters
+                {
+                    { "model", tableRowClickEventArgs.Item },
+                    { "DialogSaved", new EventCallback<EveMail>(this, new Action<EveMail>(DialogWasSaved)) }
+                };
+                var dialog = DialogService.Show<EveMailDialog>("Edit Eve Mail", parameters, options);
             }
         }
 
