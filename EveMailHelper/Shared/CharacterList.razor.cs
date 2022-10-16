@@ -43,6 +43,11 @@ namespace EveMailHelper.Shared
         //{
         //}
 
+        public void Reload()
+        {
+            table.ReloadServerData();
+        }
+
         /// <summary>
         /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>

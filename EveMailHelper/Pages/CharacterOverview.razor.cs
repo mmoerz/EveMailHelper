@@ -1,4 +1,5 @@
 ﻿using EveMailHelper.DataAccessLayer.Models;
+using EveMailHelper.Shared;
 
 using Microsoft.AspNetCore.Components;
 
@@ -12,6 +13,8 @@ namespace EveMailHelper.Pages
         #region parameters
         #endregion
 
+        public CharacterList ListOfCharacters = null!;
+
         public Character Model { get; set; } = new();
 
         private void CharacterSelected(Character character)
@@ -21,7 +24,9 @@ namespace EveMailHelper.Pages
 
         private void CharacterChanged(Character character)
         {
+            _ = character ?? throw new ArgumentNullException(nameof(character));
 
+            ListOfCharacters.Reload();
         }
     }
 }

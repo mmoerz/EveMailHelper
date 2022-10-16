@@ -13,18 +13,22 @@ namespace EveMailHelper.Shared
 
         #region parameters
         [Parameter]
-        public Character Model {
-            get { _character.CreatedDate = date ?? DateTime.Now; return _character; } 
-            set { _character = value; date = _character.CreatedDate; } 
-        }
-        private Character _character = null!;
+        public Character Model { get; set; }
+            //get { _character.CreatedDate = date ?? DateTime.Now; return _character; } 
+            //set { _character = value; date = _character.CreatedDate; } 
+        //}
+        //private Character _character = null!;
 
         [Parameter]
         public EventCallback<Character> OnCharacterSave { get; set; }
         #endregion
 
         // a mudblazor hack, since the datetimepicker requires a nullable var
-        private DateTime? date = DateTime.Now;
+        private DateTime? date //= DateTime.Now;
+        {
+            get { return Model.CreatedDate; }
+            set { Model.CreatedDate = value ?? DateTime.Now; }
+        }
 
         public bool IsEditable { get; set; } = false;
         private Character _backup = null!;
@@ -32,8 +36,9 @@ namespace EveMailHelper.Shared
         public void Cancel()
         {
             // ok this is not optimal ...
-            _character.CopyShallow(_backup);
-            date = _character.CreatedDate;
+            //_character.CopyShallow(_backup);
+            Model.CopyShallow(_backup);
+            //date = _character.CreatedDate;
             IsEditable = false;
         }
 

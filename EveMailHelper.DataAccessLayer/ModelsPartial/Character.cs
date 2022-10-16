@@ -13,6 +13,7 @@ namespace EveMailHelper.DataAccessLayer.Models
             Id = character.Id;
             Name = character.Name;
             Age = character.Age;
+            ReallifeAge = character.ReallifeAge;
             Description = character.Description;
             CreatedDate = character.CreatedDate;
             IsExcluded = character.IsExcluded;
