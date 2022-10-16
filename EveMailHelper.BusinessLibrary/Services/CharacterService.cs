@@ -14,17 +14,39 @@ namespace EveMailHelper.BusinessLibrary.Services
         #region injected
         private readonly IDbContextFactory<EveMailHelperContext> dbFactory = null!;
         #endregion
-        private readonly EveMailHelperContext dbContext = null!;
+        private readonly EveMailHelperContext _context = null!;
         private readonly CharacterDbAccess _characterDbAccess;
         //private readonly RunnerWriteDb<ICollection<string>, ICollection<Character>> _addCharRunner;
 
         public CharacterService(IDbContextFactory<EveMailHelperContext> dbContextFactory)
         {
             dbFactory = dbContextFactory;
-            dbContext = dbFactory.CreateDbContext();
-            _characterDbAccess = new CharacterDbAccess(dbContext);
+            _context = dbFactory.CreateDbContext();
+            _characterDbAccess = new CharacterDbAccess(_context);
             //_addCharRunner = new RunnerWriteDb<ICollection<string>, ICollection<Character>>
             //    (new AddCharactersAction(_characterDbAccess), dbContext);
+        }
+
+        public void Delete(Character character)
+        {
+            _ = character ?? throw new ArgumentNullException(nameof(character));
+            if (character.Id == Guid.Empty)
+                throw new ArgumentException("null Guid is invalid", nameof(character));
+            // now load the Evemail with all Sendto entities (child's that depend on it)
+            IQueryable<Character> query = from mail in _context.Characters
+                                        select mail;
+            query = query.Where(mail => mail.Id == character.Id);
+            var result = query.Include(mail => mail.EveMailReceived).First();
+
+            _context.Characters.Remove(result);
+            _context.SaveChanges();
+        }
+
+        public async Task Update(Character character)
+        {
+            _ = character ?? throw new ArgumentNullException(nameof(character));
+            _context.Characters.Update(character);
+            await _context.SaveChangesAsync();
         }
 
         public ICollection<Character> GetCharactersByName(ICollection<string> characterNames)
@@ -34,7 +56,7 @@ namespace EveMailHelper.BusinessLibrary.Services
 
         public async Task<TableData<Character>> GetPaginated(string searchString, TableState state)
         {
-            IQueryable<Character> query = from character in dbContext.Characters
+            IQueryable<Character> query = from character in _context.Characters
                                           select character;
 
             if (!string.IsNullOrWhiteSpace(searchString))

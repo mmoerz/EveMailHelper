@@ -33,5 +33,10 @@ namespace EveMailHelper.BusinessLibrary.Complex.dbAccess
         {
             _context.Characters.Add(character);
         }
+
+        public void Update(Character character)
+        {
+            _context.Characters.Update(character);
+        }
     }
 }

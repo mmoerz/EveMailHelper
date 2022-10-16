@@ -19,5 +19,9 @@ namespace EveMailHelper.Pages
             Model.CopyShallow(character);
         }
 
+        private void CharacterChanged(Character character)
+        {
+
+        }
     }
 }

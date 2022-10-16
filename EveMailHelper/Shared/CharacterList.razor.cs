@@ -85,5 +85,11 @@ namespace EveMailHelper.Shared
             }
             return string.Empty;
         }
+
+        private void DeleteCharacter(Character character)
+        {
+            CharacterService.Delete(character);
+            table.ReloadServerData();
+        }
     }
 }
