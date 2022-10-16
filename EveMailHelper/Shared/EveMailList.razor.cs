@@ -109,5 +109,11 @@ namespace EveMailHelper.Shared
         {
             table.ReloadServerData();
         }
+
+        private void DeleteEmail(EveMail mail)
+        {
+            EveMailService.Delete(mail);
+            table.ReloadServerData();
+        }
     }
 }

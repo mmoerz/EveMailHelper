@@ -43,6 +43,21 @@ namespace EveMailHelper.BusinessLibrary.Services
                 (new UpdateEveMailAction(_evemailDbAccess), _context);
         }
 
+        public void Delete(EveMail eveMail)
+        {
+            _ = eveMail ?? throw new ArgumentNullException(nameof(eveMail));
+            if (eveMail.Id == Guid.Empty)
+                throw new ArgumentException("null Guid is invalid", nameof(eveMail));
+            // now load the Evemail with all Sendto entities (child's that depend on it)
+            IQueryable<EveMail> query = from mail in _context.EveMails
+                                        select mail;
+            query = query.Where(mail => mail.Id == eveMail.Id);
+            var result = query.Include(mail => mail.SentTo).First();
+
+            _context.EveMails.Remove(result);
+            _context.SaveChanges();
+        }
+
         public EveMail Update(EveMail eveMail)
         {
             return _updateMailRunner.RunAction(eveMail);

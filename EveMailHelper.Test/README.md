@@ -1,4 +1,6 @@
 ﻿
+
+
 ## Package Manager Packages
 
 ```
@@ -11,3 +13,7 @@ Install-Package Microsoft.Extensions.PlatformAbstractions
 Install-Package xunit
 Install-Package xunit.runner.visualstudio
 ```
+
+# Knowlegebase
+
+https://hamidmosalla.com/2017/02/25/xunit-theory-working-with-inlinedata-memberdata-classdata/
