@@ -1,0 +1,48 @@
+﻿@using EveMailHelper.BusinessLibrary.Complex.dto
+<MudTable Class="mt-4"
+          Dense="true"
+          Hover="true"
+          FixedHeader="true"
+          FixedFooter="true"
+          ReadOnly="true"
+          OnRowClick="RowClickEvent"
+          RowClassFunc="@SelectedRowClassFunc"
+          ServerData=@(new Func<TableState, Task<TableData<Communication>>>(ServerReload))
+          SortLabel="Sortierung"
+          T="Communication"
+          @ref="table">
+    <!-- IsEditRowSwitchingBlocked="" -->
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Character Communication</MudText>
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))"
+                      Placeholder="Suche"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium"
+                      Class="mt-0">
+        </MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width:100px;" />
+        <col style="width:50%" />
+        <col style="width:25px" />
+        <col style="width:25px" />
+        <col style="width:25px"/>
+        <col />
+    </ColGroup>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortLabel="Type" T="Communication">Character Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Name" T="Communication">Description</MudTableSortLabel> </MudTh>
+        <MudTh><MudTableSortLabel SortLabel="CreateDate" T="Communication">Reallife Age</MudTableSortLabel></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.TypeName()</MudTd>
+        <MudTd DataLabel="Description">@context.Name</MudTd>
+        <MudTd DataLabel="Reallifeage">@context.CreatedDate</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager HidePageNumber="false" />
+    </PagerContent>
+</MudTable>

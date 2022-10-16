@@ -12,8 +12,8 @@ namespace EveMailHelper.Shared
         #endregion
 
         #region parameters
-        [Parameter]
-        public Character Model { get; set; }
+        [Parameter] 
+        public Character Model { get; set; } = null!;
             //get { _character.CreatedDate = date ?? DateTime.Now; return _character; } 
             //set { _character = value; date = _character.CreatedDate; } 
         //}

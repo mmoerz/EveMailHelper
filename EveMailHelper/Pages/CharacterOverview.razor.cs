@@ -14,12 +14,14 @@ namespace EveMailHelper.Pages
         #endregion
 
         public CharacterList ListOfCharacters = null!;
+        public CharacterCommunicationList CommunicationList = null!;
 
         public Character Model { get; set; } = new();
 
         private void CharacterSelected(Character character)
         {
             Model.CopyShallow(character);
+            CommunicationList.Reload();
         }
 
         private void CharacterChanged(Character character)

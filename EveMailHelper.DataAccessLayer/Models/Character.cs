@@ -11,6 +11,8 @@ namespace EveMailHelper.DataAccessLayer.Models
         public Character()
         {
             EveMailReceived = new HashSet<EveMailSentTo>();
+            Chats = new HashSet<Chat>();
+            Notes = new HashSet<Note>();
             CreatedDate = DateTime.Now;
         }
 
@@ -24,5 +26,7 @@ namespace EveMailHelper.DataAccessLayer.Models
         public DateTime CreatedDate { get; set; }
 
         public virtual ICollection<EveMailSentTo> EveMailReceived { get; set; }
+        public virtual ICollection<Chat> Chats { get; set; }
+        public virtual ICollection<Note> Notes { get; set; }
     }
 }

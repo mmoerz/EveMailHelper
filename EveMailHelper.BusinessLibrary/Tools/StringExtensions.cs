@@ -16,5 +16,17 @@ namespace EveMailHelper.BusinessLibrary.Tools
                 .Select(x => x.Trim())
                 .ToArray();
         }
+
+        public static int SafeParseInt(this string searchString)
+        {
+            try
+            {
+                return int.Parse(searchString);
+            }
+            catch
+            {
+                return -1;
+            }
+        }
     }
 }
