@@ -1,5 +1,6 @@
 ﻿using EveMailHelper.BusinessLibrary.Complex.dto;
 using EveMailHelper.BusinessLibrary.Services;
+using EveMailHelper.BusinessLibrary.Tools;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataAccessLayer.Models;
 
@@ -44,7 +45,7 @@ namespace EveMailHelper.Pages
 
         private async Task Submit()
         {
-            var receivers = ReceiverString.Split(',');
+            var receivers = ReceiverString.SplitStringOfCharacters(',');
             await EveMailService.SendTo(TemplateId, receivers);
         }
     }

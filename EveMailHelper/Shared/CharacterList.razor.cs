@@ -17,6 +17,8 @@ namespace EveMailHelper.Shared
         #endregion
 
         #region parameters
+        [Parameter]
+        public EventCallback<Character> OnCharacterSelect { get; set; }
         #endregion
 
         #region pagination stuff
@@ -62,6 +64,9 @@ namespace EveMailHelper.Shared
 
         private void RowClickEvent(TableRowClickEventArgs<Character> tableRowClickEventArgs)
         {
+            if (tableRowClickEventArgs == null)
+                return;
+            OnCharacterSelect.InvokeAsync(tableRowClickEventArgs.Item);
         }
 
         private string SelectedRowClassFunc(Character rmodel, int rowNumber)

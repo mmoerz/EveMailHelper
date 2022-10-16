@@ -17,6 +17,7 @@ namespace EveMailHelper.DataAccessLayer.Models
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public int? Age { get; set; } = null!;
+        public int? ReallifeAge { get; set; } = null!;
         public string? Description { get; set; } = null!;
         public bool IsExcluded { get; set; } = false;
         public bool IsInRecruitment { get; set; } = false;

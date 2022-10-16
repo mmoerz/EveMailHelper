@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using EveMailHelper.DataAccessLayer.Models;
+
+using Microsoft.AspNetCore.Components;
 
 namespace EveMailHelper.Pages
 {
@@ -9,5 +11,13 @@ namespace EveMailHelper.Pages
 
         #region parameters
         #endregion
+
+        public Character Model { get; set; } = new();
+
+        private void CharacterSelected(Character character)
+        {
+            Model.CopyShallow(character);
+        }
+
     }
 }

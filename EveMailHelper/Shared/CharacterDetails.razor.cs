@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using EveMailHelper.DataAccessLayer.Models;
+
+using Microsoft.AspNetCore.Components;
 
 namespace EveMailHelper.Shared
 {
@@ -8,6 +10,10 @@ namespace EveMailHelper.Shared
         #endregion
 
         #region parameters
+        [Parameter]
+        public Character Model { get; set; } = null!;
         #endregion
+
+        DateTime? date = DateTime.Now;
     }
 }

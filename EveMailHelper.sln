@@ -8,6 +8,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.DataAccessLayer", "EveMailHelper.DataAccessLayer\EveMailHelper.DataAccessLayer.csproj", "{4E6DC236-B1C5-4BB4-9F68-4392553CC775}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.Test", "EveMailHelper.Test\EveMailHelper.Test.csproj", "{154BB47F-8245-4339-933C-A8F2A792218E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4E6DC236-B1C5-4BB4-9F68-4392553CC775} = {4E6DC236-B1C5-4BB4-9F68-4392553CC775}
+		{86D2FF5E-54D4-49D8-AD7D-BD6BAEAA5556} = {86D2FF5E-54D4-49D8-AD7D-BD6BAEAA5556}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.BusinessLibrary", "EveMailHelper.BusinessLibrary\EveMailHelper.BusinessLibrary.csproj", "{86D2FF5E-54D4-49D8-AD7D-BD6BAEAA5556}"
 EndProject
