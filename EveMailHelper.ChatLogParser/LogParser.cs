@@ -65,16 +65,15 @@ namespace EveMailHelper.ChatLogParser
         {
             bool HeaderComplete = false;
             int[] emptyLines = new int[7] { 1, 2, 3, 4, 6, 12, 13 };
-            
 
             string? line;
-            
-            while ((line = txtR.ReadLine()) != null && !HeaderComplete)
+
+            while (!HeaderComplete && (line = txtR.ReadLine()) != null)
             {
                 LineCount++;
                 if (emptyLines.Contains(LineCount) && !string.IsNullOrEmpty(line))
                     break;
-                Match? match; 
+                Match? match;
                 switch (LineCount)
                 {
                     case 5:
@@ -121,13 +120,22 @@ namespace EveMailHelper.ChatLogParser
         {
             LineCount = 0;
             using var txtR = File.OpenText(filename);
+            string? line;
 
             var headerResult = ParseHeader(txtR);
 
-            string? line;
-            while ((line = txtR.ReadLine()) != null)
+            if ((line = txtR.ReadLine()) == null)
+                return;
+            LineCount++;
+
+            if (string.IsNullOrEmpty(line))
+                if ((line = txtR.ReadLine()) == null)
+                    return;
+
+            do
             {
                 LineCount++;
+                
                 var match = ParserRegexes.Message.Match(line);
                 if (!match.Success)
                     throw new Exception($"unknown message format encountered in file {filename} at line: {LineCount}");
@@ -137,7 +145,7 @@ namespace EveMailHelper.ChatLogParser
                     Author = match.Groups["author"].Value,
                     Message = match.Groups["message"].Value
                 });
-            }
+            } while ((line = txtR.ReadLine()) != null);
         }
     }
 }

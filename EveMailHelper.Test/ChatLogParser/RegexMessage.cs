@@ -9,6 +9,8 @@ using System.Linq;
 
 using Xunit;
 
+using static MudBlazor.CategoryTypes;
+
 namespace EveMailHelper.Test.ChatLogParser
 {
     public partial class RegexMessage
@@ -18,6 +20,8 @@ namespace EveMailHelper.Test.ChatLogParser
         }
 
         [Theory]
+        [InlineData("[ 2022.06.02 17:54:57 ] Nat Aaroon > Worm Abyssal TII v2",
+            "2022.06.02 17:54:57", "Nat Aaroon", "Worm Abyssal TII v2")]
         [InlineData("[ 2022.06.02 17:54:40 ] Nat Aaroon > Worm Abyssal TII v2",
             "2022.06.02 17:54:40", "Nat Aaroon", "Worm Abyssal TII v2")]
         [InlineData("[ 2022.06.02 17:54:40 ] H.u'1`\"nta > Worm Abyssal TII v2",

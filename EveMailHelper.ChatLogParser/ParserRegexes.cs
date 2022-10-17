@@ -21,7 +21,10 @@ namespace EveMailHelper.ChatLogParser
             new Regex(@"^\s+Session started:\s+(?<sessionstart>[0-9:.\s]+)$", RegexOptions.Compiled);
 
         public static Regex Message =
-            new Regex(@"^\s*\[\s+(?<timestamp>[0-9:.\s]+)\s\]\s+(?<author>[A-Za-z0-9'`""._\s-]+)\s+\>\s+(?<message>.*)");
+            new Regex(@"\s*\[\s+(?<timestamp>[0-9:.\s]+)\s\]\s+(?<author>[A-Za-z0-9'`""._\s-]+)\s+\>\s+(?<message>.*)$",
+                RegexOptions.Compiled);
 
+        public static Regex Timestamp =
+            new Regex(@"\s*\[\s+(?<timestamp>[0-9:\.\s]+)\s\]");
     }
 }
