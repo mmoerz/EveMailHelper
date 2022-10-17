@@ -25,7 +25,6 @@ namespace EveMailHelper.Pages
         #endregion
 
         #region GUI Components
-        private MudForm form = null!;
 
         #endregion
         private string ReceiverString { get; set; } = null!;
@@ -38,7 +37,7 @@ namespace EveMailHelper.Pages
             templates = await EveMailTemplateService.GetAll();
         }
 
-        private void Cancel()
+        private static void Cancel()
         {
             //newModels();
         }

@@ -21,14 +21,10 @@ namespace EveMailHelper.Shared
         #endregion
 
         #region pagination stuff
-        private bool dense = true;
-        private bool hover = true;
-        private bool readOnly = false;
-        private bool fixed_heaer = true;
-        private bool fixed_footer = true;
+        private readonly bool readOnly = false;
 
         //private IEnumerable<Report> pagedData = null!;
-        private MudTable<EveMailTemplate> table = null!;
+        private MudTable<EveMailTemplate>? table = null!;
         //private int totalItems;
         private string searchString = "";
         #endregion
@@ -58,7 +54,7 @@ namespace EveMailHelper.Shared
         private void OnSearch(string text)
         {
             searchString = text;
-            table.ReloadServerData();
+            table?.ReloadServerData();
         }
 
         private void RowClickEvent(TableRowClickEventArgs<EveMailTemplate> tableRowClickEventArgs)
@@ -82,7 +78,7 @@ namespace EveMailHelper.Shared
                 selectedRowNumber = -1;
                 return string.Empty;
             }
-            else if (table.SelectedItem != null && table.SelectedItem.Equals(rmodel))
+            else if (table?.SelectedItem != null && table.SelectedItem.Equals(rmodel))
             {
                 selectedRowNumber = rowNumber;
                 model = rmodel;
@@ -107,7 +103,7 @@ namespace EveMailHelper.Shared
 
         private void DialogWasSaved(EveMailTemplate eveMailTemplate)
         {
-            table.ReloadServerData();
+            table?.ReloadServerData();
         }
     }
 }

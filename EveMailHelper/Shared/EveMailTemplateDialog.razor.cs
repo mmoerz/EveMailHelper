@@ -22,7 +22,7 @@ namespace EveMailHelper.Shared
         public EventCallback<EveMailTemplate> DialogSaved { get; set; }
         #endregion
 
-        MudForm form = null!;
+        MudForm? form = null!;
         
         private async Task Save()
         {

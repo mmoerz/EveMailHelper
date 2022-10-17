@@ -1,9 +1,13 @@
-﻿using EveMailHelper.DataAccessLayer.Models;
+﻿using EveMailHelper.ChatLogParser;
+using EveMailHelper.DataAccessLayer.Models;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.Configuration;
 
 using MudBlazor;
+
+using System.Collections.Generic;
 
 namespace EveMailHelper.Shared
 {
@@ -11,6 +15,9 @@ namespace EveMailHelper.Shared
     {
         #region injections
         [Inject] ISnackbar Snackbar { get; set; } = null!;
+        //[Inject] IConfiguration Configuration { get; set; } = null!;
+        [Inject] IChatLogParser LogParser { get; set; } = null!;
+        [Inject] ILogger<ChatLogDragnDropUpload> Logger { get; set; } = null!;
         #endregion
 
         #region parameters
@@ -27,12 +34,12 @@ namespace EveMailHelper.Shared
 
         //}
 
-        private int MaxFileSize = 1024000;
+        private readonly int MaxFileSize = 1024000;
 
         private bool Clearing = false;
-        private static string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
+        private readonly static string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
         private string DragClass = DefaultDragClass;
-        private List<string> fileNames = new();
+        private readonly List<string> fileNames = new();
 
         private async Task OnInputFileChanged(InputFileChangeEventArgs e)
         {
@@ -46,6 +53,15 @@ namespace EveMailHelper.Shared
                 return;
             }
 
+            // Uploaded Chat file parse
+            try
+            {
+                LogParser.PreFlightCheck();
+            } catch (Exception exc)
+            {
+                Logger.LogError(exc, "pre flight checks for chat log parsing failed");
+            }
+            
             var files = e.GetMultipleFiles();
             foreach (var file in files)
             {
@@ -53,6 +69,7 @@ namespace EveMailHelper.Shared
                 using Stream stream = file.OpenReadStream(MaxFileSize); //read file with size in kb                    
                 using FileStream fs = File.Create(file.Name);
                 await stream.CopyToAsync(fs);
+                
                 Snackbar.Add($"finished uploading {file.Name}");
             }
 
@@ -99,17 +116,14 @@ namespace EveMailHelper.Shared
             DragClass = DefaultDragClass;
         }
 
-        private async Task UploadFiles(InputFileChangeEventArgs e)
+        private void UploadFiles(InputFileChangeEventArgs e)
         {
             
-
-            
-
             var entries = e.GetMultipleFiles();
             
             //Snackbar.Add($"Files with {entries.FirstOrDefault().Size} bytes size are not allowed", Severity.Error);
             //Snackbar.Add($"Files starting with letter {entries.FirstOrDefault().Name.Substring(0, 1)} are not recommended", Severity.Warning);
-            Snackbar.Add($"This file has the extension {entries.FirstOrDefault().Name.Split(".").Last()}", Severity.Info);
+            Snackbar.Add($"This file has the extension {entries[0].Name.Split(".").Last()}", Severity.Info);
 
             //TODO upload the files to the server
 

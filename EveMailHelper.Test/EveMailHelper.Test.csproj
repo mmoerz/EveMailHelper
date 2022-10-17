@@ -29,7 +29,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EveMailHelper.BusinessLibrary\EveMailHelper.BusinessLibrary.csproj" />
+    <ProjectReference Include="..\EveMailHelper.ChatLogParser\EveMailHelper.ChatLogParser.csproj" />
     <ProjectReference Include="..\EveMailHelper.DataAccessLayer\EveMailHelper.DataAccessLayer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\ChatLogParser\onlyheader.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

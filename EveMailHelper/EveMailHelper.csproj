@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EveMailHelper.BusinessLibrary\EveMailHelper.BusinessLibrary.csproj" />
+    <ProjectReference Include="..\EveMailHelper.ChatLogParser\EveMailHelper.ChatLogParser.csproj" />
     <ProjectReference Include="..\EveMailHelper.DataAccessLayer\EveMailHelper.DataAccessLayer.csproj" />
   </ItemGroup>
 

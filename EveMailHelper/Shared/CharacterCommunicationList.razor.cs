@@ -28,14 +28,14 @@ namespace EveMailHelper.Shared
         #region pagination stuff
 
         //private IEnumerable<Report> pagedData = null!;
-        private MudTable<Communication> table = null!;
+        private MudTable<Communication>? table = null!;
         //private int totalItems;
         private string searchString = "";
         #endregion
 
         #region rowselection
         private int selectedRowNumber = -1;
-        private Communication model = null!;
+        //private Communication model = null!;
         #endregion
 
         //protected override async Task OnInitializedAsync()
@@ -44,7 +44,7 @@ namespace EveMailHelper.Shared
 
         public void Reload()
         {
-            table.ReloadServerData();
+            table?.ReloadServerData();
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace EveMailHelper.Shared
         private void OnSearch(string text)
         {
             searchString = text;
-            table.ReloadServerData();
+            table?.ReloadServerData();
         }
 
         private void RowClickEvent(TableRowClickEventArgs<Communication> tableRowClickEventArgs)
@@ -79,16 +79,14 @@ namespace EveMailHelper.Shared
                 selectedRowNumber = -1;
                 return string.Empty;
             }
-            else if (table.SelectedItem != null && table.SelectedItem.Equals(rmodel))
+            else if (table?.SelectedItem != null && table.SelectedItem.Equals(rmodel))
             {
                 selectedRowNumber = rowNumber;
-                model = rmodel;
+                //model = rmodel;
 
                 return "selected";
             }
             return string.Empty;
         }
-
-
     }
 }

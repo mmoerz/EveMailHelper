@@ -5,7 +5,7 @@
         <MudText Typo="Typo.h6">Manual Eve Mail</MudText>
     </MudCardHeader>
     <MudCardContent>
-        <MudForm @ref="form">
+        <MudForm>
             <MudTextField T="string" @bind-Value="ReceiverString" Label="Receivers" HelperText="Enter receivers delimited by a colon."></MudTextField>
             <MudSelect T="Guid"
                        Label="Template"

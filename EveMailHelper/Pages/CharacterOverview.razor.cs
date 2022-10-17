@@ -13,7 +13,7 @@ namespace EveMailHelper.Pages
         #region parameters
         #endregion
 
-        public CharacterList ListOfCharacters = null!;
+        public CharacterList? ListOfCharacters = null!;
 
         public Character Model { get; set; } = new();
 
@@ -26,7 +26,7 @@ namespace EveMailHelper.Pages
         {
             _ = character ?? throw new ArgumentNullException(nameof(character));
 
-            ListOfCharacters.Reload();
+            ListOfCharacters?.Reload();
         }
     }
 }

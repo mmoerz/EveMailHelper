@@ -30,7 +30,7 @@ namespace EveMailHelper.Pages.EveChar
 
         #region GUI Components
         #endregion
-        public CharacterCommunicationList CommunicationList = null!;
+        public CharacterCommunicationList? CommunicationList = null!;
 
         //protected override async Task OnInitializedAsync()
         //{
