@@ -22,6 +22,6 @@ namespace EveMailHelper.DataAccessLayer.Models
         public Character Listener { get; set; } = null!;
         public Character AttachedTo { get; set; } = null!;
 
-        public virtual ICollection<ChatEntry> Messages { get; set; } = null!;
+        public virtual ICollection<ChatMessage> Messages { get; set; } = null!;
     }
 }

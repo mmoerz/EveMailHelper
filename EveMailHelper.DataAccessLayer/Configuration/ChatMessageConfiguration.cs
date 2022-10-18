@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EveMailHelper.DataAccessLayer.Configuration
 {
-    public partial class ChatEntryConfiguration : IEntityTypeConfiguration<ChatEntry>
+    public partial class ChatMessageConfiguration : IEntityTypeConfiguration<ChatMessage>
     {
-        public void Configure(EntityTypeBuilder<ChatEntry> builder)
+        public void Configure(EntityTypeBuilder<ChatMessage> builder)
         {
             builder.Property(ce => ce.Message)
                 .IsRequired()

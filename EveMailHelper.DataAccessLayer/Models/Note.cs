@@ -11,7 +11,7 @@ namespace EveMailHelper.DataAccessLayer.Models
         public Guid Id { get; set; }
         public string Title { get; set; } = null!;
         public string Content { get; set; } = null!;
-        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
         
         public Guid AttachedToId { get; set; } 
         public Character AttachedTo { get; set; } = null!;
