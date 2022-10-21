@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EveMailHelper.DataAccessLayer.Models
 {
-    public class Chat
+    public partial class Chat
     {
         public Guid Id { get; set; }
         public string ChannelName { get; set; } = null!;

@@ -1,4 +1,5 @@
-﻿using EveMailHelper.BusinessLibrary.Services;
+﻿using EveMailHelper.BusinessLibrary.Interfaces;
+using EveMailHelper.BusinessLibrary.Services;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,8 @@ namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools
             services.AddTransient<IEveMailService, EveMailService>();
             services.AddTransient<IEveMailTemplateService, EveMailTemplateService>();
             services.AddTransient<ICommunicationService, CommunicationService>();
+            services.AddTransient<INoteService, NoteService>();
+
         }
     }
 }

@@ -6,8 +6,9 @@ namespace EveMailHelper.BusinessLibrary.Services
 {
     public interface INoteService
     {
-        Note AddOrUpdate(Note note);
+        Task<Note> Update(Note note);
         Task<Note?> GetById(Guid id);
+        Task Delete(Note note);
         Task<TableData<Note>> GetPaginated(string searchString, TableState state);
     }
 }

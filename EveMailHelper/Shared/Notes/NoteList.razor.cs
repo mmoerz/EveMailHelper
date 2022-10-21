@@ -1,4 +1,5 @@
-﻿using EveMailHelper.BusinessLibrary.Services;
+﻿using EveMailHelper.BusinessLibrary.Interfaces;
+using EveMailHelper.BusinessLibrary.Services;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataAccessLayer.Models;
 
@@ -9,11 +10,11 @@ using MudBlazor;
 
 namespace EveMailHelper.Shared.Notes
 {
-    public partial class CharacterList : ComponentBase
+    public partial class NoteList : ComponentBase
     {
         #region injections
         [Inject] NavigationManager Navigation { get; set; } = null!;
-        [Inject] ICharacterService CharacterService { get; set; } = null!;
+        [Inject] INoteService NoteService { get; set; } = null!;
 
         #endregion
 
@@ -26,7 +27,7 @@ namespace EveMailHelper.Shared.Notes
         private readonly bool readOnly = false;
         
         //private IEnumerable<Report> pagedData = null!;
-        private MudTable<Character>? table = null!;
+        private MudTable<Note>? table = null!;
         //private int totalItems;
         private string searchString = "";
         #endregion
@@ -86,9 +87,9 @@ namespace EveMailHelper.Shared.Notes
             return string.Empty;
         }
 
-        private void DeleteNote(Note note)
+        private async Task DeleteNote(Note note)
         {
-            NoteService.Delete(note);
+            await NoteService.Delete(note);
             table?.ReloadServerData();
         }
 

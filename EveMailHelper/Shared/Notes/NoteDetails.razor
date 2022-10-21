@@ -1,0 +1,29 @@
+﻿<MudForm>
+    <div class="d-flex flex-grow-1 gap-4">
+        <MudTextField Label="Name" Disabled="!IsEditable"
+                      T="string" @bind-Value="@Model.Title"
+                      HelperText="Name of the character (yeah i know this is for dummies).">
+        </MudTextField>
+        <MudTextField Label="Age" Disabled="!IsEditable"
+                      Class="flex-none d-flex"
+                      T="string" @bind-Value="@Model.Content"
+                      HelperText="The note itself.">
+        </MudTextField>
+        <MudDatePicker Label="Create Date" Disabled="!IsEditable"
+                       @bind-Date="Date" HelperText="registered in this tool at this date">
+        </MudDatePicker>
+    </div>
+    <div class="mt-4 d-flex align-center justify-space-between">
+        @if (IsEditable)
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Cancel" Class="ml-2">Cancel</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Save" Disabled="false" Class="ml-auto">
+                Save
+            </MudButton>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Edit" Class="ml-2">Edit</MudButton>
+        }
+    </div>
+</MudForm>

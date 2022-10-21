@@ -1,5 +1,6 @@
 ﻿using EveMailHelper.BusinessLibrary.Complex;
 using EveMailHelper.BusinessLibrary.Complex.dbAccess;
+using EveMailHelper.BusinessLibrary.Interfaces;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataAccessLayer.Models;
 
@@ -20,20 +21,28 @@ namespace EveMailHelper.BusinessLibrary.Services
         #region injected
         #endregion
         private readonly NoteDbAccess _dbAccess;
+        private readonly EveMailHelperContext _context;
         //private readonly RunnerWriteDb<Note, Note> _addTemplateRunner;
 
         public NoteService(IDbContextFactory<EveMailHelperContext> dbContextFactory)
         {
-            var dbContext = dbContextFactory.CreateDbContext();
-            _dbAccess = new(dbContext);
+            _context = dbContextFactory.CreateDbContext();
+            _dbAccess = new(_context);
 
         }
 
-        public Note AddOrUpdate(Note note)
+        public async Task Delete(Note note)
+        {
+            _dbAccess.Delete(note);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Note> Update(Note note)
         {
             _ = note ?? throw new ArgumentNullException(nameof(note));
 
             _dbAccess.Update(note);
+            await _context.SaveChangesAsync();
 
             return note;
         }

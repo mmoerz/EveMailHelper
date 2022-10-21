@@ -6,6 +6,7 @@ using EveMailHelper.BusinessLibrary.Complex;
 using EveMailHelper.BusinessLibrary.Complex.dbAccess;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataAccessLayer.Models;
+using EveMailHelper.BusinessLibrary.Interfaces;
 
 namespace EveMailHelper.BusinessLibrary.Services
 {

@@ -21,6 +21,11 @@ namespace EveMailHelper.BusinessLibrary.Complex.dbAccess
             _context = context;
         }
 
+        public void Delete(Note note)
+        {
+            _context.Notes.Remove(note);
+        }
+
         public async Task<ICollection<Note>> GetAll()
         {
             return await _context.Notes.ToListAsync();

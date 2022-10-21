@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EveMailHelper.DataAccessLayer.Models
 {
-    public class Note
+    public partial class Note
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = null!;
