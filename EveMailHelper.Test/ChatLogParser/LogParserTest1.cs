@@ -22,7 +22,7 @@ namespace EveMailHelper.Test.ChatLogParser
         [InlineData("Data/ChatLogParser/onlyheader.txt")]
         public void Test1(string fileName)
         {
-            var sut = new LogParser();
+            var sut = new EveMailHelper.ChatLogParser.ChatLogParser();
             sut.ParseFile(fileName);
         }
 
@@ -32,7 +32,7 @@ namespace EveMailHelper.Test.ChatLogParser
             "Worm Abyssal TII v2", "Worm Abyssal TII v2")]
         public void Test2(string fileName, string expectedMsg1, string expectedMsg2)
         {
-            var sut = new LogParser();
+            var sut = new EveMailHelper.ChatLogParser.ChatLogParser();
             sut.ParseFile(fileName);
             sut.Chat.Messages.First().Message.ShouldBe(expectedMsg1);
             sut.Chat.Messages.Last().Message.ShouldBe(expectedMsg2);

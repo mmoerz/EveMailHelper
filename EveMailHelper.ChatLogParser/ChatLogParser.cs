@@ -7,11 +7,11 @@ using EveMailHelper.ChatLogParser.Models;
 
 namespace EveMailHelper.ChatLogParser
 {
-    public class LogParser : IChatLogParser
+    public class ChatLogParser : IChatLogParser
     {
         private const string _SECTION = "Upload";
         private readonly IConfiguration _configuration = null!;
-        private readonly ILogger<LogParser> _logger = null!;
+        private readonly ILogger<ChatLogParser> _logger = null!;
 
         public string GetUploadPath
         {
@@ -23,13 +23,13 @@ namespace EveMailHelper.ChatLogParser
             }
         }
 
-        public LogParser(IConfiguration Configuration, ILogger<LogParser> logger)
+        public ChatLogParser(IConfiguration Configuration, ILogger<ChatLogParser> logger)
         {
             _configuration = Configuration;
             _logger = logger;
         }
 
-        public LogParser()
+        public ChatLogParser()
         {
 
         }

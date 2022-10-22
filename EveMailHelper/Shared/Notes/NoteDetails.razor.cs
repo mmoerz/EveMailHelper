@@ -12,11 +12,14 @@ namespace EveMailHelper.Shared.Notes
         #endregion
 
         #region parameters
-        [Parameter] 
+        [CascadingParameter] 
         public Note Model { get; set; } = null!;
 
         [Parameter]
         public EventCallback<Note> OnNoteSave { get; set; }
+
+        [Parameter]
+        public bool ButtonsEnabled { get; set; } = true;
         #endregion
 
         // a mudblazor hack, since the datetimepicker requires a nullable var

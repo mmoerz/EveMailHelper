@@ -33,6 +33,7 @@ builder.Host.UseNLog();
 #endregion
 
 #region internal Services
+builder.Services.AddEveMailHelperChatLogParser();
 builder.Services.AddEveMailHelperBusinessLogic();
 #endregion
 

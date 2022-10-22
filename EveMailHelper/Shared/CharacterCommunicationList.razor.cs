@@ -15,6 +15,7 @@ namespace EveMailHelper.Shared
         #region injections
         //[Inject] ICharacterService CharacterService { get; set; } = null!;
         [Inject] ICommunicationService CommunicationService { get; set; } = null!;
+        [Inject] IDialogService DialogService { get; set; } = null!;
         #endregion
 
         #region parameters
@@ -70,6 +71,36 @@ namespace EveMailHelper.Shared
         {
             if (tableRowClickEventArgs == null)
                 return;
+            if (tableRowClickEventArgs.Item.obj.GetType() == typeof(Chat))
+            {
+                var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+                var parameters = new DialogParameters
+                    {
+                    { "model", tableRowClickEventArgs.Item.obj },
+                    { "DialogSaved", new EventCallback<Chat>(this, new Action<Chat>(ChatDialogWasSaved)) }
+                    };
+                var dialog = DialogService.Show<EveMailDialog>("Edit Chat", parameters, options);
+            }
+            if (tableRowClickEventArgs.Item.obj.GetType() == typeof(EveMail))
+            {
+                var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+                var parameters = new DialogParameters
+                {
+                    { "model", tableRowClickEventArgs.Item.obj },
+                    { "DialogSaved", new EventCallback<EveMail>(this, new Action<EveMail>(EveMailDialogWasSaved)) }
+                };
+                var dialog = DialogService.Show<EveMailDialog>("Edit Eve Mail", parameters, options);
+            }
+            if (tableRowClickEventArgs.Item.obj.GetType() == typeof(Note))
+            {
+                var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+                var parameters = new DialogParameters
+                {
+                    { "model", tableRowClickEventArgs.Item.obj },
+                    { "DialogSaved", new EventCallback<Note>(this, new Action<Note>(NoteDialogWasSaved)) }
+                };
+                var dialog = DialogService.Show<EveMailDialog>("Edit Eve Mail", parameters, options);
+            }
         }
 
         private string SelectedRowClassFunc(Communication rmodel, int rowNumber)
@@ -82,11 +113,28 @@ namespace EveMailHelper.Shared
             else if (table?.SelectedItem != null && table.SelectedItem.Equals(rmodel))
             {
                 selectedRowNumber = rowNumber;
+
+
+
                 //model = rmodel;
 
                 return "selected";
             }
             return string.Empty;
+        }
+
+        private void EveMailDialogWasSaved(EveMail eveMail)
+        {
+            table?.ReloadServerData();
+        }
+        private void NoteDialogWasSaved(Note note)
+        {
+            table?.ReloadServerData();
+        }
+
+        private void ChatDialogWasSaved(Chat chat)
+        {
+            table?.ReloadServerData();
         }
     }
 }
