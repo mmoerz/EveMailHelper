@@ -2,6 +2,7 @@
 using EveMailHelper.BusinessLibrary.Services;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataAccessLayer.Models;
+using EveMailHelper.Shared.Notes;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
@@ -79,27 +80,15 @@ namespace EveMailHelper.Shared
                     { "model", tableRowClickEventArgs.Item.obj },
                     { "DialogSaved", new EventCallback<Chat>(this, new Action<Chat>(ChatDialogWasSaved)) }
                     };
-                var dialog = DialogService.Show<EveMailDialog>("Edit Chat", parameters, options);
+                //var dialog = DialogService.Show<ChatDialog>("Edit Chat", parameters, options);
             }
             if (tableRowClickEventArgs.Item.obj.GetType() == typeof(EveMail))
             {
-                var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
-                var parameters = new DialogParameters
-                {
-                    { "model", tableRowClickEventArgs.Item.obj },
-                    { "DialogSaved", new EventCallback<EveMail>(this, new Action<EveMail>(EveMailDialogWasSaved)) }
-                };
-                var dialog = DialogService.Show<EveMailDialog>("Edit Eve Mail", parameters, options);
+                var dialog = CreateEmailDialog(tableRowClickEventArgs.Item.obj);
             }
             if (tableRowClickEventArgs.Item.obj.GetType() == typeof(Note))
             {
-                var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
-                var parameters = new DialogParameters
-                {
-                    { "model", tableRowClickEventArgs.Item.obj },
-                    { "DialogSaved", new EventCallback<Note>(this, new Action<Note>(NoteDialogWasSaved)) }
-                };
-                var dialog = DialogService.Show<EveMailDialog>("Edit Eve Mail", parameters, options);
+                var dialog = CreateNoteDialog(tableRowClickEventArgs.Item.obj);
             }
         }
 
@@ -121,6 +110,38 @@ namespace EveMailHelper.Shared
                 return "selected";
             }
             return string.Empty;
+        }
+
+        private IDialogReference CreateEmailDialog(object note)
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+            var parameters = new DialogParameters
+                {
+                    { "model", note },
+                    { "DialogSaved", new EventCallback<EveMail>(this, new Action<EveMail>(EveMailDialogWasSaved)) }
+                };
+            return DialogService.Show<EveMailDialog>("Edit Eve Mail", parameters, options);
+        }
+
+        private IDialogReference CreateNoteDialog(object note)
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+            var parameters = new DialogParameters
+                {
+                    { "model", note },
+                    { "DialogSaved", new EventCallback<Note>(this, new Action<Note>(NoteDialogWasSaved)) }
+                };
+            return DialogService.Show<NoteDialog>("Edit Eve Mail", parameters, options);
+        }
+
+        private void AddEveMail()
+        {
+            var dialog = CreateEmailDialog(new EveMail());
+        }
+
+        private void AddNote()
+        {
+            var dialog = CreateNoteDialog(new Note() { AttachedTo = Character });
         }
 
         private void EveMailDialogWasSaved(EveMail eveMail)

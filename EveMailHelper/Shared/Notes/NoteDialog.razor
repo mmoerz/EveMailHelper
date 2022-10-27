@@ -1,22 +1,6 @@
 ﻿<MudDialog>
-    <DialogContent>
-        <!--
-        <MudForm @ref="form">
-            <MudTextField Label="Title" Disabled="!IsEditable"
-                          T="string" @bind-Value="@Model.Title"
-                          HelperText="Title of the note">
-            </MudTextField>
-            <MudTextField Label="Content" Disabled="!IsEditable"
-                          Class="flex-none d-flex"
-                          T="string" @bind-Value="@Model.Content"
-                          HelperText="The note itself.">
-            </MudTextField>
-            <MudDatePicker Label="Create Date" Disabled="!IsEditable"
-                           @bind-Date="Date" HelperText="registered in this tool at this date">
-            </MudDatePicker>
-        </MudForm>
-        -->
-        <NoteDetails ButtonsEnabled="false"></NoteDetails>
+    <DialogContent>       
+        <NoteDetails Note="Model" ButtonsEnabled="false" IsEditable="true"></NoteDetails>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>

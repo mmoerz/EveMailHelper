@@ -16,7 +16,7 @@ namespace EveMailHelper.Shared.Notes
         #region parameters
         [CascadingParameter]
         MudDialogInstance MudDialog { get; set; } = null!;
-        [CascadingParameter]
+        [Parameter]
         public Note Model { get; set; } = new();
         [Parameter]
         public EventCallback<Note> DialogSaved { get; set; }
