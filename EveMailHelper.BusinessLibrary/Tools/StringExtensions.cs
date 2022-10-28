@@ -14,6 +14,7 @@ namespace EveMailHelper.BusinessLibrary.Tools
         {
             return input.Split(delimiter)
                 .Select(x => x.Trim())
+                .Where(x => x.Length > 0)
                 .ToArray();
         }
 

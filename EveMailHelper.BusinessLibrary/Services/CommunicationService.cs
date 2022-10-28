@@ -83,7 +83,7 @@ namespace EveMailHelper.BusinessLibrary.Services
         {
             IQueryable<Chat> query = from mail in _context.Chats
                                      select mail;
-            
+
             //IQueryable<Guid> queryChars =
             //    from ch in _context.Characters
             //    where ch.Name.Contains(searchString)
@@ -139,11 +139,8 @@ namespace EveMailHelper.BusinessLibrary.Services
         public async Task<TableData<Note>> GetPaginatedNotes(Character character, string searchString, TableState state)
         {
             IQueryable<Note> query = from note in _context.Notes
-                                        select note;
-            IQueryable<Guid> querySendTos =
-                from sendTo in _context.EveMailSentTos
-                where sendTo.CharacterId == character.Id
-                select sendTo.EveMailId;
+                                     where note.AttachedToId == character.Id
+                                     select note;
 
             int searchInt = searchString.SafeParseInt();
 
@@ -194,8 +191,7 @@ namespace EveMailHelper.BusinessLibrary.Services
                     CreatedDate = eveMail.CreatedDate,
                     obj = eveMail,
                     Name = eveMail.Subject,
-                }
-                );
+                });
             }
 
             var eveChats = await GetPaginatedChats(character, searchString, state);
@@ -204,7 +200,7 @@ namespace EveMailHelper.BusinessLibrary.Services
                 communicationList.Add(new Communication()
                 {
                     Id = eveChat.Id,
-                    CreatedDate  = eveChat.SessionStarted,
+                    CreatedDate = eveChat.SessionStarted,
                     obj = eveChat,
                     Name = eveChat.ChannelName,
                 });

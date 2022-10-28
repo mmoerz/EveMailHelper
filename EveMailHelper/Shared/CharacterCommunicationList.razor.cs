@@ -112,6 +112,17 @@ namespace EveMailHelper.Shared
             return string.Empty;
         }
 
+        private IDialogReference CreateChatDialog(object chat)
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+            var parameters = new DialogParameters
+                {
+                    { "model", chat },
+                    { "DialogSaved", new EventCallback<Chat>(this, new Action<Chat>(ChatDialogWasSaved)) }
+                };
+            return DialogService.Show<EveMailDialog>("Add Chat", parameters, options);
+        }
+
         private IDialogReference CreateEmailDialog(object note)
         {
             var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
@@ -131,7 +142,7 @@ namespace EveMailHelper.Shared
                     { "model", note },
                     { "DialogSaved", new EventCallback<Note>(this, new Action<Note>(NoteDialogWasSaved)) }
                 };
-            return DialogService.Show<NoteDialog>("Edit Eve Mail", parameters, options);
+            return DialogService.Show<NoteDialog>("Edit Note", parameters, options);
         }
 
         private void AddEveMail()
@@ -142,6 +153,11 @@ namespace EveMailHelper.Shared
         private void AddNote()
         {
             var dialog = CreateNoteDialog(new Note() { AttachedTo = Character });
+        }
+
+        private void AddChat()
+        {
+            var dialog = CreateChatDialog(new Chat() { AttachedTo = Character });
         }
 
         private void EveMailDialogWasSaved(EveMail eveMail)

@@ -3,6 +3,7 @@
 using Xunit;
 using EveMailHelper.BusinessLibrary.Tools;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace EveMailHelper.Test.Tools
 {
@@ -21,6 +22,10 @@ namespace EveMailHelper.Test.Tools
             yield return new object[] { ',', "firstname1, firstname2 lastname2", new string[] { "firstname1", "firstname2 lastname2" } };
             yield return new object[] { '.', "  firstname1  . first2 middle2 last2 . first3 last3  ", 
                                         new string[] { "firstname1", "first2 middle2 last2", "first3 last3" } };
+            // test case ending with colon
+            yield return new object[] { ',', "firstname1 lastname1, firstname2 lastname2,",
+                                        new string[] { "firstname1 lastname1", "firstname2 lastname2"} };
+
         }
 
         [Theory]
