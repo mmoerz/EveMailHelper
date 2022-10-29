@@ -10,5 +10,6 @@ namespace EveMailHelper.BusinessLibrary.Services
         Task<TableData<EveMail>> GetPaginated(string searchString, TableState state);
         Task SendTo(Guid templateId, ICollection<string> receivers);
         void Delete(EveMail eveMail);
+        Task<List<string>> FilterReceivers(string receivers, DateTime filterTime);
     }
 }

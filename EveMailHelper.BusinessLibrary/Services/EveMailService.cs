@@ -1,6 +1,7 @@
 ﻿using EveMailHelper.BusinessLibrary.Complex;
 using EveMailHelper.BusinessLibrary.Complex.dbAccess;
 using EveMailHelper.BusinessLibrary.Complex.dto;
+using EveMailHelper.BusinessLibrary.Tools;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataAccessLayer.Models;
 
@@ -61,6 +62,15 @@ namespace EveMailHelper.BusinessLibrary.Services
         public EveMail Update(EveMail eveMail)
         {
             return _updateMailRunner.RunAction(eveMail);
+        }
+
+        public async Task<List<string>> FilterReceivers(string receivers, DateTime filterTime)
+        {
+            var result = await _evemailDbAccess.GetReceiversFiltered(receivers.SplitStringOfCharacters(','), filterTime);
+            List<string> receiversFiltered = new List<string>();
+            foreach (var item in result)
+                receiversFiltered.Add(item.Character.Name);
+            return receiversFiltered;
         }
 
         public async Task<TableData<EveMail>> GetPaginated(string searchString, TableState state)

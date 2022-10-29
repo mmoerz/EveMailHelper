@@ -1,0 +1,26 @@
+﻿@page "/EveMails/CheckEveMailSent"
+
+<MudCard Elevation="4">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Check For Mail Sent To within last 24 Hours</MudText>
+        <MudText Typo="Typo.h6"></MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudForm>
+            <MudTextField T="string" @bind-Value="ReceiverString" Label="Receivers" HelperText="Enter receivers delimited by a colon."></MudTextField>
+            <MudDatePicker @bind-Date="Date" Label="Has not received Mail after"></MudDatePicker>
+            <MudTimePicker @bind-Time="Time" Label="Has not received Mail after"></MudTimePicker>
+            <MudTextField T="string" @bind-Value="FilteredReceiverString" Label="Filtered Receivers"
+                HelperText="This will be the list of receivers that have not received mails since the above date and time">
+            </MudTextField>
+        </MudForm>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" OnClick="@(()=> Cancel())">
+            Cancel
+        </MudButton>
+        <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" Class="ml-auto" OnClick="(()=> Submit())">
+            Save
+        </MudButton>
+    </MudCardActions>
+</MudCard>
