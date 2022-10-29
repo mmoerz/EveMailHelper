@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 using MudBlazor;
 
-namespace EveMailHelper.Pages
+namespace EveMailHelper.Pages.EveMails
 {
     public partial class ManualEveMail : ComponentBase
     {
