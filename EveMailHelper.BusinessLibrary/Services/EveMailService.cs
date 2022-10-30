@@ -67,10 +67,14 @@ namespace EveMailHelper.BusinessLibrary.Services
         public async Task<List<string>> FilterReceivers(string receivers, DateTime filterTime)
         {
             var result = await _evemailDbAccess.GetReceiversFiltered(receivers.SplitStringOfCharacters(','), filterTime);
-            List<string> receiversFiltered = new List<string>();
-            foreach (var item in result)
-                receiversFiltered.Add(item.Character.Name);
-            return receiversFiltered;
+            //List<string> receiversFiltered = new List<string>();
+            //foreach (var item in result)
+            //    receiversFiltered.Add(item.Name);
+            //receiversFiltered.AddRange(result);
+
+            //return receiversFiltered.OrderBy(x => x).ToList();
+            //return receiversFiltered;
+            return result;
         }
 
         public async Task<TableData<EveMail>> GetPaginated(string searchString, TableState state)

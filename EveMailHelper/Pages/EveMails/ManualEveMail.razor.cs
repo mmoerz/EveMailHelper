@@ -14,6 +14,7 @@ namespace EveMailHelper.Pages.EveMails
     public partial class ManualEveMail : ComponentBase
     {
         #region injections
+        [Inject] ISnackbar Snackbar { get; set; } = null!;
         [Inject] IEveMailTemplateService EveMailTemplateService { get; set; } = null!;
         // maybe of use when coloring the already known chars
         //[Inject] ICharacterService CharacterService { get; set; } = null!;
@@ -46,6 +47,7 @@ namespace EveMailHelper.Pages.EveMails
         {
             var receivers = ReceiverString.SplitStringOfCharacters(',');
             await EveMailService.SendTo(TemplateId, receivers);
+            Snackbar.Add("Message saved as sent");
         }
     }
 }
