@@ -28,7 +28,8 @@ namespace EveMailHelper.BusinessLibrary.Complex.dbAccess
         {
             // first part only gets characters that have an email sent to before the datetime
             IQueryable<Guid> queryChars = from ch in _context.Characters
-                                          where CharacterNames.Contains(ch.Name)
+                                          where CharacterNames.Contains(ch.Name) 
+                                          && ! ch.IsExcluded
                                           select ch.Id;
 
             var queryTo = from sendTo in _context.EveMailSentTos

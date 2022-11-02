@@ -27,10 +27,45 @@ namespace EveMailHelper.Pages.EveMails
         #region GUI Components
 
         #endregion
-        private string ReceiverString { get; set; } = null!;
-        private string FilteredReceiverString { get; set; } = null!;
-        private Guid TemplateId { get; set; }
-        private ICollection<EveMailTemplate> templates = null!;
+
+        private MudTextField<int>? TextFieldAmount = null!;
+        private int ReceiverAmount { get; set; }
+        private string _receiverString = null!;
+        private string ReceiverString
+        {
+            get
+            {
+                return _receiverString;
+            }
+            set 
+            {
+                _receiverString = value;
+                var helpAmount = 0;
+                if (_receiverString != null)
+                    helpAmount = value.SplitStringOfCharacters(',').Count();
+                TextFieldAmount?.SetText(helpAmount.ToString());
+            }
+        }
+
+        private MudTextField<int>? TextFieldAmountFiltered = null!;
+        private int ReceiverFilteredAmount { get; set; }
+
+        private string _filteredReceiverString = null!;
+        private string FilteredReceiverString {
+            get
+            {
+                return _filteredReceiverString;
+            }
+            set
+            {
+                _filteredReceiverString = value;
+                var helpAmount = 0;
+                if (_filteredReceiverString != null)
+                    helpAmount = value.SplitStringOfCharacters(',').Count();
+                TextFieldAmountFiltered?.SetText(helpAmount.ToString());
+            }
+        }
+        private bool SubmitDisabled { get; set; } = false;
 
         /// <summary>
         /// initialized with yesterday
@@ -53,11 +88,18 @@ namespace EveMailHelper.Pages.EveMails
         {
             if (Date == null)
                 return;
+            if (ReceiverString == null)
+                return;
+
+            SubmitDisabled = true;
+
             var receivers = ReceiverString.SplitStringOfCharacters(',');
             var filterTime = CombineDateAndTime(Date.Value, Time);
             
             var filteredReceivers = await EveMailService.FilterReceivers(ReceiverString, filterTime);
             FilteredReceiverString = string.Join(", ", filteredReceivers);
+
+            SubmitDisabled = false;
         }
 
         private static DateTime CombineDateAndTime(DateTime? dateTime, TimeSpan? timeSpan)
