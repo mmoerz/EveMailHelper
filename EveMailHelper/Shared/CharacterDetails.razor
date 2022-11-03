@@ -1,31 +1,31 @@
 ﻿<MudForm>
     <div class="d-flex flex-grow-1 gap-4">
         <MudTextField Label="Name" Disabled="!IsEditable"
-                      T="string" @bind-Value="@Model.Name"
+                      T="string" @bind-Value="@ViewModel.Name"
                       HelperText="Name of the character (yeah i know this is for dummies).">
         </MudTextField>
         <MudTextField Label="Age" Disabled="!IsEditable"
                       Class="flex-none d-flex"
-                      T="int?" @bind-Value="@Model.Age"
+                      T="int?" @bind-Value="@ViewModel.Age"
                       HelperText="Ingame character Age">
         </MudTextField>
         <MudTextField Label="Age in Reality" Disabled="!IsEditable"
                       Class="flex-none d-flex"
-                      T="int?" @bind-Value="@Model.ReallifeAge"
+                      T="int?" @bind-Value="@ViewModel.ReallifeAge"
                       HelperText="out of game age">
         </MudTextField>
         <MudDatePicker Label="Create Date" Disabled="!IsEditable"
-                       @bind-Date="date" HelperText="registered in this tool at this date">
+                       @bind-Date="@ViewModel.CreatedDate" HelperText="registered in this tool at this date">
         </MudDatePicker>
     </div>
     <div class="mt-4 d-flex flex-grow-1 gap-4">
         <MudCheckBox Label="Is a recruitee" Disabled="!IsEditable"
-                     @bind-Checked="@Model.IsInRecruitment"></MudCheckBox>
+                     @bind-Checked="@ViewModel.IsInRecruitment"></MudCheckBox>
         <MudCheckBox Label="Wishes not to be disturbed" Disabled="!IsEditable"
-                     @bind-Checked="@Model.IsExcluded"></MudCheckBox>
+                     @bind-Checked="@ViewModel.IsExcluded"></MudCheckBox>
     </div>
     <MudTextField Label="Description" Disabled="!IsEditable"
-                  T="string" @bind-Value="@Model.Description" HelperText="Short summary about this guy/girl.">
+                  T="string" @bind-Value="@ViewModel.Description" HelperText="Short summary about this guy/girl.">
     </MudTextField>
 
     <div class="mt-4 d-flex align-center justify-space-between">

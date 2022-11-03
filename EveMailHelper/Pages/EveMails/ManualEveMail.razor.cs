@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 using MudBlazor;
 
+using System.ComponentModel;
+using System.Text;
+
 namespace EveMailHelper.Pages.EveMails
 {
     public partial class ManualEveMail : ComponentBase
@@ -28,8 +31,10 @@ namespace EveMailHelper.Pages.EveMails
         #region GUI Components
 
         #endregion
+
+        static Guid defaultValue = Guid.Parse("6d5fa73f7a8c4f09d59408dab9e7fc3c");
         private string ReceiverString { get; set; } = null!;
-        private Guid TemplateId { get; set; }
+        private Guid TemplateId { get; set; } = defaultValue;
         private ICollection<EveMailTemplate> templates = null!;
 
         protected override async Task OnInitializedAsync()
@@ -38,13 +43,15 @@ namespace EveMailHelper.Pages.EveMails
             templates = await EveMailTemplateService.GetAll();
         }
 
-        private static void Cancel()
+        private void Cancel()
         {
-            //newModels();
+            ReceiverString = "";
         }
 
         private async Task Submit()
         {
+            //if (TemplateId == null)
+            //    return;
             var receivers = ReceiverString.SplitStringOfCharacters(',');
             await EveMailService.SendTo(TemplateId, receivers);
             Snackbar.Add("Message saved as sent");

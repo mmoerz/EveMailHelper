@@ -11,7 +11,8 @@
                        Label="Template"
                        @bind-Value="TemplateId"
                        HelperText="Choose a template to send"
-                       Placeholder="select one">
+                       Placeholder="select one"
+            >
                 @if (templates != null)
                 {
                     @foreach (EveMailTemplate template in templates)
