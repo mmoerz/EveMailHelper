@@ -22,13 +22,14 @@ namespace EveMailHelper.Shared.Notes
         public EventCallback<Note> DialogSaved { get; set; }
         #endregion
 
-        MudForm? form = null!;
+        private MudForm? form = null!;
         
         private async Task Save()
         {
-            //await form.Validate();
+            _ = form ?? throw new NullReferenceException("form must not be null");
+            await form.Validate();
 
-            //if (form.IsValid)
+            if (form.IsValid)
             {
                 // Notify parent component to
                 // submit the changed Analysisrequest

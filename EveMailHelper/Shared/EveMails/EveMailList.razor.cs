@@ -1,18 +1,18 @@
 ﻿using EveMailHelper.BusinessLibrary.Services;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataAccessLayer.Models;
-
+using EveMailHelper.Shared.EveMails;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 
 using MudBlazor;
 
-namespace EveMailHelper.Shared
+namespace EveMailHelper.Shared.EveMails
 {
-    public partial class EveMailTemplateList : ComponentBase
+    public partial class EveMailList : ComponentBase
     {
         #region injections
-        [Inject] IEveMailTemplateService EveMailTemplateService { get; set; } = null!;
+        [Inject] IEveMailService EveMailService { get; set; } = null!;
 
         [Inject] IDialogService DialogService { get; set; } = null!;
         #endregion
@@ -24,14 +24,14 @@ namespace EveMailHelper.Shared
         private readonly bool readOnly = false;
 
         //private IEnumerable<Report> pagedData = null!;
-        private MudTable<EveMailTemplate>? table = null!;
+        private MudTable<EveMail>? table = null!;
         //private int totalItems;
         private string searchString = "";
         #endregion
 
         #region rowselection
         private int selectedRowNumber = -1;
-        private EveMailTemplate model = null!;
+        private EveMail model = null!;
         #endregion
 
         //protected override async Task OnInitializedAsync()
@@ -41,10 +41,10 @@ namespace EveMailHelper.Shared
         /// <summary>
         /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>
-        private async Task<TableData<EveMailTemplate>> ServerReload(TableState state)
+        private async Task<TableData<EveMail>> ServerReload(TableState state)
         {
-            TableData<EveMailTemplate> onePage =
-                await EveMailTemplateService.GetPaginated(searchString, state);
+            TableData<EveMail> onePage =
+                await EveMailService.GetPaginated(searchString, state);
 
             //await Task.Delay(300);
 
@@ -57,7 +57,7 @@ namespace EveMailHelper.Shared
             table?.ReloadServerData();
         }
 
-        private void RowClickEvent(TableRowClickEventArgs<EveMailTemplate> tableRowClickEventArgs)
+        private void RowClickEvent(TableRowClickEventArgs<EveMail> tableRowClickEventArgs)
         {
             if (selectedRowNumber != -1)
             {
@@ -65,13 +65,13 @@ namespace EveMailHelper.Shared
                 var parameters = new DialogParameters
                 {
                     { "model", tableRowClickEventArgs.Item },
-                    { "DialogSaved", new EventCallback<EveMailTemplate>(this, new Action<EveMailTemplate>(DialogWasSaved)) }
+                    { "DialogSaved", new EventCallback<EveMail>(this, new Action<EveMail>(DialogWasSaved)) }
                 };
-                var dialog = DialogService.Show<EveMailTemplateDialog>("Edit Eve Mail Template", parameters, options);
+                var dialog = DialogService.Show<EveMailDialog>("Edit Eve Mail", parameters, options);
             }
         }
 
-        private string SelectedRowClassFunc(EveMailTemplate rmodel, int rowNumber)
+        private string SelectedRowClassFunc(EveMail rmodel, int rowNumber)
         {
             if (selectedRowNumber == rowNumber)
             {
@@ -92,17 +92,23 @@ namespace EveMailHelper.Shared
         {
             model = new();
 
-            var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+            var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth=MaxWidth.Large, FullWidth = true };
             var parameters = new DialogParameters
             {
                 { "model", model },
-                { "DialogSaved", new EventCallback<EveMailTemplate>(this, new Action<EveMailTemplate>(DialogWasSaved)) }
+                { "DialogSaved", new EventCallback<EveMail>(this, new Action<EveMail>(DialogWasSaved)) }
             };
-            var dialog = DialogService.Show<EveMailTemplateDialog>("Edit Eve Mail Template", parameters, options);
+            var dialog = DialogService.Show<EveMailDialog>("Edit Eve Mail Template", parameters, options);
         }
 
-        private void DialogWasSaved(EveMailTemplate eveMailTemplate)
+        private void DialogWasSaved(EveMail eveMailTemplate)
         {
+            table?.ReloadServerData();
+        }
+
+        private void DeleteEmail(EveMail mail)
+        {
+            EveMailService.Delete(mail);
             table?.ReloadServerData();
         }
     }

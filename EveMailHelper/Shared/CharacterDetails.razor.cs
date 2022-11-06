@@ -5,6 +5,8 @@ using EveMailHelper.Models;
 
 using Microsoft.AspNetCore.Components;
 
+using System.Security.Permissions;
+
 namespace EveMailHelper.Shared
 {
     public partial class CharacterDetails : ComponentBase
@@ -30,12 +32,7 @@ namespace EveMailHelper.Shared
                 ViewModel.CopyShallow(value);
             }
         }
-        //get { _character.CreatedDate = date ?? DateTime.Now; return _character; } 
-        //set { _character = value; date = _character.CreatedDate; } 
-        //}
-        //private Character _character = null!;
         
-
         [Parameter]
         public EventCallback<Character> OnCharacterSave { get; set; }
         #endregion
@@ -45,12 +42,10 @@ namespace EveMailHelper.Shared
         /// </summary>
         private ViewCharacter ViewModel { get; set; } = new();
 
-        // a mudblazor hack, since the datetimepicker requires a nullable var
-        //private DateTime? date //= DateTime.Now;
-        //{
-        //    get { return ViewModel.CreatedDate; }
-        //    set { ViewModel.CreatedDate = value ?? DateTime.Now; }
-        //}
+        public void SetModel(Character character)
+        {
+            Model = character;
+        }
 
         public bool IsEditable { get; set; } = false;
         private ViewCharacter _backup = null!;

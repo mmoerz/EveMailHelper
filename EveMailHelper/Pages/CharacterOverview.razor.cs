@@ -15,11 +15,14 @@ namespace EveMailHelper.Pages
 
         public CharacterList? ListOfCharacters = null!;
 
-        public Character Model { get; set; } = new();
+        //public Character Model { get; set; } = new();
+
+        private CharacterDetails? CharDetails { get; set; } = null!;
 
         private void CharacterSelected(Character character)
         {
-            Model.CopyShallow(character);
+            _ = CharDetails ?? throw new NullReferenceException("CharDetails");
+            CharDetails.SetModel(character);
         }
 
         private void CharacterChanged(Character character)

@@ -38,6 +38,15 @@ namespace EveMailHelper.BusinessLibrary.Services
             return chat;
         }
 
+        public async Task<Chat> UpdateTracked(Chat chat)
+        {
+            _ = chat ?? throw new ArgumentNullException(nameof(chat));
+            var helper = await _dbAccess.GetById(chat.Id);
+            helper.CopyShallowNoId(chat);
+            _dbAccess.Update(chat);
+            return chat;
+        }
+
         public async Task<TableData<Chat>> GetPaginated(string searchString, TableState state)
         {
             return await _dbAccess.GetPaginated(searchString, state);

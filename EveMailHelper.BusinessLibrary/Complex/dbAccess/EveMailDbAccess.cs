@@ -30,6 +30,7 @@ namespace EveMailHelper.BusinessLibrary.Complex.dbAccess
             IQueryable<Guid> queryChars = from ch in _context.Characters
                                           where CharacterNames.Contains(ch.Name) 
                                           && ! ch.IsExcluded
+                                          && ! ch.IsInRecruitment
                                           select ch.Id;
 
             var queryTo = from sendTo in _context.EveMailSentTos

@@ -5,25 +5,25 @@ using Microsoft.AspNetCore.Components;
 
 using MudBlazor;
 
-namespace EveMailHelper.Shared
+namespace EveMailHelper.Shared.EveMails
 {
-    public partial class EveMailTemplateDialog : ComponentBase
+    public partial class EveMailDialog : ComponentBase
     {
         #region injections
-        [Inject] IEveMailTemplateService EveMailTemplateService { get; set; } = null!;
+        [Inject] IEveMailService EveMailService { get; set; } = null!;
         #endregion
 
         #region parameters
         [CascadingParameter]
         MudDialogInstance MudDialog { get; set; } = null!;
         [Parameter]
-        public EveMailTemplate Model { get; set; } = new();
+        public EveMail Model { get; set; } = new();
         [Parameter]
-        public EventCallback<EveMailTemplate> DialogSaved { get; set; }
+        public EventCallback<EveMail> DialogSaved { get; set; }
         #endregion
 
         MudForm? form = null!;
-        
+
         private async Task Save()
         {
             //await form.Validate();
@@ -32,10 +32,10 @@ namespace EveMailHelper.Shared
             {
                 // Notify parent component to
                 // submit the changed Analysisrequest
-                EveMailTemplateService.AddOrUpdate(Model);
+                EveMailService.Update(Model);
                 await DialogSaved.InvokeAsync(Model);
             }
-            
+
             MudDialog.Close();
         }
 

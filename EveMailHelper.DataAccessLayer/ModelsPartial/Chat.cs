@@ -22,5 +22,19 @@ namespace EveMailHelper.DataAccessLayer.Models
                 Messages.Add(message);
             }
         }
+
+        public void CopyShallowNoId(Chat chat)
+        {
+            ChannelName = chat.ChannelName;
+            Listener = chat.Listener;
+            ListenerId = chat.ListenerId;
+            AttachedTo = chat.AttachedTo;
+            AttachedToId = chat.AttachedToId;
+            SessionStarted = chat.SessionStarted;
+            foreach (var message in chat.Messages)
+            {
+                Messages.Add(message);
+            }
+        }
     }
 }

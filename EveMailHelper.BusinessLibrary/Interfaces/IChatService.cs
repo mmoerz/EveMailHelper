@@ -9,5 +9,6 @@ namespace EveMailHelper.BusinessLibrary.Interfaces
         Chat AddOrUpdate(Chat chat);
         Task<Chat?> GetById(Guid id);
         Task<TableData<Chat>> GetPaginated(string searchString, TableState state);
+        Task<Chat> UpdateTracked(Chat chat);
     }
 }

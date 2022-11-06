@@ -1,0 +1,34 @@
+﻿<MudForm>
+    <div class="d-flex flex-grow-1 gap-4">
+        <MudTextField Label="Title" Disabled="!IsEditable"
+                      T="string" @bind-Value="@Chat.ChannelName"
+                      HelperText="Title of the note">
+        </MudTextField>
+        
+        <MudDatePicker Label="Create Date" Disabled="!IsEditable"
+                       @bind-Date="@Date" HelperText="registered in this tool at this date">
+        </MudDatePicker>
+    </div>
+    <MudTextField Label="Content" Disabled="!IsEditable"
+                  Class="flex-none d-flex"
+                  T="string" @bind-Value="Chat.Listener.Name"
+                  HelperText="The note itself."
+                  Lines="3">
+    </MudTextField>
+    @if (ButtonsEnabled)
+    {
+        <div class="mt-4 d-flex align-center justify-space-between">
+            @if (IsEditable)
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Cancel" Class="ml-2">Cancel</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Save" Disabled="false" Class="ml-auto">
+                    Save
+                </MudButton>
+            }
+            else
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Edit" Class="ml-2">Edit</MudButton>
+            }
+        </div>
+    }
+</MudForm>

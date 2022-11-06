@@ -84,7 +84,8 @@ namespace EveMailHelper.BusinessLibrary.Services
             return new TableData<Character>()
             {
                 Items = await query
-                .AsNoTracking()
+                //.AsNoTracking()
+                .AsTracking()
                 .Include(c => c.EveMailReceived)
                 .ToListAsync(),
                 TotalItems = totalItems,

@@ -2,6 +2,7 @@
 using EveMailHelper.BusinessLibrary.Services;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataAccessLayer.Models;
+using EveMailHelper.Shared.EveMails;
 using EveMailHelper.Shared.Notes;
 
 using Microsoft.AspNetCore.Components;
