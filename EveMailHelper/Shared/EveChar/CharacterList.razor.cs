@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 using MudBlazor;
 
-namespace EveMailHelper.Shared
+namespace EveMailHelper.Shared.EveChar
 {
     public partial class CharacterList : ComponentBase
     {
@@ -33,7 +33,7 @@ namespace EveMailHelper.Shared
 
         #region rowselection
         private int selectedRowNumber = -1;
-        private Character model = null!;
+        //private Character model = null!;
         #endregion
 
         //protected override async Task OnInitializedAsync()
@@ -81,7 +81,7 @@ namespace EveMailHelper.Shared
             else if (table?.SelectedItem != null && table.SelectedItem.Equals(rmodel))
             {
                 selectedRowNumber = rowNumber;
-                model = rmodel;
+                //model = rmodel;
 
                 return "selected";
             }

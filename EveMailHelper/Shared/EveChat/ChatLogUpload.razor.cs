@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components.Forms;
 
 using MudBlazor;
 
-namespace EveMailHelper.Shared
+namespace EveMailHelper.Shared.EveChat
 {
     public partial class ChatLogUpload : ComponentBase
     {

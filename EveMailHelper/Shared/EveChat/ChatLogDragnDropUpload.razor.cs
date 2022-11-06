@@ -9,7 +9,7 @@ using MudBlazor;
 
 using System.Collections.Generic;
 
-namespace EveMailHelper.Shared
+namespace EveMailHelper.Shared.EveChat
 {
     public partial class ChatLogDragnDropUpload : ComponentBase
     {

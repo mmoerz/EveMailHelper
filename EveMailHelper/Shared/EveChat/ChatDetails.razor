@@ -1,0 +1,27 @@
+﻿<div class="d-flex flex-grow-1 gap-4">
+    <MudTextField Label="Channelname" Disabled="false"
+                  T="string" @bind-Value="@Chat.ChannelName"
+                  HelperText="Name of the channel">
+    </MudTextField>
+
+    <MudText>Create Date</MudText>
+    <MudText>@Chat.SessionStarted
+         (chat was conducted at this date)
+    </MudText>
+    <MudText>Listener: </MudText>
+    <MudText>
+        @Chat.Listener.Name
+    </MudText>
+</div>
+<MudText>Chat is associated with Character:</MudText>
+<MudText>@Chat.AttachedTo.Name</MudText>
+
+<!-- message output -->
+@if (ButtonsEnabled)
+{
+    <div class="mt-4 d-flex align-center justify-space-between">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Close" Disabled="false" Class="ml-auto">
+            Close
+        </MudButton>
+    </div>
+}

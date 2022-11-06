@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace EveMailHelper.DataAccessLayer.Models
 {
-    public class CharacterStatus
+    public enum CharacterStatus
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; } = null!;
+        None,
+        InRecruitment,
+        CorpMember,
+        WasInRecruitment,
+        WasCorpMember
     }
 }

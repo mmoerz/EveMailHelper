@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components;
 
 using System.Security.Permissions;
 
-namespace EveMailHelper.Shared
+namespace EveMailHelper.Shared.EveChar
 {
     public partial class CharacterDetails : ComponentBase
     {
@@ -75,6 +75,17 @@ namespace EveMailHelper.Shared
             await CharacterService.Update(Model);
             await OnCharacterSave.InvokeAsync(Model);
             IsEditable = false;
+        }
+
+        protected Dictionary<CharacterStatus, string> GetCharacterStati()
+        {
+            Dictionary<CharacterStatus, string> result = new();
+            var stati = Enum.GetValues<CharacterStatus>().ToList();
+            foreach(var status in stati)
+            {
+                result[status] = status.ToString();
+            }
+            return result;
         }
     }
 }

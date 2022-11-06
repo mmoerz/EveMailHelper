@@ -17,10 +17,14 @@ namespace EveMailHelper.DataAccessLayer.Models
 
         public Guid ListenerId { get; set; }
 
+        public Guid ChatFileId { get; set; }
+
         public DateTime SessionStarted { get; set; }
 
         public Character Listener { get; set; } = null!;
         public Character AttachedTo { get; set; } = null!;
+
+        public ChatFile ChatFile { get; set; } = null!;
 
         public virtual ICollection<ChatMessage> Messages { get; set; } = null!;
     }

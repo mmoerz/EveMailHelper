@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using EveMailHelper.DataAccessLayer.Models;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EveMailHelper.DataAccessLayer.Configuration
 {
@@ -18,7 +19,10 @@ namespace EveMailHelper.DataAccessLayer.Configuration
             builder.Property(c => c.Description)
                 .HasMaxLength(400);
 
-            
+            builder.Property(c => c.Status)
+                .HasDefaultValue(CharacterStatus.None)
+                .HasConversion(new EnumToStringConverter<CharacterStatus>())
+                .IsRequired();
 
         }
     }

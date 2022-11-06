@@ -7,7 +7,7 @@
         <MudTextField Label="Age" Disabled="!IsEditable"
                       Class="flex-none d-flex"
                       T="int?" @bind-Value="@ViewModel.Age"
-                      HelperText="Ingame character Age">
+                      HelperText="Ingame character age">
         </MudTextField>
         <MudTextField Label="Age in Reality" Disabled="!IsEditable"
                       Class="flex-none d-flex"
@@ -19,6 +19,12 @@
         </MudDatePicker>
     </div>
     <div class="mt-4 d-flex flex-grow-1 gap-4">
+        <MudSelect Label="Status" Disabled="!IsEditable"
+            @bind-Value="@ViewModel.Status">
+            @foreach (var kvp in GetCharacterStati()) {
+                <MudSelectItem Value="kvp.Key">@kvp.Value</MudSelectItem>
+            }
+        </MudSelect>
         <MudCheckBox Label="Is a recruitee" Disabled="!IsEditable"
                      @bind-Checked="@ViewModel.IsInRecruitment"></MudCheckBox>
         <MudCheckBox Label="Wishes not to be disturbed" Disabled="!IsEditable"

@@ -23,6 +23,8 @@ namespace EveMailHelper.DataAccessLayer.Models
         public string? Description { get; set; } = null!;
         public bool IsExcluded { get; set; } = false;
         public bool IsInRecruitment { get; set; } = false;
+
+        public CharacterStatus Status { get; set; } = CharacterStatus.None;
         public DateTime CreatedDate { get; set; }
 
         public virtual ICollection<EveMailSentTo> EveMailReceived { get; set; }

@@ -13,6 +13,7 @@ namespace EveMailHelper.Models
             character.Age = viewCharacter.Age;
             character.ReallifeAge = viewCharacter.ReallifeAge;
             character.Description = viewCharacter.Description;
+            character.Status = character.Status;
             character.IsExcluded = viewCharacter.IsExcluded;
             character.IsInRecruitment = viewCharacter.IsInRecruitment;
             character.CreatedDate = viewCharacter.CreatedDate != null ? 

@@ -1,9 +1,8 @@
 ﻿using EveMailHelper.DataAccessLayer.Models;
-using EveMailHelper.Shared;
-
+using EveMailHelper.Shared.EveChar;
 using Microsoft.AspNetCore.Components;
 
-namespace EveMailHelper.Pages
+namespace EveMailHelper.Pages.EveChar
 {
     public partial class CharacterOverview : ComponentBase
     {
