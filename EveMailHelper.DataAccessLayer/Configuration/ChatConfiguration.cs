@@ -20,9 +20,10 @@ namespace EveMailHelper.DataAccessLayer.Configuration
                 .WithMany()
                 .HasForeignKey(c => c.ListenerId)
                 .OnDelete(DeleteBehavior.ClientCascade);
-            builder.HasOne(c => c.ChatFile)
+            builder.HasOne(c => c.ChatFile)               
                 .WithOne(cf => cf.Chat)
-                .HasForeignKey<ChatFile>(cf => cf.ChatId)
+                
+                //.HasForeignKey<ChatFile>(cf => cf.ChatId);
                 .HasForeignKey<Chat>(c => c.ChatFileId);
         }
     }
