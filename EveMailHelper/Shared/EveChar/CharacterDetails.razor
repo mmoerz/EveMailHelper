@@ -20,15 +20,20 @@
     </div>
     <div class="mt-4 d-flex flex-grow-1 gap-4">
         <MudSelect Label="Status" Disabled="!IsEditable"
-            @bind-Value="@ViewModel.Status">
-            @foreach (var kvp in GetCharacterStati()) {
+                   @bind-Value="@ViewModel.Status"
+                   Class="flex-none d-flex" HelperText="Relationship of the corporation to this character">
+            @foreach (var kvp in GetCharacterStati())
+            {
                 <MudSelectItem Value="kvp.Key">@kvp.Value</MudSelectItem>
             }
         </MudSelect>
         <MudCheckBox Label="Is a recruitee" Disabled="!IsEditable"
-                     @bind-Checked="@ViewModel.IsInRecruitment"></MudCheckBox>
+                     @bind-Checked="@ViewModel.IsInRecruitment"
+                     Class="d-flex mt-2"></MudCheckBox>
         <MudCheckBox Label="Wishes not to be disturbed" Disabled="!IsEditable"
-                     @bind-Checked="@ViewModel.IsExcluded"></MudCheckBox>
+                     @bind-Checked="@ViewModel.IsExcluded"
+                     Class="flex-none d-flex mt-2"
+        ></MudCheckBox>
     </div>
     <MudTextField Label="Description" Disabled="!IsEditable"
                   T="string" @bind-Value="@ViewModel.Description" HelperText="Short summary about this guy/girl.">

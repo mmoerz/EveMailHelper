@@ -21,12 +21,15 @@ namespace EveMailHelper.BusinessLibrary.Services
         #region injected
         #endregion
         private readonly ChatDbAccess _dbAccess;
+        private readonly ChatFileDbAccess _dbAccessChatFile;
+        private readonly EveMailHelperContext _dbContext;
         //private readonly RunnerWriteDb<Note, Note> _addTemplateRunner;
 
         public ChatService(IDbContextFactory<EveMailHelperContext> dbContextFactory)
         {
-            var dbContext = dbContextFactory.CreateDbContext();
-            _dbAccess = new(dbContext);
+            _dbContext = dbContextFactory.CreateDbContext();
+            _dbAccess = new(_dbContext);
+            _dbAccessChatFile = new(_dbContext);
         }
 
         public Chat AddOrUpdate(Chat chat)
@@ -55,6 +58,24 @@ namespace EveMailHelper.BusinessLibrary.Services
         public async Task<Chat?> GetById(Guid id)
         {
             return await _dbAccess.GetById(id);
+        }
+
+        public async Task<ChatFile> GetChatFileById(Guid id)
+        {
+            return await _dbAccessChatFile.GetById(id);
+        }
+
+        public async Task<ChatFile> UpdateChatFile(ChatFile chatFile)
+        {
+            var result =_dbAccessChatFile.Update(chatFile);
+            await _dbContext.SaveChangesAsync();
+            return result;
+        }
+
+        public async Task RemoveChatFile(Guid id)
+        {
+            await _dbAccessChatFile.Remove(id);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

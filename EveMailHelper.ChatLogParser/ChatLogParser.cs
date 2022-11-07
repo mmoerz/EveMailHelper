@@ -34,7 +34,7 @@ namespace EveMailHelper.ChatLogParser
 
         }
 
-        public ParserChat Chat { get; set; } = new();
+        //public ParserChat Chat { get; set; } = new();
 
         public int LineCount { get; set; } = 0;
 
@@ -61,8 +61,10 @@ namespace EveMailHelper.ChatLogParser
                 throw new Exception($"missing directory ${path}");
         }
 
-        private bool ParseHeader(TextReader txtR)
+        private ParserChat ParseHeader(StreamReader txtR)
         {
+            ParserChat chat = new();
+
             bool HeaderComplete = false;
             int[] emptyLines = new int[7] { 1, 2, 3, 4, 6, 12, 13 };
 
@@ -78,59 +80,66 @@ namespace EveMailHelper.ChatLogParser
                 {
                     case 5:
                         if (!ParserRegexes.dashLine.IsMatch(line))
-                            return false;
+                            throw new Exception("line 5 was not a dashline");
                         break;
 
                     case 7:
                         match = ParserRegexes.channelId.Match(line);
                         if (!match.Success)
-                            return false;
-                        Chat.ChannelId = match.Groups[1].Value;
+                            throw new Exception("line 7 didn't contain channelid");
+                        chat.ChannelId = match.Groups[1].Value;
                         break;
                     case 8:
                         match = ParserRegexes.channelName.Match(line);
                         if (!match.Success)
-                            return false;
-                        Chat.ChannelName = match.Groups[1].Value;
+                            throw new Exception("line 8 did not contain channel name");
+                        chat.ChannelName = match.Groups[1].Value;
                         break;
                     case 9:
                         match = ParserRegexes.Listener.Match(line);
                         if (!match.Success)
-                            return false;
-                        Chat.Listener = match.Groups[1].Value;
+                            throw new Exception("line 9 did not contain Listener");
+                        chat.Listener = match.Groups[1].Value;
                         break;
                     case 10:
                         match = ParserRegexes.SessionStarted.Match(line);
                         if (!match.Success)
-                            return false;
-                        Chat.StartedAt = DateTime.Parse(match.Groups[1].Value);
+                            throw new Exception("line 10 did not contain session start time");
+                        chat.StartedAt = DateTime.Parse(match.Groups[1].Value);
                         break;
                     case 11:
                         if (ParserRegexes.dashLine.IsMatch(line))
                             HeaderComplete = true;
+                        else
+                            throw new Exception("line 11 did not contain dashline");
                         break;
                     default:
                         break;
                 }
             }
-            return HeaderComplete;
+            return chat;
         }
 
-        public void ParseFile(string filename)
+        public ParserChat ParseFile(string filename)
         {
             LineCount = 0;
             using var txtR = File.OpenText(filename);
+
+            return ParseStream(txtR);
+        }
+
+        public ParserChat ParseStream(StreamReader streamReader)
+        { 
+            var chat = ParseHeader(streamReader);
             string? line;
 
-            var headerResult = ParseHeader(txtR);
-
-            if ((line = txtR.ReadLine()) == null)
-                return;
+            if ((line = streamReader.ReadLine()) == null)
+                return chat;
             LineCount++;
 
             if (string.IsNullOrEmpty(line))
-                if ((line = txtR.ReadLine()) == null)
-                    return;
+                if ((line = streamReader.ReadLine()) == null)
+                    return chat;
 
             do
             {
@@ -138,14 +147,15 @@ namespace EveMailHelper.ChatLogParser
                 
                 var match = ParserRegexes.Message.Match(line);
                 if (!match.Success)
-                    throw new Exception($"unknown message format encountered in file {filename} at line: {LineCount}");
-                Chat.Messages.Add(new ParserChatMessage()
+                    throw new Exception($"unknown message format encountered at line: {LineCount}");
+                chat.Messages.Add(new ParserChatMessage()
                 {
                     TimeStamp = DateTime.Parse(match.Groups["timestamp"].Value),
                     Author = match.Groups["author"].Value,
                     Message = match.Groups["message"].Value
                 });
-            } while ((line = txtR.ReadLine()) != null);
+            } while ((line = streamReader.ReadLine()) != null);
+            return chat;
         }
     }
 }

@@ -1,10 +1,13 @@
-﻿namespace EveMailHelper.ChatLogParser
+﻿using EveMailHelper.ChatLogParser.Models;
+
+namespace EveMailHelper.ChatLogParser
 {
     public interface IChatLogParser
     {
         string GetUploadPath { get; }
 
-        void ParseFile(string filename);
+        ParserChat ParseFile(string filename);
+        ParserChat ParseStream(StreamReader streamReader);
         void PreFlightCheck();
     }
 }
