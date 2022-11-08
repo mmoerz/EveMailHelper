@@ -17,7 +17,7 @@ namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools
             services.AddTransient<IEveMailTemplateService, EveMailTemplateService>();
             services.AddTransient<ICommunicationService, CommunicationService>();
             services.AddTransient<INoteService, NoteService>();
-
+            services.AddTransient<IChatService, ChatService>();
         }
     }
 }

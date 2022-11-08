@@ -2,6 +2,7 @@
 using EveMailHelper.BusinessLibrary.Services;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataAccessLayer.Models;
+using EveMailHelper.Shared.EveChat;
 using EveMailHelper.Shared.EveMails;
 using EveMailHelper.Shared.Notes;
 
@@ -79,7 +80,7 @@ namespace EveMailHelper.Shared
                 var parameters = new DialogParameters
                     {
                     { "model", tableRowClickEventArgs.Item.obj },
-                    { "DialogSaved", new EventCallback<Chat>(this, new Action<Chat>(ChatDialogWasSaved)) }
+                    { "DialogSaved", new EventCallback<Character>(this, new Action<Character>(ChatDialogWasSaved)) }
                     };
                 //var dialog = DialogService.Show<ChatDialog>("Edit Chat", parameters, options);
             }
@@ -118,18 +119,18 @@ namespace EveMailHelper.Shared
             var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
             var parameters = new DialogParameters
                 {
-                    { "model", chat },
-                    { "DialogSaved", new EventCallback<Chat>(this, new Action<Chat>(ChatDialogWasSaved)) }
+                    { "Character", Character },
+                    { "DialogSaved", new EventCallback<Character>(this, new Action<Character>(ChatDialogWasSaved)) }
                 };
-            return DialogService.Show<EveMailDialog>("Add Chat", parameters, options);
+            return DialogService.Show<ChatLogFileUploadDialog>("Add Chats", parameters, options);
         }
 
-        private IDialogReference CreateEmailDialog(object note)
+        private IDialogReference CreateEmailDialog(object email)
         {
             var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
             var parameters = new DialogParameters
                 {
-                    { "model", note },
+                    { "model", email },
                     { "DialogSaved", new EventCallback<EveMail>(this, new Action<EveMail>(EveMailDialogWasSaved)) }
                 };
             return DialogService.Show<EveMailDialog>("Edit Eve Mail", parameters, options);
@@ -170,7 +171,7 @@ namespace EveMailHelper.Shared
             table?.ReloadServerData();
         }
 
-        private void ChatDialogWasSaved(Chat chat)
+        private void ChatDialogWasSaved(Character character)
         {
             table?.ReloadServerData();
         }

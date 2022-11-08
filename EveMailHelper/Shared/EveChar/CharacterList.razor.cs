@@ -12,6 +12,7 @@ namespace EveMailHelper.Shared.EveChar
     public partial class CharacterList : ComponentBase
     {
         #region injections
+        [Inject] IDialogService DialogService { get; set; } = null!;
         [Inject] NavigationManager Navigation { get; set; } = null!;
         [Inject] ICharacterService CharacterService { get; set; } = null!;
 
@@ -24,7 +25,7 @@ namespace EveMailHelper.Shared.EveChar
 
         #region pagination stuff
         private readonly bool readOnly = false;
-        
+
         //private IEnumerable<Report> pagedData = null!;
         private MudTable<Character>? table = null!;
         //private int totalItems;
@@ -89,6 +90,17 @@ namespace EveMailHelper.Shared.EveChar
         }
 
         private void DeleteCharacter(Character character)
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            var parameters = new DialogParameters
+            {
+                { "Character", character },
+                { "DialogSaved", new EventCallback<Character>(this, new Action<Character>(FinallyDeleteCharacter)) }
+            };
+            DialogService.Show<CharacterDeleteDialog>("Delete Character", parameters, options);
+        }
+
+        private void FinallyDeleteCharacter(Character character)
         {
             CharacterService.Delete(character);
             table?.ReloadServerData();
