@@ -1,5 +1,6 @@
 ﻿using EveMailHelper.BusinessLibrary.Services;
-using EveMailHelper.DataAccessLayer.Models;
+using EveMailHelper.DataModels;
+using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.Shared;
 
 using Microsoft.AspNetCore.Components;

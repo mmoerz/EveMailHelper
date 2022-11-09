@@ -1,16 +1,10 @@
-﻿using EveMailHelper.BusinessLibrary.Complex.dto;
-using EveMailHelper.BusinessLibrary.Services;
-using EveMailHelper.BusinessLibrary.Tools;
-using EveMailHelper.DataAccessLayer.Context;
-using EveMailHelper.DataAccessLayer.Models;
-
-using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Components;
 
 using MudBlazor;
 
-using System.ComponentModel;
-using System.Text;
+using EveMailHelper.BusinessLibrary.Tools;
+using EveMailHelper.DataModels;
+using EveMailHelper.ServiceLayer.Interfaces;
 
 namespace EveMailHelper.Pages.EveMails
 {

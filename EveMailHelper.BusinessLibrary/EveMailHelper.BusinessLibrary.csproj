@@ -9,12 +9,13 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
-    <PackageReference Include="MudBlazor" Version="6.0.17" />
+    <PackageReference Include="MudBlazor" Version="6.0.18" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EveMailHelper.BusinessDataAccess\EveMailHelper.BusinessDataAccess.csproj" />
     <ProjectReference Include="..\EveMailHelper.ChatLogParser\EveMailHelper.ChatLogParser.csproj" />
-    <ProjectReference Include="..\EveMailHelper.DataAccessLayer\EveMailHelper.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\EveMailHelper.DataModels\EveMailHelper.DataModels.csproj" />
   </ItemGroup>
 
 </Project>

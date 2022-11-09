@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using EveMailHelper.DataAccessLayer.Models;
+using EveMailHelper.DataModels;
 
 namespace EveMailHelper.DataAccessLayer.Context
 {

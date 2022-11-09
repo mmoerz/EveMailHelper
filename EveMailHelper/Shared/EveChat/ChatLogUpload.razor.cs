@@ -1,9 +1,9 @@
-﻿using EveMailHelper.DataAccessLayer.Models;
-
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
 using MudBlazor;
+
+using EveMailHelper.DataModels;
 
 namespace EveMailHelper.Shared.EveChat
 {

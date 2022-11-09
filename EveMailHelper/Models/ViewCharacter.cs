@@ -1,6 +1,4 @@
-﻿using EveMailHelper.DataAccessLayer.Models;
-
-using System.Security.Permissions;
+﻿using EveMailHelper.DataModels;
 
 namespace EveMailHelper.Models
 {

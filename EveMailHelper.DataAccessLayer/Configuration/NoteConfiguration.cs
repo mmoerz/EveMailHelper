@@ -1,7 +1,7 @@
-﻿using EveMailHelper.DataAccessLayer.Models;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using EveMailHelper.DataModels;
 
 namespace EveMailHelper.DataAccessLayer.Configuration
 {

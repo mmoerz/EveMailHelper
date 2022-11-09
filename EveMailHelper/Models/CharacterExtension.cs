@@ -1,6 +1,4 @@
-﻿using EveMailHelper.DataAccessLayer.Migrations;
-using EveMailHelper.DataAccessLayer.Models;
-using System.Xml.Linq;
+﻿using EveMailHelper.DataModels;
 
 namespace EveMailHelper.Models
 {

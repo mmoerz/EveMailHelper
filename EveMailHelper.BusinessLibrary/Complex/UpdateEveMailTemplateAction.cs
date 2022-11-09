@@ -1,9 +1,9 @@
-﻿using EveMailHelper.BusinessLibrary.Complex.dbAccess;
-using EveMailHelper.DataAccessLayer.Models;
-
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 
 using System.Collections.Immutable;
+
+using EveMailHelper.BusinessDataAccess;
+using EveMailHelper.DataModels;
 
 namespace EveMailHelper.BusinessLibrary.Complex
 {

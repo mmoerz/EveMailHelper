@@ -1,15 +1,13 @@
-using at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools;
-
-using EveMailHelper.DataAccessLayer.Context;
-
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.EntityFrameworkCore;
 
 using MudBlazor.Services;
 
 using NLog.Web;
+
+using EveMailHelper.BusinessLogicLibrary.Tools;
+using EveMailHelper.ServiceLayer.Tools;
+using EveMailHelper.DataAccessLayer.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 

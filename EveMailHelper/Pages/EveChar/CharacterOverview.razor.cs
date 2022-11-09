@@ -1,6 +1,7 @@
-﻿using EveMailHelper.DataAccessLayer.Models;
+﻿using Microsoft.AspNetCore.Components;
+
+using EveMailHelper.DataModels;
 using EveMailHelper.Shared.EveChar;
-using Microsoft.AspNetCore.Components;
 
 namespace EveMailHelper.Pages.EveChar
 {

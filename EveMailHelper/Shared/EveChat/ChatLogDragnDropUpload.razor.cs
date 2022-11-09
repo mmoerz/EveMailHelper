@@ -1,14 +1,11 @@
-﻿using EveMailHelper.BusinessLibrary.Interfaces;
-using EveMailHelper.ChatLogParser;
-using EveMailHelper.DataAccessLayer.Models;
-
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.Extensions.Configuration;
 
 using MudBlazor;
 
-using System.Collections.Generic;
+using EveMailHelper.ChatLogParser;
+using EveMailHelper.DataModels;
+using EveMailHelper.ServiceLayer.Interfaces;
 
 namespace EveMailHelper.Shared.EveChat
 {

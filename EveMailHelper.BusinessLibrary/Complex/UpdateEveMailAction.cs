@@ -1,16 +1,9 @@
-﻿using EveMailHelper.BusinessLibrary.Complex.dbAccess;
-using EveMailHelper.DataAccessLayer.Models;
+﻿using FluentValidation.Results;
 
-using FluentValidation.Results;
-
-using Microsoft.EntityFrameworkCore;
-
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using EveMailHelper.BusinessDataAccess;
+using EveMailHelper.DataModels;
 
 namespace EveMailHelper.BusinessLibrary.Complex
 {

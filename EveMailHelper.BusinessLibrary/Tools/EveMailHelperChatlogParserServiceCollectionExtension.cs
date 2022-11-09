@@ -1,10 +1,8 @@
-﻿using EveMailHelper.BusinessLibrary.Interfaces;
-using EveMailHelper.BusinessLibrary.Services;
-using EveMailHelper.ChatLogParser;
+﻿using EveMailHelper.ChatLogParser;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools
+namespace EveMailHelper.BusinessLogicLibrary.Tools
 {
     public static class EveMailHelperChatlogParserServiceCollectionExtension
     {
@@ -13,7 +11,7 @@ namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools
         /// </summary>
         public static void AddEveMailHelperChatLogParser(this IServiceCollection services)
         {
-            services.AddTransient<IChatLogParser, ChatLogParser>();
+            services.AddTransient<IChatLogParser, ChatLogParser.ChatLogParser>();
         }
     }
 }

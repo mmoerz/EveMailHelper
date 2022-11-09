@@ -1,9 +1,9 @@
-﻿using EveMailHelper.BusinessLibrary.Services;
-using EveMailHelper.DataAccessLayer.Models;
-
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 
 using MudBlazor;
+
+using EveMailHelper.ServiceLayer.Interfaces;
+using EveMailHelper.DataModels;
 
 namespace EveMailHelper.Shared.EveChar
 {

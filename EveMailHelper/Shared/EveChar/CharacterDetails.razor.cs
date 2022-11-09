@@ -1,11 +1,8 @@
-﻿using EveMailHelper.BusinessLibrary.Interfaces;
-using EveMailHelper.BusinessLibrary.Services;
-using EveMailHelper.DataAccessLayer.Models;
+﻿using Microsoft.AspNetCore.Components;
+
+using EveMailHelper.DataModels;
 using EveMailHelper.Models;
-
-using Microsoft.AspNetCore.Components;
-
-using System.Security.Permissions;
+using EveMailHelper.ServiceLayer.Interfaces;
 
 namespace EveMailHelper.Shared.EveChar
 {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-using EveMailHelper.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
+using EveMailHelper.DataModels;
 
 namespace EveMailHelper.DataAccessLayer.Configuration
 {
