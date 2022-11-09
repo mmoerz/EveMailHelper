@@ -5,7 +5,7 @@ using MudBlazor;
 using EveMailHelper.DataModels;
 using EveMailHelper.ServiceLayer.Interfaces;
 
-namespace EveMailHelper.Shared.EveMails
+namespace EveMailHelper.Web.Shared.EveMails
 {
     public partial class EveMailList : ComponentBase
     {

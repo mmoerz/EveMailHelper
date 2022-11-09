@@ -5,7 +5,7 @@ using MudBlazor;
 using EveMailHelper.DataModels;
 using EveMailHelper.ServiceLayer.Interfaces;
 
-namespace EveMailHelper.Shared.Notes
+namespace EveMailHelper.Web.Shared.Notes
 {
     public partial class NoteDialog : ComponentBase
     {

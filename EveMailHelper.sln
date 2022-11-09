@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper", "EveMailHelper\EveMailHelper.csproj", "{B9BBCCF6-275C-41C8-A354-F1F24003D836}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.Web", "EveMailHelper\EveMailHelper.Web.csproj", "{B9BBCCF6-275C-41C8-A354-F1F24003D836}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.DataAccessLayer", "EveMailHelper.DataAccessLayer\EveMailHelper.DataAccessLayer.csproj", "{4E6DC236-B1C5-4BB4-9F68-4392553CC775}"
 	ProjectSection(ProjectDependencies) = postProject

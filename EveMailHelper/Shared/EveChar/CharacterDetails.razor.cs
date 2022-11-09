@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 
 using EveMailHelper.DataModels;
-using EveMailHelper.Models;
+using EveMailHelper.Web.Models;
 using EveMailHelper.ServiceLayer.Interfaces;
 
-namespace EveMailHelper.Shared.EveChar
+namespace EveMailHelper.Web.Shared.EveChar
 {
     public partial class CharacterDetails : ComponentBase
     {

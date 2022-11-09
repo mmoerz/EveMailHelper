@@ -1,6 +1,6 @@
 ﻿using EveMailHelper.DataModels;
 
-namespace EveMailHelper.Models
+namespace EveMailHelper.Web.Models
 {
     public static class CharacterExtension
     {

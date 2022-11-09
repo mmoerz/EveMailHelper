@@ -5,7 +5,7 @@ using MudBlazor;
 
 using EveMailHelper.DataModels;
 
-namespace EveMailHelper.Shared.EveChat
+namespace EveMailHelper.Web.Shared.EveChat
 {
     public partial class ChatLogUpload : ComponentBase
     {

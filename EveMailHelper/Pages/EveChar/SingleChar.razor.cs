@@ -1,13 +1,10 @@
-﻿using EveMailHelper.BusinessLibrary.Services;
-using EveMailHelper.DataModels;
+﻿using EveMailHelper.DataModels;
 using EveMailHelper.ServiceLayer.Interfaces;
-using EveMailHelper.Shared;
+using EveMailHelper.Web.Shared;
 
 using Microsoft.AspNetCore.Components;
 
-using MudBlazor;
-
-namespace EveMailHelper.Pages.EveChar
+namespace EveMailHelper.Web.Pages.EveChar
 {
     public partial class SingleChar : ComponentBase
     {

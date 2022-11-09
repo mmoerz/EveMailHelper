@@ -4,12 +4,12 @@ using MudBlazor;
 
 using EveMailHelper.BusinessLibrary.Complex.dto;
 using EveMailHelper.DataModels;
-using EveMailHelper.Shared.EveChat;
-using EveMailHelper.Shared.EveMails;
-using EveMailHelper.Shared.Notes;
+using EveMailHelper.Web.Shared.EveChat;
+using EveMailHelper.Web.Shared.EveMails;
+using EveMailHelper.Web.Shared.Notes;
 using EveMailHelper.ServiceLayer.Interfaces;
 
-namespace EveMailHelper.Shared
+namespace EveMailHelper.Web.Shared
 {
     public partial class CharacterCommunicationList : ComponentBase
     {

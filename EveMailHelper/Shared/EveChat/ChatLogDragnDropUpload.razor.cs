@@ -7,7 +7,7 @@ using EveMailHelper.ChatLogParser;
 using EveMailHelper.DataModels;
 using EveMailHelper.ServiceLayer.Interfaces;
 
-namespace EveMailHelper.Shared.EveChat
+namespace EveMailHelper.Web.Shared.EveChat
 {
     public partial class ChatLogDragnDropUpload : ComponentBase
     {

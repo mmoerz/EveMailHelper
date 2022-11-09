@@ -5,7 +5,7 @@ using MudBlazor;
 using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.DataModels;
 
-namespace EveMailHelper.Shared.EveChar
+namespace EveMailHelper.Web.Shared.EveChar
 {
     public partial class CharacterList : ComponentBase
     {

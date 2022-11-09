@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace EveMailHelper.Pages.EveMail
+namespace EveMailHelper.Web.Pages.EveMail
 {
     public partial class EveMailTemplateOverview : ComponentBase
     {

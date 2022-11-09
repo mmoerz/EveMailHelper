@@ -5,7 +5,7 @@ using MudBlazor;
 using EveMailHelper.DataModels;
 using EveMailHelper.ServiceLayer.Interfaces;
 
-namespace EveMailHelper.Shared.EveChat
+namespace EveMailHelper.Web.Shared.EveChat
 {
     public partial class ChatDetails : ComponentBase
     {

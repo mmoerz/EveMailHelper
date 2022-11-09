@@ -5,7 +5,7 @@ using MudBlazor;
 using EveMailHelper.BusinessLibrary.Tools;
 using EveMailHelper.ServiceLayer.Interfaces;
 
-namespace EveMailHelper.Pages.EveMails
+namespace EveMailHelper.Web.Pages.EveMails
 {
     public partial class CheckEveMailSent : ComponentBase
     {
