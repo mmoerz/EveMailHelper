@@ -6,7 +6,7 @@ using EveMailHelper.DataModels;
 using EveMailHelper.DataAccessLayer.Context;
 
 using EveMailHelper.BusinessDataAccess;
-using EveMailHelper.BusinessLibrary.Tools;
+using EveMailHelper.BusinessLibrary.Utilities;
 using EveMailHelper.ServiceLayer.Interfaces;
 
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;

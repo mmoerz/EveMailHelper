@@ -2,7 +2,7 @@
 
 using MudBlazor;
 
-using EveMailHelper.BusinessLibrary.Tools;
+using EveMailHelper.BusinessLibrary.Utilities;
 using EveMailHelper.DataModels;
 using EveMailHelper.ServiceLayer.Interfaces;
 

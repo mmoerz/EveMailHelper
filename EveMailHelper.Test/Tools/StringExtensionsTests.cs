@@ -1,7 +1,7 @@
 ﻿using Shouldly;
 
 using Xunit;
-using EveMailHelper.BusinessLibrary.Tools;
+using EveMailHelper.BusinessLibrary.Utilities;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 

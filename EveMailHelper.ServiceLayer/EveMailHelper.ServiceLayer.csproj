@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="MudBlazor" Version="6.0.18" />
+    <PackageReference Include="PointyHatGames.EVEStandard" Version="3.0.5" />
   </ItemGroup>
 
   <ItemGroup>

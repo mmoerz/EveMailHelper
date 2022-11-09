@@ -6,7 +6,7 @@ using EveMailHelper.DataModels;
 using EveMailHelper.BusinessDataAccess;
 using EveMailHelper.BusinessLibrary.Complex;
 using EveMailHelper.BusinessLibrary.Complex.dto;
-using EveMailHelper.BusinessLibrary.Tools;
+using EveMailHelper.BusinessLibrary.Utilities;
 
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.ServiceLayer.Interfaces;

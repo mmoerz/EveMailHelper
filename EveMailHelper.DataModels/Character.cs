@@ -11,6 +11,10 @@
         }
 
         public Guid Id { get; set; }
+        /// <summary>
+        /// Ingame Id
+        /// </summary>
+        public int EveId { get; set; }
         public string Name { get; set; } = null!;
         public int? Age { get; set; } = null!;
         public int? ReallifeAge { get; set; } = null!;

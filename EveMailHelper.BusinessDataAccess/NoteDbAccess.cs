@@ -4,6 +4,7 @@ using MudBlazor;
 
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataModels;
+using EveNatTools.ServiceLibrary.Utilities;
 
 namespace EveMailHelper.BusinessDataAccess
 {
@@ -49,13 +50,14 @@ namespace EveMailHelper.BusinessDataAccess
             };
             var totalItems = query.Count();
 
-            if (state.Page > 0)
-                query = query.Skip(state.Page * state.PageSize);
-            query = query.Take(state.PageSize);
+            //if (state.Page > 0)
+            //    query = query.Skip(state.Page * state.PageSize);
+            //query = query.Take(state.PageSize);
 
             return new TableData<Note>()
             {
                 Items = await query
+                .Page(state.Page, state.PageSize)
                 .AsNoTracking()
                 .Include(note => note.AttachedTo)
                 .ToListAsync(),

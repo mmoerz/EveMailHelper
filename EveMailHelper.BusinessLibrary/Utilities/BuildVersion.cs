@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools
+namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Utilities
 {
     static class BuildInformation
     {

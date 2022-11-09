@@ -1,6 +1,6 @@
 ﻿
 
-namespace EveMailHelper.BusinessLibrary.Tools
+namespace EveMailHelper.BusinessLibrary.Utilities
 {
     public static class StringExtensions
     {

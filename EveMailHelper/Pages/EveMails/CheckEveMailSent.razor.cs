@@ -2,7 +2,7 @@
 
 using MudBlazor;
 
-using EveMailHelper.BusinessLibrary.Tools;
+using EveMailHelper.BusinessLibrary.Utilities;
 using EveMailHelper.ServiceLayer.Interfaces;
 
 namespace EveMailHelper.Web.Pages.EveMails

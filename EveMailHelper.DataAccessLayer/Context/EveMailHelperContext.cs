@@ -42,7 +42,14 @@ namespace EveMailHelper.DataAccessLayer.Context
             .Build();
         }
 
+        /// <summary>
+        /// Eve Characters
+        /// </summary>
         public virtual DbSet<Character> Characters { get; set; } = null!;
+        /// <summary>
+        /// SSO Authentication Information
+        /// </summary>
+        public virtual DbSet<CharacterAuthInfo> CharacterAuthInfos { get; set; } = null!;
         public virtual DbSet<Chat> Chats { get; set; } = null!;
         public virtual DbSet<ChatFile> ChatFiles { get; set; } = null!;
         public virtual DbSet<ChatMessage> ChatMessages { get; set; } = null!;

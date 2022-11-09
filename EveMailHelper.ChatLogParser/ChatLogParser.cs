@@ -53,7 +53,8 @@ namespace EveMailHelper.ChatLogParser
                 throw new Exception("missing Upload Section in appsettings.json");
             }
 
-            var path = cfgSection.GetValue<string>("Directory");
+            var path = //cfgSection.GetValue<string>("Directory");
+                GetUploadPath;
             if (path == null)
                 throw new Exception("missing directory in Upload section in appsettings.json");
 

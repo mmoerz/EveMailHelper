@@ -33,9 +33,9 @@ namespace EveMailHelper.Test.ChatLogParser
         public void Test2(string fileName, string expectedMsg1, string expectedMsg2)
         {
             var sut = new EveMailHelper.ChatLogParser.ChatLogParser();
-            sut.ParseFile(fileName);
-            sut.Chat.Messages.First().Message.ShouldBe(expectedMsg1);
-            sut.Chat.Messages.Last().Message.ShouldBe(expectedMsg2);
+            var result = sut.ParseFile(fileName);
+            result.Messages.First().Message.ShouldBe(expectedMsg1);
+            result.Messages.Last().Message.ShouldBe(expectedMsg2);
         }
     }
 }

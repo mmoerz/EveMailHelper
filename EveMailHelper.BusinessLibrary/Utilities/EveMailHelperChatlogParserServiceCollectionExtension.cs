@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EveMailHelper.BusinessLogicLibrary.Tools
+namespace EveMailHelper.BusinessLogicLibrary.Utilities
 {
     public static class EveMailHelperChatlogParserServiceCollectionExtension
     {
