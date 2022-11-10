@@ -52,6 +52,44 @@ namespace EveMailHelper.BusinessDataAccess
                 Items = await query
                     .Page(state.Page, state.PageSize)
                     .AsTracking()
+                    .Include(x => x.Account)
+                    .Include(x => x.Characters)
+                    .ToListAsync(),
+                TotalItems = totalItems
+            };
+        }
+
+        public async Task<TableData<Character>> GetCharactersPaginated(Account account, EveAccount? eveaccount, string searchString, TableState state)
+        {
+            IQueryable<Character> query = from ch in _context.Characters
+                                          where ch.AccountId == account.Id
+                                          select ch;
+            if (eveaccount != null)
+            {
+                query.Where(x => x.EveAccountId == eveaccount.Id);
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                query = query.Where(x =>
+                    x.Name.Contains(searchString)
+                    || x.Description != null && x.Description.Contains(searchString));
+            }
+
+            query = state.SortLabel switch
+            {
+                "Description" => query.OrderByDirection(state.SortDirection, x => x.Description),
+                _ => query.OrderByDirection(state.SortDirection, x => x.Name),
+            };
+            var totalItems = query.Count();
+
+            return new TableData<Character>()
+            {
+                Items = await query
+                    .Page(state.Page, state.PageSize)
+                    .AsTracking()
+                    .Include(x => x.Account)
+                    .Include(x => x.EveAccount)
                     .ToListAsync(),
                 TotalItems = totalItems
             };

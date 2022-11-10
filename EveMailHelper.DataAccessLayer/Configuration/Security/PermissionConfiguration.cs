@@ -14,8 +14,10 @@ namespace EveMailHelper.DataAccessLayer.Configuration
             builder.ToTable("Permission", "Security");
 
             builder.Property(p => p.Name)
+                .IsRequired()
                 .HasMaxLength(200);
             builder.Property(p => p.Description)
+                .IsRequired()
                 .HasMaxLength(1000);
 
             //builder.HasMany(a => a.Roles)

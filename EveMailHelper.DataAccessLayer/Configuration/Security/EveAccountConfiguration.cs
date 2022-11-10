@@ -14,8 +14,10 @@ namespace EveMailHelper.DataAccessLayer.Configuration
             builder.ToTable("EveAccount","Security");
 
             builder.Property(ea => ea.Name)
+                .IsRequired(true)
                 .HasMaxLength(200);
             builder.Property(ea => ea.Description)
+                .IsRequired(false)
                 .HasMaxLength(1000);
 
             builder.HasMany(ea => ea.Characters)
