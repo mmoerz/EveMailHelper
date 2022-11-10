@@ -10,17 +10,17 @@ namespace EveMailHelper.Web.Shared.Account
     public partial class AccountDetails : ComponentBase
     {
         #region injections
-        [Inject] ICharacterService CharacterService { get; set; } = null!;
+        [Inject] IAccountManager AccountManager { get; set; } = null!;
         #endregion
 
-        private Character _model = null!;
+        private DataModels.Security.Account _backup = new();
 
         #region parameters
         [Parameter]
         public DataModels.Security.Account Model { get; set; } = null!;
         
         [Parameter]
-        public EventCallback<Character> OnCharacterSave { get; set; }
+        public EventCallback<DataModels.Security.Account> OnAccountSave { get; set; }
         #endregion
 
         // Mudblazor workaround
@@ -40,15 +40,14 @@ namespace EveMailHelper.Web.Shared.Account
         public void Cancel()
         {
             // ok this is not optimal ...
-            //_character.CopyShallow(_backup);
-            ViewModel.CopyShallow(_backup);
-            //date = _character.CreatedDate;
+            Model.CopyShallowNoId(_backup);
+            Created = _backup.CreatedDate;
             IsEditable = false;
         }
 
         public void Edit()
         {
-            _backup = ViewModel;
+            _backup.CopyShallowNoId(Model);
             IsEditable = true;
         }
 
@@ -59,20 +58,9 @@ namespace EveMailHelper.Web.Shared.Account
             //Character copy = new();
             //copy.CopyShallow(Model);
 
-            await CharacterService.Update(Model);
-            await OnCharacterSave.InvokeAsync(Model);
+            await AccountManager.Update(Model);
+            await OnAccountSave.InvokeAsync(Model);
             IsEditable = false;
-        }
-
-        protected Dictionary<CharacterStatus, string> GetCharacterStati()
-        {
-            Dictionary<CharacterStatus, string> result = new();
-            var stati = Enum.GetValues<CharacterStatus>().ToList();
-            foreach(var status in stati)
-            {
-                result[status] = status.ToString();
-            }
-            return result;
         }
     }
 }

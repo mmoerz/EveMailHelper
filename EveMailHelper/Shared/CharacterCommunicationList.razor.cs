@@ -54,12 +54,7 @@ namespace EveMailHelper.Web.Shared
         /// </summary>
         private async Task<TableData<Communication>> ServerReload(TableState state)
         {
-            TableData<Communication> onePage =
-                await CommunicationService.GetPaginated(Character, searchString, state);
-
-            //await Task.Delay(300);
-
-            return onePage;
+            return await CommunicationService.GetPaginated(Character, searchString, state);
         }
 
         private void OnSearch(string text)

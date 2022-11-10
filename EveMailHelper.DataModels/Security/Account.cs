@@ -1,6 +1,6 @@
 ﻿namespace EveMailHelper.DataModels.Security
 {
-    public class Account
+    public partial class Account
     {
         public Account()
         {

@@ -31,13 +31,14 @@ namespace EveMailHelper.BusinessDataAccess
         public async Task<TableData<EveAccount>> GetEveAccountsPaginated(Account account, string searchString, TableState state)
         {
             IQueryable<EveAccount> query = from eveaccount in _context.EveAccounts
-                                          select eveaccount;
+                                           where eveaccount.Id == account.Id
+                                           select eveaccount;
             
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 query = query.Where(x => 
                     x.Name.Contains(searchString)
-                    || x.Description.Contains(searchString));
+                    || x.Description != null && x.Description.Contains(searchString));
             }
 
             query = state.SortLabel switch
@@ -95,23 +96,14 @@ namespace EveMailHelper.BusinessDataAccess
             };
         }
 
-        public void Add(Character character)
+        public void Update(Account account)
         {
-            if (character.Account == null)
-            {
-                character.Account = new() { NickName = character.Name };
-            }
-            if (character.EveAccount == null)
-            {
-                character.EveAccount = new() { Name = character.Name };
-                character.Account.EveAccounts.Add(character.EveAccount);
-            }
-            _context.Characters.Add(character);
+            _context.Accounts.Update(account);
         }
 
-        public void Update(Character character)
+        public void Remove(EveAccount eveAccount)
         {
-            _context.Characters.Update(character);
+            _context.EveAccounts.Remove(eveAccount);
         }
     }
 }

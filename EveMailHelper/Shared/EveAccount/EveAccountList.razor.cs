@@ -4,29 +4,30 @@ using MudBlazor;
 
 using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.DataModels;
+using EveMailHelper.DataModels.Security;
 
-namespace EveMailHelper.Web.Shared.EveChar
+namespace EveMailHelper.Web.Shared.EveAccount
 {
     public partial class EveAccountList : ComponentBase
     {
         #region injections
         [Inject] IDialogService DialogService { get; set; } = null!;
-        [Inject] NavigationManager Navigation { get; set; } = null!;
-        [Inject] ICharacterService CharacterService { get; set; } = null!;
+        //[Inject] NavigationManager Navigation { get; set; } = null!;
+        [Inject] IAccountManager AccountManager { get; set; } = null!;
 
         #endregion
 
         #region parameters
         [Parameter]
-        public EventCallback<Character> OnCharacterSelect { get; set; }
+        public DataModels.Security.Account Account { get; set; } = null!;
+        [Parameter]
+        public EventCallback<DataModels.Security.EveAccount> OnEveAccountSelect { get; set; }
         #endregion
 
         #region pagination stuff
         private readonly bool readOnly = false;
 
-        //private IEnumerable<Report> pagedData = null!;
-        private MudTable<Character>? table = null!;
-        //private int totalItems;
+        private MudTable<DataModels.Security.EveAccount>? table = null!;
         private string searchString = "";
         #endregion
 
@@ -43,12 +44,9 @@ namespace EveMailHelper.Web.Shared.EveChar
         /// <summary>
         /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>
-        private async Task<TableData<Character>> ServerReload(TableState state)
+        private async Task<TableData<DataModels.Security.EveAccount>> ServerReload(TableState state)
         {
-            TableData<Character> onePage =
-                await CharacterService.GetPaginated(searchString, state);
-
-            return onePage;
+            return await AccountManager.GetEveAccountsPaginated(Account, searchString, state);
         }
 
         private void OnSearch(string text)
@@ -57,14 +55,14 @@ namespace EveMailHelper.Web.Shared.EveChar
             table?.ReloadServerData();
         }
 
-        private void RowClickEvent(TableRowClickEventArgs<Character> tableRowClickEventArgs)
+        private void RowClickEvent(TableRowClickEventArgs<DataModels.Security.EveAccount> tableRowClickEventArgs)
         {
             if (tableRowClickEventArgs == null)
                 return;
-            OnCharacterSelect.InvokeAsync(tableRowClickEventArgs.Item);
+            OnEveAccountSelect.InvokeAsync(tableRowClickEventArgs.Item);
         }
 
-        private string SelectedRowClassFunc(Character rmodel, int rowNumber)
+        private string SelectedRowClassFunc(DataModels.Security.EveAccount rmodel, int rowNumber)
         {
             if (selectedRowNumber == rowNumber)
             {
@@ -81,26 +79,24 @@ namespace EveMailHelper.Web.Shared.EveChar
             return string.Empty;
         }
 
-        private void DeleteCharacter(Character character)
+        private void DeleteCharacter(DataModels.Security.EveAccount character)
         {
             var options = new DialogOptions { CloseOnEscapeKey = true };
             var parameters = new DialogParameters
             {
                 { "Character", character },
-                { "DialogSaved", new EventCallback<Character>(this, new Action<Character>(FinallyDeleteCharacter)) }
+                { "DialogSaved", new EventCallback<DataModels.Security.EveAccount>(
+                    this, new Action<DataModels.Security.EveAccount>(FinallyDeleteCharacter)) }
             };
-            DialogService.Show<CharacterDeleteDialog>("Delete Character", parameters, options);
+            DialogService.Show<EveAccountDeleteDialog>("Delete EveAccount", parameters, options);
         }
 
-        private void FinallyDeleteCharacter(Character character)
+        private void FinallyDeleteCharacter(DataModels.Security.EveAccount eveAccount)
         {
-            CharacterService.Delete(character);
+            AccountManager.Remove(eveAccount);
             table?.ReloadServerData();
         }
 
-        private void NavigateToCharacter(Character character)
-        {
-            Navigation.NavigateTo($"/EveChar/SingleChar/{character.Id}");
-        }
+        
     }
 }
