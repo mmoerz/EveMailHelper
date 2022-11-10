@@ -1,11 +1,13 @@
-﻿using EveMailHelper.DataModels;
+﻿using System.Security.Claims;
+
+using EveMailHelper.DataModels;
 
 namespace EveMailHelper.ServiceLayer.Interfaces
 {
     public interface IAuthenticationManager
     {
-        bool AuthTokenNeedsRefresh(Character character);
-        Task FinalizeEveAuthentication(string code, string state);
+        bool AuthTokenNeedsRefresh(DataModels.Character character);
+        Task<Character> FinalizeEveAuthentication(ClaimsPrincipal principal, string code, string state);
         string GetEveAuthorizationUrl(List<string>? scopes = null);
 
         /// <summary>
@@ -13,14 +15,14 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         /// </summary>
         /// <param name="character">to fetch accesstoken for</param>
         /// <returns></returns>
-        CharacterAuthInfo? GetLastAuthInfoForCharacter(Character character);
+        CharacterAuthInfo? GetLastAuthInfoForCharacter(DataModels.Character character);
 
         /// <summary>
         /// checks that there really is an accesstoken to refresh for the character
         /// </summary>
         /// <param name="character">to check for an accesstoken</param>
         /// <returns></returns>
-        bool HasAuthInfo(Character character);
+        bool HasAuthInfo(DataModels.Character character);
         bool IsValidCharacterAuthInfoId(Guid guid);
 
         /// <summary>
@@ -28,6 +30,6 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         /// TODO: check if is really expired already (if not do nothing)
         /// </summary>
         /// <param name="character"></param>
-        Task RefreshTokenAsync(Character character);
+        Task RefreshTokenAsync(DataModels.Character character);
     }
 }

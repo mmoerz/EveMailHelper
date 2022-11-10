@@ -27,6 +27,15 @@ namespace EveMailHelper.ServiceLayer.Managers
             //    (new AddCharactersAction(_characterDbAccess), dbContext);
         }
 
+        public async Task<Character> Add(Character character)
+        {
+            _ = character ?? throw new ArgumentNullException(nameof(character));
+            
+            _characterDbAccess.Add(character);
+            await _context.SaveChangesAsync();
+            return character;
+        }
+
         public void Delete(Character character)
         {
             _ = character ?? throw new ArgumentNullException(nameof(character));
@@ -34,7 +43,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 throw new ArgumentException("null Guid is invalid", nameof(character));
             // now load the Evemail with all Sendto entities (child's that depend on it)
             IQueryable<Character> query = from mail in _context.Characters
-                                        select mail;
+                                          select mail;
             query = query.Where(mail => mail.Id == character.Id);
             var result = query.Include(mail => mail.EveMailReceived).First();
 

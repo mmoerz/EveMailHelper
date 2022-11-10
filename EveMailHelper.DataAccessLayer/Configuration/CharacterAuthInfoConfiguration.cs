@@ -22,12 +22,12 @@ namespace EveNatTools.DataAccessLibrary.Configuration
 
             builder
                 .Property(c => c.AccessToken)                
-                .HasMaxLength(512)
+                .HasMaxLength(2000)
                 .HasComment("oauth accesstoken");
 
             builder
                 .Property(c => c.RefreshToken)                
-                .HasMaxLength(512)              
+                .HasMaxLength(1536)              
                 .HasComment("oauth refreshtoken");
 
             builder

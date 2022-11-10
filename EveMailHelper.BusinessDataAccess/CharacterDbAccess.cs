@@ -28,6 +28,15 @@ namespace EveMailHelper.BusinessDataAccess
 
         public void Add(Character character)
         {
+            if (character.Account == null)
+            {
+                character.Account = new() { NickName = character.Name };
+            }
+            if (character.EveAccount == null)
+            {
+                character.EveAccount = new() { Name = character.Name };
+                character.Account.EveAccounts.Add(character.EveAccount);
+            }
             _context.Characters.Add(character);
         }
 

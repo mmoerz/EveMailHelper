@@ -156,12 +156,12 @@ try
 
     app.UseRouting();
 
-    #region EveStandard needs
+    #region EveStandard SSO Authentication requirements
     app.UseCookiePolicy();
     app.UseAuthentication();
     app.UseAuthorization(); // EveStandard
     app.UseSession();
-    app.MapControllers();
+    app.MapControllers(); // for cross site authentification
     #endregion
 
     app.MapBlazorHub();
@@ -176,6 +176,7 @@ catch (Exception ex)
 }
 finally
 {
-    // ensure flush and proper shutdown for NLog to avoid loosing anything
+    // ensure flushing of cached messages
+    // and proper shutdown for NLog to avoid loosing anything
     NLog.LogManager.Shutdown();
 }

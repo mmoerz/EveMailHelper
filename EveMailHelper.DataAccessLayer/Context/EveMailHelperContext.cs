@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 
 using EveMailHelper.DataModels;
+using EveMailHelper.DataModels.Security;
 
 namespace EveMailHelper.DataAccessLayer.Context
 {
@@ -42,6 +43,8 @@ namespace EveMailHelper.DataAccessLayer.Context
             .Build();
         }
 
+        public virtual DbSet<Account> Accounts { get; set; } = null!;
+        public virtual DbSet<EveAccount> EveAccounts { get; set; } = null!;
         /// <summary>
         /// Eve Characters
         /// </summary>

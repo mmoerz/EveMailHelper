@@ -4,6 +4,7 @@ using EveMailHelper.DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EveMailHelper.DataAccessLayer.Migrations
 {
     [DbContext(typeof(EveMailHelperContext))]
-    partial class EveMailHelperContextModelSnapshot : ModelSnapshot
+    [Migration("20221110090513_AuthInfoExtended")]
+    partial class AuthInfoExtended
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,8 +77,8 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.Property<string>("AccessToken")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(768)
+                        .HasColumnType("nvarchar(768)")
                         .HasComment("oauth accesstoken");
 
                     b.Property<Guid?>("CharId")
@@ -87,8 +89,8 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.Property<string>("RefreshToken")
                         .IsRequired()
-                        .HasMaxLength(1536)
-                        .HasColumnType("nvarchar(1536)")
+                        .HasMaxLength(768)
+                        .HasColumnType("nvarchar(768)")
                         .HasComment("oauth refreshtoken");
 
                     b.Property<string>("Scopes")
