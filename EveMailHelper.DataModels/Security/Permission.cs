@@ -1,20 +1,18 @@
 ﻿namespace EveMailHelper.DataModels.Security
 {
-    public class EveAccount
+    public class Permission
     {
-        public EveAccount()
+        Permission() 
         {
-            Characters = new HashSet<Character>();
+            Roles = new HashSet<Role>();
         }
 
         public Guid Id { get; set; }
-        public Guid AccountId { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
-        public Account Account { get; set; } = null!;
-        public ICollection<Character> Characters { get; set; }
+        public HashSet<Role> Roles { get; set; } 
     }
 }

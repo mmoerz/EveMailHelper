@@ -15,8 +15,10 @@ namespace EveMailHelper.DataAccessLayer.Configuration
 
             builder.Property(ea => ea.Name)
                 .HasMaxLength(200);
-            
-            builder.HasMany(a => a.Characters)
+            builder.Property(ea => ea.Description)
+                .HasMaxLength(1000);
+
+            builder.HasMany(ea => ea.Characters)
                 .WithOne(c => c.EveAccount)
                 .HasForeignKey(c => c.EveAccountId);
         }

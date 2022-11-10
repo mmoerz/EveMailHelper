@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EveMailHelper.DataModels.Security
+﻿namespace EveMailHelper.DataModels.Security
 {
     public class Account
     {
@@ -12,6 +6,7 @@ namespace EveMailHelper.DataModels.Security
         {
             Characters = new HashSet<Character>();
             EveAccounts= new HashSet<EveAccount>();
+            Roles = new HashSet<Role>();
         }
 
         public Guid Id { get; set; }
@@ -19,8 +14,12 @@ namespace EveMailHelper.DataModels.Security
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string Email { get; set; } = null!;
+        public string Description { get; set; } = null!;
+
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         public ICollection<Character> Characters { get; set; }
         public ICollection<EveAccount> EveAccounts { get; set; }
+        public ICollection<Role> Roles { get; set; }
     }
 }

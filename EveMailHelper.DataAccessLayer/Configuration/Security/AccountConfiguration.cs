@@ -23,6 +23,8 @@ namespace EveMailHelper.DataAccessLayer.Configuration
                 .HasMaxLength(200);
             builder.Property(a => a.Email)
                 .HasMaxLength(200);
+            builder.Property(a => a.Description)
+                .HasMaxLength(1000);
 
             builder.HasMany(a => a.Characters)
                 .WithOne(c => c.Account)
@@ -31,6 +33,10 @@ namespace EveMailHelper.DataAccessLayer.Configuration
             builder.HasMany(a => a.EveAccounts)
                 .WithOne(c => c.Account)
                 .HasForeignKey(c => c.AccountId);
+
+            builder.HasMany(a => a.Roles)
+                .WithMany(r => r.Accounts);
+                
         }
     }
 }

@@ -1,0 +1,37 @@
+﻿<MudForm>
+    <div class="d-flex flex-grow-1 gap-4">
+        <MudTextField Label="Name" Disabled="!IsEditable"
+                      T="string" @bind-Value="@Model.NickName"
+                      HelperText="Name of this account in this application">
+        </MudTextField>
+        <MudTextField Label="Name" Disabled="!IsEditable"
+                      T="string" @bind-Value="@Model.FirstName"
+                      HelperText="Your firstname">
+        </MudTextField>
+        <MudTextField Label="Name" Disabled="!IsEditable"
+                      T="string" @bind-Value="@Model.LastName"
+                      HelperText="Your lastname">
+        </MudTextField>
+        <MudDatePicker Label="Create Date" Disabled="!IsEditable"
+                       @bind-Date="@Created" HelperText="registered in this tool at this date">
+        </MudDatePicker>
+    </div>
+    
+    <MudTextField Label="Description" Disabled="!IsEditable"
+                  T="string" @bind-Value="@Model.Description" HelperText="Short summary about this account.">
+    </MudTextField>
+
+    <div class="mt-4 d-flex align-center justify-space-between">
+        @if (IsEditable)
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Cancel" Class="ml-2">Cancel</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Save" Disabled="false" Class="ml-auto">
+                Save
+            </MudButton>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Edit" Class="ml-2">Edit</MudButton>
+        }
+    </div>
+</MudForm>
