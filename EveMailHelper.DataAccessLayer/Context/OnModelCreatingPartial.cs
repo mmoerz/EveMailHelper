@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using EveMailHelper.DataModels;
+using EveMailHelper.DataModels.Security;
 
 namespace EveMailHelper.DataAccessLayer.Context
 {
@@ -10,14 +11,23 @@ namespace EveMailHelper.DataAccessLayer.Context
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EveMailHelperContext).Assembly);
 
-            //modelBuilder.Entity<Character>()
-            //    .HasData(new Character()
-            //    {
-            //        Name="moerz01",
-                    
-            //    }
-            //    );
+            modelBuilder.Entity<Account>()
+                .HasData(new Account()
+                {
+                    Id = Guid.Empty,
+                    NickName = "Default",
+                    FirstName = "Default",
+                    LastName = "Default",
+                    Description = "Default Account"
+                });
 
+            modelBuilder.Entity<EveAccount>()
+                .HasData(new EveAccount()
+                {
+                    Id = Guid.Empty,
+                    Name = "Default",
+                    Description = "Default Account"
+                });
         }
     }
 }
