@@ -80,8 +80,17 @@ namespace EveMailHelper.Controllers
                 return Redirect("/error");
             }
 
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
+
+            AuthenticationState authState;
+            ClaimsPrincipal user = new();
+            try
+            {
+                authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+                user = authState.User;
+            } catch
+            {
+
+            }
 
             var character = await _authManager.FinalizeEveAuthentication(user, code, state);
             await SignInAsync(user, character);

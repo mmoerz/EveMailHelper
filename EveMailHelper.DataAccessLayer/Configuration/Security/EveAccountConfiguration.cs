@@ -22,7 +22,8 @@ namespace EveMailHelper.DataAccessLayer.Configuration
 
             builder.HasMany(ea => ea.Characters)
                 .WithOne(c => c.EveAccount)
-                .HasForeignKey(c => c.EveAccountId);
+                .HasForeignKey(c => c.EveAccountId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

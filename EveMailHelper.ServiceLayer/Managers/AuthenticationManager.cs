@@ -84,12 +84,15 @@ namespace EveMailHelper.ServiceLibrary.Managers
                     EveId = character.CharacterId,
                     Name = character.CharacterName,
                 };
+                dbCharacter = _characterDbAccess.Add(dbCharacter);
                 //_dbContext.SaveChanges();
             }
             else {
-                dbCharacter = _dbContext.Characters.
-                    Where(c => c.EveId == character.CharacterId).
-                    Single();
+                dbCharacter = _dbContext.Characters
+                    .Where(c => c.EveId == character.CharacterId)
+                    .Include(c => c.Account)
+                    .Include(c => c.EveAccount)
+                    .Single();
             }
             // store already used Account / EveAccount into the char
             if (IsAlreadyAuthenticated(principal))

@@ -26,7 +26,7 @@ namespace EveMailHelper.BusinessDataAccess
             return query.ToList();
         }
 
-        public void Add(Character character)
+        public Character Add(Character character)
         {
             if (character.Account == null)
             {
@@ -38,6 +38,7 @@ namespace EveMailHelper.BusinessDataAccess
                 character.Account.EveAccounts.Add(character.EveAccount);
             }
             _context.Characters.Add(character);
+            return character;
         }
 
         public void Update(Character character)
