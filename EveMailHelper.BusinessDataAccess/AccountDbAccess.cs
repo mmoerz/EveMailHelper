@@ -18,7 +18,7 @@ namespace EveMailHelper.BusinessDataAccess
             _context = context;
         }
 
-        public Account GetCharactersById(Guid id)
+        public Account GetById(Guid id)
         {
             return _context.Accounts.Where(account => account.Id == id)
                 .AsTracking()
@@ -60,50 +60,14 @@ namespace EveMailHelper.BusinessDataAccess
             };
         }
 
-        public async Task<TableData<Character>> GetCharactersPaginated(Account account, EveAccount? eveaccount, string searchString, TableState state)
-        {
-            IQueryable<Character> query = from ch in _context.Characters
-                                          where ch.AccountId == account.Id
-                                          select ch;
-            if (eveaccount != null)
-            {
-                query.Where(x => x.EveAccountId == eveaccount.Id);
-            }
-
-            if (!string.IsNullOrWhiteSpace(searchString))
-            {
-                query = query.Where(x =>
-                    x.Name.Contains(searchString)
-                    || x.Description != null && x.Description.Contains(searchString));
-            }
-
-            query = state.SortLabel switch
-            {
-                "Description" => query.OrderByDirection(state.SortDirection, x => x.Description),
-                _ => query.OrderByDirection(state.SortDirection, x => x.Name),
-            };
-            var totalItems = query.Count();
-
-            return new TableData<Character>()
-            {
-                Items = await query
-                    .Page(state.Page, state.PageSize)
-                    .AsTracking()
-                    .Include(x => x.Account)
-                    .Include(x => x.EveAccount)
-                    .ToListAsync(),
-                TotalItems = totalItems
-            };
-        }
-
         public void Update(Account account)
         {
             _context.Accounts.Update(account);
         }
 
-        public void Remove(EveAccount eveAccount)
+        public void Remove(Account eveAccount)
         {
-            _context.EveAccounts.Remove(eveAccount);
+            _context.Accounts.Remove(eveAccount);
         }
     }
 }

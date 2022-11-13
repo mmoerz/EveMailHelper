@@ -55,4 +55,11 @@
     <PagerContent>
         <MudTablePager HidePageNumber="false" />
     </PagerContent>
+    <FooterContent>
+        <MudIcon Icon="@Icons.Material.Filled.Add"></MudIcon>
+        <a href="@LinkGenerator.GetPathByAction("Login", "Auth")"><img src="https://web.ccpgamescdn.com/eveonlineassets/developers/eve-sso-login-white-small.png" alt="LOG IN with EVE Online" /></a>
+        <!-- 
+            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="() => AddCharacter()">Eve Login</MudIconButton>
+            -->
+    </FooterContent>
 </MudTable>

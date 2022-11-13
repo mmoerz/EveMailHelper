@@ -93,6 +93,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
                     .Include(c => c.Account)
                     .Include(c => c.EveAccount)
                     .Single();
+                dbCharacter = _characterDbAccess.CheckAndFix(dbCharacter);
             }
             // store already used Account / EveAccount into the char
             if (IsAlreadyAuthenticated(principal))
@@ -142,7 +143,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
             var accountId = principal.FindFirst(CLAIM_ACCOUNT_ID);
             if (accountId == null)
                 throw new Exception("no User already authenticated");
-            var parsed = Guid.TryParse(accountId.ToString(), out Guid accountGuid);
+            var parsed = Guid.TryParse(accountId.Value.ToString(), out Guid accountGuid);
             if (!parsed)
                 throw new Exception("account id not a valid Guid");
             return _dbContext.Accounts
@@ -155,7 +156,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
             var eveaccountId = principal.FindFirst(CLAIM_EVEACCOUNT_ID);
             if (eveaccountId == null)
                 throw new Exception("no User already authenticated");
-            var parsed = Guid.TryParse(eveaccountId.ToString(), out Guid accountGuid);
+            var parsed = Guid.TryParse(eveaccountId.Value.ToString(), out Guid accountGuid);
             if (!parsed)
                 throw new Exception("eveaccount id not a valid Guid");
             return _dbContext.EveAccounts

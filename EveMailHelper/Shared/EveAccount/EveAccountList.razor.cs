@@ -11,6 +11,7 @@ namespace EveMailHelper.Web.Shared.EveAccount
     public partial class EveAccountList : ComponentBase
     {
         #region injections
+        [Inject] ISnackbar Snackbar { get; set; } = null!;
         [Inject] IDialogService DialogService { get; set; } = null!;
         //[Inject] NavigationManager Navigation { get; set; } = null!;
         [Inject] IAccountManager AccountManager { get; set; } = null!;
@@ -25,7 +26,7 @@ namespace EveMailHelper.Web.Shared.EveAccount
         #endregion
 
         #region pagination stuff
-        private readonly bool readOnly = false;
+        private bool readOnly = false;
 
         private MudTable<DataModels.Security.EveAccount>? table = null!;
         private string searchString = "";
@@ -34,6 +35,10 @@ namespace EveMailHelper.Web.Shared.EveAccount
         #region rowselection
         private int selectedRowNumber = -1;
         //private Character model = null!;
+        #endregion
+
+        #region new item
+        private DataModels.Security.EveAccount? newItem = null;
         #endregion
 
         public void Reload()
@@ -97,6 +102,27 @@ namespace EveMailHelper.Web.Shared.EveAccount
             table?.ReloadServerData();
         }
 
-        
+        private void NewItem()
+        {
+            Snackbar.Add("Adding new Item", Severity.Info);
+            readOnly = true;
+            newItem = new();
+        }
+
+        private void NewItemSave()
+        {
+            if (newItem != null)
+            {
+                AccountManager.Update(newItem);
+                //Items.Add(newItem);
+            }
+            NewItemCancel();
+        }
+
+        private void NewItemCancel()
+        {
+            newItem = null;
+            readOnly = false;
+        }
     }
 }

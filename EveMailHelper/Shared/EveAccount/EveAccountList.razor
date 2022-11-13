@@ -12,7 +12,7 @@
           @ref="table">
     <!-- IsEditRowSwitchingBlocked="" -->
     <ToolBarContent>
-        <MudText Typo="Typo.h6">Character List</MudText>
+        <MudText Typo="Typo.h6">Eve Account List</MudText>
         <MudSpacer />
         <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))"
                       Placeholder="Suche"
@@ -27,12 +27,12 @@
         <col style="width:50%" />
         <col style="width:25px" />
         <col style="width:25px" />
-        <col style="width:25px"/>
+        <col style="width:25px" />
         <col />
         <col />
     </ColGroup>
     <HeaderContent>
-        <MudTh><MudTableSortLabel SortLabel="Name" T="DataModels.Security.EveAccount">Character Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Name" T="DataModels.Security.EveAccount">Account Name</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortLabel="Description" T="DataModels.Security.EveAccount">Description</MudTableSortLabel> </MudTh>
         <MudTh><MudTableSortLabel SortLabel="CreatedDate" T="DataModels.Security.EveAccount">Created on</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortLabel="CharacterCount" T="DataModels.Security.EveAccount">Assigned Characters</MudTableSortLabel></MudTh>
@@ -46,8 +46,40 @@
         <MudTd DataLabel="DeleteChar">
             <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteCharacter(context)"></MudIconButton>
         </MudTd>
-        
     </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Name">
+            <MudTextField @bind-Value="@context.Name" Required ReadOnly />
+        </MudTd>
+        <MudTd DataLabel="Description">
+            <MudTextField @bind-Value="@context.Description" />
+        </MudTd>
+        <MudTd DataLabel="CreatedDate">
+            <MudDatePicker @bind-Value="@context.CreatedDate" />
+        </MudTd>
+    </RowEditingTemplate>
+    <FooterContent>
+        @if (newItem == null)
+        {
+            <MudIconButton @onclick="@(()=>NewItem())" Icon="@Icons.Material.Filled.Add"></MudIconButton>
+        }
+        else
+        {
+            <MudTd DataLabel="Benutzername">
+                <MudTextField @bind-Value="@newItem.Name" Required />
+            </MudTd>
+            <MudTd DataLabel="Description">
+                <MudTextField @bind-Value="@newItem.Description" />
+            </MudTd>
+            <MudTd DataLabel="CreatedDate">
+                <MudDatePicker @bind-Value="@newItem.CreatedDate" />
+            </MudTd>
+            <MudTd>
+                <MudIconButton @onclick="@(()=>NewItemSave())" Icon="@Icons.Material.Filled.Check" Size="Size.Small" />
+                <MudIconButton @onclick="@(()=>NewItemCancel())" Icon="@Icons.Material.Filled.Cancel" Size="Size.Small" />
+            </MudTd>
+        }
+    </FooterContent>
     <PagerContent>
         <MudTablePager HidePageNumber="false" />
     </PagerContent>

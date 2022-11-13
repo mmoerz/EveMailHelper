@@ -4,19 +4,27 @@ using MudBlazor;
 
 using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.DataModels;
+using EveMailHelper.DataModels.Security;
 
 namespace EveMailHelper.Web.Shared.EveChar
 {
     public partial class CharacterList : ComponentBase
     {
         #region injections
+        [Inject] LinkGenerator LinkGenerator { get; set; } = null!;
         [Inject] IDialogService DialogService { get; set; } = null!;
         [Inject] NavigationManager Navigation { get; set; } = null!;
         [Inject] ICharacterService CharacterService { get; set; } = null!;
+        [Inject] IAccountManager AccountManager { get; set; } = null!;
 
         #endregion
 
         #region parameters
+        [Parameter]
+        public DataModels.Security.Account Account { get; set; } = null!;
+        [Parameter]
+        public DataModels.Security.EveAccount EveAccount { get; set; } = null!;
+
         [Parameter]
         public EventCallback<Character> OnCharacterSelect { get; set; }
         #endregion
@@ -49,12 +57,10 @@ namespace EveMailHelper.Web.Shared.EveChar
         /// </summary>
         private async Task<TableData<Character>> ServerReload(TableState state)
         {
-            TableData<Character> onePage =
-                await CharacterService.GetPaginated(searchString, state);
+            if (Account == null)
+                return await CharacterService.GetPaginated(searchString, state);
 
-            //await Task.Delay(300);
-
-            return onePage;
+            return await AccountManager.GetCharactersPaginated(Account, EveAccount, searchString, state);
         }
 
         private void OnSearch(string text)

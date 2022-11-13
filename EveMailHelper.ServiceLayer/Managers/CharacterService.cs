@@ -60,12 +60,12 @@ namespace EveMailHelper.ServiceLayer.Managers
 
         public Character GetCharactersById(Guid id)
         {
-            return _characterDbAccess.GetCharactersById(id);
+            return _characterDbAccess.GetById(id);
         }
 
         public ICollection<Character> GetCharactersByName(ICollection<string> characterNames)
         {
-            return _characterDbAccess.GetCharactersByName(characterNames);
+            return _characterDbAccess.GetByNames(characterNames);
         }
 
         public async Task<TableData<Character>> GetPaginated(string searchString, TableState state)

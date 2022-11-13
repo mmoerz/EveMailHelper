@@ -16,6 +16,10 @@
                 <a href="@LinkGenerator.GetPathByAction("Login", "Auth")"><img src="https://web.ccpgamescdn.com/eveonlineassets/developers/eve-sso-login-white-small.png" alt="LOG IN with EVE Online" /></a>
             </NotAuthorized>
             <Authorized>
+                <!--
+                    <MudNavLink Class="ms-auto" Href="Security/AccountOverview" Match="NavLinkMatch.All">Account</MudNavLink>
+                    -->
+                <MudIconButton Icon="@Icons.Material.Filled.ManageAccounts" Color="Color.Inherit" Link="Security/AccountOverview" Target="_blank" />
                 <a href="@LinkGenerator.GetPathByAction("Logout", "Auth")"><MudText>Logout</MudText></a>
             </Authorized>
         </AuthorizeView>

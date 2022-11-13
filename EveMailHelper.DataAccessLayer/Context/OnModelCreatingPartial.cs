@@ -11,23 +11,24 @@ namespace EveMailHelper.DataAccessLayer.Context
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EveMailHelperContext).Assembly);
 
-            modelBuilder.Entity<Account>()
-                .HasData(new Account()
-                {
-                    Id = Guid.Empty,
-                    NickName = "Default",
-                    FirstName = "Default",
-                    LastName = "Default",
-                    Description = "Default Account"
-                });
+            //modelBuilder.Entity<Account>()
+            //    .HasData(new Account()
+            //    {
+            //        Id = Guid.Empty,
+            //        NickName = "Default",
+            //        FirstName = "Default",
+            //        LastName = "Default",
+            //        Description = "Default Account"
+            //    });
 
-            modelBuilder.Entity<EveAccount>()
-                .HasData(new EveAccount()
-                {
-                    Id = Guid.Empty,
-                    Name = "Default",
-                    Description = "Default Account"
-                });
+            //modelBuilder.Entity<EveAccount>()
+            //    .HasData(new EveAccount()
+            //    {
+            //        Id = Guid.Empty,
+            //        Name = "Default",
+            //        Description = "Default Account"
+            //    });
+
         }
     }
 }

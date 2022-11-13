@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 
 using EveMailHelper.DataModels;
+using EveMailHelper.DataModels.Security;
 
 namespace EveMailHelper.ServiceLayer.Interfaces
 {
@@ -8,6 +9,8 @@ namespace EveMailHelper.ServiceLayer.Interfaces
     {
         bool AuthTokenNeedsRefresh(DataModels.Character character);
         Task<Character> FinalizeEveAuthentication(ClaimsPrincipal principal, string code, string state);
+        Account GetAccountFromPrincipal(ClaimsPrincipal principal);
+        EveAccount GetEveAccountFromPrincipal(ClaimsPrincipal principal);
         string GetEveAuthorizationUrl(List<string>? scopes = null);
 
         /// <summary>

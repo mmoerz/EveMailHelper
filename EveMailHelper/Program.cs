@@ -67,6 +67,7 @@ try
     // Register with DI container
     builder.Services.AddSingleton<EVEStandardAPI>(esiClient);
 
+    // TODO: this is not the best way to check for config file parts
     builder.CheckIfMainConfigItemExists("SSOCallbackUrl");
     builder.CheckIfMainConfigItemExists("ClientId");
     builder.CheckIfMainConfigItemExists("SecretKey");
@@ -98,11 +99,9 @@ try
     builder.Host.UseNLog();
     #endregion
 
-    #region internal Services
+    #region internal services of this tool
     builder.Services.AddEveMailHelperChatLogParser();
     builder.Services.AddEveMailHelperServices();
-
-    builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
     #endregion
 
     var app = builder.Build();

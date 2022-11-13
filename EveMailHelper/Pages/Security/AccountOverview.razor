@@ -1,0 +1,15 @@
+﻿@page "/Security/AccountOverview"
+@using EveMailHelper.Web.Shared.Account
+@using EveMailHelper.Web.Shared.EveAccount
+@using EveMailHelper.Web.Shared.EveChar
+
+<MudText Typo="@Typo.h6">EveMailHelper Account Overview</MudText>
+<MudCard>
+    <MudCardContent>
+        <AccountDetails Model="Account" />
+    </MudCardContent>
+</MudCard>
+
+<EveAccountList Account="Account" />
+
+<CharacterList Account="Account"></CharacterList>

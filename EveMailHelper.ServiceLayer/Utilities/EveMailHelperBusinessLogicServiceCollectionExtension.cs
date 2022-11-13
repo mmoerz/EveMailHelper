@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using EveMailHelper.ServiceLayer.Managers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using EveMailHelper.ServiceLibrary.Managers;
 
 namespace EveMailHelper.ServiceLayer.Utilities
 {
@@ -15,6 +16,11 @@ namespace EveMailHelper.ServiceLayer.Utilities
         /// </summary>
         public static void AddEveMailHelperServices(this IServiceCollection services)
         {
+            // accounts, eve accounts, characters and permissions are handled here
+            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
+
+            // only basic account and eve account handling
+            services.AddTransient<IAccountManager, AccountManager>();
             services.AddTransient<ICharacterService, CharacterService>();
             services.AddTransient<IEveMailService, EveMailService>();
             services.AddTransient<IEveMailTemplateService, EveMailTemplateService>();

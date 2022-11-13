@@ -1,5 +1,12 @@
 ﻿using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataModels;
+using EveMailHelper.DataModels.Security;
+
+using EveNatTools.ServiceLibrary.Utilities;
+
+using Microsoft.EntityFrameworkCore;
+
+using MudBlazor;
 
 namespace EveMailHelper.BusinessDataAccess
 {
@@ -11,12 +18,33 @@ namespace EveMailHelper.BusinessDataAccess
             _context = context;
         }
 
-        public Character GetCharactersById(Guid id)
+        public Character Add(Character character)
+        {
+            var characterFixed = CheckAndFix(character);
+            _context.Characters.Add(characterFixed);
+            return characterFixed;
+        }
+
+        public Character CheckAndFix(Character character)
+        {
+            if (character.Account == null || character.Account.Id == Guid.Empty)
+            {
+                character.Account = new() { NickName = character.Name };
+            }
+            if (character.EveAccount == null || character.EveAccount.Id == Guid.Empty)
+            {
+                character.EveAccount = new() { Name = character.Name };
+                character.Account.EveAccounts.Add(character.EveAccount);
+            }
+            return character;
+        }
+
+        public Character GetById(Guid id)
         {
             return _context.Characters.Where(character => character.Id == id).First();
         }
 
-        public ICollection<Character> GetCharactersByName(ICollection<string> characterNames)
+        public ICollection<Character> GetByNames(ICollection<string> characterNames)
         {
             IQueryable<Character> query = from character in _context.Characters
                                           select character;
@@ -26,19 +54,40 @@ namespace EveMailHelper.BusinessDataAccess
             return query.ToList();
         }
 
-        public Character Add(Character character)
+        public async Task<TableData<Character>> GetCharactersPaginated(Account account, EveAccount? eveaccount, string searchString, TableState state)
         {
-            if (character.Account == null)
+            IQueryable<Character> query = from ch in _context.Characters
+                                          where ch.AccountId == account.Id
+                                          select ch;
+            if (eveaccount != null)
             {
-                character.Account = new() { NickName = character.Name };
+                query.Where(x => x.EveAccountId == eveaccount.Id);
             }
-            if (character.EveAccount == null)
+
+            if (!string.IsNullOrWhiteSpace(searchString))
             {
-                character.EveAccount = new() { Name = character.Name };
-                character.Account.EveAccounts.Add(character.EveAccount);
+                query = query.Where(x =>
+                    x.Name.Contains(searchString)
+                    || x.Description != null && x.Description.Contains(searchString));
             }
-            _context.Characters.Add(character);
-            return character;
+
+            query = state.SortLabel switch
+            {
+                "Description" => query.OrderByDirection(state.SortDirection, x => x.Description),
+                _ => query.OrderByDirection(state.SortDirection, x => x.Name),
+            };
+            var totalItems = query.Count();
+
+            return new TableData<Character>()
+            {
+                Items = await query
+                    .Page(state.Page, state.PageSize)
+                    .AsTracking()
+                    .Include(x => x.Account)
+                    .Include(x => x.EveAccount)
+                    .ToListAsync(),
+                TotalItems = totalItems
+            };
         }
 
         public void Update(Character character)

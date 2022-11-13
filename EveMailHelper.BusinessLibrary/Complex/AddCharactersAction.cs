@@ -23,7 +23,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
 
         public ICollection<Character> Action(ICollection<string> characterNames)
         {
-            ICollection<Character> characterList = _dbAccess.GetCharactersByName(characterNames);
+            ICollection<Character> characterList = _dbAccess.GetByNames(characterNames);
 
             foreach (string charName in characterNames)
             {

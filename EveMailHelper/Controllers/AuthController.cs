@@ -95,7 +95,7 @@ namespace EveMailHelper.Controllers
             var character = await _authManager.FinalizeEveAuthentication(user, code, state);
             await SignInAsync(user, character);
 
-            return Redirect("/characterList");
+            return Redirect("/Security/AccountOverview");
         }
 
         private async Task SignInAsync(ClaimsPrincipal principal, DataModels.Character character)
