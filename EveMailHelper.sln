@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.Web", "EveMailHelper\EveMailHelper.Web.csproj", "{B9BBCCF6-275C-41C8-A354-F1F24003D836}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B9F57046-E9CF-4F9C-A76C-61DD309500EF} = {B9F57046-E9CF-4F9C-A76C-61DD309500EF}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.DataAccessLayer", "EveMailHelper.DataAccessLayer\EveMailHelper.DataAccessLayer.csproj", "{4E6DC236-B1C5-4BB4-9F68-4392553CC775}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -29,21 +32,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.ChatLogParser", "EveMailHelper.ChatLogParser\EveMailHelper.ChatLogParser.csproj", "{9A27ECE7-C60F-4717-A630-796E2596512A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EveMailHelper.DataModels", "EveMailHelper.DataModels\EveMailHelper.DataModels.csproj", "{2E232CAB-AF02-488B-BDA4-E40663C0D3A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.DataModels", "EveMailHelper.DataModels\EveMailHelper.DataModels.csproj", "{2E232CAB-AF02-488B-BDA4-E40663C0D3A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EveMailHelper.BusinessDataAccess", "EveMailHelper.BusinessDataAccess\EveMailHelper.BusinessDataAccess.csproj", "{5E6B4CE8-4940-414D-B252-019011C4E847}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.BusinessDataAccess", "EveMailHelper.BusinessDataAccess\EveMailHelper.BusinessDataAccess.csproj", "{5E6B4CE8-4940-414D-B252-019011C4E847}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2E232CAB-AF02-488B-BDA4-E40663C0D3A3} = {2E232CAB-AF02-488B-BDA4-E40663C0D3A3}
 		{4E6DC236-B1C5-4BB4-9F68-4392553CC775} = {4E6DC236-B1C5-4BB4-9F68-4392553CC775}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EveMailHelper.ServiceLayer", "EveMailHelper.ServiceLayer\EveMailHelper.ServiceLayer.csproj", "{9B11B967-6F75-4C38-B71F-3B5AE5E1D2A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.ServiceLayer", "EveMailHelper.ServiceLayer\EveMailHelper.ServiceLayer.csproj", "{9B11B967-6F75-4C38-B71F-3B5AE5E1D2A0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2E232CAB-AF02-488B-BDA4-E40663C0D3A3} = {2E232CAB-AF02-488B-BDA4-E40663C0D3A3}
 		{4E6DC236-B1C5-4BB4-9F68-4392553CC775} = {4E6DC236-B1C5-4BB4-9F68-4392553CC775}
 		{5E6B4CE8-4940-414D-B252-019011C4E847} = {5E6B4CE8-4940-414D-B252-019011C4E847}
 		{86D2FF5E-54D4-49D8-AD7D-BD6BAEAA5556} = {86D2FF5E-54D4-49D8-AD7D-BD6BAEAA5556}
+		{B9F57046-E9CF-4F9C-A76C-61DD309500EF} = {B9F57046-E9CF-4F9C-A76C-61DD309500EF}
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EVEStandard", "EVEStandard\EVEStandard\EVEStandard.csproj", "{B9F57046-E9CF-4F9C-A76C-61DD309500EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +89,10 @@ Global
 		{9B11B967-6F75-4C38-B71F-3B5AE5E1D2A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B11B967-6F75-4C38-B71F-3B5AE5E1D2A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B11B967-6F75-4C38-B71F-3B5AE5E1D2A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9F57046-E9CF-4F9C-A76C-61DD309500EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9F57046-E9CF-4F9C-A76C-61DD309500EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9F57046-E9CF-4F9C-A76C-61DD309500EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9F57046-E9CF-4F9C-A76C-61DD309500EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,55 @@
+﻿<MudTable Class="mt-4"
+          Dense="true"
+          Hover="true"
+          FixedHeader="true"
+          FixedFooter="true"
+          ReadOnly="@ReadOnly"
+          OnRowClick="RowClickEvent"
+          RowClassFunc="@SelectedRowClassFunc"
+          ServerData=@(new Func<TableState, Task<TableData<EVEStandard.Models.Mail>>>(ServerReload))
+          SortLabel="Sortierung"
+          T="EVEStandard.Models.Mail"
+          @ref="Table">
+    <!-- IsEditRowSwitchingBlocked="" -->
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Eve Account List</MudText>
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))"
+                      Placeholder="Suche"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium"
+                      Class="mt-0">
+        </MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width:100px;" />
+        <col style="width:50%" />
+        <col style="width:25px" />
+        <col style="width:25px" />
+        <col style="width:25px" />
+        <col />
+        <col />
+    </ColGroup>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortLabel="From" T="EVEStandard.Models.Mail">From</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Subject" T="EVEStandard.Models.Mail">Subject</MudTableSortLabel> </MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Labels" T="EVEStandard.Models.Mail">Labels</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="IsRead" T="EVEStandard.Models.Mail">IsRead</MudTableSortLabel></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="From">@context.From</MudTd>
+        <MudTd DataLabel="Subject">@context.Subject</MudTd>
+        <MudTd DataLabel="CreatedDate">@context.Labels</MudTd>
+        <MudTd DataLabel="CharacterCount">@context.IsRead</MudTd>
+        <!--
+        <MudTd DataLabel="DeleteChar">
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteCharacter(context)"></MudIconButton>
+        </MudTd>
+        -->
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager HidePageNumber="false" />
+    </PagerContent>
+</MudTable>

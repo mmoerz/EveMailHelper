@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="MudBlazor" Version="6.0.18" />
-    <PackageReference Include="PointyHatGames.EVEStandard" Version="3.0.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,6 +15,7 @@
     <ProjectReference Include="..\EveMailHelper.BusinessLibrary\EveMailHelper.BusinessLibrary.csproj" />
     <ProjectReference Include="..\EveMailHelper.DataAccessLayer\EveMailHelper.DataAccessLayer.csproj" />
     <ProjectReference Include="..\EveMailHelper.DataModels\EveMailHelper.DataModels.csproj" />
+    <ProjectReference Include="..\EVEStandard\EVEStandard\EVEStandard.csproj" />
   </ItemGroup>
 
 </Project>

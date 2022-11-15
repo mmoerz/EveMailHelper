@@ -21,13 +21,13 @@
     <PackageReference Include="MudBlazor" Version="6.0.18" />
     <PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.5" />
-    <PackageReference Include="PointyHatGames.EVEStandard" Version="3.0.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EveMailHelper.ChatLogParser\EveMailHelper.ChatLogParser.csproj" />
     <ProjectReference Include="..\EveMailHelper.DataModels\EveMailHelper.DataModels.csproj" />
     <ProjectReference Include="..\EveMailHelper.ServiceLayer\EveMailHelper.ServiceLayer.csproj" />
+    <ProjectReference Include="..\EVEStandard\EVEStandard\EVEStandard.csproj" />
   </ItemGroup>
 
   <ItemGroup>

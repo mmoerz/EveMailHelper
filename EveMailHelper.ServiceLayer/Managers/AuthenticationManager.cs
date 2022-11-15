@@ -15,6 +15,7 @@ using EveMailHelper.DataModels.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Text.Json;
 using EVEStandard.API;
+using EVEStandard.Models.API;
 
 namespace EveMailHelper.ServiceLibrary.Managers
 {
@@ -69,9 +70,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
 
             var dbAuthInfo = _tokenDbAccess.FindCharacterAuthInfoById(stateGuid);
 
-            dbAuthInfo.AccessToken = accessToken.AccessToken;
-            dbAuthInfo.RefreshToken = accessToken.RefreshToken;
-            dbAuthInfo.ExpiresUTC = accessToken.ExpiresUtc;
+            dbAuthInfo.ShallowCopyFrom(accessToken);
 
             // if the corresponding char is not yet in the database, create it
             DataModels.Character dbCharacter = null!;
@@ -85,7 +84,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
                     Name = character.CharacterName,
                 };
                 dbCharacter = _characterDbAccess.Add(dbCharacter);
-                //_dbContext.SaveChanges();
+                _dbContext.SaveChanges(); // to aquire a guid for the char
             }
             else {
                 dbCharacter = _dbContext.Characters
@@ -242,6 +241,35 @@ namespace EveMailHelper.ServiceLibrary.Managers
                 return false;
             }
             return true;
+        }
+
+        // TODO: get authDTO for specific scope
+        public AuthDTO GetAuthDTOForPrincipal(ClaimsPrincipal principal)
+        {
+            var charGuid = GetCharacterGuidFromPrincipal(principal);
+            var character = _characterDbAccess.GetById(charGuid);
+
+            var authInfos = _tokenDbAccess.FindCharacterAuthInfoByChar(character);
+            if (authInfos == null || authInfos.Count == 0)
+            {
+                throw new ArgumentException("character without authinfo");
+            }
+            var authInfo = authInfos
+                .Where(x => x.ExpiresUTC > DateTime.UtcNow)
+                .First();
+            AuthDTO result = new()
+            {
+                AccessToken = new()
+                {
+                    AccessToken = authInfo.AccessToken,
+                    ExpiresUtc = authInfo.ExpiresUTC,
+                    RefreshToken = authInfo.RefreshToken,
+                    TokenType = authInfo.TokenType,
+                },
+                CharacterId = character.EveId,
+                Scopes = string.Join(",", authInfo.Scopes),
+            };
+            return result;  
         }
 
     }

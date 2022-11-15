@@ -6,6 +6,7 @@ using EveMailHelper.ServiceLayer.Managers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using EveMailHelper.ServiceLibrary.Managers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace EveMailHelper.ServiceLayer.Utilities
 {
@@ -27,9 +28,18 @@ namespace EveMailHelper.ServiceLayer.Utilities
             services.AddTransient<ICommunicationService, CommunicationService>();
             services.AddTransient<INoteService, NoteService>();
             services.AddTransient<IChatService, ChatService>();
+
+            services.AddTransient<IInGameMailManager, InGameMailManager>();
         }
 
-        public static void AddEveMailStandardServices(this IServiceCollection services)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="loginPath">Path for authentication controller</param>
+        public static void AddEveMailStandardServices(
+            this IServiceCollection services,
+            string loginPath)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -41,8 +51,12 @@ namespace EveMailHelper.ServiceLayer.Utilities
                 options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-
+            // Add cookie authentication and set the login url
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = loginPath;
+                });
         }
     }
 }

@@ -26,7 +26,7 @@ namespace EveNatTools.DataAccessLibrary.Configuration
                 .HasComment("oauth accesstoken");
 
             builder
-                .Property(c => c.RefreshToken)                
+                .Property(c => c.RefreshToken)
                 .HasMaxLength(1536)              
                 .HasComment("oauth refreshtoken");
 
