@@ -1,0 +1,3 @@
+[submodule "EVEStandard"]
+	path = EVEStandard
+	url = https://github.com/gehnster/EVEStandard.git
