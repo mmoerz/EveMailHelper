@@ -140,7 +140,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
         public async Task<DataModels.Character> GetCharacterFromPrincipal(ClaimsPrincipal principal)
         {
             var guid = GetCharacterGuidFromPrincipal(principal);
-            return await _characterDbAccess.GetById(guid);
+            return await _characterDbAccess.GetByIdAsync(guid);
         }
 
         public Account GetAccountFromPrincipal(ClaimsPrincipal principal)
@@ -253,7 +253,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
         public async Task<AuthDTO> GetAuthDTOForPrincipal(ClaimsPrincipal principal)
         {
             var charGuid = GetCharacterGuidFromPrincipal(principal);
-            var character = await _characterDbAccess.GetById(charGuid);
+            var character = await _characterDbAccess.GetByIdAsync(charGuid);
 
             var authInfos = _tokenDbAccess.FindCharacterAuthInfoByChar(character);
             if (authInfos == null || authInfos.Count == 0)

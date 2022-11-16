@@ -107,7 +107,7 @@ namespace EveMailHelper.BusinessLibrary.Services
         {
             using var transaction = _context.Database.BeginTransaction();
             var template = await _templateDbAccess.GetById(templateId);
-            var character = await _characterDbAccess.GetById(fromCharacter.Id);
+            var character = await _characterDbAccess.GetByIdAsync(fromCharacter.Id);
 
             if (template == null)
                 throw new Exception($"cannot find template with id {templateId}");

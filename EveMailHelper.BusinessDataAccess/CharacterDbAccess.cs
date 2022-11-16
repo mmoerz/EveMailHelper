@@ -39,9 +39,14 @@ namespace EveMailHelper.BusinessDataAccess
             return character;
         }
 
-        public async Task<Character> GetById(Guid id)
+        public async Task<Character> GetByIdAsync(Guid id)
         {
             return await _context.Characters.Where(character => character.Id == id).FirstAsync();
+        }
+
+        public Character GetById(Guid id)
+        {
+            return _context.Characters.Where(character => character.Id == id).First();
         }
 
         public ICollection<Character> GetByNames(ICollection<string> characterNames)
