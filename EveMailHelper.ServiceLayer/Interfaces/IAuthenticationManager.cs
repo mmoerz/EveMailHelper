@@ -12,7 +12,8 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         bool AuthTokenNeedsRefresh(DataModels.Character character);
         Task<Character> FinalizeEveAuthentication(ClaimsPrincipal principal, string code, string state);
         Account GetAccountFromPrincipal(ClaimsPrincipal principal);
-        AuthDTO GetAuthDTOForPrincipal(ClaimsPrincipal principal);
+        Task<AuthDTO> GetAuthDTOForPrincipal(ClaimsPrincipal principal);
+        Task<Character> GetCharacterFromPrincipal(ClaimsPrincipal principal);
         EveAccount GetEveAccountFromPrincipal(ClaimsPrincipal principal);
         string GetEveAuthorizationUrl(List<string>? scopes = null);
 

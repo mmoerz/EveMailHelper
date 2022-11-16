@@ -23,7 +23,6 @@ namespace EveMailHelper.DataAccessLayer.Configuration
                 .HasDefaultValue(CharacterStatus.None)
                 .HasConversion(new EnumToStringConverter<CharacterStatus>())
                 .IsRequired();
-
         }
     }
 }

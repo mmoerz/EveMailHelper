@@ -20,7 +20,7 @@ namespace EveMailHelper.Web.Pages.EveChar
             get { return Character.Id.ToString(); } 
             set
             {
-                Character = CharacterService.GetCharactersById(Guid.Parse(value));
+                Character = CharacterService.GetById(Guid.Parse(value)).Result;
             } 
         }
         

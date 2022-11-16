@@ -24,7 +24,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
 
         public async Task<EveMail> ActionAsync(SendTemplateToDto dto)
         {
-            dto.Template.CreateMail(out EveMail eveMail);
+            dto.Template.CreateMail(out EveMail eveMail, dto.FromCharacter);
             foreach (var receiver in dto.Characters)
             {
                 eveMail.SentTo.Add(new EveMailSentTo() { Character = receiver });

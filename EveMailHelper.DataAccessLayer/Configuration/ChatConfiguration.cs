@@ -22,7 +22,6 @@ namespace EveMailHelper.DataAccessLayer.Configuration
                 .OnDelete(DeleteBehavior.ClientCascade);
             builder.HasOne(c => c.ChatFile)               
                 .WithOne(cf => cf.Chat)
-                
                 //.HasForeignKey<ChatFile>(cf => cf.ChatId);
                 .HasForeignKey<Chat>(c => c.ChatFileId);
         }

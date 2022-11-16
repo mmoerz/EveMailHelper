@@ -58,12 +58,12 @@ namespace EveMailHelper.ServiceLayer.Managers
             await _context.SaveChangesAsync();
         }
 
-        public Character GetCharactersById(Guid id)
+        public async Task<Character> GetById(Guid id)
         {
-            return _characterDbAccess.GetById(id);
+            return await _characterDbAccess.GetById(id);
         }
 
-        public ICollection<Character> GetCharactersByName(ICollection<string> characterNames)
+        public ICollection<Character> GetByName(ICollection<string> characterNames)
         {
             return _characterDbAccess.GetByNames(characterNames);
         }

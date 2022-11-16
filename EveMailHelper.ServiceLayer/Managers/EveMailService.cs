@@ -103,10 +103,11 @@ namespace EveMailHelper.BusinessLibrary.Services
             };
         }
 
-        public async Task SendTo(Guid templateId, ICollection<string> receiverNames)
+        public async Task SendTo(Guid templateId, Character fromCharacter, ICollection<string> receiverNames)
         {
             using var transaction = _context.Database.BeginTransaction();
             var template = await _templateDbAccess.GetById(templateId);
+            var character = await _characterDbAccess.GetById(fromCharacter.Id);
 
             if (template == null)
                 throw new Exception($"cannot find template with id {templateId}");
@@ -115,6 +116,7 @@ namespace EveMailHelper.BusinessLibrary.Services
             SendTemplateToDto dto = new()
             {
                 Template = template,
+                FromCharacter = character,
                 Characters = characters
             };
 

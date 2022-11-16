@@ -5,6 +5,7 @@ using MudBlazor;
 using EveMailHelper.BusinessLibrary.Utilities;
 using EveMailHelper.DataModels;
 using EveMailHelper.ServiceLayer.Interfaces;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace EveMailHelper.Web.Pages.EveMails
 {
@@ -16,6 +17,9 @@ namespace EveMailHelper.Web.Pages.EveMails
         // maybe of use when coloring the already known chars
         //[Inject] ICharacterService CharacterService { get; set; } = null!;
         [Inject] IEveMailService EveMailService { get; set; } = null!;
+
+        [Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
+        [Inject] IAuthenticationManager AuthenticationManager { get; set; } = null!;
 
         #endregion
 
@@ -46,8 +50,11 @@ namespace EveMailHelper.Web.Pages.EveMails
         {
             //if (TemplateId == null)
             //    return;
+            var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+            var character = await AuthenticationManager.GetCharacterFromPrincipal(user);
+
             var receivers = ReceiverString.SplitStringOfCharacters(',');
-            await EveMailService.SendTo(TemplateId, receivers);
+            await EveMailService.SendTo(TemplateId, character,  receivers);
             Snackbar.Add("Message saved as sent");
         }
     }

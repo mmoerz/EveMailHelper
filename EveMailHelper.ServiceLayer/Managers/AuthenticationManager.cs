@@ -125,7 +125,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
             if (result == null || !Guid.TryParse(result.Value, out Guid resultGuid))
                 throw new Exception("claims identifier not a valid Guid");
             return resultGuid;
-        }
+        } 
 
         public static bool IsAlreadyAuthenticated(ClaimsPrincipal principal)
         {
@@ -135,6 +135,12 @@ namespace EveMailHelper.ServiceLibrary.Managers
             }
             catch { return false; }
             return true;
+        }
+
+        public async Task<DataModels.Character> GetCharacterFromPrincipal(ClaimsPrincipal principal)
+        {
+            var guid = GetCharacterGuidFromPrincipal(principal);
+            return await _characterDbAccess.GetById(guid);
         }
 
         public Account GetAccountFromPrincipal(ClaimsPrincipal principal)
@@ -244,10 +250,10 @@ namespace EveMailHelper.ServiceLibrary.Managers
         }
 
         // TODO: get authDTO for specific scope
-        public AuthDTO GetAuthDTOForPrincipal(ClaimsPrincipal principal)
+        public async Task<AuthDTO> GetAuthDTOForPrincipal(ClaimsPrincipal principal)
         {
             var charGuid = GetCharacterGuidFromPrincipal(principal);
-            var character = _characterDbAccess.GetById(charGuid);
+            var character = await _characterDbAccess.GetById(charGuid);
 
             var authInfos = _tokenDbAccess.FindCharacterAuthInfoByChar(character);
             if (authInfos == null || authInfos.Count == 0)

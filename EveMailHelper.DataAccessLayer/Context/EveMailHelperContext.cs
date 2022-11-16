@@ -57,6 +57,7 @@ namespace EveMailHelper.DataAccessLayer.Context
         public virtual DbSet<ChatFile> ChatFiles { get; set; } = null!;
         public virtual DbSet<ChatMessage> ChatMessages { get; set; } = null!;
         public virtual DbSet<EveMail> EveMails { get; set; } = null!;
+        public virtual DbSet<EveMailLabel> EveMailLabels { get; set; } = null!;
         public virtual DbSet<EveMailSentTo> EveMailSentTos { get; set; } = null!;
         public virtual DbSet<EveMailTemplate> EveMailTemplates { get; set; } = null!;
         public virtual DbSet<Note> Notes { get; set; } = null!;
