@@ -49,12 +49,27 @@ namespace EveMailHelper.BusinessDataAccess
             return _context.Characters.Where(character => character.Id == id).First();
         }
 
+        public Character GetByEveId(int? id)
+        {
+            return _context.Characters.Where(character => character.EveId == id).First();
+        }
+
         public ICollection<Character> GetByNames(ICollection<string> characterNames)
         {
             IQueryable<Character> query = from character in _context.Characters
                                           select character;
 
             query = query.Where(x => characterNames.Contains(x.Name));
+
+            return query.ToList();
+        }
+
+        public ICollection<Character> GetByEveId(ICollection<int> characterEveIds)
+        {
+            IQueryable<Character> query = from character in _context.Characters
+                                          select character;
+
+            query = query.Where(x => characterEveIds.Contains(x.EveId));
 
             return query.ToList();
         }

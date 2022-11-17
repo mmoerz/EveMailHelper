@@ -16,6 +16,7 @@
     <ProjectReference Include="..\EveMailHelper.BusinessDataAccess\EveMailHelper.BusinessDataAccess.csproj" />
     <ProjectReference Include="..\EveMailHelper.ChatLogParser\EveMailHelper.ChatLogParser.csproj" />
     <ProjectReference Include="..\EveMailHelper.DataModels\EveMailHelper.DataModels.csproj" />
+    <ProjectReference Include="..\EVEStandard\EVEStandard\EVEStandard.csproj" />
   </ItemGroup>
 
 </Project>

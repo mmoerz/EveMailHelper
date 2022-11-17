@@ -7,14 +7,14 @@ using EveMailHelper.DataModels;
 
 namespace EveMailHelper.BusinessLibrary.Complex
 {
-    public class AddCharactersAction : IBizAction<ICollection<string>, ICollection<Character>>
+    public class AddCharactersByNameAction : IBizAction<ICollection<string>, ICollection<Character>>
     {
         readonly CharacterDbAccess _dbAccess;
         private List<ValidationResult> _errors = new();
 
-        public AddCharactersAction(CharacterDbAccess characterDbAccess)
+        public AddCharactersByNameAction(CharacterDbAccess dbAccess)
         {
-            _dbAccess = characterDbAccess;
+            _dbAccess = dbAccess;
         }
 
         public IImmutableList<ValidationResult> Errors => _errors.ToImmutableList();

@@ -33,7 +33,7 @@ namespace EveMailHelper.BusinessLibrary.Services
             _templateDbAccess = new EveMailTemplateDbAccess(_context);
             _evemailDbAccess = new EveMailDbAccess(_context);
             _addCharRunner = new RunnerWriteDb<ICollection<string>, ICollection<Character>>
-                (new AddCharactersAction(_characterDbAccess), _context);
+                (new AddCharactersByNameAction(_characterDbAccess), _context);
             _sendTemplateToRunner = new RunnerWriteDbAsync<SendTemplateToDto, EveMail>
                 (new SendEveMailBasedOnTemplateAction(_evemailDbAccess), _context);
             _updateMailRunner = new RunnerWriteDb<EveMail, EveMail>

@@ -36,18 +36,6 @@ namespace EveMailHelper.BusinessDataAccess
                 .Entity;
         }
 
-        public IDictionary<int, EveMailLabel> UpdateList(ICollection<EveMailLabel> eveMailLabels)
-        {
-            Dictionary<int, EveMailLabel> result = new();
-            foreach (var label in eveMailLabels)
-            {
-                if (label.EveLabelId != null)
-                {
-                    var updatedLabel = Update(label);
-                    result.Add(label.EveLabelId.Value, updatedLabel);
-                }
-            }
-            return result;
-        }
+
     }
 }

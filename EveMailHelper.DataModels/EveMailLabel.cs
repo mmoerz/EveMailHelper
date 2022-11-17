@@ -11,7 +11,7 @@ namespace EveMailHelper.DataModels
         public Guid Id { get; set; }
         public Guid CharacterId { get; set; }
 
-        public int? EveLabelId { get; set; } = null;
+        public long? EveLabelId { get; set; } = null;
         public string Name { get; set; } = string.Empty;
 
         public string Color { get; set; } = string.Empty;
