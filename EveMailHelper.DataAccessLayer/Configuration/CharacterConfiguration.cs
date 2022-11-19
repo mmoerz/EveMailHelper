@@ -17,12 +17,23 @@ namespace EveMailHelper.DataAccessLayer.Configuration
                 .HasMaxLength(150);
 
             builder.Property(c => c.Description)
+                .IsRequired(false)
                 .HasMaxLength(400);
+            builder.Property(c => c.RecruitmentNote)
+                .IsRequired(false)
+                .HasMaxLength(400);
+            builder.Property(c => c.Title)
+                .HasMaxLength(100);
 
             builder.Property(c => c.Status)
                 .HasDefaultValue(CharacterStatus.None)
                 .HasConversion(new EnumToStringConverter<CharacterStatus>())
                 .IsRequired();
+
+            //builder.HasOne(c => c.Corporation)
+            //    .WithMany(co => co.Members)
+            //    .HasForeignKey(c => c.CorporationId)
+            //    .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

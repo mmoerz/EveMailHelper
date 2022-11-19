@@ -17,15 +17,15 @@ namespace EveMailHelper.BusinessDataAccess.Utilities
             return resultLabels;
         }
 
-        public static IDictionary<int, DataModels.Character> ToEveIdCharacterDictionary
-            (this ICollection<DataModels.Character> characters)
+        public static IDictionary<int, T> ToEveIdDictionary<T>   
+            (this ICollection<T> collection) where T : IBaseEveId
         {
-            IDictionary<int, DataModels.Character> result = 
-                new Dictionary<int, DataModels.Character>();
+            IDictionary<int, T> result = 
+                new Dictionary<int, T>();
 
-            foreach(var character in characters)
+            foreach(var item in collection)
             {
-                result.Add(character.EveId, character);
+                result.Add(item.EveId, item);
             }
             return result;
         }

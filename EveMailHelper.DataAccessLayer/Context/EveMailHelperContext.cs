@@ -43,6 +43,7 @@ namespace EveMailHelper.DataAccessLayer.Context
             .Build();
         }
 
+        public virtual DbSet<Alliance> Alliances { get; set; } = null!;
         public virtual DbSet<Account> Accounts { get; set; } = null!;
         public virtual DbSet<EveAccount> EveAccounts { get; set; } = null!;
         /// <summary>
@@ -56,6 +57,7 @@ namespace EveMailHelper.DataAccessLayer.Context
         public virtual DbSet<Chat> Chats { get; set; } = null!;
         public virtual DbSet<ChatFile> ChatFiles { get; set; } = null!;
         public virtual DbSet<ChatMessage> ChatMessages { get; set; } = null!;
+        public virtual DbSet<Corporation> Corporations { get; set; } = null!;
         public virtual DbSet<EveMail> EveMails { get; set; } = null!;
         public virtual DbSet<EveMailLabel> EveMailLabels { get; set; } = null!;
         public virtual DbSet<EveMailSentTo> EveMailSentTos { get; set; } = null!;

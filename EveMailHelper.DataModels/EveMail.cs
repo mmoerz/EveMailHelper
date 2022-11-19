@@ -1,6 +1,6 @@
 ﻿namespace EveMailHelper.DataModels
 {
-    public partial class EveMail
+    public partial class EveMail : IBaseEveLongId
     {
         public EveMail()
         {
@@ -16,7 +16,7 @@
         /// <summary>
         /// this id comes from EvE (Rest API)
         /// </summary>
-        public long? EveMailId { get; set; }
+        public long? EveId { get; set; }
 
         public bool IsRead { get; set; }
 

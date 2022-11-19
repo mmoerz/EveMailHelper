@@ -27,7 +27,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
 
         public async Task<IDictionary<int, Character>> ActionAsync(ICollection<int> eveIds)
         {
-            IDictionary<int, Character> characters = _dbAccess.GetByEveId(eveIds).ToEveIdCharacterDictionary();
+            IDictionary<int, Character> characters = _dbAccess.GetByEveId(eveIds).ToEveIdDictionary();
 
             foreach (var eveId in eveIds)
             {

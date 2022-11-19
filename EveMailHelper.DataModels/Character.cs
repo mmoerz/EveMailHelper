@@ -2,7 +2,7 @@
 
 namespace EveMailHelper.DataModels
 {
-    public partial class Character
+    public partial class Character : IBaseEveId
     {
         public Character()
         {
@@ -27,8 +27,20 @@ namespace EveMailHelper.DataModels
         public Guid EveAccountId { get; set; }
         public string Name { get; set; } = null!;
         public int? Age { get; set; } = null!;
+
+        public DateTime Birthday { get; set; }
         public int? ReallifeAge { get; set; } = null!;
+
+        public Guid BloodlineId { get; set; }
+
+        public Guid? CorporationId { get; set; }
         public string? Description { get; set; } = null!;
+        public Guid? FactionId { get; set; }
+        // public GenderEnum Gender { get; set; }
+        public int RaceId { get; set; }
+        public string? RecruitmentNote { get; set; } = null!;
+        public float? SecurityStatus { get; set; }
+        public string Title { get; set; } = null!;
         public bool IsExcluded { get; set; } = false;
         public bool IsInRecruitment { get; set; } = false;
 
@@ -41,5 +53,7 @@ namespace EveMailHelper.DataModels
         public virtual ICollection<EveMailSentTo> EveMailReceived { get; set; }
         public virtual ICollection<Chat> Chats { get; set; }
         public virtual ICollection<Note> Notes { get; set; }
+
+        public virtual Corporation? Corporation { get; set; } = null!;
     }
 }

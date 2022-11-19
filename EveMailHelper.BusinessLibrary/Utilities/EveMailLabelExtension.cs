@@ -20,7 +20,7 @@ namespace EveMailHelper.BusinessDataAccess.Utilities
             mail.Subject = copyFrom.Subject;
             mail.CreatedDate = copyFrom.Timestamp ?? DateTime.Now;
             mail.IsRead = copyFrom.IsRead ?? false;
-            mail.EveMailId =  copyFrom.MailId;
+            mail.EveId =  copyFrom.MailId;
             return mail;
         }
     }
