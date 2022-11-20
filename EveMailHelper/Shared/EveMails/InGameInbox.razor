@@ -6,9 +6,9 @@
           ReadOnly="@ReadOnly"
           OnRowClick="RowClickEvent"
           RowClassFunc="@SelectedRowClassFunc"
-          ServerData=@(new Func<TableState, Task<TableData<EVEStandard.Models.Mail>>>(ServerReload))
+          ServerData=@(new Func<TableState, Task<TableData<Mail>>>(ServerReload))
           SortLabel="Sortierung"
-          T="EVEStandard.Models.Mail"
+          T="Mail"
           @ref="Table">
     <!-- IsEditRowSwitchingBlocked="" -->
     <ToolBarContent>
@@ -32,17 +32,19 @@
         <col />
     </ColGroup>
     <HeaderContent>
-        <MudTh><MudTableSortLabel SortLabel="From" T="EVEStandard.Models.Mail">From</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="Subject" T="EVEStandard.Models.Mail">Subject</MudTableSortLabel> </MudTh>
-        <MudTh><MudTableSortLabel SortLabel="Labels" T="EVEStandard.Models.Mail">Labels</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="IsRead" T="EVEStandard.Models.Mail">IsRead</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="From" T="Mail">From</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Subject" T="Mail">Subject</MudTableSortLabel> </MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Labels" T="Mail">Labels</MudTableSortLabel> </MudTh>
+        <MudTh><MudTableSortLabel SortLabel="CreateDate" T="Mail">Senddate</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="IsRead" T="Mail">IsRead</MudTableSortLabel></MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="From">@context.From</MudTd>
         <MudTd DataLabel="Subject">@context.Subject</MudTd>
-        <MudTd DataLabel="CreatedDate">@context.Labels</MudTd>
-        <MudTd DataLabel="CharacterCount">@context.IsRead</MudTd>
+        <MudTd DataLabel="Labels">@context.Labels.ToString()</MudTd>
+        <MudTd DataLabel="CreatedDate">@context.CreatedDate</MudTd>
+        <MudTd DataLabel="IsRead">@context.IsRead</MudTd>
         <!--
         <MudTd DataLabel="DeleteChar">
             <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteCharacter(context)"></MudIconButton>

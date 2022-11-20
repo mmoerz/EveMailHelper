@@ -34,7 +34,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
             SSOv2 sSOv2)
         {
             _dbContext = dbContextFactory.CreateDbContext();
-                        
+
             _tokenDbAccess = new(_dbContext);
             _characterDbAccess = new(_dbContext);
             _esiClient = esiClient;
@@ -86,7 +86,8 @@ namespace EveMailHelper.ServiceLibrary.Managers
                 dbCharacter = _characterDbAccess.Add(dbCharacter);
                 _dbContext.SaveChanges(); // to aquire a guid for the char
             }
-            else {
+            else
+            {
                 dbCharacter = _dbContext.Characters
                     .Where(c => c.EveId == character.CharacterId)
                     .Include(c => c.Account)
@@ -101,7 +102,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
                 var eveaccount = GetEveAccountFromPrincipal(principal);
                 dbCharacter.Account = account;
                 dbCharacter.EveAccount = eveaccount;
-            } 
+            }
 
             // verify that no mismatches have happened
             if (dbCharacter.Name != character.CharacterName)
@@ -125,7 +126,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
             if (result == null || !Guid.TryParse(result.Value, out Guid resultGuid))
                 throw new Exception("claims identifier not a valid Guid");
             return resultGuid;
-        } 
+        }
 
         public static bool IsAlreadyAuthenticated(ClaimsPrincipal principal)
         {
@@ -226,14 +227,14 @@ namespace EveMailHelper.ServiceLibrary.Managers
             if (authInfo == null)
                 throw new InvalidOperationException($"Cannot request new token when no refresh token can be found for the character {character.Name}");
             var accessTokenDetails = await _sso.GetNewBasicAuthAccessAndRefreshTokenAsync(authInfo.RefreshToken);
-            
+
             UpdateAccessToken(authInfo, accessTokenDetails);
         }
 
         protected void UpdateAccessToken(CharacterAuthInfo characterAuthInfo, AccessTokenDetails accessTokenDetails)
         {
-            _= characterAuthInfo ?? throw new ArgumentNullException(nameof(characterAuthInfo));
-            _= accessTokenDetails ?? throw new ArgumentNullException(nameof(accessTokenDetails));
+            _ = characterAuthInfo ?? throw new ArgumentNullException(nameof(characterAuthInfo));
+            _ = accessTokenDetails ?? throw new ArgumentNullException(nameof(accessTokenDetails));
 
             characterAuthInfo.ShallowCopyFrom(accessTokenDetails);
             _dbContext.SaveChanges();
@@ -260,10 +261,40 @@ namespace EveMailHelper.ServiceLibrary.Managers
             {
                 throw new ArgumentException("character without authinfo");
             }
-            var authInfo = authInfos
-                .Where(x => x.ExpiresUTC > DateTime.UtcNow)
-                .First();
-            AuthDTO result = new()
+
+            CharacterAuthInfo authInfo = new();
+            bool noUnexpiredAuthInfo = false;
+            try
+            {
+                authInfo = authInfos
+                    .Where(x => x.ExpiresUTC > DateTime.UtcNow)
+                    .First();
+
+            }
+            catch (Exception ex)
+            {
+                noUnexpiredAuthInfo = true;
+            }
+            if (noUnexpiredAuthInfo)
+            {
+                authInfo = authInfos.Where(x => x.ExpiresUTC == authInfos.Max(x => x.ExpiresUTC)).First();
+                var accessTokenDetails =
+                    await _sso.GetNewBasicAuthAccessAndRefreshTokenAsync(authInfo.RefreshToken);
+                //, authInfo.Scopes.ToList());
+                authInfo = new()
+                {
+                    AccessToken = accessTokenDetails.AccessToken,
+                    RefreshToken = accessTokenDetails.RefreshToken,
+                    TokenType = accessTokenDetails.TokenType,
+                    ExpiresUTC = accessTokenDetails.ExpiresUtc,
+                    Char = authInfo.Char,
+                    Scopes = authInfo.Scopes
+                };
+                _tokenDbAccess.Add(authInfo);
+                _dbContext.SaveChanges();
+            }
+
+            return new AuthDTO()
             {
                 AccessToken = new()
                 {
@@ -275,7 +306,6 @@ namespace EveMailHelper.ServiceLibrary.Managers
                 CharacterId = character.EveId,
                 Scopes = string.Join(",", authInfo.Scopes),
             };
-            return result;  
         }
 
     }

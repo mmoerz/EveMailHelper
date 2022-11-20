@@ -20,18 +20,21 @@ namespace EveMailHelper.ServiceLayer.Managers
     public class InGameMailManager : IInGameMailManager
     {
         private readonly EveMailHelperContext _dbContext;
-        private readonly EveMailLabelDbAccess _eveMailLabelDbAccess;
+        //private readonly EveMailLabelDbAccess _eveMailLabelDbAccess;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly IAuthenticationManager _authenticationManager;
         private readonly EVEStandardAPI _esiClient;
         private readonly SSOv2 _sSOv2;
 
-        private readonly RunnerWriteDb<AddLabelDTO, IDictionary<long, EveMailLabel>> updateEveMailLabels;
+        private readonly RunnerWriteDb<AddLabelDTO, IDictionary<long, MailLabel>> updateEveMailLabels;
         private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Character>> addEsCharacters;
         private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Corporation>> addEsCorporations;
         private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Alliance>> addEsAlliances;
         private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, MailList>> addEsMailList;
-        private readonly RunnerWriteDbAsync<AddMailDTO, ICollection<EveMail>> addEsMails;
+        private readonly RunnerWriteDbAsync<AddMailDTO, ICollection<Mail>> addEsMails;
+
+        // TODO: remove this
+        private readonly MailDbAccess _mailDbAccess;
         
 
         public InGameMailManager(
@@ -42,12 +45,13 @@ namespace EveMailHelper.ServiceLayer.Managers
             )
         {
             _dbContext = dbContextFactory.CreateDbContext();
-            _eveMailLabelDbAccess = new(_dbContext);
+            var eveMailLabelDbAccess = new MailLabelDbAccess(_dbContext);
             var characterDbAccess = new CharacterDbAccess(_dbContext);
             var corporationDbAccess = new CorporationDbAccess(_dbContext);
             var allianceDbAccess = new AllianceDbAccess(_dbContext);
             var maillistDbAccess = new MailListDbAccess(_dbContext);
-            var eveMailDbAccess = new EveMailDbAccess(_dbContext);
+            var eveMailDbAccess = new MailDbAccess(_dbContext);
+            _mailDbAccess = eveMailDbAccess;
 
             _authenticationStateProvider = authenticationStateProvider;
             _authenticationManager = authenticationManager;
@@ -55,7 +59,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             _sSOv2 = ssov2;
 
             updateEveMailLabels = new(
-                new UpdateEveMailLabelsAction(_eveMailLabelDbAccess),
+                new UpdateEveMailLabelsAction(eveMailLabelDbAccess, characterDbAccess),
                 _dbContext
                 );
             addEsCharacters = new(
@@ -80,7 +84,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 );
         }
 
-        public async Task<TableData<EveMail>> GetInboxMails(
+        public async Task<TableData<Mail>> GetInboxMails(
             string searchString, TableState state)
         {
             var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -93,12 +97,12 @@ namespace EveMailHelper.ServiceLayer.Managers
 
             var eveLabels = updateEveMailLabels.RunAction(new AddLabelDTO()
             {
-                Character = character,
+                CharacterId = character.Id,
                 MailLabels = labelsAndCount.Model.Labels
             });
 
-            var lastEveMailId = _
-            var items = await _esiClient.Mail.ReturnMailHeadersV1Async(auth, new List<long>(), 0);
+            var lastEveMailId = await _mailDbAccess.GetMaxEveMailIdAsync();
+            var items = await _esiClient.Mail.ReturnMailHeadersV1Async(auth, new List<long>(), lastEveMailId);
             var idLists = ExtractIdsFromMails(items.Model);
             var mailDTO = new AddMailDTO()
             {
@@ -116,7 +120,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             //var items = await _esiClient.Mail.ReturnMailV1Async(auth, 0);
             //var chara = await _esiClient.Location.GetCharacterLocationV1Async(auth);
 
-            return new TableData<EveMail>()
+            return new TableData<Mail>()
             {
                 Items = mails.ToList(),
                 TotalItems = mails.Count()

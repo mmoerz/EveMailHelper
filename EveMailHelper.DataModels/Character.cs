@@ -1,8 +1,9 @@
-﻿using EveMailHelper.DataModels.Security;
+﻿using EveMailHelper.DataModels.Interfaces;
+using EveMailHelper.DataModels.Security;
 
 namespace EveMailHelper.DataModels
 {
-    public partial class Character : IBaseEveId
+    public partial class Character : IBaseEveId, IBaseEveObject
     {
         public Character()
         {
@@ -17,6 +18,7 @@ namespace EveMailHelper.DataModels
         /// Ingame Id
         /// </summary>
         public int EveId { get; set; }
+        public DateTime EveLastUpdated { get; set; }
         /// <summary>
         /// account of this tool
         /// </summary>
@@ -43,6 +45,7 @@ namespace EveMailHelper.DataModels
         public string Title { get; set; } = null!;
         public bool IsExcluded { get; set; } = false;
         public bool IsInRecruitment { get; set; } = false;
+        public bool EveDeletedInGame { get; set; } = false;
 
         public CharacterStatus Status { get; set; } = CharacterStatus.None;
         public DateTime CreatedDate { get; set; }

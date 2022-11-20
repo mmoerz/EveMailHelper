@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EveMailHelper.DataModels
+namespace EveMailHelper.DataModels.Interfaces
 {
     public interface IBaseEveLongId
     {

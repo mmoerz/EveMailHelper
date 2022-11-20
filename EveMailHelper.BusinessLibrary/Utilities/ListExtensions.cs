@@ -1,16 +1,17 @@
 ﻿using EveMailHelper.DataModels;
+using EveMailHelper.DataModels.Interfaces;
 
 namespace EveMailHelper.BusinessDataAccess.Utilities
 {
     public static class ListExtensions
     {
-        public static ICollection<DataModels.EveMailLabel> ToEveMailLabelList
+        public static ICollection<DataModels.MailLabel> ToEveMailLabelList
             (this ICollection<EVEStandard.Models.MailLabel> mailLabels, Character character)
         {
-            List<DataModels.EveMailLabel> resultLabels = new();
+            List<DataModels.MailLabel> resultLabels = new();
             foreach (var label in mailLabels)
             {
-                var newLabel = new DataModels.EveMailLabel().CopyFrom(label);
+                var newLabel = new DataModels.MailLabel().CopyFrom(label);
                 newLabel.Character = character;
                 resultLabels.Add(newLabel);
             }

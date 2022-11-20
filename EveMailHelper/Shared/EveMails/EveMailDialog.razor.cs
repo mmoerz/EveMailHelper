@@ -10,16 +10,16 @@ namespace EveMailHelper.Web.Shared.EveMails
     public partial class EveMailDialog : ComponentBase
     {
         #region injections
-        [Inject] IEveMailService EveMailService { get; set; } = null!;
+        [Inject] IMailService EveMailService { get; set; } = null!;
         #endregion
 
         #region parameters
         [CascadingParameter]
         MudDialogInstance MudDialog { get; set; } = null!;
         [Parameter]
-        public EveMail Model { get; set; } = new();
+        public Mail Model { get; set; } = new();
         [Parameter]
-        public EventCallback<EveMail> DialogSaved { get; set; }
+        public EventCallback<Mail> DialogSaved { get; set; }
         #endregion
 
         MudForm? form = null!;

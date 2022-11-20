@@ -19,7 +19,7 @@ namespace EveMailHelper.BusinessLibrary.Services
         #region injected
         private readonly EveMailHelperContext _context = null!;
         //private readonly CharacterDbAccess _characterDbAccess;
-        private readonly EveMailDbAccess _evemailDbAccess;
+        private readonly MailDbAccess _evemailDbAccess;
         #endregion
 
         public CommunicationService(IDbContextFactory<EveMailHelperContext> dbContextFactory)
@@ -27,12 +27,12 @@ namespace EveMailHelper.BusinessLibrary.Services
             var factory = dbContextFactory;
             _context = factory.CreateDbContext();
             //_characterDbAccess = new CharacterDbAccess(_context);
-            _evemailDbAccess = new EveMailDbAccess(_context);
+            _evemailDbAccess = new MailDbAccess(_context);
         }
 
-        public async Task<TableData<EveMail>> GetPaginatedEveMail(Character character, string searchString, TableState state)
+        public async Task<TableData<Mail>> GetPaginatedEveMail(Character character, string searchString, TableState state)
         {
-            IQueryable<EveMail> query = from mail in _context.EveMails
+            IQueryable<Mail> query = from mail in _context.EveMails
                                         select mail;
             IQueryable<Guid> querySendTos =
                 from sendTo in _context.EveMailSentTos
@@ -65,7 +65,7 @@ namespace EveMailHelper.BusinessLibrary.Services
                 query = query.Skip(state.Page * state.PageSize);
             query = query.Take(state.PageSize);
 
-            return new TableData<EveMail>()
+            return new TableData<Mail>()
             {
                 Items = await query
                 .AsNoTracking()

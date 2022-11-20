@@ -1,5 +1,7 @@
 ﻿
 
+using EveMailHelper.DataModels.Interfaces;
+
 namespace EveMailHelper.DataModels
 {
     public class Alliance : IBaseEveId

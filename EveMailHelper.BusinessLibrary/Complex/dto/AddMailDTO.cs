@@ -10,7 +10,7 @@ namespace EveMailHelper.BusinessLibrary.Complex.dto
 {
     public class AddMailDTO
     {
-        public IDictionary<long, EveMailLabel> Labels = null!;
+        public IDictionary<long, MailLabel> Labels = null!;
         public IDictionary<int, Character> Characters = null!;
         public IDictionary<int, Corporation> Corporations = null!;
         public IDictionary<int, Alliance> Alliances = null!;

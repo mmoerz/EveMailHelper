@@ -9,13 +9,13 @@ using EveMailHelper.BusinessDataAccess.Utilities;
 
 namespace EveMailHelper.BusinessLibrary.Complex
 {
-    public class AddEveMailsAction : IBizActionAsync<AddMailDTO, ICollection<EveMail>>
+    public class AddEveMailsAction : IBizActionAsync<AddMailDTO, ICollection<Mail>>
     {
-        readonly EveMailDbAccess _dbAccess;
+        readonly MailDbAccess _dbAccess;
         readonly CharacterDbAccess _charcterDbAcces;
         private List<ValidationResult> _errors = new();
 
-        public AddEveMailsAction(EveMailDbAccess dbAccess, CharacterDbAccess characterDbAccess)
+        public AddEveMailsAction(MailDbAccess dbAccess, CharacterDbAccess characterDbAccess)
         {
             _dbAccess = dbAccess;
             _charcterDbAcces = characterDbAccess;
@@ -25,14 +25,14 @@ namespace EveMailHelper.BusinessLibrary.Complex
 
         public bool HasErrors => _errors.Any();
 
-        public async Task<ICollection<EveMail>> ActionAsync(AddMailDTO dto)
+        public async Task<ICollection<Mail>> ActionAsync(AddMailDTO dto)
         {
-            ICollection<EveMail> resultMails = new List<EveMail>();
+            ICollection<Mail> resultMails = new List<Mail>();
 
             foreach (var esMail in dto.esMails)
             {
                 // copy the simple stuff
-                var newDbMail = new EveMail().BasicCopyFrom(esMail);
+                var newDbMail = new Mail().BasicCopyFrom(esMail);
                 // translate the difficult things to the ids of our db
                 if (esMail.From != null)
                     newDbMail.From = dto.Characters[esMail.From.Value];

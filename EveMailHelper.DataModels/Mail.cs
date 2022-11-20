@@ -1,12 +1,14 @@
-﻿namespace EveMailHelper.DataModels
+﻿using EveMailHelper.DataModels.Interfaces;
+
+namespace EveMailHelper.DataModels
 {
-    public partial class EveMail : IBaseEveLongId
+    public partial class Mail : IBaseEveLongId
     {
-        public EveMail()
+        public Mail()
         {
             SentTo = new HashSet<EveMailSentTo>();
             Recipients = new HashSet<EveMailRecipient>();
-            Labels = new HashSet<EveMailLabel>();
+            Labels = new HashSet<MailLabel>();
             CreatedDate = DateTime.Now;
         }
 
@@ -30,6 +32,6 @@
         public Character From { get; set; } = null!;
         public virtual ICollection<EveMailSentTo> SentTo { get; set; }
         public virtual ICollection<EveMailRecipient> Recipients { get; set; }
-        public virtual ICollection<EveMailLabel> Labels { get; set; }
+        public virtual ICollection<MailLabel> Labels { get; set; }
     }
 }

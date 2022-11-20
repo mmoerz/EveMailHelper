@@ -11,7 +11,7 @@
         public Guid CharacterId { get; set; }
         public DateTime SentDate { get; set; }
 
-        public virtual EveMail EveMail { get; set; } = null!;
+        public virtual Mail EveMail { get; set; } = null!;
         public virtual Character Character { get; set; } = null!;
 
     }

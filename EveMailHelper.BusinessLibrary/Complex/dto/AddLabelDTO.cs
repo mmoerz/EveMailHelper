@@ -10,7 +10,7 @@ namespace EveMailHelper.BusinessLibrary.Complex.dto
 {
     public class AddLabelDTO
     {
-        public Character Character { get; set; } = null!;
+        public Guid CharacterId { get; set; } = Guid.Empty;
         public ICollection<EVEStandard.Models.MailLabel> MailLabels { get; set; } = null!;
     }
 }

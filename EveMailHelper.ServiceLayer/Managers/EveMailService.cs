@@ -13,40 +13,40 @@ using EveMailHelper.ServiceLayer.Interfaces;
 
 namespace EveMailHelper.BusinessLibrary.Services
 {
-    public class EveMailService : IEveMailService
+    public class MailManager : IMailService
     {
         #region injected
         #endregion
         private readonly EveMailHelperContext _context = null!;
         private readonly CharacterDbAccess _characterDbAccess;
         private readonly EveMailTemplateDbAccess _templateDbAccess;
-        private readonly EveMailDbAccess _evemailDbAccess;
+        private readonly MailDbAccess _evemailDbAccess;
         private readonly RunnerWriteDb<ICollection<string>, ICollection<Character>> _addCharRunner;
-        private readonly RunnerWriteDbAsync<SendTemplateToDto, EveMail> _sendTemplateToRunner;
-        private readonly RunnerWriteDb<EveMail, EveMail> _updateMailRunner;
+        private readonly RunnerWriteDbAsync<SendTemplateToDto, Mail> _sendTemplateToRunner;
+        private readonly RunnerWriteDb<Mail, Mail> _updateMailRunner;
 
-        public EveMailService(IDbContextFactory<EveMailHelperContext> dbContextFactory)
+        public MailManager(IDbContextFactory<EveMailHelperContext> dbContextFactory)
         {
             var factory = dbContextFactory;
             _context = factory.CreateDbContext();
             _characterDbAccess = new CharacterDbAccess(_context);
             _templateDbAccess = new EveMailTemplateDbAccess(_context);
-            _evemailDbAccess = new EveMailDbAccess(_context);
+            _evemailDbAccess = new MailDbAccess(_context);
             _addCharRunner = new RunnerWriteDb<ICollection<string>, ICollection<Character>>
                 (new AddCharactersByNameAction(_characterDbAccess), _context);
-            _sendTemplateToRunner = new RunnerWriteDbAsync<SendTemplateToDto, EveMail>
+            _sendTemplateToRunner = new RunnerWriteDbAsync<SendTemplateToDto, Mail>
                 (new SendEveMailBasedOnTemplateAction(_evemailDbAccess), _context);
-            _updateMailRunner = new RunnerWriteDb<EveMail, EveMail>
+            _updateMailRunner = new RunnerWriteDb<Mail, Mail>
                 (new UpdateEveMailAction(_evemailDbAccess), _context);
         }
 
-        public void Delete(EveMail eveMail)
+        public void Delete(Mail eveMail)
         {
             _ = eveMail ?? throw new ArgumentNullException(nameof(eveMail));
             if (eveMail.Id == Guid.Empty)
                 throw new ArgumentException("null Guid is invalid", nameof(eveMail));
             // now load the Evemail with all Sendto entities (child's that depend on it)
-            IQueryable<EveMail> query = from mail in _context.EveMails
+            IQueryable<Mail> query = from mail in _context.EveMails
                                         select mail;
             query = query.Where(mail => mail.Id == eveMail.Id);
             var result = query.Include(mail => mail.SentTo).First();
@@ -55,7 +55,7 @@ namespace EveMailHelper.BusinessLibrary.Services
             _context.SaveChanges();
         }
 
-        public EveMail Update(EveMail eveMail)
+        public Mail Update(Mail eveMail)
         {
             return _updateMailRunner.RunAction(eveMail);
         }
@@ -73,9 +73,9 @@ namespace EveMailHelper.BusinessLibrary.Services
             return result;
         }
 
-        public async Task<TableData<EveMail>> GetPaginated(string searchString, TableState state)
+        public async Task<TableData<Mail>> GetPaginated(string searchString, TableState state)
         {
-            IQueryable<EveMail> query = from mail in _context.EveMails
+            IQueryable<Mail> query = from mail in _context.EveMails
                                         select mail;
 
             if (!string.IsNullOrWhiteSpace(searchString))
@@ -94,7 +94,7 @@ namespace EveMailHelper.BusinessLibrary.Services
                 query = query.Skip(state.Page * state.PageSize);
             query = query.Take(state.PageSize);
 
-            return new TableData<EveMail>()
+            return new TableData<Mail>()
             {
                 Items = await query
                 .AsNoTracking()

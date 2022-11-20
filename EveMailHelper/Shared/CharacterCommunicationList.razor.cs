@@ -77,7 +77,7 @@ namespace EveMailHelper.Web.Shared
                     };
                 //var dialog = DialogService.Show<ChatDialog>("Edit Chat", parameters, options);
             }
-            if (tableRowClickEventArgs.Item.obj.GetType() == typeof(EveMail))
+            if (tableRowClickEventArgs.Item.obj.GetType() == typeof(Mail))
             {
                 var dialog = CreateEmailDialog(tableRowClickEventArgs.Item.obj);
             }
@@ -124,7 +124,7 @@ namespace EveMailHelper.Web.Shared
             var parameters = new DialogParameters
                 {
                     { "model", email },
-                    { "DialogSaved", new EventCallback<EveMail>(this, new Action<EveMail>(EveMailDialogWasSaved)) }
+                    { "DialogSaved", new EventCallback<Mail>(this, new Action<Mail>(EveMailDialogWasSaved)) }
                 };
             return DialogService.Show<EveMailDialog>("Edit Eve Mail", parameters, options);
         }
@@ -142,7 +142,7 @@ namespace EveMailHelper.Web.Shared
 
         private void AddEveMail()
         {
-            var dialog = CreateEmailDialog(new EveMail());
+            var dialog = CreateEmailDialog(new Mail());
         }
 
         private void AddNote()
@@ -155,7 +155,7 @@ namespace EveMailHelper.Web.Shared
             var dialog = CreateChatDialog(new Chat() { AttachedTo = Character });
         }
 
-        private void EveMailDialogWasSaved(EveMail eveMail)
+        private void EveMailDialogWasSaved(Mail eveMail)
         {
             table?.ReloadServerData();
         }

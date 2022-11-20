@@ -29,5 +29,7 @@ namespace EveMailHelper.BusinessLibrary.Utilities
                 return -1;
             }
         }
+
+
     }
 }

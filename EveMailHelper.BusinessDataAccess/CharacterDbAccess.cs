@@ -12,6 +12,8 @@ namespace EveMailHelper.BusinessDataAccess
 {
     public class CharacterDbAccess
     {
+        const int MaxCacheMinutesDefault = 24 * 60;
+
         private readonly EveMailHelperContext _context;
         public CharacterDbAccess(EveMailHelperContext context)
         {
@@ -51,7 +53,9 @@ namespace EveMailHelper.BusinessDataAccess
 
         public Character GetByEveId(int? id)
         {
-            return _context.Characters.Where(character => character.EveId == id).First();
+            return _context.Characters
+                .Where(character => character.EveId == id)
+                .First();
         }
 
         public ICollection<Character> GetByNames(ICollection<string> characterNames)
@@ -64,12 +68,11 @@ namespace EveMailHelper.BusinessDataAccess
             return query.ToList();
         }
 
-        public ICollection<Character> GetByEveId(ICollection<int> characterEveIds)
+        public ICollection<Character> GetByEveIds(ICollection<int> characterEveIds)
+            
         {
-            IQueryable<Character> query = from character in _context.Characters
-                                          select character;
-
-            query = query.Where(x => characterEveIds.Contains(x.EveId));
+            var query = _context.Characters
+                .Where(character => characterEveIds.Contains(character.EveId));
 
             return query.ToList();
         }

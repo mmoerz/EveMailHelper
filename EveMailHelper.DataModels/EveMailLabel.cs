@@ -1,12 +1,6 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EveMailHelper.DataModels
+﻿namespace EveMailHelper.DataModels
 {
-    public partial class EveMailLabel
+    public partial class MailLabel
     {
         public Guid Id { get; set; }
         public Guid CharacterId { get; set; }
@@ -18,5 +12,10 @@ namespace EveMailHelper.DataModels
         public int? UnreadCount { get; set; } = null;
 
         public Character Character { get; set; } = null!;
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

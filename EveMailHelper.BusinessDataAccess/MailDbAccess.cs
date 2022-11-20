@@ -2,20 +2,27 @@
 
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataModels;
+using System.Security.Cryptography;
 
 namespace EveMailHelper.BusinessDataAccess
 {
-    public class EveMailDbAccess
+    public class MailDbAccess
     {
         private readonly EveMailHelperContext _context;
-        public EveMailDbAccess(EveMailHelperContext context)
+        public MailDbAccess(EveMailHelperContext context)
         {
             _context = context;
         }
 
-        public async Task AddAsync(EveMail eveMail)
+        public async Task AddAsync(Mail eveMail)
         {
             await _context.EveMails.AddAsync(eveMail);
+        }
+
+        public async Task<long> GetMaxEveMailIdAsync()
+        {
+            var result = await _context.EveMails.MaxAsync(m => m.EveId);
+            return result ?? 0;
         }
 
         public async Task<List<string>> GetReceiversFiltered(IEnumerable<string> CharacterNames, DateTime notAfterDateTime)
@@ -79,7 +86,7 @@ namespace EveMailHelper.BusinessDataAccess
                 .ToList();
         }
 
-        public void Update(EveMail eveMail)
+        public void Update(Mail eveMail)
         {
             _ = eveMail ?? throw new ArgumentNullException(nameof(eveMail));
             _context.EveMails.Update(eveMail);

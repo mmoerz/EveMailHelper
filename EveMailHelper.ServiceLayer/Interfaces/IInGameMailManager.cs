@@ -1,13 +1,10 @@
-﻿using EVEStandard.API;
-
-using Microsoft.AspNetCore.Components.Authorization;
-
-using MudBlazor;
+﻿using MudBlazor;
+using EveMailHelper.DataModels;
 
 namespace EveMailHelper.ServiceLayer.Interfaces
 {
     public interface IInGameMailManager
     {
-        Task<TableData<EVEStandard.Models.Mail>> GetInboxMails(string searchString, TableState state);
+        Task<TableData<Mail>> GetInboxMails(string searchString, TableState state);
     }
 }

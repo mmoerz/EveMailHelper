@@ -9,24 +9,27 @@ using EveMailHelper.BusinessLibrary.Complex.dto;
 
 namespace EveMailHelper.BusinessLibrary.Complex
 {
-    public class UpdateEveMailLabelsAction : IBizAction<AddLabelDTO, IDictionary<long, EveMailLabel>>
+    public class UpdateEveMailLabelsAction : IBizAction<AddLabelDTO, IDictionary<long, MailLabel>>
     {
-        readonly EveMailLabelDbAccess _dbAccess;
+        readonly MailLabelDbAccess _dbAccess;
+        readonly CharacterDbAccess _dbAccessCharacter;
         private List<ValidationResult> _errors = new();
 
-        public UpdateEveMailLabelsAction(EveMailLabelDbAccess dbAccess)
+        public UpdateEveMailLabelsAction(MailLabelDbAccess dbAccess, CharacterDbAccess dbAccessCharacter)
         {
             _dbAccess = dbAccess;
+            _dbAccessCharacter = dbAccessCharacter;
         }
 
         public IImmutableList<ValidationResult> Errors => _errors.ToImmutableList();
 
         public bool HasErrors => _errors.Any();
 
-        public IDictionary<long, EveMailLabel> Action(AddLabelDTO labelDTO)
+        public IDictionary<long, MailLabel> Action(AddLabelDTO labelDTO)
         {
-            ICollection<EveMailLabel> labelList = labelDTO.MailLabels.ToEveMailLabelList(labelDTO.Character);
-            IDictionary<long, EveMailLabel> result = new Dictionary<long, EveMailLabel>();
+            var character = _dbAccessCharacter.GetById(labelDTO.CharacterId);
+            ICollection<MailLabel> labelList = labelDTO.MailLabels.ToEveMailLabelList(character);
+            IDictionary<long, MailLabel> result = new Dictionary<long, MailLabel>();
 
             foreach (var label in labelList)
             {

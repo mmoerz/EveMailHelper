@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EveMailHelper.DataAccessLayer.Configuration
 {
-    public partial class EveMailLabelConfigurationConfiguration : IEntityTypeConfiguration<EveMailLabel>
+    public partial class EveMailLabelConfigurationConfiguration : IEntityTypeConfiguration<MailLabel>
     {
-        public void Configure(EntityTypeBuilder<EveMailLabel> builder)
+        public void Configure(EntityTypeBuilder<MailLabel> builder)
         {
             builder.Property(e => e.Name)
                 .IsRequired()

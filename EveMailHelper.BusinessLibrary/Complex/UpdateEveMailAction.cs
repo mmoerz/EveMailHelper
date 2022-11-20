@@ -7,12 +7,12 @@ using EveMailHelper.DataModels;
 
 namespace EveMailHelper.BusinessLibrary.Complex
 {
-    public class UpdateEveMailAction : IBizAction<EveMail, EveMail>
+    public class UpdateEveMailAction : IBizAction<Mail, Mail>
     {
-        readonly EveMailDbAccess _dbAccess;
+        readonly MailDbAccess _dbAccess;
         private List<ValidationResult> _errors = new();
 
-        public UpdateEveMailAction(EveMailDbAccess dbAccess)
+        public UpdateEveMailAction(MailDbAccess dbAccess)
         {
             _dbAccess = dbAccess;
         }
@@ -21,7 +21,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
 
         public bool HasErrors => _errors.Any();
 
-        public EveMail Action(EveMail dto)
+        public Mail Action(Mail dto)
         {
             _ = dto ?? throw new ArgumentNullException(nameof(dto));
 

@@ -9,25 +9,25 @@ using System.Threading.Tasks;
 
 namespace EveMailHelper.BusinessDataAccess
 {
-    public class EveMailLabelDbAccess
+    public class MailLabelDbAccess
     {
         private readonly EveMailHelperContext _context;
-        public EveMailLabelDbAccess(EveMailHelperContext context)
+        public MailLabelDbAccess(EveMailHelperContext context)
         {
             _context = context;
         }
 
-        public async Task AddAsync(EveMailLabel eveMailLabel)
+        public async Task AddAsync(MailLabel eveMailLabel)
         {
             await _context.EveMailLabels.AddAsync(eveMailLabel);
         }
 
-        public EveMailLabel Update(EveMailLabel eveMailLabel)
+        public MailLabel Update(MailLabel eveMailLabel)
         {
             var foundLabels = _context.EveMailLabels
                 .Where(x => x.EveLabelId == eveMailLabel.EveLabelId);
 
-            EveMailLabel result = eveMailLabel;
+            MailLabel result = eveMailLabel;
             if (foundLabels.Any())
                 result = foundLabels.First();
 

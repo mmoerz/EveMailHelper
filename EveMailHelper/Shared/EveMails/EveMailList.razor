@@ -5,9 +5,9 @@
           ReadOnly="@readOnly"
           OnRowClick="RowClickEvent"
           RowClassFunc="@SelectedRowClassFunc"
-          ServerData=@(new Func<TableState, Task<TableData<EveMail>>>(ServerReload))
+          ServerData=@(new Func<TableState, Task<TableData<Mail>>>(ServerReload))
           SortLabel="Sortierung"
-          T="EveMail"
+          T="Mail"
           @ref="table">
     <!-- IsEditRowSwitchingBlocked="" -->
     <ToolBarContent>

@@ -4,7 +4,7 @@
     {
         public EveMailTemplate()
         {
-            EveMailsGenerated = new HashSet<EveMail>();
+            EveMailsGenerated = new HashSet<Mail>();
             CreatedDate = DateTime.Now;
         }
 
@@ -13,6 +13,6 @@
         public string Content { get; set; } = null!;
         public DateTime CreatedDate { get; set; }
 
-        public virtual ICollection<EveMail> EveMailsGenerated { get; set; }
+        public virtual ICollection<Mail> EveMailsGenerated { get; set; }
     }
 }

@@ -3,12 +3,12 @@ using MudBlazor;
 
 namespace EveMailHelper.ServiceLayer.Interfaces
 {
-    public interface IEveMailService
+    public interface IMailService
     {
-        EveMail Update(EveMail eveMail);
-        Task<TableData<EveMail>> GetPaginated(string searchString, TableState state);
+        Mail Update(Mail eveMail);
+        Task<TableData<Mail>> GetPaginated(string searchString, TableState state);
         Task SendTo(Guid templateId, Character fromCharacter, ICollection<string> receivers);
-        void Delete(EveMail eveMail);
+        void Delete(Mail eveMail);
         Task<List<string>> FilterReceivers(string receivers, DateTime filterTime);
     }
 }
