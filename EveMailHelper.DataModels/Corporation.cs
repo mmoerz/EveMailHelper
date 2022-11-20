@@ -8,7 +8,7 @@ namespace EveMailHelper.DataModels
 {
     public class Corporation : IBaseEveId
     {
-        Corporation()
+        public Corporation()
         {
             Members = new HashSet<Character>();
         }

@@ -28,7 +28,11 @@ namespace EveMailHelper.ServiceLayer.Managers
 
         private readonly RunnerWriteDb<AddLabelDTO, IDictionary<long, EveMailLabel>> updateEveMailLabels;
         private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Character>> addEsCharacters;
+        private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Corporation>> addEsCorporations;
+        private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Alliance>> addEsAlliances;
+        private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, MailList>> addEsMailList;
         private readonly RunnerWriteDbAsync<AddMailDTO, ICollection<EveMail>> addEsMails;
+        
 
         public InGameMailManager(
             AuthenticationStateProvider authenticationStateProvider,
@@ -40,6 +44,9 @@ namespace EveMailHelper.ServiceLayer.Managers
             _dbContext = dbContextFactory.CreateDbContext();
             _eveMailLabelDbAccess = new(_dbContext);
             var characterDbAccess = new CharacterDbAccess(_dbContext);
+            var corporationDbAccess = new CorporationDbAccess(_dbContext);
+            var allianceDbAccess = new AllianceDbAccess(_dbContext);
+            var maillistDbAccess = new MailListDbAccess(_dbContext);
             var eveMailDbAccess = new EveMailDbAccess(_dbContext);
 
             _authenticationStateProvider = authenticationStateProvider;
@@ -55,14 +62,25 @@ namespace EveMailHelper.ServiceLayer.Managers
                 new AddEsCharactersAction(characterDbAccess, _esiClient),
                 _dbContext
                 );
+            addEsCorporations = new(
+                new AddEsCorporationsAction(corporationDbAccess, _esiClient),
+                _dbContext
+                );
+            addEsAlliances = new(
+                new AddEsAlliancesAction(allianceDbAccess, _esiClient),
+                _dbContext
+                );
+            addEsMailList = new(
+                new AddEsMailListsAction(maillistDbAccess, _esiClient),
+                _dbContext
+                );
             addEsMails = new(
                 new AddEveMailsAction(eveMailDbAccess, characterDbAccess),
                 _dbContext
                 );
         }
 
-        public async Task<TableData<EVEStandard.Models.Mail>> GetInboxMails(
-            //AuthenticationState authenticationState,
+        public async Task<TableData<EveMail>> GetInboxMails(
             string searchString, TableState state)
         {
             var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -79,30 +97,29 @@ namespace EveMailHelper.ServiceLayer.Managers
                 MailLabels = labelsAndCount.Model.Labels
             });
 
+            var lastEveMailId = _
             var items = await _esiClient.Mail.ReturnMailHeadersV1Async(auth, new List<long>(), 0);
             var idLists = ExtractIdsFromMails(items.Model);
             var mailDTO = new AddMailDTO()
             {
                 Labels = eveLabels,
-                // add all eve characters by id
                 Characters = await addEsCharacters.RunAction(idLists.EsCharacterIds),
-                // add all corporations by id
-                //var corporationList = 
-                // add all mailinglists by id
-
-                //_esiClient.Character.GetCharacterPublicInfoV5Async()
+                Corporations = await addEsCorporations.RunAction(idLists.EsCorporationIds),
+                Alliances = await addEsAlliances.RunAction(idLists.EsAlliances),
+                MailLists = await addEsMailList.RunAction(idLists.EsMailingLists)
             };
             // now add all recipients
             var mails = await addEsMails.RunAction(mailDTO);
 
+            // download the content
 
             //var items = await _esiClient.Mail.ReturnMailV1Async(auth, 0);
             //var chara = await _esiClient.Location.GetCharacterLocationV1Async(auth);
 
-            return new TableData<EVEStandard.Models.Mail>()
+            return new TableData<EveMail>()
             {
-                Items = items.Model.ToList(),
-                TotalItems = items.Model.Count()
+                Items = mails.ToList(),
+                TotalItems = mails.Count()
             };
         }
 

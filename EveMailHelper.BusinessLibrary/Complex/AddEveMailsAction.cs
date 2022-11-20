@@ -27,33 +27,42 @@ namespace EveMailHelper.BusinessLibrary.Complex
 
         public async Task<ICollection<EveMail>> ActionAsync(AddMailDTO dto)
         {
-            ICollection<EveMail> mailList = new List<EveMail>();
+            ICollection<EveMail> resultMails = new List<EveMail>();
 
-            foreach (var mail in dto.esMails)
+            foreach (var esMail in dto.esMails)
             {
                 // copy the simple stuff
-                var newDbMail = new EveMail().BasicCopyFrom(mail);
+                var newDbMail = new EveMail().BasicCopyFrom(esMail);
                 // translate the difficult things to the ids of our db
-                newDbMail.From = _charcterDbAcces.GetByEveId(mail.From);
-                foreach (var recipient in mail.Recipients)
+                if (esMail.From != null)
+                    newDbMail.From = dto.Characters[esMail.From.Value];
+                foreach (var recipient in esMail.Recipients)
                 {
                     if (recipient == null) continue;
+                    EveMailRecipient? eveMailRecipient = null;
                     switch(recipient.RecipientType)
                     {
                         case EVEStandard.Models.MailRecipient.RecipientTypeEnum.character:
                             var character = dto.Characters[recipient.RecipientId];
-                            newDbMail.Recipients.Add(new EveMailRecipientCharacter() { Character =  character});
+                            eveMailRecipient = new EveMailRecipientCharacter() { Character = character};
                             break;
                         case EVEStandard.Models.MailRecipient.RecipientTypeEnum.alliance:
+                            var alliance = dto.Alliances[recipient.RecipientId];
+                            eveMailRecipient = new EveMailRecipientAlliance() { Alliance = alliance };
                             break;
                         case EVEStandard.Models.MailRecipient.RecipientTypeEnum.corporation:
+                            var corporation = dto.Corporations[recipient.RecipientId];
+                            eveMailRecipient = new EveMailRecipientCorporation() { Corporation = corporation };
                             break;
                         case EVEStandard.Models.MailRecipient.RecipientTypeEnum.mailing_list:
+                            var maillist = dto.MailLists[recipient.RecipientId];
+                            eveMailRecipient = new EveMailRecipientMailList() { MailList = maillist };
                             break;
                     }
-                    
+                    if (eveMailRecipient != null)
+                        newDbMail.Recipients.Add(eveMailRecipient);
                 }
-                foreach (var label in mail.Labels)
+                foreach (var label in esMail.Labels)
                 {
                     if (label != null)
                         newDbMail.Labels.Add(dto.Labels[label.Value]);
@@ -61,7 +70,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
                 await _dbAccess.AddAsync(newDbMail);
             }
             
-            return mailList;
+            return resultMails;
         }
 
          

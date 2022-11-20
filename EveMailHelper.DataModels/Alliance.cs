@@ -4,7 +4,7 @@ namespace EveMailHelper.DataModels
 {
     public class Alliance : IBaseEveId
     {
-        Alliance()
+        public Alliance()
         {
             Corporations = new HashSet<Corporation>();
         }
@@ -14,7 +14,7 @@ namespace EveMailHelper.DataModels
         public string Name { get; set; } = null!;
         public Guid CreatorCorporationId { get; set; }
         public Guid CreatorId { get; set; }
-        public DateTime DateFounded { get; set; }
+        public DateTime? DateFounded { get; set; }
         public Guid? ExecutorCorporationId { get; set; }
         public string Ticker { get; set; } = null!;
 

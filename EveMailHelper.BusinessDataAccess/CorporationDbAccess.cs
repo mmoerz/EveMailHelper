@@ -5,6 +5,7 @@ using EveMailHelper.DataModels.Security;
 using EveNatTools.ServiceLibrary.Utilities;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 using MudBlazor;
 
@@ -27,6 +28,17 @@ namespace EveMailHelper.BusinessDataAccess
                 .Include(x => x.Ceo)
                 // ?? eveaccount->characters?
                 .First();
+        }
+
+        public ICollection<Corporation> GetByEveIds(ICollection<int> ids)
+        {
+            return _context.Corporations
+                .Where(account => ids.Contains(account.EveId))
+                .AsTracking()
+                .Include(x => x.Alliance)
+                .Include(x => x.Ceo)
+                // ?? eveaccount->characters?
+                .ToList();
         }
 
         public async Task<TableData<Corporation>> GetEveAccountsPaginated(string searchString, TableState state)
@@ -61,14 +73,20 @@ namespace EveMailHelper.BusinessDataAccess
             };
         }
 
-        public void Update(Account account)
+        public Corporation Add(Corporation item)
         {
-            _context.Accounts.Update(account);
+            return _context.Corporations.Add(item)
+                .Entity;
         }
 
-        public void Remove(Account eveAccount)
+        public void Update(Corporation item)
         {
-            _context.Accounts.Remove(eveAccount);
+            _context.Corporations.Update(item);
+        }
+
+        public void Remove(Corporation item)
+        {
+            _context.Corporations.Remove(item);
         }
     }
 }

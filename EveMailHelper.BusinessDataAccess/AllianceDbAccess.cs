@@ -27,6 +27,15 @@ namespace EveMailHelper.BusinessDataAccess
                 .First();
         }
 
+        public ICollection<Alliance> GetByEveIds(ICollection<int> ids)
+        {
+            return _context.Alliances
+                .Where(account => ids.Contains(account.EveId))
+                .AsTracking()
+                .Include(x => x.Corporations)
+                .ToList();
+        }
+
         public async Task<TableData<Alliance>> GetEveAccountsPaginated(string searchString, TableState state)
         {
             IQueryable<Alliance> query = from alliance in _context.Alliances
@@ -60,14 +69,20 @@ namespace EveMailHelper.BusinessDataAccess
             };
         }
 
-        public void Update(Account account)
+        public Alliance Add(Alliance item)
         {
-            _context.Accounts.Update(account);
+            return _context.Alliances.Add(item)
+                .Entity;
         }
 
-        public void Remove(Account eveAccount)
+        public void Update(Alliance item)
         {
-            _context.Accounts.Remove(eveAccount);
+            _context.Alliances.Update(item);
+        }
+
+        public void Remove(Alliance item)
+        {
+            _context.Alliances.Remove(item);
         }
     }
 }
