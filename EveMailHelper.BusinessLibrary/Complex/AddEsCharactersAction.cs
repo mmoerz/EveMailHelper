@@ -14,7 +14,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
 {
     public class AddEsCharactersAction : IBizActionAsync<ICollection<int>, IDictionary<int, Character>>
     {
-        readonly CharacterDbAccess _dbAccess;
+        private readonly CharacterDbAccess _dbAccess;
         private readonly EVEStandardAPI _esiClient;
         private List<ValidationResult> _errors = new();
 
@@ -67,6 +67,10 @@ namespace EveMailHelper.BusinessLibrary.Complex
                     character.CopyShallow(charInfo);
                     character.EveId = eveId;
                     character.EveDeletedInGame = deleted;
+                    if (character.Description?.Length >= 3000)
+                    {
+                        var description = character.Description;
+                    }
                     _dbAccess.Add(character);
                     characters.Add(character.EveId, character);
                 }
@@ -75,6 +79,8 @@ namespace EveMailHelper.BusinessLibrary.Complex
                     try
                     {
                         charInfo = (await _esiClient.Character.GetCharacterPublicInfoV5Async(eveId)).Model;
+                        if (characters[eveId].EveDeletedInGame)
+                            characters[eveId].EveDeletedInGame = false;
                         characters[eveId].CopyShallow(charInfo);
                     }
                     catch (Exception ex)
@@ -84,6 +90,10 @@ namespace EveMailHelper.BusinessLibrary.Complex
                         {
                             characters[eveId].EveDeletedInGame = true;
                         }
+                    }
+                    if (characters[eveId].Description?.Length >= 3000)
+                    {
+                        var description = characters[eveId].Description;
                     }
                     _dbAccess.Update(characters[eveId]);
                 }

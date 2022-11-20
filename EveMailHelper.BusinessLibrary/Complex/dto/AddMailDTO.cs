@@ -10,11 +10,13 @@ namespace EveMailHelper.BusinessLibrary.Complex.dto
 {
     public class AddMailDTO
     {
+        public EVEStandard.Models.API.AuthDTO authDTO { get; set; } = null!;
         public IDictionary<long, MailLabel> Labels = null!;
         public IDictionary<int, Character> Characters = null!;
         public IDictionary<int, Corporation> Corporations = null!;
         public IDictionary<int, Alliance> Alliances = null!;
         public IDictionary<int, MailList> MailLists = null!;
-        public ICollection<EVEStandard.Models.Mail> esMails = null!;
+        public ICollection<EVEStandard.Models.Mail> esMailHeaders = null!;
+        public ICollection<EVEStandard.Models.MailContent> esMailContent = null!;
     }
 }

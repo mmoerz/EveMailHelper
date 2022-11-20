@@ -23,6 +23,7 @@ namespace EveMailHelper.BusinessDataAccess
         public Character Add(Character character)
         {
             var characterFixed = CheckAndFix(character);
+            character.EveLastUpdated= DateTime.UtcNow;
             _context.Characters.Add(characterFixed);
             return characterFixed;
         }
@@ -115,6 +116,7 @@ namespace EveMailHelper.BusinessDataAccess
 
         public void Update(Character character)
         {
+            character.EveLastUpdated = DateTime.UtcNow;
             _context.Characters.Update(character);
         }
     }

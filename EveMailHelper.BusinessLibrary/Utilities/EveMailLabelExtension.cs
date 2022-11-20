@@ -24,7 +24,7 @@ namespace EveMailHelper.BusinessDataAccess.Utilities
             return mail;
         }
 
-        public static string ToString(this ICollection<MailLabel> mailLabels, string delimiter=",")
+        public static string ToString(this ISet<MailLabel> mailLabels, string delimiter=",")
         {
             _ = delimiter ?? throw new ArgumentNullException(nameof(delimiter));
 

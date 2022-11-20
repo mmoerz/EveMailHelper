@@ -79,7 +79,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 _dbContext
                 );
             addEsMails = new(
-                new AddEveMailsAction(eveMailDbAccess, characterDbAccess),
+                new AddEveMailsAction(eveMailDbAccess, characterDbAccess, _esiClient),
                 _dbContext
                 );
         }
@@ -101,16 +101,22 @@ namespace EveMailHelper.ServiceLayer.Managers
                 MailLabels = labelsAndCount.Model.Labels
             });
 
-            var lastEveMailId = await _mailDbAccess.GetMaxEveMailIdAsync();
-            var items = await _esiClient.Mail.ReturnMailHeadersV1Async(auth, new List<long>(), lastEveMailId);
-            var idLists = ExtractIdsFromMails(items.Model);
+            var lastEveMailId = await _mailDbAccess.GetMaxEveMailIdAsync(character.Id);
+            // this doesn't seem to work properly ... lastmailid is properly given, but doesn't seem to influence the
+            // mails that are transfered
+            var headers = await _esiClient.Mail.ReturnMailHeadersV1Async(auth, new List<long>(), lastEveMailId);
+
+
+            var idLists = ExtractIdsFromMails(headers.Model);
             var mailDTO = new AddMailDTO()
             {
+                authDTO= auth,
                 Labels = eveLabels,
                 Characters = await addEsCharacters.RunAction(idLists.EsCharacterIds),
                 Corporations = await addEsCorporations.RunAction(idLists.EsCorporationIds),
                 Alliances = await addEsAlliances.RunAction(idLists.EsAlliances),
-                MailLists = await addEsMailList.RunAction(idLists.EsMailingLists)
+                MailLists = await addEsMailList.RunAction(idLists.EsMailingLists),
+                esMailHeaders = headers.Model
             };
             // now add all recipients
             var mails = await addEsMails.RunAction(mailDTO);

@@ -18,11 +18,12 @@ namespace EveMailHelper.DataAccessLayer.Configuration
 
             builder.Property(c => c.Description)
                 .IsRequired(false)
-                .HasMaxLength(400);
+                .HasMaxLength(8000);
             builder.Property(c => c.RecruitmentNote)
                 .IsRequired(false)
                 .HasMaxLength(400);
             builder.Property(c => c.Title)
+                .IsRequired(false)
                 .HasMaxLength(100);
 
             builder.Property(c => c.Status)

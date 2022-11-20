@@ -4,7 +4,7 @@ using EveMailHelper.DataModels;
 
 namespace EveMailHelper.DataAccessLayer.Configuration
 {
-    public partial class EveMailConfiguration : IEntityTypeConfiguration<Mail>
+    public partial class MailConfiguration : IEntityTypeConfiguration<Mail>
     {
         public void Configure(EntityTypeBuilder<Mail> builder)
         {
@@ -13,9 +13,12 @@ namespace EveMailHelper.DataAccessLayer.Configuration
                 .HasMaxLength(150);
             builder.Property(e => e.Content)
                 .IsRequired()
-                .HasMaxLength(8000);
+                .HasMaxLength(16000);
             builder.Property(e => e.CreatedDate)
                 .IsRequired();
+            builder.HasOne(m => m.From)
+                .WithMany()
+                .HasForeignKey(m => m.FromId);
             builder.HasOne(e => e.EveMailTemplate)
                 .WithMany(emt => emt.EveMailsGenerated)
                 .HasForeignKey(e => e.EveMailTemplateId)

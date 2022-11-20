@@ -4,6 +4,7 @@ using EveMailHelper.DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EveMailHelper.DataAccessLayer.Migrations
 {
     [DbContext(typeof(EveMailHelperContext))]
-    partial class EveMailHelperContextModelSnapshot : ModelSnapshot
+    [Migration("20221120221550_Mail")]
+    partial class Mail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,7 +82,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         .IsUnique()
                         .HasFilter("[ExecutorCorporationId] IS NOT NULL");
 
-                    b.ToTable("Alliances", (string)null);
+                    b.ToTable("Alliances");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.Character", b =>
@@ -210,7 +212,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasIndex("CharId");
 
-                    b.ToTable("CharacterAuthInfos", (string)null);
+                    b.ToTable("CharacterAuthInfos");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.Chat", b =>
@@ -245,7 +247,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasIndex("ListenerId");
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.ChatFile", b =>
@@ -260,7 +262,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChatFiles", (string)null);
+                    b.ToTable("ChatFiles");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.ChatMessage", b =>
@@ -289,7 +291,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasIndex("ChatId");
 
-                    b.ToTable("ChatMessages", (string)null);
+                    b.ToTable("ChatMessages");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.Corporation", b =>
@@ -362,7 +364,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         .IsUnique()
                         .HasFilter("[CreatorId] IS NOT NULL");
 
-                    b.ToTable("Corporations", (string)null);
+                    b.ToTable("Corporations");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.EveMailRecipient", b =>
@@ -382,7 +384,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasIndex("MailId");
 
-                    b.ToTable("EveMailRecipient", (string)null);
+                    b.ToTable("EveMailRecipient");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("EveMailRecipient");
                 });
@@ -472,7 +474,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasIndex("FromId");
 
-                    b.ToTable("EveMails", (string)null);
+                    b.ToTable("EveMails");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.MailLabel", b =>
@@ -509,7 +511,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasIndex("MailId");
 
-                    b.ToTable("EveMailLabels", (string)null);
+                    b.ToTable("EveMailLabels");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.MailList", b =>
@@ -527,7 +529,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MailLists", (string)null);
+                    b.ToTable("MailLists");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.Note", b =>
@@ -556,7 +558,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasIndex("AttachedToId");
 
-                    b.ToTable("Notes", (string)null);
+                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.Security.Account", b =>

@@ -27,7 +27,7 @@ namespace EveMailHelper.DataModels
         /// assigned Eve account
         /// </summary>
         public Guid EveAccountId { get; set; }
-        public string Name { get; set; } = null!;
+        public string Name { get; set; } = string.Empty;
         public int? Age { get; set; } = null!;
 
         public DateTime Birthday { get; set; }
@@ -42,7 +42,7 @@ namespace EveMailHelper.DataModels
         public int RaceId { get; set; }
         public string? RecruitmentNote { get; set; } = null!;
         public float? SecurityStatus { get; set; }
-        public string Title { get; set; } = null!;
+        public string? Title { get; set; } = null!;
         public bool IsExcluded { get; set; } = false;
         public bool IsInRecruitment { get; set; } = false;
         public bool EveDeletedInGame { get; set; } = false;
