@@ -19,6 +19,13 @@ namespace EveMailHelper.BusinessDataAccess
             await _context.EveMails.AddAsync(eveMail);
         }
 
+        public async Task<Mail> GetByEveId(long eveId)
+        {
+            return await _context.EveMails
+                .Where(x => x.EveId == eveId)
+                .FirstAsync();
+        }
+
         public async Task<long> GetMaxEveMailIdAsync(Guid characterId)
         {
             var result = await _context.EveMails

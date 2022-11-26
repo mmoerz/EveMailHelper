@@ -14,6 +14,7 @@ namespace EveMailHelper.DataModels
 
         public Guid Id { get; set; }
         public Guid FromId { get; set; }
+        public Guid OwnerId { get; set; }
 
         /// <summary>
         /// this id comes from EvE (Rest API)
@@ -30,6 +31,7 @@ namespace EveMailHelper.DataModels
         public virtual EveMailTemplate? EveMailTemplate { get; set; } = null!;
 
         public Character From { get; set; } = null!;
+        public Character Owner { get; set; } = null!;
         public virtual ICollection<EveMailSentTo> SentTo { get; set; }
         public virtual ICollection<EveMailRecipient> Recipients { get; set; }
         public virtual ICollection<MailLabel> Labels { get; set; }

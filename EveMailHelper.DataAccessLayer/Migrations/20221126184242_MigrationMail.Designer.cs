@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EveMailHelper.DataAccessLayer.Migrations
 {
     [DbContext(typeof(EveMailHelperContext))]
-    [Migration("20221120221550_Mail")]
-    partial class Mail
+    [Migration("20221126184242_MigrationMail")]
+    partial class MigrationMail
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -463,6 +463,9 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Subject")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -474,7 +477,9 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasIndex("FromId");
 
-                    b.ToTable("EveMails");
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Mail", "Eve");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.MailLabel", b =>
@@ -879,12 +884,20 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.HasOne("EveMailHelper.DataModels.Character", "From")
                         .WithMany()
                         .HasForeignKey("FromId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("EveMailHelper.DataModels.Character", "Owner")
+                        .WithMany("Mails")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("EveMailTemplate");
 
                     b.Navigation("From");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.MailLabel", b =>
@@ -960,6 +973,8 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.Navigation("Chats");
 
                     b.Navigation("EveMailReceived");
+
+                    b.Navigation("Mails");
 
                     b.Navigation("Notes");
                 });

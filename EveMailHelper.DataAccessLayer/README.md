@@ -26,6 +26,8 @@ Add-Migration [migrationname]
 
 Remove-Migration
 
+For removing migrations that have already been applied to the database, use the Update-Database command with a prior migration name to revert to it.
+
 # needed connection string
 use user-secrets!!!
 Place the secrets for the connection(s) into both the class library and the .net core web project.

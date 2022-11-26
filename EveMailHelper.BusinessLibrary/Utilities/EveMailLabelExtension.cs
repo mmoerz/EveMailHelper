@@ -1,4 +1,5 @@
-﻿using EveMailHelper.DataModels;
+﻿using EveMailHelper.DataAccessLayer.Migrations;
+using EveMailHelper.DataModels;
 
 using Microsoft.Data.SqlClient.DataClassification;
 
@@ -15,7 +16,7 @@ namespace EveMailHelper.BusinessDataAccess.Utilities
             return label;
         }
 
-        public static Mail BasicCopyFrom(this Mail mail, EVEStandard.Models.Mail copyFrom)
+        public static DataModels.Mail BasicCopyFrom(this DataModels.Mail mail, EVEStandard.Models.Mail copyFrom)
         {
             mail.Subject = copyFrom.Subject;
             mail.CreatedDate = copyFrom.Timestamp ?? DateTime.Now;
@@ -24,7 +25,14 @@ namespace EveMailHelper.BusinessDataAccess.Utilities
             return mail;
         }
 
-        public static string ToString(this ISet<MailLabel> mailLabels, string delimiter=",")
+        public static string ToString<T>(this ICollection<T> values, string delimiter = ",")
+        {
+            _ = delimiter ?? throw new ArgumentNullException(nameof(delimiter));
+
+            return string.Join(delimiter, values);
+        }
+
+        public static string ToString(this HashSet<MailLabel> mailLabels, string delimiter)
         {
             _ = delimiter ?? throw new ArgumentNullException(nameof(delimiter));
 

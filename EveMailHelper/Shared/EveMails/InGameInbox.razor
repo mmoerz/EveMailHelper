@@ -1,4 +1,6 @@
-﻿<MudTable Class="mt-4"
+﻿@using EveMailHelper.BusinessDataAccess.Utilities;
+
+<MudTable Class="mt-4"
           Dense="true"
           Hover="true"
           FixedHeader="true"
@@ -42,7 +44,7 @@
     <RowTemplate>
         <MudTd DataLabel="From">@context.From.Name</MudTd>
         <MudTd DataLabel="Subject">@context.Subject</MudTd>
-        <MudTd DataLabel="Labels">@context.Labels.ToString()</MudTd>
+        <MudTd DataLabel="Labels">@context.Labels.ToString(",")</MudTd>
         <MudTd DataLabel="CreatedDate">@context.CreatedDate</MudTd>
         <MudTd DataLabel="IsRead">@context.IsRead</MudTd>
         <!--

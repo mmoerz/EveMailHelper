@@ -30,13 +30,15 @@ namespace EveMailHelper.Web.Shared.EveMails
 
         private string SearchString { get; set; } = string.Empty;
         private int selectedRowNumber = -1;
-        //protected override async Task OnInitializedAsync()
-        //{
-        //}
+
+        protected override async Task OnInitializedAsync()
+        {
+            await InGameMailManager.GetInboxMails();
+        }
 
         private async Task<TableData<Mail>> ServerReload(TableState state)
         {
-            return await InGameMailManager.GetInboxMails(SearchString, state);
+            return await InGameMailManager.GetPaginatedCurrentCharacter(SearchString, state);
         }
 
         private void OnSearch(string text)

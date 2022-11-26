@@ -4,6 +4,7 @@ using EveMailHelper.DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EveMailHelper.DataAccessLayer.Migrations
 {
     [DbContext(typeof(EveMailHelperContext))]
-    partial class EveMailHelperContextModelSnapshot : ModelSnapshot
+    [Migration("20221126201252_MigrationCorp1")]
+    partial class MigrationCorp1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,9 +53,6 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.Property<DateTime?>("DateFounded")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("EveDeleteInGame")
-                        .HasColumnType("bit");
 
                     b.Property<int>("EveId")
                         .HasColumnType("int");

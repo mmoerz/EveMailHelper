@@ -10,6 +10,7 @@ namespace EveMailHelper.DataModels
             EveMailReceived = new HashSet<EveMailSentTo>();
             Chats = new HashSet<Chat>();
             Notes = new HashSet<Note>();
+            Mails = new HashSet<Mail>();
             CreatedDate = DateTime.Now;
         }
 
@@ -56,6 +57,7 @@ namespace EveMailHelper.DataModels
         public virtual ICollection<EveMailSentTo> EveMailReceived { get; set; }
         public virtual ICollection<Chat> Chats { get; set; }
         public virtual ICollection<Note> Notes { get; set; }
+        public virtual ICollection<Mail> Mails { get; set; }
 
         public virtual Corporation? Corporation { get; set; } = null!;
     }

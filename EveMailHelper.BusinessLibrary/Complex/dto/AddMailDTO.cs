@@ -18,5 +18,6 @@ namespace EveMailHelper.BusinessLibrary.Complex.dto
         public IDictionary<int, MailList> MailLists = null!;
         public ICollection<EVEStandard.Models.Mail> esMailHeaders = null!;
         public ICollection<EVEStandard.Models.MailContent> esMailContent = null!;
+        public Character Owner = null!;
     }
 }

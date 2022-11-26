@@ -31,6 +31,8 @@ namespace EveMailHelper.DataModels
         public string Ticker { get; set; } = null!;
         public string Url { get; set; } = null!; 
         public bool WarEligible { get; set; }
+        public bool EveDeletedInGame { get; set; } = false;
+
 
         public virtual Alliance? Alliance { get; set; } = null!;
         public virtual Character? Ceo { get; set; } = null!;

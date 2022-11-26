@@ -7,6 +7,8 @@ using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.ServiceLayer.Utilities;
 using EveMailHelper.ServiceLibrary.Managers;
 
+using EveNatTools.ServiceLibrary.Utilities;
+
 using EVEStandard;
 using EVEStandard.Models.API;
 
@@ -14,6 +16,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 using MudBlazor;
+
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EveMailHelper.ServiceLayer.Managers
 {
@@ -35,7 +39,7 @@ namespace EveMailHelper.ServiceLayer.Managers
 
         // TODO: remove this
         private readonly MailDbAccess _mailDbAccess;
-        
+
 
         public InGameMailManager(
             AuthenticationStateProvider authenticationStateProvider,
@@ -84,8 +88,51 @@ namespace EveMailHelper.ServiceLayer.Managers
                 );
         }
 
-        public async Task<TableData<Mail>> GetInboxMails(
+        public async Task<TableData<Mail>> GetPaginatedCurrentCharacter(
+            string searchString, TableState state
+            )
+        {
+            var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
+            var eveAccount = _authenticationManager.GetEveAccountFromPrincipal(user);
+            var character = await _authenticationManager.GetCharacterFromPrincipal(user);
+            return await GetPaginated(character, searchString, state);
+        }
+
+        public async Task<TableData<Mail>> GetPaginated(Character fromCharacter,
             string searchString, TableState state)
+        {
+            var query = from mail in _dbContext.EveMails
+                        where mail.Owner == fromCharacter
+                        select mail;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(m => m.Subject.Contains(searchString) ||
+                    m.Content.Contains(searchString));
+            }
+
+            query = state.SortLabel switch
+            {
+                "Content" => query.OrderByDirection(state.SortDirection, x => x.Content),
+                "Senddate" => query.OrderByDirection(state.SortDirection, x => x.CreatedDate),
+                _ => query.OrderByDirection(state.SortDirection, x => x.Subject),
+            };
+
+            var items = await query
+                    .Page(state.Page, state.PageSize)
+                    .Include(x => x.From)
+                    .Include(x => x.Labels)
+                    .Include(x => x.Recipients)
+                    .ToListAsync();
+
+            return new TableData<Mail>()
+            {
+                Items = items,
+                TotalItems = items.Count()
+            };
+        }
+
+        public async Task GetInboxMails()
         {
             var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
             var eveAccount = _authenticationManager.GetEveAccountFromPrincipal(user);
@@ -104,33 +151,33 @@ namespace EveMailHelper.ServiceLayer.Managers
             var lastEveMailId = await _mailDbAccess.GetMaxEveMailIdAsync(character.Id);
             // this doesn't seem to work properly ... lastmailid is properly given, but doesn't seem to influence the
             // mails that are transfered
-            var headers = await _esiClient.Mail.ReturnMailHeadersV1Async(auth, new List<long>(), lastEveMailId);
+            //var headers2 = await _esiClient.Mail.ReturnMailHeadersV1Async(auth, new List<long>(), lastEveMailId - 400);
+            long nextEveMailId = lastEveMailId;
 
-
-            var idLists = ExtractIdsFromMails(headers.Model);
-            var mailDTO = new AddMailDTO()
+            while (nextEveMailId > 0)
             {
-                authDTO= auth,
-                Labels = eveLabels,
-                Characters = await addEsCharacters.RunAction(idLists.EsCharacterIds),
-                Corporations = await addEsCorporations.RunAction(idLists.EsCorporationIds),
-                Alliances = await addEsAlliances.RunAction(idLists.EsAlliances),
-                MailLists = await addEsMailList.RunAction(idLists.EsMailingLists),
-                esMailHeaders = headers.Model
-            };
-            // now add all recipients
-            var mails = await addEsMails.RunAction(mailDTO);
+                var headers = await _esiClient.Mail.ReturnMailHeadersV1Async(auth, new List<long>(), nextEveMailId);
+                if (headers.Model.Count == 50) // yeah maximum, maybe there are more mails??
+                    nextEveMailId = (headers.Model.Last().MailId ?? 0) - 1;
+                else
+                    nextEveMailId = 0;
 
-            // download the content
+                var idLists = ExtractIdsFromMails(headers.Model);
+                var mailDTO = new AddMailDTO()
+                {
+                    authDTO = auth,
+                    Labels = eveLabels,
+                    Characters = await addEsCharacters.RunAction(idLists.EsCharacterIds),
+                    Corporations = await addEsCorporations.RunAction(idLists.EsCorporationIds),
+                    Alliances = await addEsAlliances.RunAction(idLists.EsAlliances),
+                    MailLists = await addEsMailList.RunAction(idLists.EsMailingLists),
+                    esMailHeaders = headers.Model,
+                    Owner = character
+                };
+                // now add all recipients
+                var mails = await addEsMails.RunAction(mailDTO);
 
-            //var items = await _esiClient.Mail.ReturnMailV1Async(auth, 0);
-            //var chara = await _esiClient.Location.GetCharacterLocationV1Async(auth);
-
-            return new TableData<Mail>()
-            {
-                Items = mails.ToList(),
-                TotalItems = mails.Count()
-            };
+            }
         }
 
         private class EsIdLists

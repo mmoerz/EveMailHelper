@@ -8,6 +8,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration
     {
         public void Configure(EntityTypeBuilder<Mail> builder)
         {
+            builder.ToTable("Mail", "Eve");
             builder.Property(e => e.Subject)
                 .IsRequired()
                 .HasMaxLength(150);
@@ -18,7 +19,12 @@ namespace EveMailHelper.DataAccessLayer.Configuration
                 .IsRequired();
             builder.HasOne(m => m.From)
                 .WithMany()
-                .HasForeignKey(m => m.FromId);
+                .HasForeignKey(m => m.FromId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            builder.HasOne(m => m.Owner)
+                .WithMany(c => c.Mails)
+                .HasForeignKey(m => m.OwnerId)
+                .OnDelete(DeleteBehavior.ClientCascade);
             builder.HasOne(e => e.EveMailTemplate)
                 .WithMany(emt => emt.EveMailsGenerated)
                 .HasForeignKey(e => e.EveMailTemplateId)

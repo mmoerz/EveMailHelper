@@ -6,6 +6,7 @@ using EveMailHelper.BusinessDataAccess;
 using EveMailHelper.DataModels;
 using EVEStandard;
 using EveMailHelper.BusinessDataAccess.Utilities;
+using EveMailHelper.BusinessLibrary.Utilities;
 
 namespace EveMailHelper.BusinessLibrary.Complex
 {
@@ -33,16 +34,33 @@ namespace EveMailHelper.BusinessLibrary.Complex
             {
                 if (!alliances.ContainsKey(eveId))
                 {
-                    var allianceInfo = await _esiClient.Corporation.GetCorporationInfoV5Async(eveId);
-
-                    Alliance corporation = new()
+                    bool deleted = false;
+                    Alliance alliance = new();
+                    var allianceInfo = new EVEStandard.Models.Alliance()
                     {
-                        Name = allianceInfo.Model.Name,
-                        EveId = eveId,
-                        DateFounded = allianceInfo.Model.DateFounded,
+                        Name = "Unknown"
                     };
-                    corporation = _dbAccess.Add(corporation);
-                    alliances.Add(corporation.EveId, corporation);
+
+                    try
+                    {
+                        var dto = await _esiClient.Alliance.GetAllianceInfoV3Async(eveId);
+                        allianceInfo = dto.Model;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.Message == "Unhandled error: {\"error\":\"Alliance has been deleted!\"}")
+                        {
+                            // this eveId will stay unknown forever and ever
+                            allianceInfo.Name = "Deleted";
+                            allianceInfo.Ticker = "";
+                            deleted = true;
+                        }
+                    }
+                    
+                    alliance.CopyShallow(eveId, allianceInfo);
+                    alliance.EveDeleteInGame = deleted;
+                    alliance = _dbAccess.Add(alliance);
+                    alliances.Add(alliance.EveId, alliance);
                 }
             }
 

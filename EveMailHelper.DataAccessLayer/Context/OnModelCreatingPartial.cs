@@ -11,6 +11,18 @@ namespace EveMailHelper.DataAccessLayer.Context
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EveMailHelperContext).Assembly);
 
+            //modelBuilder.Entity<Character>()
+            //    .HasData(new Character()
+            //    {
+            //        Id = Guid.Empty,
+            //        Name = "Admin",
+            //        Age = 0,
+            //        Birthday = DateTime.Now,
+            //        CreatedDate= DateTime.Now,
+            //        Account= new Account() { }
+            //    }
+            //    ) ;
+
             //modelBuilder.Entity<Account>()
             //    .HasData(new Account()
             //    {
