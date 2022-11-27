@@ -11,6 +11,18 @@ namespace EveMailHelper.DataAccessLayer.Context
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EveMailHelperContext).Assembly);
 
+            modelBuilder.Entity<Corporation>()
+                .HasData(new Corporation()
+                {
+                    Id = Guid.Parse("11110000-0000-0000-0000-000011110000"),
+                    Name = "Noname Default",
+                    EveId = 0,
+                    Description = "Noname Default",
+                    DateFounded = DateTime.Now,
+                    Ticker = "Noname Default"
+                }
+                );
+
             //modelBuilder.Entity<Character>()
             //    .HasData(new Character()
             //    {

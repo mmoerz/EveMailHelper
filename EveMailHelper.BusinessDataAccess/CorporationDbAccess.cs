@@ -30,6 +30,25 @@ namespace EveMailHelper.BusinessDataAccess
                 .First();
         }
 
+        public Corporation GetByEveId(int eveId)
+        {
+            return _context.Corporations
+                .Where(item => item.EveId == eveId)
+                .AsTracking()
+                .Include(x => x.Alliance)
+                .Include(x => x.Ceo)
+                // ?? eveaccount->characters?
+                .First();
+        }
+
+        public Task<Corporation> GetDefaultAsync()
+        {
+            return _context.Corporations
+                .Where(item => item.Name == "Noname Default")
+                .AsTracking()
+                .FirstAsync();
+        }
+
         public ICollection<Corporation> GetByEveIds(ICollection<int> ids)
         {
             return _context.Corporations

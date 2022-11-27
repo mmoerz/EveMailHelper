@@ -75,7 +75,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 _dbContext
                 );
             addEsAlliances = new(
-                new AddEsAlliancesAction(allianceDbAccess, _esiClient),
+                new AddEsAlliancesAction(allianceDbAccess, corporationDbAccess, _esiClient),
                 _dbContext
                 );
             addEsMailList = new(
@@ -118,17 +118,17 @@ namespace EveMailHelper.ServiceLayer.Managers
                 _ => query.OrderByDirection(state.SortDirection, x => x.Subject),
             };
 
-            var items = await query
+            var itemCount = query.Count();
+
+            return new TableData<Mail>()
+            {
+                Items = await query
                     .Page(state.Page, state.PageSize)
                     .Include(x => x.From)
                     .Include(x => x.Labels)
                     .Include(x => x.Recipients)
-                    .ToListAsync();
-
-            return new TableData<Mail>()
-            {
-                Items = items,
-                TotalItems = items.Count()
+                    .ToListAsync(),
+                TotalItems = itemCount
             };
         }
 
@@ -162,7 +162,8 @@ namespace EveMailHelper.ServiceLayer.Managers
                 else
                     nextEveMailId = 0;
 
-                var idLists = ExtractIdsFromMails(headers.Model);
+                var idLists = await ExtractIdsFromMails(headers.Model);
+
                 var mailDTO = new AddMailDTO()
                 {
                     authDTO = auth,
@@ -196,7 +197,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             public ISet<int> EsMailingLists;
         }
 
-        private EsIdLists ExtractIdsFromMails(ICollection<EVEStandard.Models.Mail> esMails)
+        private async Task<EsIdLists> ExtractIdsFromMails(ICollection<EVEStandard.Models.Mail> esMails)
         {
             EsIdLists result = new();
 
@@ -213,10 +214,18 @@ namespace EveMailHelper.ServiceLayer.Managers
                             result.EsCharacterIds.Add(recipient.RecipientId);
                             break;
                         case EVEStandard.Models.MailRecipient.RecipientTypeEnum.alliance:
+                            var dto = await _esiClient.Alliance.GetAllianceInfoV3Async(recipient.RecipientId);
+                            result.EsCharacterIds.Add(dto.Model.CreatorId);
+                            result.EsCorporationIds.Add(dto.Model.CreatorCorporationId);
+                            if (dto.Model.ExecutorCorporationId != null)
+                                result.EsCorporationIds.Add(dto.Model.ExecutorCorporationId.Value);
                             result.EsAlliances.Add(recipient.RecipientId);
                             break;
                         case EVEStandard.Models.MailRecipient.RecipientTypeEnum.corporation:
+                            var corp = await _esiClient.Corporation.GetCorporationInfoV5Async(recipient.RecipientId);
                             result.EsCorporationIds.Add(recipient.RecipientId);
+                            result.EsCharacterIds.Add(corp.Model.CeoId);
+                            result.EsCharacterIds.Add(corp.Model.CreatorId);
                             break;
                         case EVEStandard.Models.MailRecipient.RecipientTypeEnum.mailing_list:
                             result.EsMailingLists.Add(recipient.RecipientId);

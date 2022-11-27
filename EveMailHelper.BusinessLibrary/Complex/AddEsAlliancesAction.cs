@@ -12,13 +12,16 @@ namespace EveMailHelper.BusinessLibrary.Complex
 {
     public class AddEsAlliancesAction : IBizActionAsync<ICollection<int>, IDictionary<int, Alliance>>
     {
-        readonly AllianceDbAccess _dbAccess;
+        private readonly AllianceDbAccess _dbAccess;
+        private readonly CorporationDbAccess _corporationDbAccess;
         private readonly EVEStandardAPI _esiClient;
         private List<ValidationResult> _errors = new();
 
-        public AddEsAlliancesAction(AllianceDbAccess dbAccess, EVEStandardAPI esiClient)
+        public AddEsAlliancesAction(
+            AllianceDbAccess dbAccess, CorporationDbAccess corpDbAccess, EVEStandardAPI esiClient)
         {
             _dbAccess = dbAccess;
+            _corporationDbAccess= corpDbAccess;
             _esiClient = esiClient;
         }
 
@@ -35,16 +38,20 @@ namespace EveMailHelper.BusinessLibrary.Complex
                 if (!alliances.ContainsKey(eveId))
                 {
                     bool deleted = false;
-                    Alliance alliance = new();
+                    Alliance alliance = new()
+                    {
+                        CreatorCorporation = await _corporationDbAccess.GetDefaultAsync(),
+                    };
                     var allianceInfo = new EVEStandard.Models.Alliance()
                     {
-                        Name = "Unknown"
+                        Name = "Unknown",                        
                     };
 
                     try
                     {
                         var dto = await _esiClient.Alliance.GetAllianceInfoV3Async(eveId);
                         allianceInfo = dto.Model;
+
                     }
                     catch (Exception ex)
                     {
@@ -59,6 +66,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
                     
                     alliance.CopyShallow(eveId, allianceInfo);
                     alliance.EveDeleteInGame = deleted;
+                    alliance.CreatorCorporation = _corporationDbAccess.GetByEveId(allianceInfo.CreatorCorporationId);
                     alliance = _dbAccess.Add(alliance);
                     alliances.Add(alliance.EveId, alliance);
                 }

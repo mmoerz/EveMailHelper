@@ -39,6 +39,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
                     {
                         Name = "Unknown",
                         Description = "Unknown",
+
                     };
                     try
                     {
