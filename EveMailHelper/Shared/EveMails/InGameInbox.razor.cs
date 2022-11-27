@@ -15,8 +15,9 @@ namespace EveMailHelper.Web.Shared.EveMails
         #region injections
         [Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
         [Inject] IAuthenticationManager AuthenticationManager { get; set; } = null!;
-
+        [Inject] IMailService MailService { get; set; } = null!;
         [Inject] IInGameMailManager InGameMailManager { get; set; } = null!;
+        [Inject] IDialogService DialogService { get; set; } = null!;
         #endregion
 
         #region parameters
@@ -38,7 +39,7 @@ namespace EveMailHelper.Web.Shared.EveMails
 
         private async Task<TableData<Mail>> ServerReload(TableState state)
         {
-            return await InGameMailManager.GetPaginatedCurrentCharacter(SearchString, state);
+            return await MailService.GetPaginatedCurrentCharacter(SearchString, state);
         }
 
         private void OnSearch(string text)
@@ -51,7 +52,16 @@ namespace EveMailHelper.Web.Shared.EveMails
         {
             if (tableRowClickEventArgs == null)
                 return;
-            //OnCharacterSelect.InvokeAsync(tableRowClickEventArgs.Item);
+            if (selectedRowNumber != -1)
+            {
+                var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
+                var parameters = new DialogParameters
+                {
+                    { "model", tableRowClickEventArgs.Item },
+                    { "DialogSaved", new EventCallback<Mail>(this, new Action<Mail>(DialogWasSaved)) }
+                };
+                var dialog = DialogService.Show<EveMailDialog>("Edit Eve Mail", parameters, options);
+            }
         }
 
         private string SelectedRowClassFunc(Mail rmodel, int rowNumber)
@@ -69,6 +79,11 @@ namespace EveMailHelper.Web.Shared.EveMails
                 return "selected";
             }
             return string.Empty;
+        }
+
+        private void DialogWasSaved(Mail eveMailTemplate)
+        {
+            Table?.ReloadServerData();
         }
     }
 }

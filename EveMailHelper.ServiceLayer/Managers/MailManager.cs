@@ -10,6 +10,8 @@ using EveMailHelper.BusinessLibrary.Utilities;
 
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.ServiceLayer.Interfaces;
+using Microsoft.AspNetCore.Components.Authorization;
+using EveNatTools.ServiceLibrary.Utilities;
 
 namespace EveMailHelper.BusinessLibrary.Services
 {
@@ -17,27 +19,33 @@ namespace EveMailHelper.BusinessLibrary.Services
     {
         #region injected
         #endregion
-        private readonly EveMailHelperContext _context = null!;
+        private readonly EveMailHelperContext _dbContext = null!;
         private readonly CharacterDbAccess _characterDbAccess;
         private readonly EveMailTemplateDbAccess _templateDbAccess;
         private readonly MailDbAccess _evemailDbAccess;
+        private readonly AuthenticationStateProvider _authenticationStateProvider;
+        private readonly IAuthenticationManager _authenticationManager;
         private readonly RunnerWriteDb<ICollection<string>, ICollection<Character>> _addCharRunner;
         private readonly RunnerWriteDbAsync<SendTemplateToDto, Mail> _sendTemplateToRunner;
         private readonly RunnerWriteDb<Mail, Mail> _updateMailRunner;
 
-        public MailManager(IDbContextFactory<EveMailHelperContext> dbContextFactory)
+        public MailManager(IDbContextFactory<EveMailHelperContext> dbContextFactory,
+            AuthenticationStateProvider authenticationStateProvider,
+            IAuthenticationManager authenticationManager)
         {
             var factory = dbContextFactory;
-            _context = factory.CreateDbContext();
-            _characterDbAccess = new CharacterDbAccess(_context);
-            _templateDbAccess = new EveMailTemplateDbAccess(_context);
-            _evemailDbAccess = new MailDbAccess(_context);
+            _dbContext = factory.CreateDbContext();
+            _characterDbAccess = new CharacterDbAccess(_dbContext);
+            _templateDbAccess = new EveMailTemplateDbAccess(_dbContext);
+            _evemailDbAccess = new MailDbAccess(_dbContext);
+            _authenticationStateProvider = authenticationStateProvider;
+            _authenticationManager = authenticationManager;
             _addCharRunner = new RunnerWriteDb<ICollection<string>, ICollection<Character>>
-                (new AddCharactersByNameAction(_characterDbAccess), _context);
+                (new AddCharactersByNameAction(_characterDbAccess), _dbContext);
             _sendTemplateToRunner = new RunnerWriteDbAsync<SendTemplateToDto, Mail>
-                (new SendEveMailBasedOnTemplateAction(_evemailDbAccess), _context);
+                (new SendEveMailBasedOnTemplateAction(_evemailDbAccess), _dbContext);
             _updateMailRunner = new RunnerWriteDb<Mail, Mail>
-                (new UpdateEveMailAction(_evemailDbAccess), _context);
+                (new UpdateEveMailAction(_evemailDbAccess), _dbContext);
         }
 
         public void Delete(Mail eveMail)
@@ -46,13 +54,13 @@ namespace EveMailHelper.BusinessLibrary.Services
             if (eveMail.Id == Guid.Empty)
                 throw new ArgumentException("null Guid is invalid", nameof(eveMail));
             // now load the Evemail with all Sendto entities (child's that depend on it)
-            IQueryable<Mail> query = from mail in _context.EveMails
+            IQueryable<Mail> query = from mail in _dbContext.EveMails
                                         select mail;
             query = query.Where(mail => mail.Id == eveMail.Id);
             var result = query.Include(mail => mail.SentTo).First();
 
-            _context.EveMails.Remove(result);
-            _context.SaveChanges();
+            _dbContext.EveMails.Remove(result);
+            _dbContext.SaveChanges();
         }
 
         public Mail Update(Mail eveMail)
@@ -75,7 +83,7 @@ namespace EveMailHelper.BusinessLibrary.Services
 
         public async Task<TableData<Mail>> GetPaginated(string searchString, TableState state)
         {
-            IQueryable<Mail> query = from mail in _context.EveMails
+            IQueryable<Mail> query = from mail in _dbContext.EveMails
                                         select mail;
 
             if (!string.IsNullOrWhiteSpace(searchString))
@@ -103,9 +111,53 @@ namespace EveMailHelper.BusinessLibrary.Services
             };
         }
 
+        public async Task<TableData<Mail>> GetPaginatedCurrentCharacter(
+            string searchString, TableState state
+            )
+        {
+            var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
+            var eveAccount = _authenticationManager.GetEveAccountFromPrincipal(user);
+            var character = await _authenticationManager.GetCharacterFromPrincipal(user);
+            return await GetPaginated(character, searchString, state);
+        }
+
+        public async Task<TableData<Mail>> GetPaginated(Character fromCharacter,
+            string searchString, TableState state)
+        {
+            var query = from mail in _dbContext.EveMails
+                        where mail.Owner == fromCharacter
+                        select mail;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(m => m.Subject.Contains(searchString) ||
+                    m.Content.Contains(searchString));
+            }
+
+            query = state.SortLabel switch
+            {
+                "Content" => query.OrderByDirection(state.SortDirection, x => x.Content),
+                "Senddate" => query.OrderByDirection(state.SortDirection, x => x.CreatedDate),
+                _ => query.OrderByDirection(state.SortDirection, x => x.Subject),
+            };
+
+            var itemCount = query.Count();
+
+            return new TableData<Mail>()
+            {
+                Items = await query
+                    .Page(state.Page, state.PageSize)
+                    .Include(x => x.From)
+                    .Include(x => x.Labels)
+                    .Include(x => x.Recipients)
+                    .ToListAsync(),
+                TotalItems = itemCount
+            };
+        }
+
         public async Task SendTo(Guid templateId, Character fromCharacter, ICollection<string> receiverNames)
         {
-            using var transaction = _context.Database.BeginTransaction();
+            using var transaction = _dbContext.Database.BeginTransaction();
             var template = await _templateDbAccess.GetById(templateId);
             var character = await _characterDbAccess.GetByIdAsync(fromCharacter.Id);
 

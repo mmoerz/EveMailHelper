@@ -88,50 +88,6 @@ namespace EveMailHelper.ServiceLayer.Managers
                 );
         }
 
-        public async Task<TableData<Mail>> GetPaginatedCurrentCharacter(
-            string searchString, TableState state
-            )
-        {
-            var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
-            var eveAccount = _authenticationManager.GetEveAccountFromPrincipal(user);
-            var character = await _authenticationManager.GetCharacterFromPrincipal(user);
-            return await GetPaginated(character, searchString, state);
-        }
-
-        public async Task<TableData<Mail>> GetPaginated(Character fromCharacter,
-            string searchString, TableState state)
-        {
-            var query = from mail in _dbContext.EveMails
-                        where mail.Owner == fromCharacter
-                        select mail;
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                query = query.Where(m => m.Subject.Contains(searchString) ||
-                    m.Content.Contains(searchString));
-            }
-
-            query = state.SortLabel switch
-            {
-                "Content" => query.OrderByDirection(state.SortDirection, x => x.Content),
-                "Senddate" => query.OrderByDirection(state.SortDirection, x => x.CreatedDate),
-                _ => query.OrderByDirection(state.SortDirection, x => x.Subject),
-            };
-
-            var itemCount = query.Count();
-
-            return new TableData<Mail>()
-            {
-                Items = await query
-                    .Page(state.Page, state.PageSize)
-                    .Include(x => x.From)
-                    .Include(x => x.Labels)
-                    .Include(x => x.Recipients)
-                    .ToListAsync(),
-                TotalItems = itemCount
-            };
-        }
-
         public async Task GetInboxMails()
         {
             var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;

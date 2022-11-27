@@ -17,12 +17,16 @@ namespace EveMailHelper.Web.Shared.EveMails
         [CascadingParameter]
         MudDialogInstance MudDialog { get; set; } = null!;
         [Parameter]
+        public bool Editable { get; set; } = false;
+        [Parameter]
         public Mail Model { get; set; } = new();
         [Parameter]
         public EventCallback<Mail> DialogSaved { get; set; }
         #endregion
 
         MudForm? form = null!;
+
+        Color Color = Color.Success;
 
         private async Task Save()
         {
@@ -41,5 +45,9 @@ namespace EveMailHelper.Web.Shared.EveMails
 
         void Cancel() => MudDialog.Cancel();
 
+        MarkupString ModelContentMarkup => (MarkupString)Model.Content
+            .Replace("<font size=\"13\"", "<font size=\"3\"")
+            .Replace("<font size=\"18\"", "<font size=\"4\"");
+        
     }
 }

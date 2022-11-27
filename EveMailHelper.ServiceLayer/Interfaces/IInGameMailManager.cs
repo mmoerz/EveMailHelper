@@ -10,7 +10,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         /// </summary>
         /// <returns></returns>
         Task GetInboxMails();
-        Task<TableData<Mail>> GetPaginated(Character fromCharacter, string searchString, TableState state);
-        Task<TableData<Mail>> GetPaginatedCurrentCharacter(string searchString, TableState state);
+        //Task<TableData<Mail>> GetPaginated(Character fromCharacter, string searchString, TableState state);
+        //Task<TableData<Mail>> GetPaginatedCurrentCharacter(string searchString, TableState state);
     }
 }
