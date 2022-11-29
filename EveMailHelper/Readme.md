@@ -1,5 +1,4 @@
 ﻿# DAE Meldestelle webfrontend
-
 ## Package Management Console Packages
 
 ```
@@ -33,6 +32,9 @@ to force passing the windows authentication from the IIS to
 the webapplication.
 This mechanism should work properly regardless of out or in process configuration.
 
+
+
+
 # packaging
 simply deploy to a zip file.
 
@@ -59,7 +61,11 @@ simply deploy to a zip file.
     - start/restart webapplication pool
 
 # knowledge base
-(MudBlazor with Fluent Validation)[https://mudblazor.com/components/form#using-fluent-validation]
+[MudBlazor with Fluent Validation](https://mudblazor.com/components/form#using-fluent-validation)
+
+[Rendering Html String in c# Razor]([http://www.mikepope.com/blog/displayblog.aspx?permalink=2218) doesnt work for Blazor
+
+[Rendering Html string in c# Blazor](https://stackoverflow.com/questions/50604366/is-there-an-equivalent-to-html-raw-in-blazor)
 
 # development notes
 - set in the project's properties Debug>Enable Windows Auhtentication 

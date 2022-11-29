@@ -29,14 +29,14 @@ namespace EveMailHelper.DataModels
         public long? Shares { get; set; } = null;
         public float TaxRate { get; set; }
         public string Ticker { get; set; } = null!;
-        public string Url { get; set; } = null!; 
+        public string Url { get; set; } = null!;
         public bool WarEligible { get; set; }
         public bool EveDeletedInGame { get; set; } = false;
-
+        public DateTime EveLastUpdated { get; set; } = DateTime.UtcNow;
 
         public virtual Alliance? Alliance { get; set; } = null!;
         public virtual Character? Ceo { get; set; } = null!;
-        public virtual Character? Createor { get; set; } = null!;
+        public virtual Character? Creator { get; set; } = null!;
         public virtual ICollection<Character> Members { get; set; }
     }
 }

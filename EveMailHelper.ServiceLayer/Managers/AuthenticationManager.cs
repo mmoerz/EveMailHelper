@@ -271,7 +271,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
                     .First();
 
             }
-            catch (Exception ex)
+            catch 
             {
                 noUnexpiredAuthInfo = true;
             }

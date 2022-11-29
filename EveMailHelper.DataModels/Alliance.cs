@@ -19,11 +19,13 @@ namespace EveMailHelper.DataModels
         public DateTime? DateFounded { get; set; }
         public Guid? ExecutorCorporationId { get; set; }
         public string Ticker { get; set; } = null!;
-        public bool EveDeleteInGame { get; set; } = false;
+        public bool EveDeletedInGame { get; set; } = false;
+        public DateTime EveLastUpdated { get; set; } = DateTime.UtcNow;
+
 
         public virtual Corporation CreatorCorporation { get; set; } = null!;
         public virtual Character Creator { get; set; } = null!;
-        public virtual Corporation ExecutorCorporation { get; set; } = null!;
+        public virtual Corporation? ExecutorCorporation { get; set; } = null!;
         public virtual ICollection<Corporation> Corporations { get; set; } 
     }
 }

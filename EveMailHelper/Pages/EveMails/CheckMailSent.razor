@@ -1,0 +1,62 @@
+﻿@page "/EveMails/CheckEveMailSent"
+
+<style>
+    .amount {
+        width: 50px;
+    }
+</style>
+
+<MudCard Elevation="4">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Check For Mail Sent To within last 24 Hours</MudText>
+        <MudText Typo="Typo.h6"></MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudForm>
+            <div class="d-flex flex-grow-1 gap-4">
+                <MudTextField T="int"
+                              @bind-value="ReceiverAmount"
+                              Label="Amount"
+                              ReadOnly="true"
+                              Class="flex-none d-flex amount"
+                              @ref="TextFieldAmount">
+                </MudTextField>
+                <MudTextField T="string" @bind-Value="ReceiverString"
+                              Label="Receivers"
+                              HelperText="Enter receivers delimited by a colon." Class="flex ">
+                </MudTextField>
+            </div>
+            <div class="d-flex flex-grow-1 gap-4">
+                <MudDatePicker @bind-Date="Date" Label="Has not received Mail after" Class="flex"></MudDatePicker>
+                <MudTimePicker @bind-Time="Time" Label="Has not received Mail after" Class="flex"></MudTimePicker>
+            </div>
+            <div class="d-flex flex-grow-1 gap-4">
+                <MudTextField T="int"
+                              @bind-value="ReceiverFilteredAmount"
+                              Label="Amount"
+                              ReadOnly="true"
+                              Class="flex-none d-flex amount"
+                              @ref="TextFieldAmountFiltered">
+                </MudTextField>
+                <MudTextField T="string" @bind-Value="FilteredReceiverString"
+                              Label="Filtered Receivers"
+                              HelperText="This will be the list of receivers that have not received mails since the above date and time"
+                              Class="flex"
+                >
+                </MudTextField>
+            </div>
+        </MudForm>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Variant="Variant.Filled" Color="MudBlazor.Color.Primary" OnClick="@(()=> Cancel())">
+            Cancel
+        </MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="MudBlazor.Color.Primary"
+                   Class="ml-auto"
+                   OnClick="(()=> Submit())"
+                   Disabled="@SubmitDisabled">
+            Check
+        </MudButton>
+    </MudCardActions>
+</MudCard>

@@ -24,20 +24,24 @@ namespace EveMailHelper.Web.Shared.EveMails
         public EventCallback<Mail> DialogSaved { get; set; }
         #endregion
 
-        MudForm? form = null!;
+        MudForm? Form = null!;
 
         Color Color = Color.Success;
 
         private async Task Save()
         {
-            //await form.Validate();
-
-            //if (form.IsValid)
+            if (Editable)
             {
-                // Notify parent component to
-                // submit the changed Analysisrequest
-                EveMailService.Update(Model);
-                await DialogSaved.InvokeAsync(Model);
+                _ = Form ?? throw new NullReferenceException("Mudform must not be null");
+                await Form.Validate();
+
+                if (Form.IsValid)
+                {
+                    // Notify parent component to
+                    // submit the changed Analysisrequest
+                    EveMailService.Update(Model);
+                    await DialogSaved.InvokeAsync(Model);
+                }
             }
 
             MudDialog.Close();
@@ -48,6 +52,6 @@ namespace EveMailHelper.Web.Shared.EveMails
         MarkupString ModelContentMarkup => (MarkupString)Model.Content
             .Replace("<font size=\"13\"", "<font size=\"3\"")
             .Replace("<font size=\"18\"", "<font size=\"4\"");
-        
+
     }
 }

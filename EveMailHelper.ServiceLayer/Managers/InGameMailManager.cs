@@ -67,7 +67,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 _dbContext
                 );
             addEsCharacters = new(
-                new AddEsCharactersAction(characterDbAccess, _esiClient),
+                new AddEsCharactersAction(characterDbAccess, corporationDbAccess, allianceDbAccess, _esiClient),
                 _dbContext
                 );
             addEsCorporations = new(

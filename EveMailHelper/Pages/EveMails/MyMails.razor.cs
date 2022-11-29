@@ -17,9 +17,9 @@ namespace EveMailHelper.Web.Pages.EveMails
         #region GUI Components
         #endregion
 
-        protected override async Task OnInitializedAsync()
-        {
+        //protected override async Task OnInitializedAsync()
+        //{
             
-        }
+        //}
     }
 }

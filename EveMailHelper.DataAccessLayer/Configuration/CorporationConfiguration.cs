@@ -37,7 +37,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration
                 .WithOne()
                 .HasForeignKey<Corporation>(a => a.CeoId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
-            builder.HasOne(a => a.Createor)
+            builder.HasOne(a => a.Creator)
                 .WithOne()
                 .HasForeignKey<Corporation>(a => a.CreatorId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
