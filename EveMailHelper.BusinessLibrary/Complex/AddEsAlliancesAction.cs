@@ -65,7 +65,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
                     }
                     
                     alliance.CopyShallow(eveId, allianceInfo);
-                    alliance.EveDeleteInGame = deleted;
+                    alliance.EveDeletedInGame = deleted;
                     alliance.CreatorCorporation = _corporationDbAccess.GetByEveId(allianceInfo.CreatorCorporationId);
                     alliance = _dbAccess.Add(alliance);
                     alliances.Add(alliance.EveId, alliance);

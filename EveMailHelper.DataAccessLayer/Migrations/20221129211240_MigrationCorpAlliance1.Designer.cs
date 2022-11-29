@@ -4,6 +4,7 @@ using EveMailHelper.DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EveMailHelper.DataAccessLayer.Migrations
 {
     [DbContext(typeof(EveMailHelperContext))]
-    partial class EveMailHelperContextModelSnapshot : ModelSnapshot
+    [Migration("20221129211240_MigrationCorpAlliance1")]
+    partial class MigrationCorpAlliance1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -380,11 +382,11 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         new
                         {
                             Id = new Guid("11110000-0000-0000-0000-000011110000"),
-                            DateFounded = new DateTime(2022, 11, 29, 22, 51, 33, 126, DateTimeKind.Local).AddTicks(2925),
+                            DateFounded = new DateTime(2022, 11, 29, 22, 12, 40, 482, DateTimeKind.Local).AddTicks(5529),
                             Description = "Noname Default",
                             EveDeletedInGame = false,
                             EveId = 0,
-                            EveLastUpdated = new DateTime(2022, 11, 29, 21, 51, 33, 126, DateTimeKind.Utc).AddTicks(2902),
+                            EveLastUpdated = new DateTime(2022, 11, 29, 21, 12, 40, 482, DateTimeKind.Utc).AddTicks(5495),
                             MemberCount = 0,
                             Name = "Noname Default",
                             TaxRate = 0f,
@@ -750,7 +752,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.HasOne("EveMailHelper.DataModels.Corporation", "CreatorCorporation")
                         .WithOne()
                         .HasForeignKey("EveMailHelper.DataModels.Alliance", "CreatorCorporationId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EveMailHelper.DataModels.Character", "Creator")
@@ -761,7 +763,8 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasOne("EveMailHelper.DataModels.Corporation", "ExecutorCorporation")
                         .WithOne()
-                        .HasForeignKey("EveMailHelper.DataModels.Alliance", "ExecutorCorporationId");
+                        .HasForeignKey("EveMailHelper.DataModels.Alliance", "ExecutorCorporationId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Creator");
 
@@ -855,7 +858,8 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                 {
                     b.HasOne("EveMailHelper.DataModels.Alliance", "Alliance")
                         .WithMany("Corporations")
-                        .HasForeignKey("AllianceId");
+                        .HasForeignKey("AllianceId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EveMailHelper.DataModels.Character", "Ceo")
                         .WithOne()

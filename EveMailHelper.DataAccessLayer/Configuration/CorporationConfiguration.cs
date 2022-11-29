@@ -45,6 +45,10 @@ namespace EveMailHelper.DataAccessLayer.Configuration
                 .WithOne(ch => ch.Corporation)
                 .HasForeignKey(ch => ch.CorporationId)
                 .OnDelete(DeleteBehavior.SetNull);
+            //builder.HasOne(c => c.Alliance)
+            //    .WithMany(a => a.Corporations)
+            //    .HasForeignKey(c => c.AllianceId)
+            //    .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

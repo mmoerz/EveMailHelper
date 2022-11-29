@@ -17,8 +17,13 @@ namespace EveMailHelper.BusinessLibrary.Utilities
 
         public static Corporation CopyShallow(this Corporation corp, int eveId, EVEStandard.Models.CorporationInfo corpInfo)
         {
-            corp.Name = corpInfo.Name;
             corp.EveId = eveId;
+            return corp.CopyShallow(corpInfo);
+        }
+
+        public static Corporation CopyShallow(this Corporation corp, EVEStandard.Models.CorporationInfo corpInfo)
+        {
+            corp.Name = corpInfo.Name;
             corp.Ticker = corpInfo.Ticker;
             corp.DateFounded= corpInfo.DateFounded;
             corp.Description = corpInfo.Description;
@@ -33,8 +38,13 @@ namespace EveMailHelper.BusinessLibrary.Utilities
 
         public static Alliance CopyShallow(this Alliance alliance, int eveId, EVEStandard.Models.Alliance eveAlliance)
         {
+            alliance.EveId = eveId;
+            return alliance.CopyShallow(eveAlliance);
+        }
+
+        public static Alliance CopyShallow(this Alliance alliance, EVEStandard.Models.Alliance eveAlliance)
+        {
             alliance.Name = eveAlliance.Name;
-            alliance.EveId= eveId;
             alliance.Ticker = eveAlliance.Ticker;
             alliance.DateFounded = eveAlliance.DateFounded;
             // TODO: Rest is missing

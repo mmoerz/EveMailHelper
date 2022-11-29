@@ -19,18 +19,18 @@ namespace EveMailHelper.DataAccessLayer.Configuration
             builder.HasOne(a => a.CreatorCorporation)
                 .WithOne()
                 .HasForeignKey<Alliance>(a => a.CreatorCorporationId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.ClientCascade);
             builder.HasOne(a => a.Creator)               
                 .WithOne()
                 .HasForeignKey<Alliance>(a => a.CreatorId);
             builder.HasMany(a => a.Corporations)
                 .WithOne(c => c.Alliance)
                 .HasForeignKey(c => c.AllianceId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.ClientSetNull);
             builder.HasOne(a => a.ExecutorCorporation)
                 .WithOne()
                 .HasForeignKey<Alliance>(a => a.ExecutorCorporationId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

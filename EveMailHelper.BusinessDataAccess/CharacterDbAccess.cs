@@ -1,4 +1,5 @@
-﻿using EveMailHelper.DataAccessLayer.Context;
+﻿using EveMailHelper.BusinessDataAccess.Interfaces;
+using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataModels;
 using EveMailHelper.DataModels.Security;
 
@@ -10,7 +11,7 @@ using MudBlazor;
 
 namespace EveMailHelper.BusinessDataAccess
 {
-    public class CharacterDbAccess
+    public class CharacterDbAccess : IEveId<Character>, IUpdateModel<Character>
     {
         const int MaxCacheMinutesDefault = 24 * 60;
 
@@ -114,10 +115,11 @@ namespace EveMailHelper.BusinessDataAccess
             };
         }
 
-        public void Update(Character character)
+        public Character Update(Character character)
         {
             character.EveLastUpdated = DateTime.UtcNow;
             _context.Characters.Update(character);
+            return character;
         }
     }
 }

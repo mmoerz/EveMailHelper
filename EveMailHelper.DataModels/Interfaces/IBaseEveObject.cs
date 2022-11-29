@@ -13,5 +13,9 @@ namespace EveMailHelper.DataModels.Interfaces
         /// (UTC)
         /// </summary>
         public DateTime EveLastUpdated { get; set; }
+        /// <summary>
+        /// set to true if item was deleted in game.
+        /// </summary>
+        public bool EveDeletedInGame { get; set; }
     }
 }

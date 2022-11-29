@@ -1,4 +1,5 @@
-﻿using EveMailHelper.DataAccessLayer.Context;
+﻿using EveMailHelper.BusinessDataAccess.Interfaces;
+using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataModels;
 using EveMailHelper.DataModels.Security;
 
@@ -10,7 +11,7 @@ using MudBlazor;
 
 namespace EveMailHelper.BusinessDataAccess
 {
-    public class AllianceDbAccess
+    public class AllianceDbAccess : IEveId<Alliance>, IUpdateModel<Alliance>
     {
         private readonly EveMailHelperContext _context;
         public AllianceDbAccess(EveMailHelperContext context)
@@ -75,9 +76,12 @@ namespace EveMailHelper.BusinessDataAccess
                 .Entity;
         }
 
-        public void Update(Alliance item)
+        public Alliance Update(Alliance item)
         {
-            _context.Alliances.Update(item);
+            item.EveLastUpdated = DateTime.UtcNow;
+            
+            return _context.Alliances.Update(item)
+                .Entity;
         }
 
         public void Remove(Alliance item)

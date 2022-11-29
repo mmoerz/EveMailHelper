@@ -7,14 +7,14 @@ using EveMailHelper.ServiceLayer.Interfaces;
 
 namespace EveMailHelper.Web.Pages.EveMails
 {
-    public partial class CheckMailSent : ComponentBase
+    public partial class MailRecruitment : ComponentBase
     {
         #region injections
         [Inject] IEveMailTemplateService EveMailTemplateService { get; set; } = null!;
         // maybe of use when coloring the already known chars
         //[Inject] ICharacterService CharacterService { get; set; } = null!;
         [Inject] IMailService MailService { get; set; } = null!;
-
+        [Inject] IInGameCharacterManager InGameCharacterManager { get; set; } = null!;
         [Inject] IInGameMailManager InGameMailManager { get; set; } = null!;
 
         #endregion
@@ -73,8 +73,6 @@ namespace EveMailHelper.Web.Pages.EveMails
 
         //protected override async Task OnInitializedAsync()
         //{
-        //    //dbContext = await dbContextFactory.CreateDbContextAsync();
-            
         //}
 
         private static void Cancel()
@@ -95,12 +93,14 @@ namespace EveMailHelper.Web.Pages.EveMails
             var filterTime = CombineDateAndTime(Date.Value, Time);
             
             var filteredReceivers = await MailService.FilterReceivers(ReceiverString, filterTime);
-            FilteredReceiverString = string.Join(", ", filteredReceivers);
+            var FilteredReceiverString = string.Join(", ", filteredReceivers);
 
             // load all new characters from eve
+            var characters = await InGameCharacterManager.LoadCharactersByName(filteredReceivers);
             
             // check that those characters are all newbies
             // == only starter corporation
+
 
             SubmitDisabled = false;
         }

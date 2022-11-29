@@ -1,73 +1,72 @@
-﻿using Microsoft.Extensions.Logging;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EveMailHelper.BusinessDataAccess.Interfaces;
+using EveMailHelper.DataModels.Interfaces;
+using EveMailHelper.BusinessDataAccess.Utilities;
 
 namespace EveMailHelper.BusinessLibrary.Utilities
 {
-    public class EveDownloaderData<TEveInfo, TModel>
+    public class EveDownloader<TEveInfo, TModel, TdbAccess>
+        where TdbAccess : IEveId<TModel>
+        where TModel : IBaseEveId, IBaseEveObject
     {
-        //private readonly ILogger<EveDownloaderData<TEveInfo, TModel>> log;
-        private readonly HashSet<int> eveIds = new();
-        private readonly IDictionary<int, TEveInfo> eveData = new Dictionary<int, TEveInfo>();
-        private readonly IDictionary<int, TModel> models = new Dictionary<int, TModel>();
+        private TdbAccess _dbAccess;
+        private EveDownloaderData<TEveInfo, TModel> _data;
+        private DateTime _notOlderThan;
+        private string _eveWasDeletedString;
 
-        public EveDownloaderData() { }
+        public delegate Task<TEveInfo> GetInfoFromEve(int eveId);
 
-        //EveDownloaderData(ILogger<EveDownloaderData<TEveInfo, TModel>> logger)
-        //{
-        //    log = logger;
-        //}
-
-        public EveDownloaderData(
-            ICollection<int> initialEveIds)
-            //ILogger<EveDownloaderData<TEveInfo, TModel>> logger)
+        public EveDownloader(TdbAccess dbAccess,
+            ICollection<int> eveIds,
+            string eveWasDeletedString = "",
+            DateTime? notOlderThan = null)
         {
-            eveIds = initialEveIds.ToHashSet();
-            //log = logger;
+            _dbAccess = dbAccess;
+            _data = new(eveIds);
+            _notOlderThan = notOlderThan ?? DateTime.UtcNow - new TimeSpan(24, 0, 0);
+            _eveWasDeletedString = string.IsNullOrEmpty(eveWasDeletedString)
+                ? "Unhandled error: {\"error\":\"Character has been deleted!\"}"
+                : eveWasDeletedString;
         }
 
-        public void Add(int Key)
+        public async Task Download(GetInfoFromEve getInfoFromEve)
+        //(Func<int,Task<TEveInfo>> GetInfoFromEve2)
         {
-            if (!eveData.ContainsKey(Key) && !models.ContainsKey(Key))
+            var workEveIds = _data.GetHashEveIds();
+            // fetch data from database
+            var dbModels = _dbAccess.GetByEveIds(workEveIds).ToEveIdDictionary();
+
+            foreach (var eveId in workEveIds)
             {
-                eveIds.Add(Key);
+                if (dbModels.ContainsKey(eveId) && dbModels[eveId].EveLastUpdated >= _notOlderThan)
+                    continue;
+                try
+                {
+                    var eveInfo = await getInfoFromEve(eveId);
+                    _data.Add(eveId, eveInfo);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message == _eveWasDeletedString)
+                    {
+                        _data.AddDeleted(eveId);
+                    }
+                }
             }
+            _data.MergeModels(dbModels);
+            _data.ClearEveIds();
         }
 
-        public IDictionary<int, TModel> MergeModels(IDictionary<int, TModel> newModels)
-        {
-            return models.Merge(newModels);
-        }
+        public void AddEveId(int Key) => _data.Add(Key);
 
-        public void Add(int Key, TEveInfo Value)
-        {
-            //if (eveData.ContainsKey(Key))
-                //log.LogWarning("trying to add value for existing key");
-            eveData.Add(Key, Value);
-        }
+        public bool HasDbId(int key) => _data.HasModel(key);
 
-        public HashSet<int> GetHashEveIds()
-        {
-            return eveIds.ToHashSet();
-        }
+        public TModel GetModelById(int key) => _data.Models[key];
 
-        public bool HasEveIds()
-        {
-            return eveIds.Count > 0;
-        }
+        public bool HasEveIds() => _data.HasEveIds();
 
-        public bool ContainsKey(int Key)
-        {
-            return models.ContainsKey(Key) && eveData.ContainsKey(Key);
-        }
+        public void RegisterEveId(int eveId) => _data.Add(eveId);
 
-        public void ClearEveIds()
-        {
-            eveIds.Clear();
-        }
+        public EveDownloaderData<TEveInfo, TModel> GetData() => _data;
+
     }
 }

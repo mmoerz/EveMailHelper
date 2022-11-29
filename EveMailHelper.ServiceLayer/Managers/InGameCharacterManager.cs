@@ -21,7 +21,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EveMailHelper.ServiceLayer.Managers
 {
-    public class InGameCharacterManager 
+    public class InGameCharacterManager : IInGameCharacterManager
     {
         private readonly EveMailHelperContext _dbContext;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
@@ -30,8 +30,8 @@ namespace EveMailHelper.ServiceLayer.Managers
         private readonly SSOv2 _sSOv2;
 
         private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Character>> addEsCharacters;
-        private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Corporation>> addEsCorporations;
-        private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Alliance>> addEsAlliances;
+        //private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Corporation>> addEsCorporations;
+        //private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Alliance>> addEsAlliances;
 
         // TODO: remove this
         private readonly MailDbAccess _mailDbAccess;
@@ -62,17 +62,9 @@ namespace EveMailHelper.ServiceLayer.Managers
                 new AddEsCharactersAction(characterDbAccess, corporationDbAccess, allianceDbAccess, _esiClient),
                 _dbContext
                 );
-            addEsCorporations = new(
-                new AddEsCorporationsAction(corporationDbAccess, _esiClient),
-                _dbContext
-                );
-            addEsAlliances = new(
-                new AddEsAlliancesAction(allianceDbAccess, corporationDbAccess, _esiClient),
-                _dbContext
-                );
         }
 
-        public async Task LoadCharactersByName(List<string> CharacterNames)
+        public async Task<ICollection<Character>> LoadCharactersByName(List<string> CharacterNames)
         {
             var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
             var eveAccount = _authenticationManager.GetEveAccountFromPrincipal(user);
@@ -80,21 +72,18 @@ namespace EveMailHelper.ServiceLayer.Managers
 
             AuthDTO auth = await _authenticationManager.GetAuthDTOForPrincipal(user);
 
-            foreach(var charName in CharacterNames)
+            HashSet<int> characterEveIds = new HashSet<int>();
+            foreach (var charName in CharacterNames)
             {
                 var found = await _esiClient.Search.SearchCharacterV3Async(
                     auth, new List<string>() { "character" }, charName, true);
                 if (found == null) continue;
-                var foundCharacterIds = found.Model.Character;
-                var Characters = await addEsCharacters.RunAction(foundCharacterIds);
-
-               
-
+                characterEveIds.UnionWith(found.Model.Character);
             }
 
-            //Corporations = await addEsCorporations.RunAction(idLists.EsCorporationIds);
-            //Alliances = await addEsAlliances.RunAction(idLists.EsAlliances);
+            var Characters = await addEsCharacters.RunAction(characterEveIds);
 
+            return Characters.Values;
         }
 
     }

@@ -105,6 +105,6 @@ namespace EveMailHelper.ServiceLayer.Managers
             };
         }
 
-
+        
     }
 }

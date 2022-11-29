@@ -109,6 +109,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             // mails that are transfered
             //var headers2 = await _esiClient.Mail.ReturnMailHeadersV1Async(auth, new List<long>(), lastEveMailId - 400);
             long nextEveMailId = lastEveMailId;
+            nextEveMailId += 1000;
 
             while (nextEveMailId > 0)
             {

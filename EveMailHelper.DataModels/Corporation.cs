@@ -7,7 +7,7 @@ using EveMailHelper.DataModels.Interfaces;
 
 namespace EveMailHelper.DataModels
 {
-    public class Corporation : IBaseEveId
+    public class Corporation : IBaseEveId, IBaseEveObject
     {
         public Corporation()
         {

@@ -1,4 +1,5 @@
-﻿using EveMailHelper.DataAccessLayer.Context;
+﻿using EveMailHelper.BusinessDataAccess.Interfaces;
+using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataModels;
 using EveMailHelper.DataModels.Security;
 
@@ -11,7 +12,7 @@ using MudBlazor;
 
 namespace EveMailHelper.BusinessDataAccess
 {
-    public class CorporationDbAccess
+    public class CorporationDbAccess : IEveId<Corporation>, IUpdateModel<Corporation>
     {
         private readonly EveMailHelperContext _context;
         public CorporationDbAccess(EveMailHelperContext context)
@@ -98,9 +99,11 @@ namespace EveMailHelper.BusinessDataAccess
                 .Entity;
         }
 
-        public void Update(Corporation item)
+        public Corporation Update(Corporation item)
         {
-            _context.Corporations.Update(item);
+            item.EveLastUpdated = DateTime.Now;
+            return _context.Corporations.Update(item)
+                .Entity;
         }
 
         public void Remove(Corporation item)
