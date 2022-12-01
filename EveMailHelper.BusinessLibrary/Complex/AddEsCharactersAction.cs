@@ -8,12 +8,13 @@ using EVEStandard;
 using EveMailHelper.BusinessLibrary.Utilities;
 using EveMailHelper.BusinessDataAccess.Utilities;
 using System.Linq;
+using EveMailHelper.BusinessLibrary.Complex.dto;
 
 //using EVEStandard.Models;
 
 namespace EveMailHelper.BusinessLibrary.Complex
 {
-    public class AddEsCharactersAction : IBizActionAsync<ICollection<int>, IDictionary<int, Character>>
+    public class AddEsCharactersAction : IBizActionAsync<CharCorpAllianceDTO, CharCorpAllianceDTO>
     {
         private readonly CharacterDbAccess _characterdbAccess;
         private readonly CorporationDbAccess _corpDbAccess;
@@ -49,13 +50,13 @@ namespace EveMailHelper.BusinessLibrary.Complex
         EveDataUpdater<EVEStandard.Models.CorporationInfo, Corporation, CorporationDbAccess> corporationUpdater = null!;
         EveDataUpdater<EVEStandard.Models.Alliance, Alliance, AllianceDbAccess> allianceUpdater = null!;
 
-        public async Task<IDictionary<int, Character>> ActionAsync(
-            ICollection<int> peveCharacterIds //, ICollection<int> peveCorporationIds, ICollection<int> peveAllianceIds
+        public async Task<CharCorpAllianceDTO> ActionAsync(
+            CharCorpAllianceDTO inputDTO //, ICollection<int> peveCorporationIds, ICollection<int> peveAllianceIds
             )
         {
-            characterDL = new(_characterdbAccess, peveCharacterIds);
-            corporationDL = new(_corpDbAccess, new List<int>());
-            allianceDL = new(_allianceDbAccess, new List<int>());
+            characterDL = new(_characterdbAccess, inputDTO.CharactersDD);
+            corporationDL = new(_corpDbAccess, inputDTO.CorporationsDD);
+            allianceDL = new(_allianceDbAccess, inputDTO.AlliancesDD);
 
             while (characterDL.HasEveIds() || corporationDL.HasEveIds() || allianceDL.HasEveIds())
             {
@@ -70,14 +71,24 @@ namespace EveMailHelper.BusinessLibrary.Complex
             // finally use the eve infos to correct the dependencies by setting the objects
             characterUpdater.CopyInfo(CharacterCopyShallow, CharacterFactory);
             corporationUpdater.CopyInfo(CorporationCopyShallow, CorporationFactory);
-            allianceUpdater.CopyInfo(AllianceCopyShallow, AllianceFactory);
+            // alliance NEEDS charIds and corpIDs
+            //allianceUpdater.CopyInfo(AllianceCopyShallow, AllianceFactory);
 
+            // do the following stuff after committing all characters and corps
             // another round for updates (after alliance ids should be present)
-            characterUpdater.Update(TransformEveCharInfo);
-            corporationUpdater.Update(TransformEveCorporationInfo);
-            allianceUpdater.Update(TransformEveAllianceInfo);
+            characterUpdater.Update(CharacterNullOp);
+            corporationUpdater.Update(CorporationNullOp);
+            // alliance must be done after saving those changes to the database
+            // and retrieving new guids for them
 
-            return characterUpdater.Result();
+            CharCorpAllianceDTO resultDTO = new()
+            {
+                CharactersDD = characterUpdater.Data,
+                CorporationsDD = corporationUpdater.Data,
+                AlliancesDD = allianceUpdater.Data,
+            };
+
+            return resultDTO;
         }
 
         private async Task<EVEStandard.Models.CharacterInfo> GetCharacterInfo(int eveId)
@@ -112,6 +123,11 @@ namespace EveMailHelper.BusinessLibrary.Complex
             return allianceInfo;
         }
 
+        private Character CharacterNullOp(EVEStandard.Models.CharacterInfo info, Character oldModel)
+        {
+            return oldModel;
+        }
+
         private Character CharacterCopyShallow(EVEStandard.Models.CharacterInfo info, Character oldModel)
         {
             return oldModel.CopyShallow(info);
@@ -142,6 +158,11 @@ namespace EveMailHelper.BusinessLibrary.Complex
                 Title = "Unknown",
                 Description = "Unknown",
             };
+        }
+
+        private Corporation CorporationNullOp(EVEStandard.Models.CorporationInfo info, Corporation oldModel)
+        {
+            return oldModel;
         }
 
         private Corporation CorporationCopyShallow(EVEStandard.Models.CorporationInfo info, Corporation oldModel)
@@ -179,6 +200,11 @@ namespace EveMailHelper.BusinessLibrary.Complex
         }
 
         private Alliance AllianceCopyShallow(EVEStandard.Models.Alliance info, Alliance oldModel)
+        {
+            return oldModel.CopyShallow(info);
+        }
+
+        private Alliance UpdateEveAllianceInfo(EVEStandard.Models.Alliance info, Alliance oldModel)
         {
             return oldModel.CopyShallow(info);
         }

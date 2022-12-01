@@ -29,9 +29,9 @@ namespace EveMailHelper.ServiceLayer.Managers
         private readonly EVEStandardAPI _esiClient;
         private readonly SSOv2 _sSOv2;
 
-        private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Character>> addEsCharacters;
-        //private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Corporation>> addEsCorporations;
-        //private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Alliance>> addEsAlliances;
+        private readonly RunnerWriteDbAsync<CharCorpAllianceDTO, CharCorpAllianceDTO> addEsCharacters;
+        private readonly RunnerWriteDb<CharCorpAllianceDTO, CharCorpAllianceDTO> addExtEsCharacterAction;
+        private readonly RunnerWriteDb<CharCorpAllianceDTO, CharCorpAllianceDTO> addExtEsAllianceAction;
 
         // TODO: remove this
         private readonly MailDbAccess _mailDbAccess;
@@ -62,6 +62,14 @@ namespace EveMailHelper.ServiceLayer.Managers
                 new AddEsCharactersAction(characterDbAccess, corporationDbAccess, allianceDbAccess, _esiClient),
                 _dbContext
                 );
+            addExtEsCharacterAction = new(
+                new AddExtEsCharacterAction(characterDbAccess, corporationDbAccess, allianceDbAccess, _esiClient),
+                _dbContext
+                );
+            addExtEsAllianceAction = new(
+                new AddExtEsAllianceAction(characterDbAccess, corporationDbAccess, allianceDbAccess, esiClient),
+                _dbContext
+                );
         }
 
         public async Task<ICollection<Character>> LoadCharactersByName(List<string> CharacterNames)
@@ -81,9 +89,14 @@ namespace EveMailHelper.ServiceLayer.Managers
                 characterEveIds.UnionWith(found.Model.Character);
             }
 
-            var Characters = await addEsCharacters.RunAction(characterEveIds);
+            var newCharacters = await addEsCharacters.RunAction(new CharCorpAllianceDTO()
+            {
+                CharactersDD = new(characterEveIds)
+            }) ;
+            var withAlliances = addExtEsAllianceAction.RunAction(newCharacters);
+            var result = addExtEsCharacterAction.RunAction(withAlliances);
 
-            return Characters.Values;
+            return result.CharactersDD.Models.Values.ToList();
         }
 
     }

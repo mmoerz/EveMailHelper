@@ -31,8 +31,9 @@ namespace EveMailHelper.ServiceLayer.Managers
         private readonly SSOv2 _sSOv2;
 
         private readonly RunnerWriteDb<AddLabelDTO, IDictionary<long, MailLabel>> updateEveMailLabels;
-        private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Character>> addEsCharacters;
-        private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Corporation>> addEsCorporations;
+        private readonly RunnerWriteDbAsync<CharCorpAllianceDTO, CharCorpAllianceDTO> addEsCharacters;
+        private readonly RunnerWriteDb<CharCorpAllianceDTO, CharCorpAllianceDTO> addExtEsCharacterAction;
+        private readonly RunnerWriteDb<CharCorpAllianceDTO, CharCorpAllianceDTO> addExtEsAllianceAction;
         private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Alliance>> addEsAlliances;
         private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, MailList>> addEsMailList;
         private readonly RunnerWriteDbAsync<AddMailDTO, ICollection<Mail>> addEsMails;
@@ -70,12 +71,12 @@ namespace EveMailHelper.ServiceLayer.Managers
                 new AddEsCharactersAction(characterDbAccess, corporationDbAccess, allianceDbAccess, _esiClient),
                 _dbContext
                 );
-            addEsCorporations = new(
-                new AddEsCorporationsAction(corporationDbAccess, _esiClient),
+            addExtEsCharacterAction = new (
+                new AddExtEsCharacterAction(characterDbAccess, corporationDbAccess, allianceDbAccess, _esiClient),
                 _dbContext
                 );
-            addEsAlliances = new(
-                new AddEsAlliancesAction(allianceDbAccess, corporationDbAccess, _esiClient),
+            addExtEsAllianceAction = new(
+                new AddExtEsAllianceAction(characterDbAccess, corporationDbAccess, allianceDbAccess, _esiClient),
                 _dbContext
                 );
             addEsMailList = new(
@@ -111,6 +112,8 @@ namespace EveMailHelper.ServiceLayer.Managers
             long nextEveMailId = lastEveMailId;
             nextEveMailId += 1000;
 
+            CharCorpAllianceDTO ccaDTO = new();
+
             while (nextEveMailId > 0)
             {
                 var headers = await _esiClient.Mail.ReturnMailHeadersV1Async(auth, new List<long>(), nextEveMailId);
@@ -120,14 +123,24 @@ namespace EveMailHelper.ServiceLayer.Managers
                     nextEveMailId = 0;
 
                 var idLists = await ExtractIdsFromMails(headers.Model);
+                
+                ccaDTO.CharactersDD.UnionWith(idLists.EsCharacterIds);
+                ccaDTO.CorporationsDD.UnionWith(idLists.EsCorporationIds);
+                ccaDTO.AlliancesDD.UnionWith(idLists.EsAlliances);
+
+                var resultChar1 = await addEsCharacters.RunAction(ccaDTO);
+                // now fixup alliances and save that
+                var resultChar2 = addExtEsAllianceAction.RunAction(resultChar1);
+                // now fixup the characters and corps and save them again
+                var resultChar3 = addExtEsCharacterAction.RunAction(resultChar2);
 
                 var mailDTO = new AddMailDTO()
                 {
                     authDTO = auth,
                     Labels = eveLabels,
-                    Characters = await addEsCharacters.RunAction(idLists.EsCharacterIds),
-                    Corporations = await addEsCorporations.RunAction(idLists.EsCorporationIds),
-                    Alliances = await addEsAlliances.RunAction(idLists.EsAlliances),
+                    Characters = resultChar3.CharactersDD.Models,
+                    Corporations = resultChar3.CorporationsDD.Models,
+                    Alliances = resultChar3.AlliancesDD.Models,
                     MailLists = await addEsMailList.RunAction(idLists.EsMailingLists),
                     esMailHeaders = headers.Model,
                     Owner = character

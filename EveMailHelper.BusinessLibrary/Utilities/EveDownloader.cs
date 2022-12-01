@@ -8,20 +8,33 @@ namespace EveMailHelper.BusinessLibrary.Utilities
         where TdbAccess : IEveId<TModel>
         where TModel : IBaseEveId, IBaseEveObject
     {
-        private TdbAccess _dbAccess;
+        private readonly TdbAccess _dbAccess;
         private EveDownloaderData<TEveInfo, TModel> _data;
         private DateTime _notOlderThan;
         private string _eveWasDeletedString;
 
         public delegate Task<TEveInfo> GetInfoFromEve(int eveId);
 
+        //public EveDownloader(TdbAccess dbAccess,
+        //    ICollection<int> eveIds,
+        //    string eveWasDeletedString = "",
+        //    DateTime? notOlderThan = null)
+        //{
+        //    _dbAccess = dbAccess;
+        //    _data = new(eveIds);
+        //    _notOlderThan = notOlderThan ?? DateTime.UtcNow - new TimeSpan(24, 0, 0);
+        //    _eveWasDeletedString = string.IsNullOrEmpty(eveWasDeletedString)
+        //        ? "Unhandled error: {\"error\":\"Character has been deleted!\"}"
+        //        : eveWasDeletedString;
+        //}
+
         public EveDownloader(TdbAccess dbAccess,
-            ICollection<int> eveIds,
+            EveDownloaderData<TEveInfo, TModel> data,
             string eveWasDeletedString = "",
             DateTime? notOlderThan = null)
         {
             _dbAccess = dbAccess;
-            _data = new(eveIds);
+            _data = data;
             _notOlderThan = notOlderThan ?? DateTime.UtcNow - new TimeSpan(24, 0, 0);
             _eveWasDeletedString = string.IsNullOrEmpty(eveWasDeletedString)
                 ? "Unhandled error: {\"error\":\"Character has been deleted!\"}"
@@ -37,8 +50,14 @@ namespace EveMailHelper.BusinessLibrary.Utilities
 
             foreach (var eveId in workEveIds)
             {
-                if (dbModels.ContainsKey(eveId) && dbModels[eveId].EveLastUpdated >= _notOlderThan)
+                if (dbModels.ContainsKey(eveId)
+                    && (dbModels[eveId].EveDeletedInGame == true ||
+                        dbModels[eveId].EveLastUpdated >= _notOlderThan)
+                    )
+                {
                     continue;
+                }
+
                 try
                 {
                     var eveInfo = await getInfoFromEve(eveId);

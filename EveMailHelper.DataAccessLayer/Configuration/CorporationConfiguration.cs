@@ -18,7 +18,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration
                 .IsRequired(false);
             builder.Property(a => a.Description)
                 .IsRequired()
-                .HasMaxLength(1024);
+                .HasMaxLength(8000);
             builder.Property(a => a.FactionId)
                 .IsRequired(false);
             builder.Property(a => a.HomeStationId)

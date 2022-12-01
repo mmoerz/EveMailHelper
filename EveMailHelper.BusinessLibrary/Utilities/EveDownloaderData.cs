@@ -98,6 +98,9 @@ namespace EveMailHelper.BusinessLibrary.Utilities
             eveIds.Clear();
         }
 
-        
+        public void UnionWith(ICollection<int> collection)
+        {
+            eveIds.UnionWith(collection);
+        }
     }
 }

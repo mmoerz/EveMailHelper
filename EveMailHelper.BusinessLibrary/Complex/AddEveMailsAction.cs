@@ -18,8 +18,10 @@ namespace EveMailHelper.BusinessLibrary.Complex
         private readonly EVEStandardAPI _esiClient;
         private List<ValidationResult> _errors = new();
 
-        public AddEveMailsAction(MailDbAccess dbAccess, CharacterDbAccess characterDbAccess,
-             EVEStandardAPI esiClient)
+        public AddEveMailsAction(
+            MailDbAccess dbAccess,
+            CharacterDbAccess characterDbAccess,
+            EVEStandardAPI esiClient)
         {
             _dbAccess = dbAccess;
             _charcterDbAcces = characterDbAccess;
