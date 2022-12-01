@@ -10,7 +10,7 @@ namespace EveMailHelper.Web.Shared.EveMails
     public partial class EveMailList : ComponentBase
     {
         #region injections
-        [Inject] IMailService EveMailService { get; set; } = null!;
+        [Inject] IMailManager EveMailService { get; set; } = null!;
 
         [Inject] IDialogService DialogService { get; set; } = null!;
         #endregion

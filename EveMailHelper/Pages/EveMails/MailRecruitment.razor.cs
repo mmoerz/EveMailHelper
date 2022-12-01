@@ -13,7 +13,7 @@ namespace EveMailHelper.Web.Pages.EveMails
         [Inject] IEveMailTemplateService EveMailTemplateService { get; set; } = null!;
         // maybe of use when coloring the already known chars
         //[Inject] ICharacterService CharacterService { get; set; } = null!;
-        [Inject] IMailService MailService { get; set; } = null!;
+        [Inject] IMailManager MailService { get; set; } = null!;
         [Inject] IInGameCharacterManager InGameCharacterManager { get; set; } = null!;
         [Inject] IInGameMailManager InGameMailManager { get; set; } = null!;
 

@@ -15,7 +15,7 @@ namespace EveMailHelper.DataModels
         {
             get
             {
-                return MailList.Name;
+                return MailList != null ? MailList.Name : "";
             }
         }
     }

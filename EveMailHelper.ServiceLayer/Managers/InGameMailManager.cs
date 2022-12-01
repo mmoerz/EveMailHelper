@@ -34,7 +34,6 @@ namespace EveMailHelper.ServiceLayer.Managers
         private readonly RunnerWriteDbAsync<CharCorpAllianceDTO, CharCorpAllianceDTO> addEsCharacters;
         private readonly RunnerWriteDb<CharCorpAllianceDTO, CharCorpAllianceDTO> addExtEsCharacterAction;
         private readonly RunnerWriteDb<CharCorpAllianceDTO, CharCorpAllianceDTO> addExtEsAllianceAction;
-        private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, Alliance>> addEsAlliances;
         private readonly RunnerWriteDbAsync<ICollection<int>, IDictionary<int, MailList>> addEsMailList;
         private readonly RunnerWriteDbAsync<AddMailDTO, ICollection<Mail>> addEsMails;
 
@@ -110,7 +109,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             // mails that are transfered
             //var headers2 = await _esiClient.Mail.ReturnMailHeadersV1Async(auth, new List<long>(), lastEveMailId - 400);
             long nextEveMailId = lastEveMailId;
-            nextEveMailId += 1000;
+            nextEveMailId = int.MaxValue;
 
             CharCorpAllianceDTO ccaDTO = new();
 

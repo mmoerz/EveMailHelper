@@ -10,7 +10,7 @@ namespace EveMailHelper.Web.Shared.EveMails
     public partial class EveMailDialog : ComponentBase
     {
         #region injections
-        [Inject] IMailService EveMailService { get; set; } = null!;
+        [Inject] IMailManager MailManager { get; set; } = null!;
         #endregion
 
         #region parameters
@@ -28,6 +28,11 @@ namespace EveMailHelper.Web.Shared.EveMails
 
         Color Color = Color.Success;
 
+        protected override async Task OnInitializedAsync()
+        {
+            Model = await MailManager.GetReceivers(Model);
+        }
+
         private async Task Save()
         {
             if (Editable)
@@ -39,7 +44,7 @@ namespace EveMailHelper.Web.Shared.EveMails
                 {
                     // Notify parent component to
                     // submit the changed Analysisrequest
-                    EveMailService.Update(Model);
+                    MailManager.Update(Model);
                     await DialogSaved.InvokeAsync(Model);
                 }
             }
@@ -52,6 +57,11 @@ namespace EveMailHelper.Web.Shared.EveMails
         MarkupString ModelContentMarkup => (MarkupString)Model.Content
             .Replace("<font size=\"13\"", "<font size=\"3\"")
             .Replace("<font size=\"18\"", "<font size=\"4\"");
+
+        private string ToRecipients(Mail mail)
+        {
+            return string.Join(", ", mail.Recipients);
+        }
 
     }
 }

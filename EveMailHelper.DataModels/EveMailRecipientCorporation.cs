@@ -15,7 +15,7 @@ namespace EveMailHelper.DataModels
         {
             get
             {
-                return Corporation.Name;
+                return Corporation != null ? Corporation.Name : "";
             }
         }
     }

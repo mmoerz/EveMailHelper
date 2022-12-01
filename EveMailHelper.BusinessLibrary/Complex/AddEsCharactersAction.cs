@@ -21,7 +21,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
         private readonly AllianceDbAccess _allianceDbAccess;
         private readonly EVEStandardAPI _esiClient;
         private List<ValidationResult> _errors = new();
-        DateTime _notOlderThan;
+        private readonly DateTime _notOlderThan;
 
         public AddEsCharactersAction(
             CharacterDbAccess dbAccess,
@@ -54,9 +54,9 @@ namespace EveMailHelper.BusinessLibrary.Complex
             CharCorpAllianceDTO inputDTO //, ICollection<int> peveCorporationIds, ICollection<int> peveAllianceIds
             )
         {
-            characterDL = new(_characterdbAccess, inputDTO.CharactersDD);
-            corporationDL = new(_corpDbAccess, inputDTO.CorporationsDD);
-            allianceDL = new(_allianceDbAccess, inputDTO.AlliancesDD);
+            characterDL = new(_characterdbAccess, inputDTO.CharactersDD, notOlderThan: _notOlderThan);
+            corporationDL = new(_corpDbAccess, inputDTO.CorporationsDD, notOlderThan: _notOlderThan);
+            allianceDL = new(_allianceDbAccess, inputDTO.AlliancesDD, notOlderThan: _notOlderThan);
 
             while (characterDL.HasEveIds() || corporationDL.HasEveIds() || allianceDL.HasEveIds())
             {
@@ -128,7 +128,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
             return oldModel;
         }
 
-        private Character CharacterCopyShallow(EVEStandard.Models.CharacterInfo info, Character oldModel)
+        private Character CharacterCopyShallow(int eveId, EVEStandard.Models.CharacterInfo info, Character oldModel)
         {
             return oldModel.CopyShallow(info);
         }
@@ -165,7 +165,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
             return oldModel;
         }
 
-        private Corporation CorporationCopyShallow(EVEStandard.Models.CorporationInfo info, Corporation oldModel)
+        private Corporation CorporationCopyShallow(int eveId, EVEStandard.Models.CorporationInfo info, Corporation oldModel)
         {
             return oldModel.CopyShallow(info);
         }

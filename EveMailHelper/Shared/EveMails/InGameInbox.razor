@@ -1,4 +1,5 @@
 ﻿@using EveMailHelper.BusinessDataAccess.Utilities;
+@using System.Globalization;
 
 <MudTable Class="mt-4"
           Dense="true"
@@ -45,7 +46,7 @@
         <MudTd DataLabel="From">@context.From.Name</MudTd>
         <MudTd DataLabel="Subject">@context.Subject</MudTd>
         <MudTd DataLabel="Labels">@context.Labels.ToString(",")</MudTd>
-        <MudTd DataLabel="CreatedDate">@context.CreatedDate</MudTd>
+        <MudTd DataLabel="CreatedDate">@context.CreatedDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</MudTd>
         <MudTd DataLabel="IsRead">@context.IsRead</MudTd>
         <!--
         <MudTd DataLabel="DeleteChar">

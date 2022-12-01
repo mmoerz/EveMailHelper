@@ -10,7 +10,11 @@ namespace EveMailHelper.DataAccessLayer.Configuration
         public void Configure(EntityTypeBuilder<EveMailRecipientCharacter> builder)
         {
             builder.HasBaseType<EveMailRecipient>();
-            //builder.Ignore(er => er.Name);
+
+            builder.HasOne(x => x.Character)
+                .WithMany()
+                .HasForeignKey(x => x.CharacterId)
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

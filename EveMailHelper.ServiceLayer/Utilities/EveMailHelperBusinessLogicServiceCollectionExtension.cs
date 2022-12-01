@@ -23,7 +23,7 @@ namespace EveMailHelper.ServiceLayer.Utilities
             // only basic account and eve account handling
             services.AddTransient<IAccountManager, AccountManager>();
             services.AddTransient<ICharacterService, CharacterService>();
-            services.AddTransient<IMailService, MailManager>();
+            services.AddTransient<IMailManager, MailManager>();
             services.AddTransient<IEveMailTemplateService, EveMailTemplateService>();
             services.AddTransient<ICommunicationService, CommunicationService>();
             services.AddTransient<INoteService, NoteService>();

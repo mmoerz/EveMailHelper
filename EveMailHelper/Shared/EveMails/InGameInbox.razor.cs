@@ -15,7 +15,7 @@ namespace EveMailHelper.Web.Shared.EveMails
         #region injections
         [Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
         [Inject] IAuthenticationManager AuthenticationManager { get; set; } = null!;
-        [Inject] IMailService MailService { get; set; } = null!;
+        [Inject] IMailManager MailManager { get; set; } = null!;
         [Inject] IInGameMailManager InGameMailManager { get; set; } = null!;
         [Inject] IDialogService DialogService { get; set; } = null!;
         #endregion
@@ -39,7 +39,7 @@ namespace EveMailHelper.Web.Shared.EveMails
 
         private async Task<TableData<Mail>> ServerReload(TableState state)
         {
-            return await MailService.GetPaginatedCurrentCharacter(SearchString, state);
+            return await MailManager.GetPaginatedCurrentCharacter(SearchString, state);
         }
 
         private void OnSearch(string text)

@@ -65,7 +65,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
             return resultDTO;
         }
 
-        private Alliance AllianceCopyShallow(EVEStandard.Models.Alliance info, Alliance oldModel)
+        private Alliance AllianceCopyShallow(int eveId, EVEStandard.Models.Alliance info, Alliance oldModel)
         {
             return oldModel.CopyShallow(info);
         }

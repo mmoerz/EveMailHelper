@@ -18,7 +18,7 @@ namespace EveMailHelper.BusinessLibrary.Utilities
         public EveDownloaderData<TEveInfo, TModel> Data { get; set; }
         private DateTime _notOlderThan;
 
-        public delegate TModel CopyShallow(TEveInfo info, TModel oldModel);
+        public delegate TModel CopyShallow(int eveId, TEveInfo info, TModel oldModel);
         public delegate TModel Transformer(TEveInfo info, TModel oldModel);
         public delegate TModel ModelFactory(bool wasDeleted);
 
@@ -50,11 +50,12 @@ namespace EveMailHelper.BusinessLibrary.Utilities
                 if (Data.Models.ContainsKey(info.Key))
                 {
                     var model = Data.Models[info.Key];
-                    Data.Models[info.Key] = copy(info.Value, model);
+                    Data.Models[info.Key] = copy(info.Key, info.Value, model);
                 }
                 else
                 {
-                    var newModel = copy(info.Value, factory(wasDeleted:false));
+                    var newModel = copy(info.Key, info.Value, factory(wasDeleted:false));
+                    newModel.EveId = info.Key;
                     Data.Models.Add(info.Key, newModel);
                 }
             }
@@ -69,6 +70,7 @@ namespace EveMailHelper.BusinessLibrary.Utilities
                 {
                     TModel newModel = factory(wasDeleted:true);
                     newModel.EveDeletedInGame = true;
+                    newModel.EveId = deletedEveId;
                     Data.Models.Add(deletedEveId, newModel);
                 }
                 Data.Models[deletedEveId].EveLastUpdated = DateTime.UtcNow;

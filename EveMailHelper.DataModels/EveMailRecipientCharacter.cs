@@ -15,7 +15,7 @@ namespace EveMailHelper.DataModels
         {
             get
             {
-                return Character.Name;
+                return Character != null ? Character.Name : "";
             }
         }
     }

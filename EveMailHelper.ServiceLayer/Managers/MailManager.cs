@@ -15,12 +15,15 @@ using EveNatTools.ServiceLibrary.Utilities;
 
 namespace EveMailHelper.BusinessLibrary.Services
 {
-    public class MailManager : IMailService
+    public class MailManager : IMailManager
     {
         #region injected
         #endregion
         private readonly EveMailHelperContext _dbContext = null!;
         private readonly CharacterDbAccess _characterDbAccess;
+        private readonly CorporationDbAccess _corporationDbAccess;
+        private readonly AllianceDbAccess _allianceDbAccess;
+        private readonly MailListDbAccess _mailListDbAccess;
         private readonly EveMailTemplateDbAccess _templateDbAccess;
         private readonly MailDbAccess _evemailDbAccess;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
@@ -36,6 +39,9 @@ namespace EveMailHelper.BusinessLibrary.Services
             var factory = dbContextFactory;
             _dbContext = factory.CreateDbContext();
             _characterDbAccess = new CharacterDbAccess(_dbContext);
+            _corporationDbAccess = new CorporationDbAccess(_dbContext);
+            _allianceDbAccess = new AllianceDbAccess(_dbContext);
+            _mailListDbAccess = new MailListDbAccess(_dbContext);
             _templateDbAccess = new EveMailTemplateDbAccess(_dbContext);
             _evemailDbAccess = new MailDbAccess(_dbContext);
             _authenticationStateProvider = authenticationStateProvider;
@@ -93,8 +99,12 @@ namespace EveMailHelper.BusinessLibrary.Services
 
             query = state.SortLabel switch
             {
+                "From" => query.OrderByDirection(state.SortDirection, x => x.From.Name),
                 "Content" => query.OrderByDirection(state.SortDirection, x => x.Content),
-                _ => query.OrderByDirection(state.SortDirection, x => x.Subject),
+                "Labels" => query.OrderByDirection(state.SortDirection, x => x.Labels),
+                "Subject" => query.OrderByDirection(state.SortDirection, x => x.Subject),
+                "IsRead" => query.OrderByDirection(state.SortDirection, x => x.IsRead),
+                _ => query.OrderByDirection(state.SortDirection, x => x.CreatedDate),
             };
             var totalItems = query.Count();
 
@@ -136,9 +146,12 @@ namespace EveMailHelper.BusinessLibrary.Services
 
             query = state.SortLabel switch
             {
+                "From" => query.OrderByDirection(state.SortDirection, x => x.From.Name),
                 "Content" => query.OrderByDirection(state.SortDirection, x => x.Content),
-                "Senddate" => query.OrderByDirection(state.SortDirection, x => x.CreatedDate),
-                _ => query.OrderByDirection(state.SortDirection, x => x.Subject),
+                "Labels" => query.OrderByDirection(state.SortDirection, x => x.Labels),
+                "Subject" => query.OrderByDirection(state.SortDirection, x => x.Subject),
+                "IsRead" => query.OrderByDirection(state.SortDirection, x => x.IsRead),
+                _ => query.OrderByDirection(state.SortDirection, x => x.CreatedDate),
             };
 
             var itemCount = query.Count();
@@ -177,6 +190,40 @@ namespace EveMailHelper.BusinessLibrary.Services
             await transaction.CommitAsync();
         }
 
-        
+        public async Task<Mail> GetReceivers(Mail mail)
+        {
+            var query = _dbContext.EveMails
+                .Where(x => x.Id == mail.Id)
+                .Include(x => x.From)
+                .Include(x => x.Labels)
+                .Include(x => x.Recipients);
+            var result = await query.FirstAsync();
+
+            foreach (var recipient in result.Recipients)
+            {
+                if (recipient is EveMailRecipientCharacter)
+                {
+                    var help = (EveMailRecipientCharacter) recipient;
+                    help.Character = _characterDbAccess.GetById(help.CharacterId);
+                }
+                if (recipient is EveMailRecipientCorporation)
+                {
+                    var help = (EveMailRecipientCorporation)recipient;
+                    help.Corporation = _corporationDbAccess.GetById(help.CorporationId);
+                }
+                if (recipient is EveMailRecipientAlliance)
+                {
+                    var help = (EveMailRecipientAlliance)recipient;
+                    help.Alliance = _allianceDbAccess.GetById(help.AllianceId);
+                }
+                if (recipient is EveMailRecipientMailList)
+                {
+                    var help = (EveMailRecipientMailList)recipient;
+                    help.MailList = _mailListDbAccess.GetById(help.MailListId);
+                }
+            }
+
+            return result;
+        }
     }
 }

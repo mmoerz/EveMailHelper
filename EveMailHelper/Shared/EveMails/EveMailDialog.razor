@@ -5,6 +5,7 @@
         @if (!Editable)
         {
             <MudText>From: @Model.From.Name</MudText>
+            <MudText>To: @ToRecipients(Model)</MudText>
             <MudText>Subject: @Model.Subject</MudText>
             <MudText>Content:</MudText>
             <div id="unique_id_mail_content" class="ma-0" style="height:300px;overflow:auto">

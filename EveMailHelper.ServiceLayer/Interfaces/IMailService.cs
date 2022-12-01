@@ -3,7 +3,7 @@ using MudBlazor;
 
 namespace EveMailHelper.ServiceLayer.Interfaces
 {
-    public interface IMailService
+    public interface IMailManager
     {
         Mail Update(Mail eveMail);
         Task<TableData<Mail>> GetPaginated(string searchString, TableState state);
@@ -12,5 +12,6 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         Task<List<string>> FilterReceivers(string receivers, DateTime filterTime);
         Task<TableData<Mail>> GetPaginatedCurrentCharacter(string searchString, TableState state);
         Task<TableData<Mail>> GetPaginated(Character fromCharacter, string searchString, TableState state);
+        Task<Mail> GetReceivers(Mail mail);
     }
 }

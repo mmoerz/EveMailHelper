@@ -15,7 +15,7 @@ namespace EveMailHelper.DataModels
         {
             get
             {
-                return Alliance.Name;
+                return Alliance != null ? Alliance.Name : "";
             }
         }
     }
