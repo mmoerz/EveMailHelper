@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace EveMailHelper.DataModels
 {
-    public partial class EveMailRecipientMailList : EveMailRecipient
+    public partial class MailRecipientAlliance : MailRecipient
     {
-        public Guid MailListId { get; set; }
-        public MailList MailList { get; set; } = null!;
+        public Guid AllianceId { get; set; }
+        public Alliance Alliance { get; set; } = null!;
 
         override public string Name
         {
             get
             {
-                return MailList != null ? MailList.Name : "";
+                return Alliance != null ? Alliance.Name : "";
             }
         }
     }

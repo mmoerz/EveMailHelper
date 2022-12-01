@@ -4,6 +4,7 @@ using MudBlazor;
 
 using EveMailHelper.BusinessLibrary.Utilities;
 using EveMailHelper.ServiceLayer.Interfaces;
+using EveMailHelper.DataModels;
 
 namespace EveMailHelper.Web.Pages.EveMails
 {
@@ -13,7 +14,7 @@ namespace EveMailHelper.Web.Pages.EveMails
         [Inject] IEveMailTemplateService EveMailTemplateService { get; set; } = null!;
         // maybe of use when coloring the already known chars
         //[Inject] ICharacterService CharacterService { get; set; } = null!;
-        [Inject] IMailManager MailService { get; set; } = null!;
+        [Inject] IMailManager MailManager { get; set; } = null!;
         [Inject] IInGameCharacterManager InGameCharacterManager { get; set; } = null!;
         [Inject] IInGameMailManager InGameMailManager { get; set; } = null!;
 
@@ -92,15 +93,17 @@ namespace EveMailHelper.Web.Pages.EveMails
             var receivers = ReceiverString.SplitStringOfCharacters(',');
             var filterTime = CombineDateAndTime(Date.Value, Time);
             
-            var filteredReceivers = await MailService.FilterReceivers(ReceiverString, filterTime);
-            var FilteredReceiverString = string.Join(", ", filteredReceivers);
+            var filteredReceivers = await MailManager.FilterReceivers(ReceiverString, filterTime);
+            
 
             // load all new characters from eve
             var characters = await InGameCharacterManager.LoadCharactersByName(filteredReceivers);
-            
+
             // check that those characters are all newbies
             // == only starter corporation
+            var noobCharacters = InGameCharacterManager.FilterNoobs(characters);
 
+            FilteredReceiverString = string.Join(", ", filteredReceivers);
 
             SubmitDisabled = false;
         }
@@ -112,5 +115,6 @@ namespace EveMailHelper.Web.Pages.EveMails
             
             return dateTime.Value.Date + timeSpan.Value;
         }
+
     }
 }

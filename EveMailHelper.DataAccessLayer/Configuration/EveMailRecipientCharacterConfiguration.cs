@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EveMailHelper.DataAccessLayer.Configuration
 {
-    public partial class EveMailRecipientCharacterConfiguration : IEntityTypeConfiguration<EveMailRecipientCharacter>
+    public partial class EveMailRecipientCharacterConfiguration : IEntityTypeConfiguration<MailRecipientCharacter>
     {
-        public void Configure(EntityTypeBuilder<EveMailRecipientCharacter> builder)
+        public void Configure(EntityTypeBuilder<MailRecipientCharacter> builder)
         {
-            builder.HasBaseType<EveMailRecipient>();
+            builder.HasBaseType<MailRecipient>();
 
             builder.HasOne(x => x.Character)
                 .WithMany()

@@ -91,24 +91,24 @@ namespace EveMailHelper.BusinessLibrary.Complex
             foreach (var recipient in esMail.Recipients)
             {
                 if (recipient == null) continue;
-                EveMailRecipient? eveMailRecipient = null;
+                MailRecipient? eveMailRecipient = null;
                 switch (recipient.RecipientType)
                 {
                     case EVEStandard.Models.MailRecipient.RecipientTypeEnum.character:
                         var character = dto.Characters[recipient.RecipientId];
-                        eveMailRecipient = new EveMailRecipientCharacter() { Character = character };
+                        eveMailRecipient = new MailRecipientCharacter() { Character = character };
                         break;
                     case EVEStandard.Models.MailRecipient.RecipientTypeEnum.alliance:
                         var alliance = dto.Alliances[recipient.RecipientId];
-                        eveMailRecipient = new EveMailRecipientAlliance() { Alliance = alliance };
+                        eveMailRecipient = new MailRecipientAlliance() { Alliance = alliance };
                         break;
                     case EVEStandard.Models.MailRecipient.RecipientTypeEnum.corporation:
                         var corporation = dto.Corporations[recipient.RecipientId];
-                        eveMailRecipient = new EveMailRecipientCorporation() { Corporation = corporation };
+                        eveMailRecipient = new MailRecipientCorporation() { Corporation = corporation };
                         break;
                     case EVEStandard.Models.MailRecipient.RecipientTypeEnum.mailing_list:
                         var maillist = dto.MailLists[recipient.RecipientId];
-                        eveMailRecipient = new EveMailRecipientMailList() { MailList = maillist };
+                        eveMailRecipient = new MailRecipientMailList() { MailList = maillist };
                         break;
                 }
                 if (eveMailRecipient != null)

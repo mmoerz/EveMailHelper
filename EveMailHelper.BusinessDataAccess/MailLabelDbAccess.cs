@@ -19,19 +19,19 @@ namespace EveMailHelper.BusinessDataAccess
 
         public async Task AddAsync(MailLabel eveMailLabel)
         {
-            await _context.EveMailLabels.AddAsync(eveMailLabel);
+            await _context.MailLabels.AddAsync(eveMailLabel);
         }
 
         public MailLabel Update(MailLabel eveMailLabel)
         {
-            var foundLabels = _context.EveMailLabels
+            var foundLabels = _context.MailLabels
                 .Where(x => x.EveLabelId == eveMailLabel.EveLabelId);
 
             MailLabel result = eveMailLabel;
             if (foundLabels.Any())
                 result = foundLabels.First();
 
-            return _context.EveMailLabels
+            return _context.MailLabels
                 .Update(result)
                 .Entity;
         }

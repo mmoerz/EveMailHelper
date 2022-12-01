@@ -32,7 +32,7 @@ namespace EveMailHelper.BusinessLibrary.Services
 
         public async Task<TableData<Mail>> GetPaginatedEveMail(Character character, string searchString, TableState state)
         {
-            IQueryable<Mail> query = from mail in _context.EveMails
+            IQueryable<Mail> query = from mail in _context.Mails
                                         select mail;
             IQueryable<Guid> querySendTos =
                 from sendTo in _context.EveMailSentTos

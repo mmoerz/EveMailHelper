@@ -30,6 +30,7 @@ namespace EveMailHelper.ServiceLayer.Utilities
             services.AddTransient<IChatService, ChatService>();
 
             services.AddTransient<IInGameMailManager, InGameMailManager>();
+            services.AddTransient<IInGameCharacterManager, InGameCharacterManager>();
         }
 
         /// <summary>

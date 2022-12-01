@@ -3,6 +3,8 @@
     public class CharacterAuthInfo
     {
         public Guid Id { get; set; } = Guid.NewGuid();
+
+        public Guid? CharId { get; set; } = null!;
         public Character? Char { get; set; } = null;
 
         /// <summary>

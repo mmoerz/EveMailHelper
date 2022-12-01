@@ -53,6 +53,14 @@ namespace EveMailHelper.BusinessDataAccess
             return _context.Characters.Where(character => character.Id == id).First();
         }
 
+        public Task<Character> GetByIdFullAsync(Guid id)
+        {
+            return _context.Characters
+                .Where(character => character.Id == id)
+                .Include(x => x.Corporation)
+                .FirstAsync();
+        }
+
         public Character GetByEveId(int? id)
         {
             return _context.Characters

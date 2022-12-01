@@ -28,7 +28,8 @@ namespace EveMailHelper.BusinessLibrary.Complex
             CorporationDbAccess corporationDbAccess,
             AllianceDbAccess allianceDbAccess,
             EVEStandardAPI esiClient,
-            DateTime? notOlderThan = null
+            DateTime? notOlderThan = null,
+            bool WithAlliance = true
             )
         {
             _characterdbAccess = dbAccess;
@@ -42,7 +43,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
 
         public bool HasErrors => _errors.Any();
 
-        public bool WithAlliance { get; set; } = false;
+        public bool WithAlliance { get; set; }
 
         EveDataUpdater<EVEStandard.Models.CharacterInfo, Character, CharacterDbAccess> characterUpdater = null! ;
         EveDataUpdater<EVEStandard.Models.CorporationInfo, Corporation, CorporationDbAccess> corporationUpdater = null!;

@@ -35,6 +35,11 @@ namespace EveNatTools.DataAccessLibrary.Configuration
                 .HasMaxLength(128)
                 .HasComment("??");
 
+            builder.HasOne(cai => cai.Char)
+                .WithMany()
+                .HasForeignKey(cai => cai.CharId)
+                .OnDelete(DeleteBehavior.ClientNoAction);
+
             builder
                 .Property(c => c.Scopes)
                 // convert the list of strings to a string delimited by a special character

@@ -7,6 +7,7 @@
     public enum CharacterStatus
     {
         None,
+        Newbie,
         InRecruitment,
         CorpMember,
         WasInRecruitment,

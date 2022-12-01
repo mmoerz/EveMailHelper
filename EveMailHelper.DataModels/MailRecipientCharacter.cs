@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EveMailHelper.DataModels
 {
-    public partial class EveMailRecipientCharacter : EveMailRecipient
+    public partial class MailRecipientCharacter : MailRecipient
     {
         public Guid CharacterId { get; set; }
         public Character Character { get; set; } = null!;

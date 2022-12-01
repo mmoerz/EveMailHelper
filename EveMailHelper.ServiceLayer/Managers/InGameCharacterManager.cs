@@ -34,6 +34,7 @@ namespace EveMailHelper.ServiceLayer.Managers
         private readonly RunnerWriteDb<CharCorpAllianceDTO, CharCorpAllianceDTO> addExtEsAllianceAction;
 
         // TODO: remove this
+        private readonly CharacterDbAccess _characterDbAccess;
         private readonly MailDbAccess _mailDbAccess;
 
 
@@ -51,6 +52,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             var allianceDbAccess = new AllianceDbAccess(_dbContext);
             var maillistDbAccess = new MailListDbAccess(_dbContext);
             var eveMailDbAccess = new MailDbAccess(_dbContext);
+            _characterDbAccess = characterDbAccess;
             _mailDbAccess = eveMailDbAccess;
 
             _authenticationStateProvider = authenticationStateProvider;
@@ -99,5 +101,35 @@ namespace EveMailHelper.ServiceLayer.Managers
             return result.CharactersDD.Models.Values.ToList();
         }
 
+        public ICollection<Character> FilterNoobs(IEnumerable<Character> characters)
+        {
+            List<Character> result = new();
+            foreach (var character in characters)
+            {
+                if (character == null) continue;
+                if (character.Corporation == null)
+                    throw new NullReferenceException(nameof(character.Corporation));
+                if (character.Corporation.Alliance == null
+                    && character.Corporation.CreatorId == null
+                    && character.Corporation.DateFounded == null
+                    && character.Corporation.MemberCount > 10000)
+                    // taxrate 0.11 ?
+                    // url = ""
+                {
+                    // here we got, this must be a starter corporation
+                    character.Status = CharacterStatus.Newbie;
+                    result.Add(character);
+                }
+                else
+                {
+                    character.Status = CharacterStatus.None;
+                }
+                _characterDbAccess.Add(character);
+            }
+
+            _dbContext.SaveChanges();
+
+            return result;
+        }
     }
 }

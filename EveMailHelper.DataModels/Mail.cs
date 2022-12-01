@@ -7,7 +7,7 @@ namespace EveMailHelper.DataModels
         public Mail()
         {
             SentTo = new HashSet<EveMailSentTo>();
-            Recipients = new HashSet<EveMailRecipient>();
+            Recipients = new HashSet<MailRecipient>();
             Labels = new HashSet<MailLabel>();
             CreatedDate = DateTime.Now;
         }
@@ -33,7 +33,7 @@ namespace EveMailHelper.DataModels
         public Character From { get; set; } = null!;
         public Character Owner { get; set; } = null!;
         public virtual ICollection<EveMailSentTo> SentTo { get; set; }
-        public virtual ICollection<EveMailRecipient> Recipients { get; set; }
+        public virtual ICollection<MailRecipient> Recipients { get; set; }
         public virtual ICollection<MailLabel> Labels { get; set; }
     }
 }

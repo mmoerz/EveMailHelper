@@ -60,12 +60,12 @@ namespace EveMailHelper.BusinessLibrary.Services
             if (eveMail.Id == Guid.Empty)
                 throw new ArgumentException("null Guid is invalid", nameof(eveMail));
             // now load the Evemail with all Sendto entities (child's that depend on it)
-            IQueryable<Mail> query = from mail in _dbContext.EveMails
+            IQueryable<Mail> query = from mail in _dbContext.Mails
                                         select mail;
             query = query.Where(mail => mail.Id == eveMail.Id);
             var result = query.Include(mail => mail.SentTo).First();
 
-            _dbContext.EveMails.Remove(result);
+            _dbContext.Mails.Remove(result);
             _dbContext.SaveChanges();
         }
 
@@ -89,7 +89,7 @@ namespace EveMailHelper.BusinessLibrary.Services
 
         public async Task<TableData<Mail>> GetPaginated(string searchString, TableState state)
         {
-            IQueryable<Mail> query = from mail in _dbContext.EveMails
+            IQueryable<Mail> query = from mail in _dbContext.Mails
                                         select mail;
 
             if (!string.IsNullOrWhiteSpace(searchString))
@@ -134,7 +134,7 @@ namespace EveMailHelper.BusinessLibrary.Services
         public async Task<TableData<Mail>> GetPaginated(Character fromCharacter,
             string searchString, TableState state)
         {
-            var query = from mail in _dbContext.EveMails
+            var query = from mail in _dbContext.Mails
                         where mail.Owner == fromCharacter
                         select mail;
 
@@ -192,7 +192,7 @@ namespace EveMailHelper.BusinessLibrary.Services
 
         public async Task<Mail> GetReceivers(Mail mail)
         {
-            var query = _dbContext.EveMails
+            var query = _dbContext.Mails
                 .Where(x => x.Id == mail.Id)
                 .Include(x => x.From)
                 .Include(x => x.Labels)
@@ -201,24 +201,24 @@ namespace EveMailHelper.BusinessLibrary.Services
 
             foreach (var recipient in result.Recipients)
             {
-                if (recipient is EveMailRecipientCharacter)
+                if (recipient is MailRecipientCharacter)
                 {
-                    var help = (EveMailRecipientCharacter) recipient;
+                    var help = (MailRecipientCharacter) recipient;
                     help.Character = _characterDbAccess.GetById(help.CharacterId);
                 }
-                if (recipient is EveMailRecipientCorporation)
+                if (recipient is MailRecipientCorporation)
                 {
-                    var help = (EveMailRecipientCorporation)recipient;
+                    var help = (MailRecipientCorporation)recipient;
                     help.Corporation = _corporationDbAccess.GetById(help.CorporationId);
                 }
-                if (recipient is EveMailRecipientAlliance)
+                if (recipient is MailRecipientAlliance)
                 {
-                    var help = (EveMailRecipientAlliance)recipient;
+                    var help = (MailRecipientAlliance)recipient;
                     help.Alliance = _allianceDbAccess.GetById(help.AllianceId);
                 }
-                if (recipient is EveMailRecipientMailList)
+                if (recipient is MailRecipientMailList)
                 {
-                    var help = (EveMailRecipientMailList)recipient;
+                    var help = (MailRecipientMailList)recipient;
                     help.MailList = _mailListDbAccess.GetById(help.MailListId);
                 }
             }

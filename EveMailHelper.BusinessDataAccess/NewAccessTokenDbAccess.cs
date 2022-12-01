@@ -27,14 +27,19 @@ namespace EveNatTools.BusinessLogicLibrary
         /// </summary>
         /// <param name="character"></param>
         /// <returns></returns>
-        public IList<CharacterAuthInfo> FindCharacterAuthInfoByChar(Character character, IList<string>? neededScopes = null)
+        public IList<CharacterAuthInfo> FindCharacterAuthInfoByChar(
+            Character character,
+            IList<string>? neededScopes = null)
         {
             return _context.CharacterAuthInfos
-                .Where(c => c.Char != null
-                        && c.Char.Id == character.Id
+                .Where(cai => cai.CharId == character.Id
+                        //&& cai.ExpiresUTC > DateTime.UtcNow
+                //c => c.Char != null
+                        //&& c.Char.Id == character.Id
                         && (neededScopes == null
-                            || c.Scopes.ContainsAllItems(neededScopes))
+                            || cai.Scopes.ContainsAllItems(neededScopes))
                        )
+                .OrderByDescending(cai => cai.ExpiresUTC)
                 .Include(c => c.Char)
                 .ToList();
         }
