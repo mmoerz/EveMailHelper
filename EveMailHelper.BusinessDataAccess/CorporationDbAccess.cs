@@ -42,6 +42,17 @@ namespace EveMailHelper.BusinessDataAccess
                 .First();
         }
 
+        public async Task<List<Corporation>> GetByIdsFullTrackedAsync(List<Guid> ids)
+        {
+            return await _context.Corporations
+                .Where(corp => ids.Contains(corp.Id))
+                .AsTracking()
+                .Include(x => x.Ceo)
+                .Include(x => x.Creator)
+                .Include(x => x.Alliance)
+                .ToListAsync();
+        }
+
         public Task<Corporation> GetDefaultAsync()
         {
             return _context.Corporations

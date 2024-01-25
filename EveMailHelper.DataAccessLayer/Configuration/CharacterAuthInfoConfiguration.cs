@@ -38,7 +38,12 @@ namespace EveNatTools.DataAccessLibrary.Configuration
             builder.HasOne(cai => cai.Char)
                 .WithMany()
                 .HasForeignKey(cai => cai.CharId)
-                .OnDelete(DeleteBehavior.ClientNoAction);
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder.HasOne(cai => cai.Account)
+                .WithMany()
+                .HasForeignKey(cai => cai.AccountId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder
                 .Property(c => c.Scopes)

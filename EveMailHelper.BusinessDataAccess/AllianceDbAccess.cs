@@ -28,14 +28,15 @@ namespace EveMailHelper.BusinessDataAccess
                 .First();
         }
 
-        public Task<Alliance> GetByIdFullAsync(Guid id)
+        public async Task<List<Alliance>> GetByIdsFullTrackedAsync(List<Guid> ids)
         {
-            return _context.Alliances
-                .Where(character => character.Id == id)
+            return await _context.Alliances
+                .Where(character => ids.Contains(character.Id))
+                .AsTracking()
                 .Include(x => x.Creator)
                 .Include(x => x.CreatorCorporation)
-                .Include(x => x.)
-                .FirstAsync();
+                .Include(x => x.ExecutorCorporation)
+                .ToListAsync();
         }
 
         public ICollection<Alliance> GetByEveIds(ICollection<int> ids)

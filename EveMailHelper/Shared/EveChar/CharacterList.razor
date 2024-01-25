@@ -57,7 +57,15 @@
     </PagerContent>
     <FooterContent>
         <MudIcon Icon="@Icons.Material.Filled.Add"></MudIcon>
-        <a href="@LinkGenerator.GetPathByAction("Login", "Auth")"><img src="https://web.ccpgamescdn.com/eveonlineassets/developers/eve-sso-login-white-small.png" alt="LOG IN with EVE Online" /></a>
+        <!-- original not so bad way to call login action from auth controller 
+            but this does not allow us to hand over the account for the next character 
+            <a href="@LinkGenerator.GetPathByAction("Login", "Auth")"><img src="https://web.ccpgamescdn.com/eveonlineassets/developers/eve-sso-login-white-small.png" alt="LOG IN with EVE Online" /></a>
+            -->
+        @if (Account != null)
+        {
+            <a href="@GetPathToLoginAction()
+            "><img src="https://web.ccpgamescdn.com/eveonlineassets/developers/eve-sso-login-white-small.png" alt="LOG IN with EVE Online" /></a>
+        }
         <!-- 
             <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="() => AddCharacter()">Eve Login</MudIconButton>
             -->

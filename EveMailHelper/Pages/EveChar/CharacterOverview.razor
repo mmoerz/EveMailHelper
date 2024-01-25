@@ -7,7 +7,12 @@
         <MudText Typo="Typo.h6">Character Overview</MudText>
     </MudCardHeader>
 </MudCard>
-<CharacterList OnCharacterSelect="CharacterSelected" @ref="ListOfCharacters"></CharacterList>
+<!-- TODO: maybe limit the list to the characters that this account has interacted with? 
+    at the moment we simply show them all, with no restraint whatsoever
+-->
+<CharacterList OnCharacterSelect="CharacterSelected" @ref="ListOfCharacters">
+
+</CharacterList>
 <MudCard Elevation="4" Class="mt-4">
     <MudCardHeader>
         <MudText Typo="Typo.h6">Character Details</MudText>

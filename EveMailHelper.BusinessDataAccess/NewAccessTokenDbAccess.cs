@@ -3,6 +3,7 @@
 using EveMailHelper.DataModels;
 using EveMailHelper.DataAccessLayer.Context;
 using EveNatTools.ServiceLibrary.Utilities;
+using Microsoft.EntityFrameworkCore.Update;
 
 namespace EveNatTools.BusinessLogicLibrary
 {
@@ -59,12 +60,21 @@ namespace EveNatTools.BusinessLogicLibrary
 
         }
 
-        public CharacterAuthInfo RegisterNewCharAuthInfo(List<string>? scopes = null)
+        public CharacterAuthInfo RegisterNewCharAuthInfo(List<string>? scopes = null, string? accountId = null)
         {
             var authInfo = new CharacterAuthInfo()
             {
                 Scopes = scopes ?? new List<string>(),
             };
+            // the accountid may come from an url parameter
+            if (accountId != null)
+            {
+                if (accountId.StartsWith("#")) 
+                {
+                    accountId = accountId.Substring(1);
+                }
+                authInfo.AccountId = new Guid(accountId);
+            }
             _context.CharacterAuthInfos.Add(authInfo);
 
             return authInfo;

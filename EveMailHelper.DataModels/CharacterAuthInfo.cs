@@ -1,9 +1,16 @@
-﻿namespace EveMailHelper.DataModels
+﻿using EveMailHelper.DataModels.Security;
+
+namespace EveMailHelper.DataModels
 {
     public class CharacterAuthInfo
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
+        /// <summary>
+        /// quite ugly, but i haven't yet found a way to make the authentication work otherwise
+        /// </summary>
+        public Guid? AccountId { get; set; } = null;
+        public Account? Account { get; set; } = null;
         public Guid? CharId { get; set; } = null!;
         public Character? Char { get; set; } = null;
 

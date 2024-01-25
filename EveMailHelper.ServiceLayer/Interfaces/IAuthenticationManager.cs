@@ -15,7 +15,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         Task<AuthDTO> GetAuthDTOForPrincipal(ClaimsPrincipal principal);
         Task<Character> GetCharacterFromPrincipal(ClaimsPrincipal principal);
         EveAccount GetEveAccountFromPrincipal(ClaimsPrincipal principal);
-        string GetEveAuthorizationUrl(List<string>? scopes = null);
+        string GetEveAuthorizationUrl(List<string>? scopes = null, string? accountID = null);
 
         /// <summary>
         /// get the latest accesstoken for a character from the database

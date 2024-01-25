@@ -2,12 +2,19 @@
 
 using EveMailHelper.DataModels;
 using EveMailHelper.Web.Shared.EveChar;
+using EveMailHelper.ServiceLayer.Interfaces;
+using Microsoft.AspNetCore.Components.Authorization;
+using EveMailHelper.DataModels.Security;
 
 namespace EveMailHelper.Web.Pages.EveChar
 {
     public partial class CharacterOverview : ComponentBase
     {
         #region injections
+        [Inject]
+        IAuthenticationManager AuthenticationManager { get; set; } = null!;
+        [Inject]
+        AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
         #endregion
 
         #region parameters
@@ -30,6 +37,16 @@ namespace EveMailHelper.Web.Pages.EveChar
             _ = character ?? throw new ArgumentNullException(nameof(character));
 
             ListOfCharacters?.Reload();
+        }
+
+        private Account Account { get; set; } = new();
+
+        protected override async Task OnInitializedAsync()
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            Account = AuthenticationManager.GetAccountFromPrincipal(user);
         }
     }
 }

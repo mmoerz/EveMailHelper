@@ -5,6 +5,7 @@ using MudBlazor;
 using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.DataModels;
 using EveMailHelper.DataModels.Security;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace EveMailHelper.Web.Shared.EveChar
 {
@@ -113,6 +114,15 @@ namespace EveMailHelper.Web.Shared.EveChar
         private void NavigateToCharacter(Character character)
         {
             Navigation.NavigateTo($"/EveChar/SingleChar/{character.Id}");
+        }
+
+        private string GetPathToLoginAction()
+        {
+            //FragmentString fragment = new FragmentString(
+            //    String.Format("#{0}", Account.Id.ToString())
+            //    );
+
+            return Account != null ?  "Auth/Login?accountId=" + Account.Id.ToString() : "Auth/Login"; 
         }
     }
 }

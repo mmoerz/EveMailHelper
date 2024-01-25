@@ -24,6 +24,7 @@ namespace EveMailHelper.ServiceLibrary.Managers
         private readonly EveMailHelperContext _dbContext;
         private readonly NewAccessTokenDbAccess _tokenDbAccess;
         private readonly CharacterDbAccess _characterDbAccess;
+        private readonly AccountDbAccess _accountDbAccess;
         private readonly EVEStandardAPI _esiClient;
         private readonly SSOv2 _sso;
 
@@ -37,13 +38,14 @@ namespace EveMailHelper.ServiceLibrary.Managers
 
             _tokenDbAccess = new(_dbContext);
             _characterDbAccess = new(_dbContext);
+            _accountDbAccess = new(_dbContext);
             _esiClient = esiClient;
             _sso = sSOv2;
         }
 
-        public string GetEveAuthorizationUrl(List<string>? scopes = null)
+        public string GetEveAuthorizationUrl(List<string>? scopes = null, string? accountID = null)
         {
-            var newAuthInfo = _tokenDbAccess.RegisterNewCharAuthInfo(scopes);
+            var newAuthInfo = _tokenDbAccess.RegisterNewCharAuthInfo(scopes, accountID);
             _dbContext.SaveChanges();
 
             var authorization = _sso.AuthorizeToSSOBasicAuthUri(newAuthInfo.Id.ToString(), scopes);
@@ -102,6 +104,13 @@ namespace EveMailHelper.ServiceLibrary.Managers
                 var eveaccount = GetEveAccountFromPrincipal(principal);
                 dbCharacter.Account = account;
                 dbCharacter.EveAccount = eveaccount;
+            }
+
+            // workaround using dbAuthInfo
+            if (dbAuthInfo.AccountId != null)
+            {
+                dbCharacter.AccountId = (Guid) dbAuthInfo.AccountId;
+                dbCharacter.Account = _accountDbAccess.GetById((Guid) dbAuthInfo.AccountId);
             }
 
             // verify that no mismatches have happened

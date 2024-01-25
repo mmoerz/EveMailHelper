@@ -14,28 +14,29 @@ using EveMailHelper.ServiceLibrary.Managers;
 using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components.Authorization;
+using EveMailHelper.DataModels.Security;
 
 namespace EveMailHelper.Controllers
 {
     [Route("/[controller]")]
     public class AuthController : Controller
     {
-        private readonly AuthenticationStateProvider _authenticationStateProvider;
+        //private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly IAuthenticationManager _authManager;
         private readonly ILogger<AuthController> _logger;
 
         public AuthController(
-            AuthenticationStateProvider AuthenticationStateProvider,
+            //AuthenticationStateProvider AuthenticationStateProvider,
             IAuthenticationManager authenticationManager,
             ILogger<AuthController> logger)
         {
-            _authenticationStateProvider = AuthenticationStateProvider;
+            //_authenticationStateProvider = AuthenticationStateProvider;
             _authManager = authenticationManager;
             _logger = logger;
         }
 
         [HttpGet("[action]")]
-        public IActionResult Login(string? returnUrl = null)
+        public IActionResult Login(string? returnUrl = null, string? accountID = null)
         {
             // Scopes are required for API calls,
             // but not for authentication,
@@ -51,10 +52,10 @@ namespace EveMailHelper.Controllers
                 Scopes.ESI_MAIL_ORGANIZE_MAIL_1,
                 Scopes.ESI_SEARCH_SEARCH_STRUCTURES_1,
             };
-
+            
             _logger.LogInformation("login caught, redirecting to external auth");
 
-            return Redirect(_authManager.GetEveAuthorizationUrl(scopes));
+            return Redirect(_authManager.GetEveAuthorizationUrl(scopes, accountID));
         }
 
         [HttpGet("[action]")]
@@ -81,17 +82,18 @@ namespace EveMailHelper.Controllers
                 return Redirect("/error");
             }
 
-
-            AuthenticationState authState;
             ClaimsPrincipal user = new();
-            try
-            {
-                authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-                user = authState.User;
-            } catch
-            {
 
-            }
+            //AuthenticationState authState;
+
+            //try
+            //{
+            //    authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+            //    user = authState.User;
+            //} catch
+            //{
+            //    _logger.LogInformation("authstate failed");
+            //}
 
             var character = await _authManager.FinalizeEveAuthentication(user, code, state);
             await SignInAsync(user, character);
