@@ -1,0 +1,16 @@
+﻿@page "/CharacterOverview"
+
+<MudCard Elevation="4">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Character Overview</MudText>
+    </MudCardHeader>
+</MudCard>
+<CharacterList OnCharacterSelect="CharacterSelected" @ref="ListOfCharacters"></CharacterList>
+<MudCard Elevation="4" Class="mt-4">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Character Details</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <CharacterDetails Model="Model" OnCharacterSave="CharacterChanged"></CharacterDetails>
+    </MudCardContent>
+</MudCard>

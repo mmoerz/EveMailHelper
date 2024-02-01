@@ -49,7 +49,7 @@ namespace EveMailHelper.BusinessDataAccess
 
             public override bool Equals(object? obj)
             {
-                if (obj.GetType() == typeof(IdName))
+                if (obj?.GetType() == typeof(IdName))
                     return Equals((IdName)obj);
                 return base.Equals(obj);
             }

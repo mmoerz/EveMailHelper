@@ -1,0 +1,49 @@
+﻿<MudTable Dense="@dense"
+          Hover="@hover"
+          FixedHeader="@fixed_heaer"
+          FixedFooter="@fixed_footer"
+          ReadOnly="@readOnly"
+          OnRowClick="RowClickEvent"
+          RowClassFunc="@SelectedRowClassFunc"
+          ServerData=@(new Func<TableState, Task<TableData<EveMailTemplate>>>(ServerReload))
+          SortLabel="Sortierung"
+          T="EveMailTemplate"
+          @ref="table">
+    <!-- IsEditRowSwitchingBlocked="" -->
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Template List</MudText>
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))"
+                      Placeholder="Suche"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium"
+                      Class="mt-0">
+        </MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width:300px;" />
+        <col style="width:450px" />
+        <col style="width:20px" />
+        <col style="width:25px" />
+        <col />
+        <col />
+    </ColGroup>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortLabel="Subject" T="Character">Subject</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Content" T="Character">Content</MudTableSortLabel> </MudTh>
+        <MudTh><MudTableSortLabel SortLabel="EmailCount" T="Character">Emails count</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="CreateDate" T="Character">Createdate</MudTableSortLabel></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Subject">@context.Subject</MudTd>
+        <MudTd DataLabel="Content">@context.Content</MudTd>
+        <MudTd DataLabel="EmailCount">@context.EveMailsGenerated.Count()</MudTd>
+        <MudTd DataLabel="CreateDate">@context.CreatedDate</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudIconButton OnClick="AddNew" Icon="@Icons.Material.Filled.Add"></MudIconButton>
+        <MudTablePager HidePageNumber="false" />
+    </PagerContent>
+</MudTable>
