@@ -1,3 +1,6 @@
 [submodule "EVEStandard"]
 	path = EVEStandard
 	url = https://github.com/gehnster/EVEStandard.git
+[submodule "EVEyamlloader"]
+	path = EVEyamlloader
+	url = git@github.com:fuzzysteve/yamlloader.git
