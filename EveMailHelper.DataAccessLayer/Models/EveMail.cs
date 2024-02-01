@@ -1,11 +1,7 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EveMailHelper.DataAccessLayer.Models
+namespace EveMailHelper.DataModels
 {
+    /*
     public partial class EveMail
     {
         public EveMail()
@@ -25,4 +21,5 @@ namespace EveMailHelper.DataAccessLayer.Models
 
         public virtual ICollection<EveMailSentTo> SentTo { get; set; }
     }
+    */
 }

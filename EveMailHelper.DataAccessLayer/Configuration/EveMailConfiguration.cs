@@ -1,13 +1,13 @@
-﻿using EveMailHelper.DataAccessLayer.Models;
+﻿using EveMailHelper.DataModels;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EveMailHelper.DataAccessLayer.Configuration
 {
-    public partial class EveMailConfiguration : IEntityTypeConfiguration<EveMail>
+    public partial class EveMailConfiguration : IEntityTypeConfiguration<Mail>
     {
-        public void Configure(EntityTypeBuilder<EveMail> builder)
+        public void Configure(EntityTypeBuilder<Mail> builder)
         {
             builder.Property(e => e.Subject)
                 .IsRequired()

@@ -1,9 +1,9 @@
-﻿using EveMailHelper.BusinessLibrary.Services;
-
+﻿
 using Microsoft.Extensions.DependencyInjection;
 
 namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools
 {
+    /*
     public static class EveMailHelperBusinessLogicServiceCollectionExtension
     {
         /// <summary>
@@ -17,4 +17,5 @@ namespace at.gv.bmi.bk.Factotum.BusinessLogicLibrary.Tools
             services.AddTransient<ICommunicationService, CommunicationService>();
         }
     }
+    */
 }

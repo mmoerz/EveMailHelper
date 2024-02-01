@@ -1,9 +1,9 @@
-﻿using FluentValidation.Results;
+﻿using EveMailHelper.BusinessDataAccess;
+using EveMailHelper.DataModels;
+using FluentValidation.Results;
 
 using System.Collections.Immutable;
 
-using EveMailHelper.BusinessLibrary.Complex.dbAccess;
-using EveMailHelper.DataAccessLayer.Models;
 
 namespace EveMailHelper.BusinessLibrary.Complex
 {
@@ -23,7 +23,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
 
         public ICollection<Character> Action(ICollection<string> characterNames)
         {
-            ICollection<Character> characterList = _dbAccess.GetCharactersByName(characterNames);
+            ICollection<Character> characterList = _dbAccess.GetByNames(characterNames);
 
             foreach (string charName in characterNames)
             {

@@ -43,10 +43,6 @@ namespace EveMailHelper.BusinessDataAccess
             };
             var totalItems = query.Count();
 
-            //if (state.Page > 0)
-            //    query = query.Skip(state.Page * state.PageSize);
-            //query = query.Take(state.PageSize);
-
             return new TableData<EveMailTemplate>()
             {
                 Items = await query

@@ -17,9 +17,15 @@ namespace EveMailHelper.ChatLogParser
         {
             get
             {
-                return _configuration
-                    .GetSection(_SECTION)
+                if (_configuration == null)
+                    throw new Exception("missing configuration");
+                IConfigurationSection uploadSection = _configuration.GetSection(_SECTION);
+                string? directory = uploadSection
                     .GetValue<string>("Directory");
+                if (directory == null)
+                    throw new Exception("missing Directory in configuration file");
+                
+                return (string) directory;
             }
         }
 

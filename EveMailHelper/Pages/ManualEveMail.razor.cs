@@ -2,8 +2,8 @@
 using EveMailHelper.BusinessLibrary.Services;
 using EveMailHelper.BusinessLibrary.Tools;
 using EveMailHelper.DataAccessLayer.Context;
-using EveMailHelper.DataAccessLayer.Models;
-
+using EveMailHelper.DataModels;
+using EveMailHelper.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +17,7 @@ namespace EveMailHelper.Pages
         [Inject] IEveMailTemplateService EveMailTemplateService { get; set; } = null!;
         // maybe of use when coloring the already known chars
         //[Inject] ICharacterService CharacterService { get; set; } = null!;
-        [Inject] IEveMailService EveMailService { get; set; } = null!;
+        [Inject] IMailManager EveMailService { get; set; } = null!;
 
         #endregion
 
@@ -46,7 +46,7 @@ namespace EveMailHelper.Pages
         private async Task Submit()
         {
             var receivers = ReceiverString.SplitStringOfCharacters(',');
-            await EveMailService.SendTo(TemplateId, receivers);
+            //await EveMailService.SendTo(TemplateId, receivers);
         }
     }
 }

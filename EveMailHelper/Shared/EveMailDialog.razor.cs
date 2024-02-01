@@ -1,6 +1,6 @@
 ﻿using EveMailHelper.BusinessLibrary.Services;
-using EveMailHelper.DataAccessLayer.Models;
-
+using EveMailHelper.DataModels;
+using EveMailHelper.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Components;
 
 using MudBlazor;
@@ -10,16 +10,16 @@ namespace EveMailHelper.Shared
     public partial class EveMailDialog : ComponentBase
     {
         #region injections
-        [Inject] IEveMailService EveMailService { get; set; } = null!;
+        [Inject] IMailManager EveMailService { get; set; } = null!;
         #endregion
 
         #region parameters
         [CascadingParameter]
         MudDialogInstance MudDialog { get; set; } = null!;
         [Parameter]
-        public EveMail Model { get; set; } = new();
+        public Mail Model { get; set; } = new();
         [Parameter]
-        public EventCallback<EveMail> DialogSaved { get; set; }
+        public EventCallback<Mail> DialogSaved { get; set; }
         #endregion
 
         MudForm form = null!;

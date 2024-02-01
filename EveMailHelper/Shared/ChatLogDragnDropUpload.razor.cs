@@ -1,5 +1,5 @@
-﻿using EveMailHelper.DataAccessLayer.Models;
-
+﻿
+using EveMailHelper.DataModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 

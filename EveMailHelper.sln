@@ -53,6 +53,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EVEStandard", "EVEStandard\
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "EVEyamlloader", "EVEyamlloader\EVEyamlloader.pyproj", "{E03F2678-39D1-4C2C-98DE-37F113350458}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EveMailHelper.Web8", "EveMailHelper.Web8\EveMailHelper.Web8.csproj", "{FCFC1F14-7E21-4637-8074-108657618307}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{B9F57046-E9CF-4F9C-A76C-61DD309500EF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E03F2678-39D1-4C2C-98DE-37F113350458}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E03F2678-39D1-4C2C-98DE-37F113350458}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCFC1F14-7E21-4637-8074-108657618307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCFC1F14-7E21-4637-8074-108657618307}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCFC1F14-7E21-4637-8074-108657618307}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCFC1F14-7E21-4637-8074-108657618307}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
