@@ -13,7 +13,7 @@ namespace EveMailHelper.DataModels.Sde
 
         public int EveId { get; set; }
         public int? GroupId { get; set; }
-        public string TypeName { get; set; }
+        public string TypeName { get; set; } = string.Empty;
         public string? Description { get; set; }
         public double? Mass { get; set; }
         public double? Volume { get; set; }
@@ -31,8 +31,8 @@ namespace EveMailHelper.DataModels.Sde
         public virtual Icon? Icon { get; set; }
         public virtual InvMarketGroup? MarketGroup { get; set; }
         public virtual ChrRace? Race { get; set; }
-        public DateTime EveLastUpdated { get; set; }
-        public bool EveDeletedInGame { get; set; }
+        public DateTime EveLastUpdated { get; set; } = DateTime.Now;
+        public bool EveDeletedInGame { get; set; } = false;
         public virtual IndustryBlueprint? IndustryBlueprint { get; set; }
         public virtual ICollection<IndustryActivity> IndustryActivities { get; set; }
         

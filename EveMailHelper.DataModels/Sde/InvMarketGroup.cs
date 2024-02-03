@@ -19,6 +19,9 @@ namespace EveMailHelper.DataModels.Sde
         public int? IconId { get; set; }
         public bool? HasTypes { get; set; }
 
+        public DateTime EveLastUpdated { get; set; } = DateTime.Now;
+        public bool EveDeletedInGame { get; set; } = false;
+
         public virtual Icon? Icon { get; set; }
         public virtual InvMarketGroup? ParentGroup { get; set; }
         public virtual ICollection<InvType> InvTypes { get; set; }

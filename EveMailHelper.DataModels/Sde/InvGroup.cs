@@ -21,6 +21,9 @@ namespace EveMailHelper.DataModels.Sde
         public bool? FittableNonSingleton { get; set; }
         public bool? Published { get; set; }
 
+        public DateTime EveLastUpdated { get; set; } = DateTime.Now;
+        public bool EveDeletedInGame { get; set; } = false;
+
         public virtual InvCategory? Category { get; set; }
         public virtual Icon? Icon { get; set; }
         public virtual ICollection<InvType> InvTypes { get; set; }
