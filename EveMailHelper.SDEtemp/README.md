@@ -43,20 +43,14 @@ Place the secrets for the connection(s) into both the class library and the .net
 # Scaffolding Original Command
 My $.5 Tip: refrain from re-scaffolding.
 
-Packagemanagementconsole:
 ```
-Scaffold-DbContext -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Connection "Data Source=localhost;Initial Catalog=EveSde;User ID=sa;Password=replaceme;" -Context "EveSde" -ContextDir "Context"
-```
-Powershell:
-```
-dotnet ef dbcontext scaffold --output-dir Models --context-dir Context --context EveSde "Data Source=localhost;Initial Catalog=EveSde;User ID=sa;Password=tNCqxOh6IMKesh23LXvQ._;" Microsoft.EntityFrameworkCore.SqlServer
+Scaffold-DbContext -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Connection "Data Source=pbkp1005;Initial Catalog=SCHULUNG20;Integrated Security=True" -Context "EFFactotum" -ContextDir "Context"
 ```
 
 Add -Force to recreate and overwrite.
 Be aware though, that several tables already have their own configuration class. (You will have to fix this manually)
 
 # Install Packages
-Packagemanagementconsole:
 ```
 Install-Package Microsoft.EntityFrameworkCore.SqlServer
 Install-Package Microsoft.EntityFrameworkCore.Tools

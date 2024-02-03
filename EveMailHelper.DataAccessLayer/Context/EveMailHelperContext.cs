@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 using EveMailHelper.DataModels;
 using EveMailHelper.DataModels.Security;
+using EveMailHelper.DataModels.Sde;
 
 namespace EveMailHelper.DataAccessLayer.Context
 {
@@ -68,7 +69,12 @@ namespace EveMailHelper.DataAccessLayer.Context
         public virtual DbSet<MailRecipientCharacter> MailRecipientCharacters { get; set; } = null!;
         public virtual DbSet<Mail> Mails { get; set; } = null!;
         public virtual DbSet<Note> Notes { get; set; } = null!;
- 
+
+        #region EveSDE
+        public virtual DbSet<ChrRace> Races { get; set; } = null!;
+
+        #endregion
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
