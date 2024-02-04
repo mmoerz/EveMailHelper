@@ -13,7 +13,7 @@ namespace EveMailHelper.DataModels.Sde
 
         public int EveId { get; set; }
         public int? CategoryId { get; set; }
-        public string? GroupName { get; set; }
+        public string GroupName { get; set; } = string.Empty;
         public int? IconId { get; set; }
         public bool? UseBasePrice { get; set; }
         public bool? Anchored { get; set; }

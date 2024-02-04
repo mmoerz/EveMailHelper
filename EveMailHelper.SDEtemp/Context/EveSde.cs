@@ -756,7 +756,7 @@ namespace EveMailHelper.SDEtemp.Context
                     .HasForeignKey(d => new { d.TypeId, d.ActivityId })
                     .HasConstraintName("FK_INDUSTRYACTIVITYMATERIALS_ACTIVITYID");
             });
-            */
+            
 
             modelBuilder.Entity<IndustryActivityProbability>(entity =>
             {
@@ -788,6 +788,7 @@ namespace EveMailHelper.SDEtemp.Context
                     .HasForeignKey(d => new { d.TypeId, d.ActivityId })
                     .HasConstraintName("FK_INDUSTRYACTIVITYPROBABILITIES_TYPEACTIVITYID");
             });
+            
 
             modelBuilder.Entity<IndustryActivityProduct>(entity =>
             {
@@ -817,6 +818,7 @@ namespace EveMailHelper.SDEtemp.Context
                     .HasForeignKey(d => new { d.TypeId, d.ActivityId })
                     .HasConstraintName("FK_INDUSTRYACTIVITYPRODUCTS_TYPEACTIVITYID");
             });
+            */
 
             modelBuilder.Entity<IndustryActivitySkill>(entity =>
             {
@@ -837,52 +839,6 @@ namespace EveMailHelper.SDEtemp.Context
                 entity.Property(e => e.SkillId).HasColumnName("skillID");
 
                 entity.Property(e => e.TypeId).HasColumnName("typeID");
-            });
-
-            modelBuilder.Entity<IndustryBlueprint>(entity =>
-            {
-                entity.HasKey(e => e.TypeId)
-                    .HasName("PK__industry__F04DF11AEEADE38B");
-
-                entity.ToTable("industryBlueprints");
-
-                entity.Property(e => e.TypeId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("typeID");
-
-                entity.Property(e => e.MaxProductionLimit).HasColumnName("maxProductionLimit");
-
-                entity.HasOne(d => d.Type)
-                    .WithOne(p => p.IndustryBlueprint)
-                    .HasForeignKey<IndustryBlueprint>(d => d.TypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_INDUSTRYBLUEPRINTS_TYPEID");
-            });
-
-            modelBuilder.Entity<InvCategory>(entity =>
-            {
-                entity.HasKey(e => e.CategoryId)
-                    .HasName("PK__invCateg__23CAF1F83939A7DD");
-
-                entity.ToTable("invCategories");
-
-                entity.Property(e => e.CategoryId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("categoryID");
-
-                entity.Property(e => e.CategoryName)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("categoryName");
-
-                entity.Property(e => e.IconId).HasColumnName("iconID");
-
-                entity.Property(e => e.Published).HasColumnName("published");
-
-                entity.HasOne(d => d.Icon)
-                    .WithMany(p => p.InvCategories)
-                    .HasForeignKey(d => d.IconId)
-                    .HasConstraintName("FK_CATEGORIES_ICONID");
             });
 
             modelBuilder.Entity<InvContrabandType>(entity =>
@@ -968,49 +924,6 @@ namespace EveMailHelper.SDEtemp.Context
                 entity.Property(e => e.OrderId).HasColumnName("orderID");
             });
 
-            modelBuilder.Entity<InvGroup>(entity =>
-            {
-                entity.HasKey(e => e.GroupId)
-                    .HasName("PK__invGroup__88C102ADEDFDC538");
-
-                entity.ToTable("invGroups");
-
-                entity.HasIndex(e => e.CategoryId, "ix_invGroups_categoryID");
-
-                entity.Property(e => e.GroupId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("groupID");
-
-                entity.Property(e => e.Anchorable).HasColumnName("anchorable");
-
-                entity.Property(e => e.Anchored).HasColumnName("anchored");
-
-                entity.Property(e => e.CategoryId).HasColumnName("categoryID");
-
-                entity.Property(e => e.FittableNonSingleton).HasColumnName("fittableNonSingleton");
-
-                entity.Property(e => e.GroupName)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("groupName");
-
-                entity.Property(e => e.IconId).HasColumnName("iconID");
-
-                entity.Property(e => e.Published).HasColumnName("published");
-
-                entity.Property(e => e.UseBasePrice).HasColumnName("useBasePrice");
-
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.InvGroups)
-                    .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK_GROUPS_CATEGORYID");
-
-                entity.HasOne(d => d.Icon)
-                    .WithMany(p => p.InvGroups)
-                    .HasForeignKey(d => d.IconId)
-                    .HasConstraintName("FK_GROUPS_ICONID");
-            });
-
             modelBuilder.Entity<InvItem>(entity =>
             {
                 entity.HasKey(e => e.ItemId)
@@ -1035,44 +948,6 @@ namespace EveMailHelper.SDEtemp.Context
                 entity.Property(e => e.Quantity).HasColumnName("quantity");
 
                 entity.Property(e => e.TypeId).HasColumnName("typeID");
-            });
-
-            modelBuilder.Entity<InvMarketGroup>(entity =>
-            {
-                entity.HasKey(e => e.MarketGroupId)
-                    .HasName("PK__invMarke__1CC51B369ADA084E");
-
-                entity.ToTable("invMarketGroups");
-
-                entity.Property(e => e.MarketGroupId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("marketGroupID");
-
-                entity.Property(e => e.Description)
-                    .HasMaxLength(3000)
-                    .IsUnicode(false)
-                    .HasColumnName("description");
-
-                entity.Property(e => e.HasTypes).HasColumnName("hasTypes");
-
-                entity.Property(e => e.IconId).HasColumnName("iconID");
-
-                entity.Property(e => e.MarketGroupName)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("marketGroupName");
-
-                entity.Property(e => e.ParentGroupId).HasColumnName("parentGroupID");
-
-                entity.HasOne(d => d.Icon)
-                    .WithMany(p => p.InvMarketGroups)
-                    .HasForeignKey(d => d.IconId)
-                    .HasConstraintName("FK_INVMARKETGROUPS_ICONID");
-
-                entity.HasOne(d => d.ParentGroup)
-                    .WithMany(p => p.InverseParentGroup)
-                    .HasForeignKey(d => d.ParentGroupId)
-                    .HasConstraintName("FK_INVMARKETGROUPS_PARENTGROUPID");
             });
 
             modelBuilder.Entity<InvMetaGroup>(entity =>

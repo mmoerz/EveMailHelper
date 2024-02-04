@@ -12,7 +12,7 @@ namespace EveMailHelper.DataModels.Sde
         }
 
         public int EveId { get; set; }
-        public string? CategoryName { get; set; }
+        public string CategoryName { get; set; }
         public int? IconId { get; set; }
         public bool? Published { get; set; }
 

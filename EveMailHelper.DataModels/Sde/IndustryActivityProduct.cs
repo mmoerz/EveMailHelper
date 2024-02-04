@@ -7,10 +7,10 @@ namespace EveMailHelper.DataModels.Sde
 {
     public partial class IndustryActivityProduct : IBaseEveObject
     {
-        public int? TypeId { get; set; }
-        public int? ActivityId { get; set; }
-        public int? ProductTypeId { get; set; }
-        public int? Quantity { get; set; }
+        public int TypeId { get; set; }
+        public int ActivityId { get; set; }
+        public int ProductTypeId { get; set; }
+        public int Quantity { get; set; } = 0;
 
         public DateTime EveLastUpdated { get; set; } = DateTime.Now;
         public bool EveDeletedInGame { get; set; } = false;

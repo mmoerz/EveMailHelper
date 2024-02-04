@@ -6,16 +6,15 @@ using EveMailHelper.DataModels.Sde;
 
 namespace EveMailHelper.DataAccessLayer.Configuration.Sde
 {
-    public partial class IndustryActivityProbabilityConfiguration
-        : IEntityTypeConfiguration<IndustryActivityProbability>
+    public partial class IndustryActivityProductConfiguration
+        : IEntityTypeConfiguration<IndustryActivityProduct>
     {
-        public void Configure(EntityTypeBuilder<IndustryActivityProbability> builder)
+        public void Configure(EntityTypeBuilder<IndustryActivityProduct> builder)
         {
-            builder.ToTable(nameof(IndustryActivityProbability), Constants.SCHEMA_SDE);
+            builder.ToTable(nameof(IndustryActivityProduct), Constants.SCHEMA_SDE);
             builder.HasAlternateKey(a => new { a.TypeId, a.ActivityId, a.ProductTypeId });
 
-            builder.Property(a => a.Probability)
-                .HasColumnType("decimal(3, 2)")
+            builder.Property(a => a.Quantity)
                 .IsRequired(true);
                             
             builder.HasOne(a => a.IndustryActivity)
