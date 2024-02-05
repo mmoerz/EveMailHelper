@@ -6,6 +6,9 @@
 ``` dotnet ef migrations add <yourVersion>```
 adds the migration called yourVersion to the pool of migrations with the current changes
 
+``` dotnet ef migrations remove ```
+removes the latest migration
+
 ```  dotnet ef database update ```
 applies the changes to the database
 

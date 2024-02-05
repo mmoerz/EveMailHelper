@@ -11,7 +11,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
         public void Configure(EntityTypeBuilder<ChrRace> builder)
         {
             builder.ToTable(nameof(ChrRace), Constants.SCHEMA_SDE);
-            builder.HasAlternateKey(a => a.EveId);
+            builder.HasKey(a => a.EveId);
             builder.Property(a => a.EveId)
                 .IsRequired()
                 .ValueGeneratedNever();
@@ -28,7 +28,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
             builder.HasOne(a => a.Icon)
                 .WithMany(p => p.ChrRaces)
                 .HasForeignKey(a => a.IconId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

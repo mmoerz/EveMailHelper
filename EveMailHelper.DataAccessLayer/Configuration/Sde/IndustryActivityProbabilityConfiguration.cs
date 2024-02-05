@@ -12,7 +12,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
         public void Configure(EntityTypeBuilder<IndustryActivityProbability> builder)
         {
             builder.ToTable(nameof(IndustryActivityProbability), Constants.SCHEMA_SDE);
-            builder.HasAlternateKey(a => new { a.TypeId, a.ActivityId, a.ProductTypeId });
+            builder.HasKey(a => new { a.TypeId, a.ActivityId, a.ProductTypeId });
 
             builder.Property(a => a.Probability)
                 .HasColumnType("decimal(3, 2)")
@@ -21,12 +21,12 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
             builder.HasOne(a => a.IndustryActivity)
                 .WithMany()
                 .HasForeignKey(a => new { a.TypeId, a.ActivityId })
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             builder.HasOne(a => a.ProductType)
                 .WithMany()
                 .HasForeignKey(a => a.ProductTypeId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

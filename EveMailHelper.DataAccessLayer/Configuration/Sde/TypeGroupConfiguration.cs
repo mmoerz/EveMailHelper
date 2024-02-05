@@ -12,7 +12,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
         public void Configure(EntityTypeBuilder<DataModels.Sde.EveType> builder)
         {
             builder.ToTable(nameof(EveType), Constants.SCHEMA_SDE);
-            builder.HasAlternateKey(a => a.EveId);
+            builder.HasKey(a => a.EveId);
 
             builder.Property(a => a.EveId)
                 .HasMaxLength(Constants.SIZE_TEXT)
@@ -34,22 +34,22 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
             builder.HasOne(d => d.Group)
                 .WithMany(p => p.InvTypes)
                 .HasForeignKey(d => d.GroupId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             builder.HasOne(a => a.Icon)
                 .WithMany(p => p.InvTypes)
                 .HasForeignKey(a => a.IconId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             builder.HasOne(a => a.MarketGroup)
                 .WithMany(p => p.InvTypes)
                 .HasForeignKey(d => d.MarketGroupId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             builder.HasOne(a => a.Race)
                 .WithMany(p => p.InvTypes)
                 .HasForeignKey(a => a.RaceId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

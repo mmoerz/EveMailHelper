@@ -12,7 +12,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
         public void Configure(EntityTypeBuilder<IndustryBlueprint> builder)
         {
             builder.ToTable(nameof(IndustryBlueprint), Constants.SCHEMA_SDE);
-            builder.HasAlternateKey(a => a.TypeId);
+            builder.HasKey(a => a.TypeId);
 
             builder.Property(a => a.TypeId)
                 .ValueGeneratedNever();
@@ -23,7 +23,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
             builder.HasOne(a => a.Type)
                 .WithOne(p => p.IndustryBlueprint)
                 .HasForeignKey<IndustryBlueprint>(a => a.TypeId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

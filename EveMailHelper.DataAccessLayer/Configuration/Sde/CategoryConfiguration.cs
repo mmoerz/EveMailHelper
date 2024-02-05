@@ -12,7 +12,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.ToTable(nameof(Category), Constants.SCHEMA_SDE);
-            builder.HasAlternateKey(a => a.EveId);
+            builder.HasKey(a => a.EveId);
 
             builder.Property(a => a.EveId)
                 .HasMaxLength(Constants.SIZE_TEXT)
@@ -24,7 +24,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
             builder.HasOne(a => a.Icon)
                 .WithMany(p => p.InvCategories)
                 .HasForeignKey(a => a.IconId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

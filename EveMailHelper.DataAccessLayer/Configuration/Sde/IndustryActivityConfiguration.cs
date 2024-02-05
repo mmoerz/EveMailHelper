@@ -12,7 +12,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
         public void Configure(EntityTypeBuilder<IndustryActivity> builder)
         {
             builder.ToTable(nameof(IndustryActivity), Constants.SCHEMA_SDE);
-            builder.HasAlternateKey(a => new { a.TypeId, a.ActivityId });
+            builder.HasKey(a => new { a.TypeId, a.ActivityId });
             builder.HasIndex(a => a.ActivityId);
             builder.Property(a => a.ActivityId)
                 .IsRequired();
@@ -20,7 +20,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
             builder.HasOne(a => a.Type)
                 .WithMany(p => p.IndustryActivities)
                 .HasForeignKey(a => a.TypeId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

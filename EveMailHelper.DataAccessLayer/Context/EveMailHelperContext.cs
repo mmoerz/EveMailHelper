@@ -71,8 +71,18 @@ namespace EveMailHelper.DataAccessLayer.Context
         public virtual DbSet<Note> Notes { get; set; } = null!;
 
         #region EveSDE
+        public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<ChrRace> Races { get; set; } = null!;
-
+        public virtual DbSet<EveType> EveTypes { get; set; } = null !;
+        public virtual DbSet<Graphic> Graphics { get; set; } = null!;
+        public virtual DbSet<Group> Groups { get; set; } = null!;
+        public virtual DbSet<Icon> Icons { get; set; } = null!;
+        public virtual DbSet<IndustryActivity> IndustryActivities { get; set; } = null!;
+        public virtual DbSet<IndustryActivityMaterial> IndustryActivityMaterials { get; set; } = null!;
+        public virtual DbSet<IndustryActivityProbability> IndustryActivityProbabilities { get; set; } = null!;
+        public virtual DbSet<IndustryActivityProduct> IndustryActivityProducts { get; set; } = null!;
+        public virtual DbSet<IndustryBlueprint> IndustryBlueprints { get; set; } = null!;
+        public virtual DbSet<MarketGroup> MarketGroups { get; set; } = null!;
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

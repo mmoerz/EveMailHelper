@@ -11,7 +11,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
         public void Configure(EntityTypeBuilder<Graphic> builder)
         {
             builder.ToTable(nameof(Graphic), Constants.SCHEMA_SDE);
-            builder.HasAlternateKey(a => a.EveId);
+            builder.HasKey(a => a.EveId);
             builder.Property(a => a.EveId)
                 .IsRequired()
                 .ValueGeneratedNever();
