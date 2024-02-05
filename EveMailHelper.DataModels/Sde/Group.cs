@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace EveMailHelper.DataModels.Sde
 {
-    public partial class InvGroup : IBaseEveId, IBaseEveObject
+    public partial class Group : IBaseEveId, IBaseEveObject
     {
-        public InvGroup()
+        public Group()
         {
-            InvTypes = new HashSet<InvType>();
+            InvTypes = new HashSet<EveType>();
         }
 
         public int EveId { get; set; }
@@ -24,8 +24,8 @@ namespace EveMailHelper.DataModels.Sde
         public DateTime EveLastUpdated { get; set; } = DateTime.Now;
         public bool EveDeletedInGame { get; set; } = false;
 
-        public virtual InvCategory? Category { get; set; }
+        public virtual Category? Category { get; set; }
         public virtual Icon? Icon { get; set; }
-        public virtual ICollection<InvType> InvTypes { get; set; }
+        public virtual ICollection<EveType> InvTypes { get; set; }
     }
 }

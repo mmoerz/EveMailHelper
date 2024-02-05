@@ -6,12 +6,12 @@ using EveMailHelper.DataModels.Sde;
 
 namespace EveMailHelper.DataAccessLayer.Configuration.Sde
 {
-    public partial class InvTypeGroupConfiguration
-        : IEntityTypeConfiguration<InvType>
+    public partial class TypeGroupConfiguration
+        : IEntityTypeConfiguration<DataModels.Sde.EveType>
     {
-        public void Configure(EntityTypeBuilder<InvType> builder)
+        public void Configure(EntityTypeBuilder<DataModels.Sde.EveType> builder)
         {
-            builder.ToTable(nameof(InvType), Constants.SCHEMA_SDE);
+            builder.ToTable(nameof(EveType), Constants.SCHEMA_SDE);
             builder.HasAlternateKey(a => a.EveId);
 
             builder.Property(a => a.EveId)

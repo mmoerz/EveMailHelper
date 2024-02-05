@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace EveMailHelper.DataModels.Sde
 {
-    public partial class InvType : IBaseEveId, IBaseEveObject
+    public partial class EveType : IBaseEveId, IBaseEveObject
     {
-        public InvType()
+        public EveType()
         {
             IndustryActivities = new HashSet<IndustryActivity>();
         }
@@ -27,9 +27,9 @@ namespace EveMailHelper.DataModels.Sde
         public int? SoundId { get; set; }
         public int? GraphicId { get; set; }
 
-        public virtual InvGroup? Group { get; set; }
+        public virtual Group? Group { get; set; }
         public virtual Icon? Icon { get; set; }
-        public virtual InvMarketGroup? MarketGroup { get; set; }
+        public virtual MarketGroup? MarketGroup { get; set; }
         public virtual ChrRace? Race { get; set; }
         public DateTime EveLastUpdated { get; set; } = DateTime.Now;
         public bool EveDeletedInGame { get; set; } = false;

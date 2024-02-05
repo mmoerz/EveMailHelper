@@ -8,7 +8,7 @@ namespace EveMailHelper.DataModels.Sde
     {
         public ChrRace()
         {
-            InvTypes = new HashSet<InvType>();
+            InvTypes = new HashSet<EveType>();
         }
 
         public int EveId { get; set; }
@@ -21,7 +21,7 @@ namespace EveMailHelper.DataModels.Sde
         public bool EveDeletedInGame { get; set; } = false;
 
         public virtual Icon? Icon { get; set; }
-        public virtual ICollection<InvType> InvTypes { get; set; }
+        public virtual ICollection<EveType> InvTypes { get; set; }
         
     }
 }

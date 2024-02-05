@@ -16,6 +16,6 @@ namespace EveMailHelper.DataModels.Sde
         public bool EveDeletedInGame { get; set; } = false;
 
         public virtual IndustryActivity? IndustryActivity { get; set; }
-        public virtual InvType? ProductType { get; set; }
+        public virtual EveType? ProductType { get; set; }
     }
 }

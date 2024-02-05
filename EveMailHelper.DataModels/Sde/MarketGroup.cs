@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace EveMailHelper.DataModels.Sde
 {
-    public partial class InvMarketGroup : IBaseEveId, IBaseEveObject
+    public partial class MarketGroup : IBaseEveId, IBaseEveObject
     {
-        public InvMarketGroup()
+        public MarketGroup()
         {
-            InvTypes = new HashSet<InvType>();
-            InverseParentGroup = new HashSet<InvMarketGroup>();
+            InvTypes = new HashSet<EveType>();
+            InverseParentGroup = new HashSet<MarketGroup>();
         }
 
         public int EveId { get; set; }
@@ -23,8 +23,8 @@ namespace EveMailHelper.DataModels.Sde
         public bool EveDeletedInGame { get; set; } = false;
 
         public virtual Icon? Icon { get; set; }
-        public virtual InvMarketGroup? ParentGroup { get; set; }
-        public virtual ICollection<InvType> InvTypes { get; set; }
-        public virtual ICollection<InvMarketGroup> InverseParentGroup { get; set; }
+        public virtual MarketGroup? ParentGroup { get; set; }
+        public virtual ICollection<EveType> InvTypes { get; set; }
+        public virtual ICollection<MarketGroup> InverseParentGroup { get; set; }
     }
 }

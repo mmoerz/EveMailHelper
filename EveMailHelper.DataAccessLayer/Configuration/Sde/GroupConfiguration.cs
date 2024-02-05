@@ -6,32 +6,30 @@ using EveMailHelper.DataModels.Sde;
 
 namespace EveMailHelper.DataAccessLayer.Configuration.Sde
 {
-    public partial class InvMarketGroupConfiguration
-        : IEntityTypeConfiguration<InvMarketGroup>
+    public partial class GroupConfiguration
+        : IEntityTypeConfiguration<Group>
     {
-        public void Configure(EntityTypeBuilder<InvMarketGroup> builder)
+        public void Configure(EntityTypeBuilder<Group> builder)
         {
-            builder.ToTable(nameof(InvMarketGroup), Constants.SCHEMA_SDE);
+            builder.ToTable(nameof(Group), Constants.SCHEMA_SDE);
             builder.HasAlternateKey(a => a.EveId);
 
             builder.Property(a => a.EveId)
                 .HasMaxLength(Constants.SIZE_TEXT)
                 .ValueGeneratedNever();
 
-            builder.Property(a => a.Description)
-                .IsRequired()
-                .HasMaxLength(Constants.SIZE_DESCRIPTION);
+            builder.HasIndex(e => e.CategoryId);
 
-            builder.Property(a => a.MarketGroupName)
+            builder.Property(a => a.GroupName)
                 .HasMaxLength(Constants.SIZE_TEXT)
                 .IsRequired(true);
 
-            builder.HasOne(d => d.ParentGroup)
-                .WithMany(p => p.InverseParentGroup)
-                .HasForeignKey(d => d.ParentGroupId);
+            builder.HasOne(d => d.Category)
+                .WithMany(p => p.InvGroups)
+                .HasForeignKey(d => d.CategoryId);
 
             builder.HasOne(a => a.Icon)
-                .WithMany(p => p.InvMarketGroups)
+                .WithMany(p => p.InvGroups)
                 .HasForeignKey(a => a.IconId)
                 .OnDelete(DeleteBehavior.SetNull);
         }

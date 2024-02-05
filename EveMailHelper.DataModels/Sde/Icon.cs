@@ -9,10 +9,10 @@ namespace EveMailHelper.DataModels.Sde
         public Icon()
         {
             ChrRaces = new HashSet<ChrRace>();
-            InvCategories = new HashSet<InvCategory>();
-            InvGroups = new HashSet<InvGroup>();
-            InvMarketGroups = new HashSet<InvMarketGroup>();
-            InvTypes = new HashSet<InvType>();
+            InvCategories = new HashSet<Category>();
+            InvGroups = new HashSet<Group>();
+            InvMarketGroups = new HashSet<MarketGroup>();
+            InvTypes = new HashSet<EveType>();
         }
 
         public int EveId { get; set; }
@@ -23,9 +23,9 @@ namespace EveMailHelper.DataModels.Sde
         public bool EveDeletedInGame { get; set; } = false;
 
         public virtual ICollection<ChrRace> ChrRaces { get; set; }
-        public virtual ICollection<InvCategory> InvCategories { get; set; }
-        public virtual ICollection<InvGroup> InvGroups { get; set; }
-        public virtual ICollection<InvMarketGroup> InvMarketGroups { get; set; }
-        public virtual ICollection<InvType> InvTypes { get; set; }
+        public virtual ICollection<Category> InvCategories { get; set; }
+        public virtual ICollection<Group> InvGroups { get; set; }
+        public virtual ICollection<MarketGroup> InvMarketGroups { get; set; }
+        public virtual ICollection<EveType> InvTypes { get; set; }
     }
 }

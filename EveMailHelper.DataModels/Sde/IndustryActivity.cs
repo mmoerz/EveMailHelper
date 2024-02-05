@@ -13,6 +13,6 @@ namespace EveMailHelper.DataModels.Sde
         public DateTime EveLastUpdated { get; set; } = DateTime.Now;
         public bool EveDeletedInGame { get; set; } = false;
 
-        public virtual InvType Type { get; set; } = null!;
+        public virtual EveType Type { get; set; } = null!;
     }
 }
