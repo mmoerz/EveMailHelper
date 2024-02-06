@@ -8,7 +8,7 @@ using EveMailHelper.DataModels;
 
 namespace EveMailHelper.BusinessLibrary.Complex
 {
-    public class SendEveMailBasedOnTemplateAction : IBizActionAsync<SendTemplateToDto, Mail>
+    public class SendEveMailBasedOnTemplateAction : IBizActionAsync<SendTemplateToDTO, Mail>
     {
         readonly MailDbAccess _dbAccess;
         private List<ValidationResult> _errors = new();
@@ -22,7 +22,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
 
         public bool HasErrors => _errors.Any();
 
-        public async Task<Mail> ActionAsync(SendTemplateToDto dto)
+        public async Task<Mail> ActionAsync(SendTemplateToDTO dto)
         {
             dto.Template.CreateMail(out Mail eveMail, dto.FromCharacter);
             foreach (var receiver in dto.Characters)

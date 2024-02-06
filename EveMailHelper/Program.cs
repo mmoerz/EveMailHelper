@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using NLog;
 using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.ServiceLibrary.Managers;
+using System.Data.Common;
 
 #region NLog Initialization for Programm.cs
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -33,9 +34,10 @@ try
 
     #region Database Access
     // factory for 'building' db access on the fly
+    var connstring = builder.Configuration.GetConnectionString("Default") 
+        ?? throw new Exception("Connectionstring Default missing in appsettings.json");
     builder.Services.AddDbContextFactory<EveMailHelperContext>(options =>
-        options.UseSqlServer(
-            builder.Configuration.GetConnectionString("Default"),
+        options.UseSqlServer(connstring,
             x => x.MigrationsAssembly("EveMailHelper.DataAccessLayer")));
     #endregion
 
@@ -110,7 +112,7 @@ try
     var JsonIISSettings = builder.Configuration.GetSection("IISSettings");
 
     var basePath = JsonIISSettings.GetValue<string>("ApplicationBasePath", "/");
-    app.Logger.LogInformation($"ApplicationBasePath loaded : '{basePath}'");
+    app.Logger.LogInformation($"ApplicationBasePath is: '{basePath}'");
 
     // load Settings from config file
     var forceProduction = JsonIISSettings.GetValue<bool>("force", true);
@@ -132,7 +134,8 @@ try
         //app.Logger.LogInformation("Environment FACTOTUMIMPORT_PATHBASE:" +
         //    $"{basePath}");
         app.Logger.LogInformation($"forcing IIS Production environment");
-        app.Logger.LogInformation($"ApplicationBasePath is: '{basePath}'");
+        //app.Logger.LogInformation($"ApplicationBasePath is: '{basePath}'");
+        app.Logger.LogInformation("Application is running production with ApplicationBasePath");
         app.UsePathBase(basePath);
         app.UseExceptionHandler("/Error");
         // The default HSTS value is 30 days. You may want to change this for production

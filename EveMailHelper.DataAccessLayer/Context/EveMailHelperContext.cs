@@ -72,7 +72,7 @@ namespace EveMailHelper.DataAccessLayer.Context
 
         #region EveSDE
         public virtual DbSet<Category> Categories { get; set; } = null!;
-        public virtual DbSet<ChrRace> Races { get; set; } = null!;
+        public virtual DbSet<CharacterRace> Races { get; set; } = null!;
         public virtual DbSet<EveType> EveTypes { get; set; } = null !;
         public virtual DbSet<Graphic> Graphics { get; set; } = null!;
         public virtual DbSet<Group> Groups { get; set; } = null!;

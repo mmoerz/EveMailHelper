@@ -29,7 +29,7 @@ namespace EveMailHelper.BusinessLibrary.Services
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly IAuthenticationManager _authenticationManager;
         private readonly RunnerWriteDb<ICollection<string>, ICollection<Character>> _addCharRunner;
-        private readonly RunnerWriteDbAsync<SendTemplateToDto, Mail> _sendTemplateToRunner;
+        private readonly RunnerWriteDbAsync<SendTemplateToDTO, Mail> _sendTemplateToRunner;
         private readonly RunnerWriteDb<Mail, Mail> _updateMailRunner;
 
         public MailManager(IDbContextFactory<EveMailHelperContext> dbContextFactory,
@@ -48,7 +48,7 @@ namespace EveMailHelper.BusinessLibrary.Services
             _authenticationManager = authenticationManager;
             _addCharRunner = new RunnerWriteDb<ICollection<string>, ICollection<Character>>
                 (new AddCharactersByNameAction(_characterDbAccess), _dbContext);
-            _sendTemplateToRunner = new RunnerWriteDbAsync<SendTemplateToDto, Mail>
+            _sendTemplateToRunner = new RunnerWriteDbAsync<SendTemplateToDTO, Mail>
                 (new SendEveMailBasedOnTemplateAction(_evemailDbAccess), _dbContext);
             _updateMailRunner = new RunnerWriteDb<Mail, Mail>
                 (new UpdateEveMailAction(_evemailDbAccess), _dbContext);
@@ -178,7 +178,7 @@ namespace EveMailHelper.BusinessLibrary.Services
                 throw new Exception($"cannot find template with id {templateId}");
 
             var characters = _addCharRunner.RunAction(receiverNames);
-            SendTemplateToDto dto = new()
+            SendTemplateToDTO dto = new()
             {
                 Template = template,
                 FromCharacter = character,

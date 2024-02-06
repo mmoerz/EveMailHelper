@@ -7,7 +7,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
 {
     public interface ICommunicationService
     {
-        Task<TableData<Communication>> GetPaginated(Character character, string searchString, TableState state);
+        Task<TableData<CommunicationDTO>> GetPaginated(Character character, string searchString, TableState state);
         Task<TableData<Mail>> GetPaginatedEveMail(Character character, string searchString, TableState state);
     }
 }

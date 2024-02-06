@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EveMailHelper.BusinessLibrary.Complex.dto
 {
-    public class Communication
+    public class CommunicationDTO
     {
         public Guid Id { get; set; }
         public object obj { get; set; } = null!;

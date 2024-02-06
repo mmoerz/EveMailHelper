@@ -1,0 +1,67 @@
+﻿<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+</style>
+
+<MudTable Dense="true"
+          Hover="true"
+          FixedHeader="true"
+          FixedFooter="true"
+          ReadOnly="@readOnly"
+          OnRowClick="RowClickEvent"
+          RowClassFunc="@SelectedRowClassFunc"
+          ServerData=@(new Func<TableState, Task<TableData<IndustryBlueprint>>>(ServerReload))
+          SortLabel="Sortierung"
+          T="IndustryBlueprint"
+          @ref="table">
+    <!-- IsEditRowSwitchingBlocked="" -->
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Email List</MudText>
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))"
+                      Placeholder="Suche"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium"
+                      Class="mt-0">
+        </MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width:300px;" />
+        <col style="width:450px" />
+        <col style="width:20px" />
+        <col style="width:25px" />
+        <col />
+        <col />
+    </ColGroup>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortLabel="TypeId" T="Character">TypeId</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="TypeName" T="Character">Blueprint Name</MudTableSortLabel> </MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Group" T="Character">Group</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="MarketGroup" T="Character">Marketgroup</MudTableSortLabel></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="TypeId">@context.TypeId</MudTd>
+        <MudTd DataLabel="TypeName">@context.Type.TypeName</MudTd>
+        <MudTd DataLabel="Group">@context.Type.Group</MudTd>
+        <MudTd DataLabel="Marketgroup">@context.Type.MarketGroup</MudTd>
+        <MudTd DataLabel="Delete">
+            <!--
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteEmail(context)"></MudIconButton>
+                -->
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager HidePageNumber="false" />
+    </PagerContent>
+</MudTable>

@@ -2,7 +2,7 @@
 
 namespace EveMailHelper.BusinessLibrary.Complex.dto
 {
-    public class SendTemplateToDto
+    public class SendTemplateToDTO
     {
         //public Guid templateId;
         public EveMailTemplate Template { get; set; } = null!;

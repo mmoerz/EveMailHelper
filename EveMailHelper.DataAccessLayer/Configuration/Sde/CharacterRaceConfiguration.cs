@@ -6,11 +6,11 @@ using EveMailHelper.DataModels.Sde;
 
 namespace EveMailHelper.DataAccessLayer.Configuration.Sde
 {
-    public partial class ChrRaceConfiguration : IEntityTypeConfiguration<ChrRace>
+    public partial class CharacterRaceConfiguration : IEntityTypeConfiguration<CharacterRace>
     {
-        public void Configure(EntityTypeBuilder<ChrRace> builder)
+        public void Configure(EntityTypeBuilder<CharacterRace> builder)
         {
-            builder.ToTable(nameof(ChrRace), Constants.SCHEMA_SDE);
+            builder.ToTable(nameof(CharacterRace), Constants.SCHEMA_SDE);
             builder.HasKey(a => a.EveId);
             builder.Property(a => a.EveId)
                 .IsRequired()

@@ -5,6 +5,7 @@ using EveMailHelper.Web.Shared.EveChar;
 using EveMailHelper.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using EveMailHelper.DataModels.Security;
+using EveMailHelper.ServiceLayer.Managers;
 
 namespace EveMailHelper.Web.Pages.EveChar
 {
@@ -15,6 +16,9 @@ namespace EveMailHelper.Web.Pages.EveChar
         IAuthenticationManager AuthenticationManager { get; set; } = null!;
         [Inject]
         AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
+
+        [Inject]
+        BlueprintManager BlueprintManager { get; set; } = null!;
         
 
         #endregion
@@ -43,7 +47,7 @@ namespace EveMailHelper.Web.Pages.EveChar
 
         protected List<string> Reactions()
         {
-            List<string> reactions = new List<string>();
+            List<string> reactions = new();
 
             return reactions;
         }

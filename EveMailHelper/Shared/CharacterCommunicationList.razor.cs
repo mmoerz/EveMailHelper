@@ -30,7 +30,7 @@ namespace EveMailHelper.Web.Shared
         #region pagination stuff
 
         //private IEnumerable<Report> pagedData = null!;
-        private MudTable<Communication>? table = null!;
+        private MudTable<CommunicationDTO>? table = null!;
         //private int totalItems;
         private string searchString = "";
         #endregion
@@ -52,7 +52,7 @@ namespace EveMailHelper.Web.Shared
         /// <summary>
         /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>
-        private async Task<TableData<Communication>> ServerReload(TableState state)
+        private async Task<TableData<CommunicationDTO>> ServerReload(TableState state)
         {
             return await CommunicationService.GetPaginated(Character, searchString, state);
         }
@@ -63,7 +63,7 @@ namespace EveMailHelper.Web.Shared
             table?.ReloadServerData();
         }
 
-        private void RowClickEvent(TableRowClickEventArgs<Communication> tableRowClickEventArgs)
+        private void RowClickEvent(TableRowClickEventArgs<CommunicationDTO> tableRowClickEventArgs)
         {
             if (tableRowClickEventArgs == null)
                 return;
@@ -87,7 +87,7 @@ namespace EveMailHelper.Web.Shared
             }
         }
 
-        private string SelectedRowClassFunc(Communication rmodel, int rowNumber)
+        private string SelectedRowClassFunc(CommunicationDTO rmodel, int rowNumber)
         {
             if (selectedRowNumber == rowNumber)
             {

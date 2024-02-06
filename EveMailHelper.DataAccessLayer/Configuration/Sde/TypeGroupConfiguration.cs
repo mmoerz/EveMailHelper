@@ -23,7 +23,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
 
             builder.Property(a => a.Description)
                 //.IsRequired()
-                .HasMaxLength(Constants.SIZE_DESCRIPTION);
+                .HasMaxLength(4096);
 
             builder.HasIndex(a => a.GroupId);
 

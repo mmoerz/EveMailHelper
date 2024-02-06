@@ -30,7 +30,7 @@ namespace EveMailHelper.DataModels.Sde
         public virtual Group? Group { get; set; }
         public virtual Icon? Icon { get; set; }
         public virtual MarketGroup? MarketGroup { get; set; }
-        public virtual ChrRace? Race { get; set; }
+        public virtual CharacterRace? Race { get; set; }
         public DateTime EveLastUpdated { get; set; } = DateTime.Now;
         public bool EveDeletedInGame { get; set; } = false;
         public virtual IndustryBlueprint? IndustryBlueprint { get; set; }

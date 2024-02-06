@@ -170,17 +170,17 @@ namespace EveMailHelper.BusinessLibrary.Services
             };
         }
 
-        public async Task<TableData<Communication>> GetPaginated(Character character, string searchString, TableState state)
+        public async Task<TableData<CommunicationDTO>> GetPaginated(Character character, string searchString, TableState state)
         {
             if (character == null)
-                return new TableData<Communication>() { Items = new List<Communication>(), TotalItems = 0 };
+                return new TableData<CommunicationDTO>() { Items = new List<CommunicationDTO>(), TotalItems = 0 };
 
             var eveMails = await GetPaginatedEveMail(character, searchString, state);
 
-            List<Communication> communicationList = new();
+            List<CommunicationDTO> communicationList = new();
             foreach (var eveMail in eveMails.Items)
             {
-                communicationList.Add(new Communication()
+                communicationList.Add(new CommunicationDTO()
                 {
                     Id = eveMail.Id,
                     CreatedDate = eveMail.CreatedDate,
@@ -192,7 +192,7 @@ namespace EveMailHelper.BusinessLibrary.Services
             var eveChats = await GetPaginatedChats(character, searchString, state);
             foreach (var eveChat in eveChats.Items)
             {
-                communicationList.Add(new Communication()
+                communicationList.Add(new CommunicationDTO()
                 {
                     Id = eveChat.Id,
                     CreatedDate = eveChat.SessionStarted,
@@ -204,7 +204,7 @@ namespace EveMailHelper.BusinessLibrary.Services
             var Notes = await GetPaginatedNotes(character, searchString, state);
             foreach (var note in Notes.Items)
             {
-                communicationList.Add(new Communication()
+                communicationList.Add(new CommunicationDTO()
                 {
                     Id = note.Id,
                     CreatedDate = note.CreatedDate,
@@ -219,7 +219,7 @@ namespace EveMailHelper.BusinessLibrary.Services
                 _ => communicationList.OrderByDirection(state.SortDirection, x => x.Name),
             };
 
-            return new TableData<Communication>()
+            return new TableData<CommunicationDTO>()
             {
                 Items = communicationList,
                 TotalItems = eveMails.TotalItems + eveChats.TotalItems + Notes.TotalItems,

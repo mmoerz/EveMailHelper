@@ -7,9 +7,9 @@
           ReadOnly="true"
           OnRowClick="RowClickEvent"
           RowClassFunc="@SelectedRowClassFunc"
-          ServerData=@(new Func<TableState, Task<TableData<Communication>>>(ServerReload))
+          ServerData=@(new Func<TableState, Task<TableData<CommunicationDTO>>>(ServerReload))
           SortLabel="Sortierung"
-          T="Communication"
+          T="CommunicationDTO"
           @ref="table">
     <!-- IsEditRowSwitchingBlocked="" -->
     <ToolBarContent>
@@ -32,9 +32,9 @@
         <col />
     </ColGroup>
     <HeaderContent>
-        <MudTh><MudTableSortLabel SortLabel="Type" T="Communication">Comm. Type</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="Description" T="Communication">Description</MudTableSortLabel> </MudTh>
-        <MudTh><MudTableSortLabel SortLabel="CreateDate" T="Communication">Create Date</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Type" T="CommunicationDTO">Comm. Type</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Description" T="CommunicationDTO">Description</MudTableSortLabel> </MudTh>
+        <MudTh><MudTableSortLabel SortLabel="CreateDate" T="CommunicationDTO">Create Date</MudTableSortLabel></MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>

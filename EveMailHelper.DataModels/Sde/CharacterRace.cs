@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace EveMailHelper.DataModels.Sde
 {
-    public partial class ChrRace : IBaseEveId, IBaseEveObject
+    public partial class CharacterRace : IBaseEveId, IBaseEveObject
     {
-        public ChrRace()
+        public CharacterRace()
         {
             InvTypes = new HashSet<EveType>();
         }

@@ -31,6 +31,7 @@ namespace EveMailHelper.ServiceLayer.Utilities
 
             services.AddTransient<IInGameMailManager, InGameMailManager>();
             services.AddTransient<IInGameCharacterManager, InGameCharacterManager>();
+            services.AddTransient<IBlueprintManager, BlueprintManager>();
         }
 
         /// <summary>
