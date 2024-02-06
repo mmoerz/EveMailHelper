@@ -12,7 +12,7 @@ namespace EveMailHelper.Web.Shared.Reactions
     public partial class ReactionList : ComponentBase
     {
         #region injections
-        [Inject] BlueprintManager BlueprintManager { get; set; } = null!;
+        [Inject] IBlueprintManager BlueprintManager { get; set; } = null!;
 
         //[Inject] IDialogService DialogService { get; set; } = null!;
         #endregion
@@ -44,7 +44,7 @@ namespace EveMailHelper.Web.Shared.Reactions
         private async Task<TableData<IndustryBlueprint>> ServerReload(TableState state)
         {
             TableData<IndustryBlueprint> onePage =
-                await BlueprintManager.GetBlueprintsPaginated(searchString, state);
+                await BlueprintManager.GetBlueprintsPaginated("Formulas", searchString, state);
 
             //await Task.Delay(300);
 

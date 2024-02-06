@@ -36,25 +36,22 @@
         </MudTextField>
     </ToolBarContent>
     <ColGroup>
-        <col style="width:300px;" />
-        <col style="width:450px" />
-        <col style="width:20px" />
-        <col style="width:25px" />
+        <col style="width:420px" />
+        <col style="width:220px" />
+        <col style="width:225px" />
         <col />
         <col />
     </ColGroup>
     <HeaderContent>
-        <MudTh><MudTableSortLabel SortLabel="TypeId" T="Character">TypeId</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortLabel="TypeName" T="Character">Blueprint Name</MudTableSortLabel> </MudTh>
         <MudTh><MudTableSortLabel SortLabel="Group" T="Character">Group</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortLabel="MarketGroup" T="Character">Marketgroup</MudTableSortLabel></MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="TypeId">@context.TypeId</MudTd>
         <MudTd DataLabel="TypeName">@context.Type.TypeName</MudTd>
-        <MudTd DataLabel="Group">@context.Type.Group</MudTd>
-        <MudTd DataLabel="Marketgroup">@context.Type.MarketGroup</MudTd>
+        <MudTd DataLabel="Group">@context.Type.Group?.GroupName</MudTd>
+        <MudTd DataLabel="Marketgroup">@context.Type.MarketGroup?.MarketGroupName</MudTd>
         <MudTd DataLabel="Delete">
             <!--
             <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteEmail(context)"></MudIconButton>

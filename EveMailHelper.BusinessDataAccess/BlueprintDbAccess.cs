@@ -38,34 +38,23 @@ namespace EveMailHelper.BusinessDataAccess
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<TableData<IndustryBlueprint>> GetPaginated(string searchString, TableState state)
+        public async Task<TableData<IndustryBlueprint>> GetPaginated(
+            string grpFilter, string searchString, TableState state)
         {
             IQueryable<IndustryBlueprint> query;
 
-            if (!string.IsNullOrWhiteSpace(searchString))
-                query = from blueprint in _context.IndustryBlueprints
-                        join type in _context.EveTypes on blueprint.TypeId equals type.EveId
-                        where type.TypeName.Contains(searchString)
-                        select blueprint;
-            else
-                query = from blueprint in _context.IndustryBlueprints
-                        join type in _context.EveTypes on blueprint.TypeId equals type.EveId
-                        select blueprint;
+            query = from blueprint in _context.IndustryBlueprints
+                    join type in _context.EveTypes on blueprint.TypeId equals type.EveId
+                    join grp in _context.Groups on type.GroupId equals grp.EveId
+                    select blueprint;
 
-            /*
-            from person in _dbContext.Person
-            join detail in _dbContext.PersonDetails on person.Id equals detail.PersonId into Details
-            from m in Details.DefaultIfEmpty()
-            select new
-            {
-                id = person.Id,
-                firstname = person.Firstname,
-                lastname = person.Lastname,
-                detailText = m.DetailText
-            };
-            */
+            query = query.Where(
+                x => x.Type.TypeName.Contains(searchString)
+                || x.Type.Group.GroupName.Contains(searchString)
+                );
+            if (!string.IsNullOrEmpty(grpFilter))
+                query = query.Where(x => x.Type.Group.GroupName.Contains(grpFilter));
             
-
             query = state.SortLabel switch
             {
                 "Content" => query.OrderByDirection(state.SortDirection, x => x.Type.TypeName),

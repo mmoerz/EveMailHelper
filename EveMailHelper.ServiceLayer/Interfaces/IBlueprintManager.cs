@@ -5,6 +5,6 @@ namespace EveMailHelper.ServiceLayer.Interfaces
 {
     public interface IBlueprintManager
     {
-        Task<TableData<IndustryBlueprint>> GetBlueprintsPaginated(string searchString, TableState state);
+        Task<TableData<IndustryBlueprint>> GetBlueprintsPaginated(string groupFilter, string searchString, TableState state);
     }
 }

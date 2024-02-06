@@ -27,13 +27,12 @@ namespace EveMailHelper.ServiceLayer.Managers
         {
             _dbContext = dbContextFactory.CreateDbContext();
             _blueprintDbAccess = new(_dbContext);
-
         }
 
         public async Task<TableData<IndustryBlueprint>> GetBlueprintsPaginated(
-            string searchString, TableState state)
+            string groupFilter, string searchString, TableState state)
         {
-            return await _blueprintDbAccess.GetPaginated(searchString, state);
+            return await _blueprintDbAccess.GetPaginated(groupFilter, searchString, state);
         }
 
         /*
