@@ -20,6 +20,7 @@ namespace EveMailHelper.ServiceLayer.Managers
     {
         private readonly EveMailHelperContext _dbContext;
         private readonly BlueprintDbAccess _blueprintDbAccess;
+        private readonly IndustryActivityDbAccess _industryActivityDbAccess;
 
 
         public BlueprintManager(
@@ -27,6 +28,7 @@ namespace EveMailHelper.ServiceLayer.Managers
         {
             _dbContext = dbContextFactory.CreateDbContext();
             _blueprintDbAccess = new(_dbContext);
+            _industryActivityDbAccess = new(_dbContext);
         }
 
         public async Task<TableData<IndustryBlueprint>> GetBlueprintsPaginated(
@@ -35,6 +37,10 @@ namespace EveMailHelper.ServiceLayer.Managers
             return await _blueprintDbAccess.GetPaginated(groupFilter, searchString, state);
         }
 
+        public async Task<List<IndustryActivity>> GetBlueprintActivity(int EveId)
+        {
+            return await _industryActivityDbAccess.GetByIdDeep(EveId);
+        }
         /*
         public async Task<TableData<Character>> GetCharactersPaginated(
             Account account, EveAccount eveAccount, string searchString, TableState state)

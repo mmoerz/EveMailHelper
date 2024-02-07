@@ -55,7 +55,7 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "EVEyamlloader", "EVEyamlloa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.Web8", "EveMailHelper.Web8\EveMailHelper.Web8.csproj", "{FCFC1F14-7E21-4637-8074-108657618307}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EveMailHelper.SDEtemp", "EveMailHelper.SDEtemp\EveMailHelper.SDEtemp.csproj", "{0A97F246-E788-4A4F-9BC8-76BB8895B767}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EveMailHelper.SDEtemp", "EveMailHelper.SDEtemp\EveMailHelper.SDEtemp.csproj", "{0A97F246-E788-4A4F-9BC8-76BB8895B767}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

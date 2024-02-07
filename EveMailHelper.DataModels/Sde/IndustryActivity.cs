@@ -6,6 +6,12 @@ namespace EveMailHelper.DataModels.Sde
 {
     public partial class IndustryActivity : IBaseEveObject
     {
+        public IndustryActivity() 
+        {
+            Materials = new HashSet<IndustryActivityMaterial>();
+            Probabilities = new HashSet<IndustryActivityProbability>();
+            Products = new HashSet<IndustryActivityProduct>();
+        }
         public int TypeId { get; set; }
         public int ActivityId { get; set; }
         public int? Time { get; set; }
@@ -14,5 +20,9 @@ namespace EveMailHelper.DataModels.Sde
         public bool EveDeletedInGame { get; set; } = false;
 
         public virtual EveType Type { get; set; } = null!;
+
+        public virtual ICollection<IndustryActivityMaterial> Materials { get; set; }
+        public virtual ICollection<IndustryActivityProbability> Probabilities { get; set; }
+        public virtual ICollection<IndustryActivityProduct> Products { get; set; }
     }
 }

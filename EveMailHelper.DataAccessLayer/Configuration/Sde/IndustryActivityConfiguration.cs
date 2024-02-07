@@ -13,7 +13,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
         {
             builder.ToTable(nameof(IndustryActivity), Constants.SCHEMA_SDE);
             builder.HasKey(a => new { a.TypeId, a.ActivityId });
-            builder.HasIndex(a => a.ActivityId);
+            //builder.HasIndex(a => a.ActivityId);
             builder.Property(a => a.ActivityId)
                 .IsRequired();
                 

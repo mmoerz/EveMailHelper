@@ -7,6 +7,11 @@ namespace EveMailHelper.DataModels.Sde
 {
     public partial class IndustryBlueprint : IBaseEveObject
     {
+        //public IndustryBlueprint() 
+        //{
+        //    IndustryActivities = new HashSet<IndustryActivity>();
+        //}
+
         public int TypeId { get; set; }
         public int? MaxProductionLimit { get; set; }
 
@@ -14,5 +19,6 @@ namespace EveMailHelper.DataModels.Sde
         public bool EveDeletedInGame { get; set; } = false;
 
         public virtual EveType Type { get; set; } = null!;
+        //public virtual  ICollection<IndustryActivity> IndustryActivities { get; set;}
     }
 }

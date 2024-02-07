@@ -23,7 +23,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
                 .OnDelete(DeleteBehavior.ClientCascade);
 
             builder.HasOne(a => a.IndustryActivity)
-                .WithMany()
+                .WithMany(i => i.Materials)
                 .HasForeignKey(a => new { a.TypeId, a.ActivityId })
                 .OnDelete(DeleteBehavior.ClientCascade);
 
