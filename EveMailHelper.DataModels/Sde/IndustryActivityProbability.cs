@@ -15,7 +15,7 @@ namespace EveMailHelper.DataModels.Sde
         public DateTime EveLastUpdated { get; set; } = DateTime.Now;
         public bool EveDeletedInGame { get; set; } = false;
 
-        public virtual IndustryActivity? IndustryActivity { get; set; }
-        public virtual EveType? ProductType { get; set; }
+        public virtual IndustryActivity IndustryActivity { get; set; } = null!;
+        public virtual EveType ProductType { get; set; } = null!;
     }
 }
