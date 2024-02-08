@@ -18,6 +18,8 @@ namespace EveMailHelper.Web.Shared.Reactions
         #endregion
 
         #region parameters
+        [Parameter]
+        public EventCallback<IndustryBlueprint> OnBlueprintSelected { get; set; }
         #endregion
 
         #region pagination stuff
@@ -60,18 +62,9 @@ namespace EveMailHelper.Web.Shared.Reactions
         
         private void RowClickEvent(TableRowClickEventArgs<IndustryBlueprint> tableRowClickEventArgs)
         {
-            if (selectedRowNumber != -1)
-            {
-                /*
-                var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Large, FullWidth = true };
-                var parameters = new DialogParameters
-                {
-                    { "model", tableRowClickEventArgs.Item },
-                    { "DialogSaved", new EventCallback<Mail>(this, new Action<Mail>(DialogWasSaved)) }
-                };
-                var dialog = DialogService.Show<EveMailDialog>("Edit Eve Mail", parameters, options);
-                */
-            }
+            if (tableRowClickEventArgs == null)
+                return;
+            OnBlueprintSelected.InvokeAsync(tableRowClickEventArgs.Item);
         }
 
         private string SelectedRowClassFunc(IndustryBlueprint rmodel, int rowNumber)

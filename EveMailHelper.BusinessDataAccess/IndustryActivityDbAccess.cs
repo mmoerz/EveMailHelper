@@ -30,7 +30,29 @@ namespace EveMailHelper.BusinessDataAccess
         public async Task<List<IndustryActivity>> GetByIdDeep(int EveId)
         {
             return await _context.IndustryActivities
-                .Where(x => x.TypeId != EveId)
+                .Where(x => x.TypeId == EveId)
+                .Include(x => x.Type)
+                .Include(i => i.Materials)
+                .ThenInclude(i => i.MaterialType)
+                .Include(i => i.Probabilities)
+                .Include(i => i.Products)
+                .ThenInclude(p => p.ProductType)
+                .ToListAsync();
+        }
+
+        public async Task<List<IndustryActivity>> FindForProduct(int EveId, int industryActivityId)
+        {
+            IQueryable<IndustryActivity> query;
+
+            query = from activity in _context.IndustryActivities
+                    join product in _context.IndustryActivityProducts
+                           on new { activity.TypeId, activity.ActivityId } equals 
+                              new { product.TypeId, product.ActivityId }
+                    where activity.ActivityId == industryActivityId  
+                    where product.ProductTypeId == EveId
+                    select activity;
+
+            return await query
                 .Include(x => x.Type)
                 .Include(i => i.Materials)
                 .ThenInclude(i => i.MaterialType)

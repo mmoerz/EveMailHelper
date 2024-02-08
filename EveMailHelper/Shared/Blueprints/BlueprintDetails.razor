@@ -1,37 +1,46 @@
-﻿<MudTable Dense="true"
+﻿@using EveMailHelper.ServiceLayer.Models
+
+<MudTable Dense="true"
           Hover="true"
           FixedHeader="true"
           FixedFooter="true"
           ReadOnly="true"
-          Items=""
+          ServerData=@(new Func<TableState, Task<TableData<BlueprintComponent>>>(ServerReload))
+          SortLabel="Sortierung"
+          T="BlueprintComponent"
           @ref="_table">
     <ToolBarContent>
-        <MudText Typo="Typo.h6">Reaction Formulas</MudText>
+        <MudText Typo="Typo.h6">@BlueprintName</MudText>
     </ToolBarContent>
     <ColGroup>
-        <col style="width:420px" />
         <col style="width:220px" />
-        <col style="width:225px" />
+        <col style="width:120px" />
+        <col style="width:100px" />
+        <col style="width:120px" />
+        <col style="width:120px" />
         <col />
         <col />
     </ColGroup>
     <HeaderContent>
-        <MudTh><MudTableSortLabel SortLabel="TypeName" T="Character">Blueprint Name</MudTableSortLabel> </MudTh>
-        <MudTh><MudTableSortLabel SortLabel="Group" T="Character">Group</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="MarketGroup" T="Character">Marketgroup</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="TypeName" T="Character">Name</MudTableSortLabel> </MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Volume" T="Character">Volume</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Quantity" T="Character">Quantity</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Price" T="Character">Price per Unit</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Sum" T="Character">Sum</MudTableSortLabel></MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="TypeName">@context.Type.TypeName</MudTd>
-            <MudTd DataLabel="Group">@context.Type.Group?.GroupName</MudTd>
-            <MudTd DataLabel="Marketgroup">@context.Type.MarketGroup?.MarketGroupName</MudTd>
-            <MudTd DataLabel="Delete">
+        <MudTd DataLabel="TypeName">@context.ProductionDepth: @context.Name</MudTd>
+        <MudTd DataLabel="Volume">@context.Volume</MudTd>
+        <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
+        <MudTd DataLabel="Price">@context.PricePerUnit
                 <!--
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteEmail(context)"></MudIconButton>
                     -->
-            </MudTd>
-        </RowTemplate>
-        <PagerContent>
+        </MudTd>
+        <MudTh DataLabel="Sum">@context.SubComponents.Count</MudTh>
+    </RowTemplate>
+    <PagerContent>
             
-        </PagerContent>
+    </PagerContent>
 </MudTable>

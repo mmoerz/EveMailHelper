@@ -6,6 +6,10 @@ using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.DataModels.Sde;
 using MudBlazor;
 using static MudBlazor.CategoryTypes;
+using System.Linq;
+using EveMailHelper.ServiceLayer.Models;
+using EveMailHelper.ServiceLayer.Managers;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EveMailHelper.Web.Shared.Blueprints
 {
@@ -15,59 +19,57 @@ namespace EveMailHelper.Web.Shared.Blueprints
         [Inject] IBlueprintManager BlueprintManager { get; set; } = null!;
         #endregion
 
-        private IndustryBlueprint _model = null!;
-
         private MudTable<BlueprintComponent> _table = null!;
-        private IEnumerable<BlueprintComponent> _blueprintComponents = null!;
+        private IList<BlueprintComponent> _blueprintComponents = new List<BlueprintComponent>();
+
+        private IndustryBlueprint _blueprint = new();
 
         #region parameters
         [Parameter]
-        public IndustryBlueprint Model
+        public IndustryBlueprint Blueprint
         {
             get
             {
-                //_model.CopyShallow(ViewModel);
-                return _model;
+                return _blueprint;
             }
             set 
             {
-                _model = value;
-                //ViewModel.CopyShallow(value);
+                _blueprint = value;
             }
         }
+
+        [Parameter]
+        public string BlueprintName { get; set; } = "no Blueprint";
         #endregion
 
+        public void Reload()
+        {
+            _table?.ReloadServerData();
+        }
+
         /// <summary>
-        /// view Model for manipulation by the UI
+        /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>
-        //private ViewCharacter ViewModel { get; set; } = new();
-
-        protected void ComposeBlueprintComponents()
+        private async Task<TableData<BlueprintComponent>> ServerReload(TableState state)
         {
-            _blueprintComponents = new List<BlueprintComponent>();
+            TableData<BlueprintComponent> data = new();
 
-            _model.
-        }
-
-        protected override async Task OnInitializedAsync()
-        {
-            //_blueprintComponents = 
-        }
-
-        public void SetModel(IndustryBlueprint blueprint)
-        {
-            Model = blueprint;
-        }       
-
-        protected Dictionary<CharacterStatus, string> GetCharacterStati()
-        {
-            Dictionary<CharacterStatus, string> result = new();
-            var stati = Enum.GetValues<CharacterStatus>().ToList();
-            foreach(var status in stati)
+            if (_blueprint != null && _blueprint.TypeId != 0)
             {
-                result[status] = status.ToString();
+                // TODO: ugly ugly reference to use '11' as an activity filter directly
+                _blueprintComponents = await BlueprintManager.GetBlueprintComponentsList(_blueprint, 11);
+                _blueprintComponents.ToFlatList();
             }
-            return result;
+
+            data.TotalItems = _blueprintComponents.Count;
+            data.Items = _blueprintComponents;
+
+            return data;
+        }
+
+        public void SetModels(List<BlueprintComponent> value)
+        {
+            _blueprintComponents = value;
         }
     }
 }

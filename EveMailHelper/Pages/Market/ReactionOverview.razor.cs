@@ -6,8 +6,12 @@ using EveMailHelper.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using EveMailHelper.DataModels.Security;
 using EveMailHelper.ServiceLayer.Managers;
+using EveMailHelper.Web.Shared.Blueprints;
+using EveMailHelper.DataModels.Sde;
+using EveMailHelper.Web.Models;
+using EveMailHelper.ServiceLayer.Models;
 
-namespace EveMailHelper.Web.Pages.EveChar
+namespace EveMailHelper.Web.Pages.Market
 {
     public partial class ReactionOverview : ComponentBase
     {
@@ -18,32 +22,26 @@ namespace EveMailHelper.Web.Pages.EveChar
         AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
 
         [Inject]
-        BlueprintManager BlueprintManager { get; set; } = null!;
-        
-
+        IBlueprintManager BlueprintManager { get; set; } = null!;
         #endregion
 
         #region parameters
         #endregion
 
-        
+        private BlueprintDetails? ListOfComponents { get; set; } = null!;
 
+        private IndustryBlueprint selectedBlueprint { get; set; } = new();
+        private string selectedBlueprintName { get; set; } = "none";
 
-        
-        /*
-        private void CharacterSelected(Character character)
+        private void BlueprintSelected(IndustryBlueprint blueprint)
         {
-            _ = CharDetails ?? throw new NullReferenceException("CharDetails");
-            CharDetails.SetModel(character);
-        }
+            _ = ListOfComponents ?? throw new NullReferenceException("BlueprintDetails");
 
-        private void CharacterChanged(Character character)
-        {
-            _ = character ?? throw new ArgumentNullException(nameof(character));
+            selectedBlueprint.CopyShallow(blueprint);
+            selectedBlueprintName = blueprint.Type.TypeName;
 
-            ListOfCharacters?.Reload();
+            ListOfComponents.Reload();
         }
-        */
 
         protected List<string> Reactions()
         {

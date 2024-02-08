@@ -4,6 +4,10 @@ using EveMailHelper.DataModels;
 using EveMailHelper.DataModels.Sde;
 using EveMailHelper.DataModels.Security;
 using EveMailHelper.ServiceLayer.Interfaces;
+using EveMailHelper.ServiceLayer.Models;
+
+using EVEStandard.Models;
+
 using Microsoft.EntityFrameworkCore;
 
 using MudBlazor;
@@ -41,12 +45,63 @@ namespace EveMailHelper.ServiceLayer.Managers
         {
             return await _industryActivityDbAccess.GetByIdDeep(EveId);
         }
-        /*
-        public async Task<TableData<Character>> GetCharactersPaginated(
-            Account account, EveAccount eveAccount, string searchString, TableState state)
+
+        public async Task<List<BlueprintComponent>> GetBlueprintComponentsList(
+            IndustryBlueprint blueprint,
+            int filterActivity = 0
+            )
         {
-            return await _blueprintDbAccess.GetCharactersPaginated(account, eveAccount, searchString, state);
+            _ = blueprint ?? throw new Exception("blueprint queried is null");
+            if (blueprint.TypeId == 0) throw new Exception("blueprint TypeId is 0.");
+
+            var activities = await GetBlueprintActivity(blueprint.TypeId);
+            var activity = activities.Where(x => x.ActivityId == 11).First();
+
+            if (activity == null)
+                throw new Exception("Oh weh blueprint ohne Activity");
+
+            return await GetBlueprintComponentsForActivity(activity, 0, filterActivity);
         }
-        */
+
+        protected async Task<List<BlueprintComponent>> GetBlueprintComponentsForActivity(
+            IndustryActivity activity,
+            int productionDepth = 0,
+            int filterActivityId = 0)
+        {
+            _ = activity ?? throw new Exception("activity is null");
+
+            var Components = new List<BlueprintComponent>();
+
+            // not producing activities should be filtered
+            foreach (var material in activity.Materials)
+            {
+                var component = new BlueprintComponent()
+                {
+                    EveId = material.MaterialType.EveId,
+                    ProductionDepth = productionDepth + 1,
+                    Name = material.MaterialType.TypeName,
+                    Quantity = material.Quantity,
+                    Volume = material.MaterialType?.Volume ?? 0.0,
+                };
+
+                // now let's check if the material can be produced (has a blueprint)
+                // and add it as a subcomponent
+                var producedBy = await _industryActivityDbAccess.FindForProduct(
+                    material.MaterialType.EveId, filterActivityId);
+                if (producedBy.Any())
+                {
+                    var first = producedBy.First();
+                    component.SubComponents = await GetBlueprintComponentsForActivity(
+                        first, 
+                        productionDepth + 1, 
+                        filterActivityId);
+                }
+
+                Components.Add(component);
+            }
+
+            return Components;
+        }
+
     }
 }
