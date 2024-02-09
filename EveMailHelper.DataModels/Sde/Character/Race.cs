@@ -1,18 +1,22 @@
 ﻿using EveMailHelper.DataModels.Interfaces;
+using EveMailHelper.DataModels.Sde.Map;
+
 using System;
 using System.Collections.Generic;
 
-namespace EveMailHelper.DataModels.Sde
+namespace EveMailHelper.DataModels.Sde.Character
 {
-    public partial class CharacterRace : IBaseEveId, IBaseEveObject
+    public partial class Race : IBaseEveId, IBaseEveObject
     {
-        public CharacterRace()
+        public Race()
         {
             InvTypes = new HashSet<EveType>();
+            Factions = new HashSet<Faction>();
+            
         }
 
         public int EveId { get; set; }
-        public string Name { get; set; } = String.Empty;
+        public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
         public int? IconId { get; set; }
         public string? ShortDescription { get; set; }
@@ -22,6 +26,8 @@ namespace EveMailHelper.DataModels.Sde
 
         public virtual Icon? Icon { get; set; }
         public virtual ICollection<EveType> InvTypes { get; set; }
+        public virtual ICollection<Faction> Factions { get; set; }
         
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EveMailHelper.DataModels.Interfaces;
+using EveMailHelper.DataModels.Sde.Character;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +9,7 @@ namespace EveMailHelper.DataModels.Sde
     {
         public Icon()
         {
-            ChrRaces = new HashSet<CharacterRace>();
+            ChrRaces = new HashSet<Race>();
             InvCategories = new HashSet<Category>();
             InvGroups = new HashSet<Group>();
             InvMarketGroups = new HashSet<MarketGroup>();
@@ -22,7 +23,7 @@ namespace EveMailHelper.DataModels.Sde
         public DateTime EveLastUpdated { get; set; } = DateTime.Now;
         public bool EveDeletedInGame { get; set; } = false;
 
-        public virtual ICollection<CharacterRace> ChrRaces { get; set; }
+        public virtual ICollection<Race> ChrRaces { get; set; }
         public virtual ICollection<Category> InvCategories { get; set; }
         public virtual ICollection<Group> InvGroups { get; set; }
         public virtual ICollection<MarketGroup> InvMarketGroups { get; set; }

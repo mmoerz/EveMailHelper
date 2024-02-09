@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using EveMailHelper.DataModels;
 using EveMailHelper.DataModels.Security;
 using EveMailHelper.DataModels.Sde;
+using EveMailHelper.DataModels.Sde.Character;
 
 namespace EveMailHelper.DataAccessLayer.Context
 {
@@ -72,7 +73,7 @@ namespace EveMailHelper.DataAccessLayer.Context
 
         #region EveSDE
         public virtual DbSet<Category> Categories { get; set; } = null!;
-        public virtual DbSet<CharacterRace> Races { get; set; } = null!;
+        public virtual DbSet<Race> Races { get; set; } = null!;
         public virtual DbSet<EveType> EveTypes { get; set; } = null !;
         public virtual DbSet<Graphic> Graphics { get; set; } = null!;
         public virtual DbSet<Group> Groups { get; set; } = null!;

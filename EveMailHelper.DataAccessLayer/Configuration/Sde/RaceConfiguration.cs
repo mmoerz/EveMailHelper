@@ -2,15 +2,15 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using EveMailHelper.DataModels;
-using EveMailHelper.DataModels.Sde;
+using EveMailHelper.DataModels.Sde.Character;
 
 namespace EveMailHelper.DataAccessLayer.Configuration.Sde
 {
-    public partial class CharacterRaceConfiguration : IEntityTypeConfiguration<CharacterRace>
+    public partial class RaceConfiguration : IEntityTypeConfiguration<Race>
     {
-        public void Configure(EntityTypeBuilder<CharacterRace> builder)
+        public void Configure(EntityTypeBuilder<Race> builder)
         {
-            builder.ToTable(nameof(CharacterRace), Constants.SCHEMA_SDE);
+            builder.ToTable(nameof(Race), Constants.SCHEMA_SDE);
             builder.HasKey(a => a.EveId);
             builder.Property(a => a.EveId)
                 .IsRequired()
