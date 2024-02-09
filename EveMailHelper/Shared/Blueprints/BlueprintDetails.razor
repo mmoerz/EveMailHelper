@@ -10,7 +10,17 @@
           T="BlueprintComponent"
           @ref="_table">
     <ToolBarContent>
-        <MudText Typo="Typo.h6">@BlueprintName</MudText>
+        <MudPaper Elevation="0">
+            <MudText Typo="Typo.h6">@BlueprintName</MudText>
+        </MudPaper>
+        @if (_mainProduct != null) {
+            <MudPaper Elevation="0" Class="ml-4">
+                <MudText>@_mainProduct.QuantityFromBlueprint</MudText>
+            </MudPaper>
+            <MudPaper Elevation="0" Class="ml-4">
+                <MudText>@_mainProduct.Name </MudText>
+            </MudPaper>
+        }
     </ToolBarContent>
     <ColGroup>
         <col style="width:220px" />
@@ -25,14 +35,27 @@
         <MudTh><MudTableSortLabel SortLabel="TypeName" T="Character">Name</MudTableSortLabel> </MudTh>
         <MudTh><MudTableSortLabel SortLabel="Volume" T="Character">Volume</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortLabel="Quantity" T="Character">Quantity</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="BPQuantity" T="Character">BPQuantity</MudTableSortLabel></MudTh>
+            <MudTh>
+                <MudTableSortLabel SortLabel="FQuantity" T="Character">
+                    ForcedQuantity
+                </MudTableSortLabel>
+            </MudTh>
         <MudTh><MudTableSortLabel SortLabel="Price" T="Character">Price per Unit</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortLabel="Sum" T="Character">Sum</MudTableSortLabel></MudTh>
+            
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="TypeName">@context.ProductionDepth: @context.Name</MudTd>
+        <MudTd DataLabel="TypeName">
+            <MudPaper Class="@GetClassForDepth(@context.ProductionDepth)" Elevation="0">
+                @context.ProductionDepth: @context.Name
+            </MudPaper>
+        </MudTd>
         <MudTd DataLabel="Volume">@context.Volume</MudTd>
         <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
+        <MudTd DataLabel="BPQuantity">@context.QuantityFromBlueprint</MudTd>
+        <MudTd DataLabel="FQuantity">@context.ForcedQuantityMultiplier</MudTd>
         <MudTd DataLabel="Price">@context.PricePerUnit
                 <!--
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteEmail(context)"></MudIconButton>

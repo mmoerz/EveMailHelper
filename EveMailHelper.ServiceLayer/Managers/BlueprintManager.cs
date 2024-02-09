@@ -46,7 +46,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             return await _industryActivityDbAccess.GetByIdDeep(EveId);
         }
 
-        public async Task<List<BlueprintComponent>> GetBlueprintComponentsList(
+        public async Task<BlueprintComponent> GetBlueprintComponentsList(
             IndustryBlueprint blueprint,
             int filterActivity = 0
             )
@@ -60,7 +60,21 @@ namespace EveMailHelper.ServiceLayer.Managers
             if (activity == null)
                 throw new Exception("Oh weh blueprint ohne Activity");
 
-            return await GetBlueprintComponentsForActivity(activity, 0, filterActivity);
+            var components = await GetBlueprintComponentsForActivity(activity, 0, filterActivity);
+
+            var first = activity.Products.First();
+            BlueprintComponent main = new()
+            {
+                EveId = activity.Type.EveId,
+                ProductionDepth = 0,
+                Name = first.ProductType.TypeName,
+                Quantity = 0,
+                QuantityFromBlueprint = first.Quantity,
+                Volume = first.ProductType.Volume ?? 0.0,
+                SubComponents = components,
+            };
+
+            return main;
         }
 
         protected async Task<List<BlueprintComponent>> GetBlueprintComponentsForActivity(
@@ -91,6 +105,10 @@ namespace EveMailHelper.ServiceLayer.Managers
                 if (producedBy.Any())
                 {
                     var first = producedBy.First();
+                    var result = first.Products.Where(x => x.ProductTypeId == material.MaterialType.EveId).First();
+
+                    component.QuantityFromBlueprint = result.Quantity;
+                    
                     component.SubComponents = await GetBlueprintComponentsForActivity(
                         first, 
                         productionDepth + 1, 

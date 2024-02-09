@@ -20,6 +20,7 @@ namespace EveMailHelper.Web.Shared.Blueprints
         #endregion
 
         private MudTable<BlueprintComponent> _table = null!;
+        private BlueprintComponent _mainProduct = null!;
         private IList<BlueprintComponent> _blueprintComponents = new List<BlueprintComponent>();
 
         private IndustryBlueprint _blueprint = new();
@@ -57,7 +58,8 @@ namespace EveMailHelper.Web.Shared.Blueprints
             if (_blueprint != null && _blueprint.TypeId != 0)
             {
                 // TODO: ugly ugly reference to use '11' as an activity filter directly
-                _blueprintComponents = await BlueprintManager.GetBlueprintComponentsList(_blueprint, 11);
+                _mainProduct = await BlueprintManager.GetBlueprintComponentsList(_blueprint, 11);
+                _blueprintComponents = _mainProduct.SubComponents.ToList();
                 _blueprintComponents.ToFlatList();
             }
 
@@ -65,6 +67,13 @@ namespace EveMailHelper.Web.Shared.Blueprints
             data.Items = _blueprintComponents;
 
             return data;
+        }
+
+        private string GetClassForDepth(int depth)
+        {
+            if (depth == 1)
+                return "";
+            return string.Format("ml-{0}", (depth-1)*2);
         }
 
         public void SetModels(List<BlueprintComponent> value)

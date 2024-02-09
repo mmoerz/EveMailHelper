@@ -1,4 +1,8 @@
-﻿namespace EveMailHelper.ServiceLayer.Models
+﻿using EveMailHelper.DataModels.Sde;
+
+using static MudBlazor.Icons;
+
+namespace EveMailHelper.ServiceLayer.Models
 {
     public class BlueprintComponent
     {
@@ -24,6 +28,16 @@
         public int Quantity { get; set; }
         public double PricePerUnit { get; set; }
         public double PriceSum { get; set; }
+
+        public int QuantityFromBlueprint { get; set; }
+
+        public double ForcedQuantityMultiplier 
+        {
+            get
+            {
+                return (double)QuantityFromBlueprint / (double)Quantity;
+            }
+        }
 
         public ICollection<BlueprintComponent> SubComponents { get; set; }
     }
