@@ -34,7 +34,7 @@ namespace EveMailHelper.DataModels.Sde.Map
         public bool EveDeletedInGame { get; set; } = false;
 
         public virtual Region Region { get; set; } = null!;
-        public virtual Faction Faction { get; set; } = null!;
+        public virtual Faction? Faction { get; set; }
         public virtual ICollection<SolarSystem> SolarSystems { get; set; }
     }
 }

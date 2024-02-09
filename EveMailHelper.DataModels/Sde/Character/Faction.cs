@@ -21,7 +21,7 @@ namespace EveMailHelper.DataModels.Sde.Character
         public string Description { get; set; } = string.Empty;
         public int RaceId { get; set; }
         public int SolarSystemId { get; set; }
-        public int CorporationId { get; set; }
+        public int? CorporationId { get; set; }
         public double SizeFactor { get; set; }
         public int? MilitiaCorporationId { get; set; }
         public int IconId { get; set; }
@@ -29,10 +29,10 @@ namespace EveMailHelper.DataModels.Sde.Character
         public bool EveDeletedInGame { get; set; } = false;
 
         public virtual Icon Icon { get; set; } = null!;
-        public virtual Race Race { get; set; } = null!;
+        public virtual Race? Race { get; set; } = null!;
         public virtual SolarSystem SolarSystem { get; set; } = null!;
-        public virtual NpcCorporation Corporation { get; set; } = null!;
-        public virtual NpcCorporation MilitiaCorporation { get; set; } = null!;
+        public virtual NpcCorporation? Corporation { get; set; }
+        public virtual NpcCorporation? MilitiaCorporation { get; set; } = null!;
         public virtual ICollection<Region> Regions { get; set; }
         public virtual ICollection<Constellation> Constellations { get; set; }
         public virtual ICollection<SolarSystem> SolarSystems { get; set; }

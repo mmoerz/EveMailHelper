@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EveMailHelper.DataAccessLayer.Migrations
 {
     [DbContext(typeof(EveMailHelperContext))]
-    [Migration("20240206095158_sdename1")]
-    partial class sdename1
+    [Migration("20240209175514_sdeFactionFix1")]
+    partial class sdeFactionFix1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -387,11 +387,11 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         new
                         {
                             Id = new Guid("11110000-0000-0000-0000-000011110000"),
-                            DateFounded = new DateTime(2024, 2, 6, 10, 51, 58, 463, DateTimeKind.Local).AddTicks(8719),
+                            DateFounded = new DateTime(2024, 2, 9, 18, 55, 14, 414, DateTimeKind.Local).AddTicks(4372),
                             Description = "Noname Default",
                             EveDeletedInGame = false,
                             EveId = 0,
-                            EveLastUpdated = new DateTime(2024, 2, 6, 9, 51, 58, 463, DateTimeKind.Utc).AddTicks(8697),
+                            EveLastUpdated = new DateTime(2024, 2, 9, 17, 55, 14, 414, DateTimeKind.Utc).AddTicks(4350),
                             MemberCount = 0,
                             Name = "Noname Default",
                             TaxRate = 0f,
@@ -628,7 +628,128 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.ToTable("Category", "Sde");
                 });
 
-            modelBuilder.Entity("EveMailHelper.DataModels.Sde.CharacterRace", b =>
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Character.Faction", b =>
+                {
+                    b.Property<int>("EveId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CorporationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EveDeletedInGame")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("EveLastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IconId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MilitiaCorporationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("RaceId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("SizeFactor")
+                        .HasColumnType("float");
+
+                    b.Property<int>("SolarSystemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EveId");
+
+                    b.HasIndex("CorporationId")
+                        .IsUnique()
+                        .HasFilter("[CorporationId] IS NOT NULL");
+
+                    b.HasIndex("IconId");
+
+                    b.HasIndex("MilitiaCorporationId")
+                        .IsUnique()
+                        .HasFilter("[MilitiaCorporationId] IS NOT NULL");
+
+                    b.HasIndex("RaceId");
+
+                    b.HasIndex("SolarSystemId");
+
+                    b.ToTable("Faction", "Sde");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Character.NpcCorporation", b =>
+                {
+                    b.Property<int>("EveId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("EnemyId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("EveDeletedInGame")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("EveLastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Extent")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("FactionId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FriendId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IconId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InitialPrice")
+                        .HasColumnType("int");
+
+                    b.Property<double>("MinSecurity")
+                        .HasColumnType("float");
+
+                    b.Property<int>("PublicShares")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Size")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SolarSystemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EveId");
+
+                    b.HasIndex("EnemyId");
+
+                    b.HasIndex("FactionId");
+
+                    b.HasIndex("FriendId");
+
+                    b.HasIndex("IconId");
+
+                    b.HasIndex("SolarSystemId");
+
+                    b.ToTable("NpcCorporation", "Sde");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Character.Race", b =>
                 {
                     b.Property<int>("EveId")
                         .HasColumnType("int");
@@ -660,7 +781,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasIndex("IconId");
 
-                    b.ToTable("CharacterRace", "Sde");
+                    b.ToTable("Race", "Sde");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.Sde.EveType", b =>
@@ -676,8 +797,8 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasMaxLength(4096)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("EveDeletedInGame")
                         .HasColumnType("bit");
@@ -862,8 +983,6 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.HasKey("TypeId", "ActivityId");
 
-                    b.HasIndex("ActivityId");
-
                     b.ToTable("IndustryActivity", "Sde");
                 });
 
@@ -968,6 +1087,216 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.HasKey("TypeId");
 
                     b.ToTable("IndustryBlueprint", "Sde");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Map.Constellation", b =>
+                {
+                    b.Property<int>("EveId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("EveDeletedInGame")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("EveLastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("FactionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<double>("Radius")
+                        .HasColumnType("float");
+
+                    b.Property<int>("RegionId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("X")
+                        .HasColumnType("float");
+
+                    b.Property<double>("XMax")
+                        .HasColumnType("float");
+
+                    b.Property<double>("XMin")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Y")
+                        .HasColumnType("float");
+
+                    b.Property<double>("YMax")
+                        .HasColumnType("float");
+
+                    b.Property<double>("YMin")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Z")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ZMax")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ZMin")
+                        .HasColumnType("float");
+
+                    b.HasKey("EveId");
+
+                    b.HasIndex("FactionId");
+
+                    b.HasIndex("RegionId");
+
+                    b.ToTable("Constellation", "Sde");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Map.Region", b =>
+                {
+                    b.Property<int>("EveId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FactionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("Nebula")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("Radius")
+                        .HasColumnType("float");
+
+                    b.Property<double>("X")
+                        .HasColumnType("float");
+
+                    b.Property<double>("XMax")
+                        .HasColumnType("float");
+
+                    b.Property<double>("XMin")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Y")
+                        .HasColumnType("float");
+
+                    b.Property<double>("YMax")
+                        .HasColumnType("float");
+
+                    b.Property<double>("YMin")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Z")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ZMax")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ZMin")
+                        .HasColumnType("float");
+
+                    b.HasKey("EveId");
+
+                    b.HasIndex("FactionId");
+
+                    b.ToTable("Region", "Sde");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Map.SolarSystem", b =>
+                {
+                    b.Property<int>("EveId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Border")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ConstellationId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Corridor")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EveDeletedInGame")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("EveLastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("FactionId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Fringe")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Hub")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("International")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("Luminosity")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<double>("Radius")
+                        .HasColumnType("float");
+
+                    b.Property<int>("RegionId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Regional")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("Security")
+                        .HasColumnType("float");
+
+                    b.Property<string>("SecurityClass")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SunTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("X")
+                        .HasColumnType("float");
+
+                    b.Property<double>("XMax")
+                        .HasColumnType("float");
+
+                    b.Property<double>("XMin")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Y")
+                        .HasColumnType("float");
+
+                    b.Property<double>("YMax")
+                        .HasColumnType("float");
+
+                    b.Property<double>("YMin")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Z")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ZMax")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ZMin")
+                        .HasColumnType("float");
+
+                    b.HasKey("EveId");
+
+                    b.HasIndex("ConstellationId");
+
+                    b.HasIndex("FactionId");
+
+                    b.HasIndex("RegionId");
+
+                    b.ToTable("SolarSystem", "Sde");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.Sde.MarketGroup", b =>
@@ -1388,7 +1717,86 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.Navigation("Icon");
                 });
 
-            modelBuilder.Entity("EveMailHelper.DataModels.Sde.CharacterRace", b =>
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Character.Faction", b =>
+                {
+                    b.HasOne("EveMailHelper.DataModels.Sde.Character.NpcCorporation", "Corporation")
+                        .WithOne()
+                        .HasForeignKey("EveMailHelper.DataModels.Sde.Character.Faction", "CorporationId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.HasOne("EveMailHelper.DataModels.Sde.Icon", "Icon")
+                        .WithMany()
+                        .HasForeignKey("IconId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("EveMailHelper.DataModels.Sde.Character.NpcCorporation", "MilitiaCorporation")
+                        .WithOne()
+                        .HasForeignKey("EveMailHelper.DataModels.Sde.Character.Faction", "MilitiaCorporationId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.HasOne("EveMailHelper.DataModels.Sde.Character.Race", "Race")
+                        .WithMany("Factions")
+                        .HasForeignKey("RaceId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("EveMailHelper.DataModels.Sde.Map.SolarSystem", "SolarSystem")
+                        .WithMany()
+                        .HasForeignKey("SolarSystemId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Corporation");
+
+                    b.Navigation("Icon");
+
+                    b.Navigation("MilitiaCorporation");
+
+                    b.Navigation("Race");
+
+                    b.Navigation("SolarSystem");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Character.NpcCorporation", b =>
+                {
+                    b.HasOne("EveMailHelper.DataModels.Sde.Character.NpcCorporation", "Enemy")
+                        .WithMany()
+                        .HasForeignKey("EnemyId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.HasOne("EveMailHelper.DataModels.Sde.Character.Faction", "Faction")
+                        .WithMany("NpcCorporations")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.HasOne("EveMailHelper.DataModels.Sde.Character.NpcCorporation", "Friend")
+                        .WithMany()
+                        .HasForeignKey("FriendId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.HasOne("EveMailHelper.DataModels.Sde.Icon", "Icon")
+                        .WithMany()
+                        .HasForeignKey("IconId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.HasOne("EveMailHelper.DataModels.Sde.Map.SolarSystem", "SolarSystem")
+                        .WithMany()
+                        .HasForeignKey("SolarSystemId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.Navigation("Enemy");
+
+                    b.Navigation("Faction");
+
+                    b.Navigation("Friend");
+
+                    b.Navigation("Icon");
+
+                    b.Navigation("SolarSystem");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Character.Race", b =>
                 {
                     b.HasOne("EveMailHelper.DataModels.Sde.Icon", "Icon")
                         .WithMany("ChrRaces")
@@ -1415,7 +1823,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         .HasForeignKey("MarketGroupId")
                         .OnDelete(DeleteBehavior.ClientCascade);
 
-                    b.HasOne("EveMailHelper.DataModels.Sde.CharacterRace", "Race")
+                    b.HasOne("EveMailHelper.DataModels.Sde.Character.Race", "Race")
                         .WithMany("InvTypes")
                         .HasForeignKey("RaceId")
                         .OnDelete(DeleteBehavior.ClientCascade);
@@ -1472,7 +1880,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.HasOne("EveMailHelper.DataModels.Sde.IndustryActivity", "IndustryActivity")
-                        .WithMany()
+                        .WithMany("Materials")
                         .HasForeignKey("TypeId", "ActivityId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
@@ -1493,7 +1901,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.HasOne("EveMailHelper.DataModels.Sde.IndustryActivity", "IndustryActivity")
-                        .WithMany()
+                        .WithMany("Probabilities")
                         .HasForeignKey("TypeId", "ActivityId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
@@ -1512,7 +1920,7 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.HasOne("EveMailHelper.DataModels.Sde.IndustryActivity", "IndustryActivity")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("TypeId", "ActivityId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
@@ -1531,6 +1939,60 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Map.Constellation", b =>
+                {
+                    b.HasOne("EveMailHelper.DataModels.Sde.Character.Faction", "Faction")
+                        .WithMany("Constellations")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.HasOne("EveMailHelper.DataModels.Sde.Map.Region", "Region")
+                        .WithMany("Constellations")
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Faction");
+
+                    b.Navigation("Region");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Map.Region", b =>
+                {
+                    b.HasOne("EveMailHelper.DataModels.Sde.Character.Faction", "Faction")
+                        .WithMany("Regions")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.Navigation("Faction");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Map.SolarSystem", b =>
+                {
+                    b.HasOne("EveMailHelper.DataModels.Sde.Map.Constellation", "Constellation")
+                        .WithMany("SolarSystems")
+                        .HasForeignKey("ConstellationId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("EveMailHelper.DataModels.Sde.Character.Faction", "Faction")
+                        .WithMany("SolarSystems")
+                        .HasForeignKey("FactionId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.HasOne("EveMailHelper.DataModels.Sde.Map.Region", "Region")
+                        .WithMany("SolarSystems")
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Constellation");
+
+                    b.Navigation("Faction");
+
+                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.Sde.MarketGroup", b =>
@@ -1637,8 +2099,21 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.Navigation("InvGroups");
                 });
 
-            modelBuilder.Entity("EveMailHelper.DataModels.Sde.CharacterRace", b =>
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Character.Faction", b =>
                 {
+                    b.Navigation("Constellations");
+
+                    b.Navigation("NpcCorporations");
+
+                    b.Navigation("Regions");
+
+                    b.Navigation("SolarSystems");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Character.Race", b =>
+                {
+                    b.Navigation("Factions");
+
                     b.Navigation("InvTypes");
                 });
 
@@ -1665,6 +2140,27 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.Navigation("InvMarketGroups");
 
                     b.Navigation("InvTypes");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.IndustryActivity", b =>
+                {
+                    b.Navigation("Materials");
+
+                    b.Navigation("Probabilities");
+
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Map.Constellation", b =>
+                {
+                    b.Navigation("SolarSystems");
+                });
+
+            modelBuilder.Entity("EveMailHelper.DataModels.Sde.Map.Region", b =>
+                {
+                    b.Navigation("Constellations");
+
+                    b.Navigation("SolarSystems");
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.Sde.MarketGroup", b =>

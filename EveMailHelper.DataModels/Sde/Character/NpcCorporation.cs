@@ -27,8 +27,8 @@ namespace EveMailHelper.DataModels.Sde.Character
         public virtual NpcCorporation? Friend { get; set; }
         public virtual NpcCorporation? Enemy { get; set; }
 
-        public virtual SolarSystem SolarSystem { get; set; } = null!;
-        public virtual Faction Faction { get; set; } = null!;
-        public virtual Icon Icon { get; set; } = null!;
+        public virtual SolarSystem? SolarSystem { get; set; } = null!;
+        public virtual Faction? Faction { get; set; } = null!;
+        public virtual Icon? Icon { get; set; } = null!;
     }
 }

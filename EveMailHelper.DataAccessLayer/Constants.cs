@@ -14,5 +14,6 @@ namespace EveMailHelper.DataAccessLayer
         public const int SIZE_FILENAME = 200;
         public const int SIZE_DESCRIPTION = 1000;
         public const int SIZE_SHORTDESCRIPTION = 500;
+        public const int SIZE_TEXT_MAX = 4096; // more than 4000 for mssql
     }
 }

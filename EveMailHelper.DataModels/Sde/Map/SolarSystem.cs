@@ -30,11 +30,10 @@ namespace EveMailHelper.DataModels.Sde.Map
         public bool Hub { get; set; }
         public bool International { get; set; }
         public bool Regional { get; set; }
-        public bool IsConstellation { get; set; }
         public double Security { get; set; }
         public int? FactionId { get; set; }
         public double Radius { get; set; }
-        public int SunTypeId { get; set; }
+        public int? SunTypeId { get; set; }
         public string? SecurityClass { get; set; }
 
         public DateTime EveLastUpdated { get; set; } = DateTime.Now;

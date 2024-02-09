@@ -23,16 +23,16 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Sde
 
             builder.Property(a => a.Description)
                 .IsRequired()
-                .HasMaxLength(Constants.SIZE_DESCRIPTION);
+                .HasMaxLength(Constants.SIZE_TEXT_MAX);
 
             builder.HasOne(f => f.Race)
                 .WithMany(r => r.Factions)
-                .HasForeignKey(r => r.Race)
+                .HasForeignKey(r => r.RaceId)
                 .OnDelete(DeleteBehavior.ClientCascade);
 
             builder.HasOne(f => f.SolarSystem)
-                .WithOne(r => r.Faction)
-                .HasForeignKey<Faction>(f => f.SolarSystemId)
+                .WithMany()
+                .HasForeignKey(f => f.SolarSystemId)
                 .OnDelete(DeleteBehavior.ClientCascade);
 
             builder.HasOne(f => f.Corporation)
