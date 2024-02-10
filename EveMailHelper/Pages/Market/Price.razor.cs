@@ -11,6 +11,7 @@ using EveMailHelper.DataModels.Sde;
 using EveMailHelper.Web.Models;
 using EveMailHelper.ServiceLayer.Models;
 using EveMailHelper.Web.Shared.Market;
+using Microsoft.Extensions.Primitives;
 
 namespace EveMailHelper.Web.Pages.Market
 {
@@ -24,6 +25,8 @@ namespace EveMailHelper.Web.Pages.Market
 
         [Inject]
         IMapManager MapManager { get; set; } = null!;
+        [Inject]
+        IEveTypeManager EveTypeManager { get; set; } = null!;
         #endregion
 
         #region parameters
@@ -46,6 +49,7 @@ namespace EveMailHelper.Web.Pages.Market
 
 
         private string RegionName { get; set; } = string.Empty;
+        private string EveTypeName {  get; set; } = string.Empty;
         private int RegionId { get; set; }
         private int TypeId { get; set; }
 
@@ -57,10 +61,29 @@ namespace EveMailHelper.Web.Pages.Market
             return await MapManager.SearchForRegionName(regionNamePartial);
         }
 
-        public void UpdateMarketPrice()
+        public async Task<IEnumerable<string>> SearchEveType(string typeNamePartial)
+        {
+            if (typeNamePartial == null)
+                return new List<string>();
+
+            return await EveTypeManager.SearchForEveTypeName(typeNamePartial);
+        }
+
+        public async Task UpdateMarketPrice()
         {
             if (myMarketOrder == null)
                 return;
+            if (string.IsNullOrEmpty(RegionName) || string.IsNullOrEmpty(EveTypeName))
+                return;
+
+            var region = await MapManager.GetRegionByName(RegionName);
+            if (region == null)
+                throw new Exception($"Regionname {RegionName} does not exist");
+            RegionId = region.EveId;
+            var evetype = await EveTypeManager.GetByName(EveTypeName);
+            if (evetype == null)
+                throw new Exception($"EveType not found for name {EveTypeName}");
+            TypeId = evetype.EveId;
 
             myMarketOrder.Reload();
         }

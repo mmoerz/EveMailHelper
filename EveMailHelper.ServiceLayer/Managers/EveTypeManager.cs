@@ -4,7 +4,6 @@ using EveMailHelper.BusinessLibrary.Complex.dto;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataModels;
 using EveMailHelper.DataModels.Sde;
-using EveMailHelper.DataModels.Sde.Map;
 using EveMailHelper.ServiceLayer.Managers;
 using EveMailHelper.ServiceLayer.Utilities;
 using EveMailHelper.ServiceLibrary.Managers;
@@ -23,36 +22,35 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EveMailHelper.ServiceLayer.Interfaces
 {
-    public class MapManager : IMapManager
+    public class EveTypeManager : IEveTypeManager
     {
         private readonly EveMailHelperContext _dbContext;
 
-        private readonly MapDbAccess _mapDbAccess;
+        private readonly EveTypeDbAccess _eveTypeDbAccess;
 
-        public MapManager(
+        public EveTypeManager(
             IDbContextFactory<EveMailHelperContext> dbContextFactory
             )
         {
             _dbContext = dbContextFactory.CreateDbContext();
-            _mapDbAccess = new MapDbAccess(_dbContext);
-
-
+            _eveTypeDbAccess = new EveTypeDbAccess(_dbContext);
         }
 
-        public async Task<IList<string>> SearchForRegionName(string regionNamePart)
+        public async Task<IList<string>> SearchForEveTypeName(string regionNamePart)
         {
-            var regions = await _mapDbAccess.SearchForRegionName(regionNamePart);
+            var types = await _eveTypeDbAccess.SearchForName(regionNamePart);
             IList<string> result = new List<string>();
-            foreach (var region in regions)
+            foreach (var evetype in types)
             {
-                result.Add(region.Name);
+                result.Add(evetype.TypeName);
             }
             return result;
         }
 
-        public async Task<Region> GetRegionByName(string eveTypeName)
+        public async Task<EveType> GetByName(string eveTypeName)
         {
-            return await _mapDbAccess.GetRegionByName(eveTypeName);
+            return await _eveTypeDbAccess.GetByName(eveTypeName);
         }
+
     }
 }
