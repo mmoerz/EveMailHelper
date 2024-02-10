@@ -5,6 +5,7 @@ using EveMailHelper.DataModels;
 using EveMailHelper.DataModels.Security;
 using EveMailHelper.DataModels.Sde;
 using EveMailHelper.DataModels.Sde.Character;
+using EveMailHelper.DataModels.Sde.Map;
 
 namespace EveMailHelper.DataAccessLayer.Context
 {
@@ -84,6 +85,12 @@ namespace EveMailHelper.DataAccessLayer.Context
         public virtual DbSet<IndustryActivityProduct> IndustryActivityProducts { get; set; } = null!;
         public virtual DbSet<IndustryBlueprint> IndustryBlueprints { get; set; } = null!;
         public virtual DbSet<MarketGroup> MarketGroups { get; set; } = null!;
+        public virtual DbSet<Region> Regions { get; set; } = null!;
+        public virtual DbSet<Constellation> Constellations { get; set; } = null!;
+        public virtual DbSet<SolarSystem> SolarSystems { get; set; } = null!;
+        public virtual DbSet<Faction> Factions { get; set; } = null!;
+        public virtual DbSet<NpcCorporation> NpcCorporations { get; set; } = null!;
+
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -21,13 +21,15 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EveMailHelper.ServiceLayer.Managers
 {
-    public class InGameMarketManager 
+    public class InGameMarketManager : IInGameMarketManager
     {
         private readonly EveMailHelperContext _dbContext;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly IAuthenticationManager _authenticationManager;
         private readonly EVEStandardAPI _esiClient;
         private readonly SSOv2 _sSOv2;
+
+        private readonly MapDbAccess _mapDbAccess;
 
         public InGameMarketManager(
             AuthenticationStateProvider authenticationStateProvider,
@@ -37,32 +39,22 @@ namespace EveMailHelper.ServiceLayer.Managers
             )
         {
             _dbContext = dbContextFactory.CreateDbContext();
-            var eveMailLabelDbAccess = new MailLabelDbAccess(_dbContext);
-            var characterDbAccess = new CharacterDbAccess(_dbContext);
-            var corporationDbAccess = new CorporationDbAccess(_dbContext);
-            var allianceDbAccess = new AllianceDbAccess(_dbContext);
-            var maillistDbAccess = new MailListDbAccess(_dbContext);
-            var eveMailDbAccess = new MailDbAccess(_dbContext);
-            
+            _mapDbAccess = new MapDbAccess(_dbContext);
+
             _authenticationStateProvider = authenticationStateProvider;
             _authenticationManager = authenticationManager;
             _esiClient = esiClient;
             _sSOv2 = ssov2;
-
-            
         }
 
-        public async Task<List<String>> LoadMarketPrice()
+        public async Task<List<EVEStandard.Models.MarketOrder>> LoadMarketPrice(int regionId, int typeId, int page)
         {
             var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
             AuthDTO auth = await _authenticationManager.GetAuthDTOForPrincipal(user);
 
-            // Market
-            //_esiClient.Universe
+            var esiresult = await _esiClient.Market.ListOrdersInRegionV1Async(regionId, typeId, page);
 
-            //_esiClient.Market.ListMarketPricesV1Async
-
-            return new List<String>();
+            return esiresult.Model;
         }
 
 

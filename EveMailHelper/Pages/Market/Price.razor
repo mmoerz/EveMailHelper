@@ -1,0 +1,41 @@
+﻿@page "/Market/Price"
+@using EveMailHelper.Web.Shared.Reactions
+@using EveMailHelper.Web.Shared.Blueprints
+@using EveMailHelper.Web.Shared.Market
+
+
+<MudCard Elevation="4">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Price Overview</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudItem>
+            <MudStack Row="true">
+                <MudAutocomplete T="string" Label="Region" @bind-Value="RegionName" SearchFunc="@SearchRegion" />
+                <MudButton OnClick="@UpdateMarketPrice" Variant="Variant.Filled" Color="Color.Primary">
+                    Update
+                </MudButton>
+            </MudStack>
+        </MudItem>
+    </MudCardContent>
+</MudCard>
+<!--
+    Firststyle button !!!
+-->
+
+
+<!-- 
+
+<CharacterList OnCharacterSelect="CharacterSelected" @ref="ListOfCharacters">
+
+-->
+
+<MudCard Elevation="4" Class="mt-4">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Reactions</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MarketOrderList RegionId="@RegionId" TypeId="@TypeId"></MarketOrderList>
+        
+    </MudCardContent>
+</MudCard>

@@ -2,8 +2,10 @@
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
     
     <MudNavLink Href="EveChar/CharacterOverview" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person">Characters</MudNavLink>
-    <MudNavLink Href="Market/ReactionOverview" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Shop">Market</MudNavLink>
-    
+    <MudNavGroup Title="Market" Icon="@Icons.Material.Filled.ShopTwo" Expanded="true">
+        <MudNavLink Href="Market/Price" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PriceCheck">Pricecheck</MudNavLink>
+        <MudNavLink Href="Market/ReactionOverview" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Shop">Market</MudNavLink>
+    </MudNavGroup>
     <MudNavGroup Title="Eve Mail" Icon="@Icons.Material.Filled.List" Expanded="true">
         <MudNavLink Href="EveMails/MailOverview" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">Emails</MudNavLink>
         <MudNavLink Href="EveMails/CheckEveMailSent" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Check">Check Receivers</MudNavLink>
