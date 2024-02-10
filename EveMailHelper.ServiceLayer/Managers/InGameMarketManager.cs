@@ -49,10 +49,10 @@ namespace EveMailHelper.ServiceLayer.Managers
 
         public async Task<List<EVEStandard.Models.MarketOrder>> LoadMarketPrice(int regionId, int typeId, int page)
         {
-            var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
-            AuthDTO auth = await _authenticationManager.GetAuthDTOForPrincipal(user);
+            //var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
+            //AuthDTO auth = await _authenticationManager.GetAuthDTOForPrincipal(user);
 
-            var esiresult = await _esiClient.Market.ListOrdersInRegionV1Async(regionId, typeId, page);
+            var esiresult = await _esiClient.Market.ListOrdersInRegionV1Async(regionId, typeId, 1);
 
             return esiresult.Model;
         }

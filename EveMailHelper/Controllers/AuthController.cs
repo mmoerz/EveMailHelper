@@ -51,6 +51,7 @@ namespace EveMailHelper.Controllers
                 Scopes.ESI_MAIL_SEND_MAIL_1,
                 Scopes.ESI_MAIL_ORGANIZE_MAIL_1,
                 Scopes.ESI_SEARCH_SEARCH_STRUCTURES_1,
+                Scopes.ESI_MARKETS_STRUCTURE_MARKETS_1
             };
             
             _logger.LogInformation("login caught, redirecting to external auth");

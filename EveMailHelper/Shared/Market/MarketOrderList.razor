@@ -36,24 +36,23 @@
         </MudTextField>
     </ToolBarContent>
     <ColGroup>
-        <col style="width:420px" />
-        <col style="width:400px" />       
+        <col style="width:40px" />
+        <col style="width:100px" />
+        <col style="width:220px" />
         <col />
         <col />
     </ColGroup>
     <HeaderContent>
-        <MudTh><MudTableSortLabel SortLabel="TypeName" T="EVEStandard.Models.MarketOrder">Blueprint Name</MudTableSortLabel> </MudTh>
-        <MudTh><MudTableSortLabel SortLabel="Group" T="EVEStandard.Models.MarketOrder">Group</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="IsBuy" T="EVEStandard.Models.MarketOrder">Is Buy</MudTableSortLabel> </MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Price" T="EVEStandard.Models.MarketOrder">Price</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Range" T="EVEStandard.Models.MarketOrder">Range</MudTableSortLabel></MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="TypeName">@context</MudTd>
-        <MudTd DataLabel="Group">@context</MudTd>
-        <MudTd DataLabel="Delete">
-            <!--
-            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteEmail(context)"></MudIconButton>
-                -->
-        </MudTd>
+        <MudTd DataLabel="IsBuy">@context.IsBuyOrder</MudTd>
+        <MudTd DataLabel="Price">@context.Price</MudTd>
+        <MudTd DataLabel="Issued">@context.Issued</MudTd>
+        <MudTd DataLabel="Range">@context.Range</MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager HidePageNumber="false" />
