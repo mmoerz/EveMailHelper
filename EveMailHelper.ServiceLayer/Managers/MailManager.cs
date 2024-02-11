@@ -76,7 +76,7 @@ namespace EveMailHelper.BusinessLibrary.Services
 
         public async Task<List<string>> FilterReceivers(string receivers, DateTime filterTime)
         {
-            var result = await _evemailDbAccess.GetReceiversFiltered(receivers.SplitStringOfCharacters(','), filterTime);
+            var result = await _evemailDbAccess.GetReceiversFilteredAsync(receivers.SplitStringOfCharacters(','), filterTime);
             //List<string> receiversFiltered = new List<string>();
             //foreach (var item in result)
             //    receiversFiltered.Add(item.Name);
@@ -171,7 +171,7 @@ namespace EveMailHelper.BusinessLibrary.Services
         public async Task SendTo(Guid templateId, Character fromCharacter, ICollection<string> receiverNames)
         {
             using var transaction = _dbContext.Database.BeginTransaction();
-            var template = await _templateDbAccess.GetById(templateId);
+            var template = await _templateDbAccess.GetByIdAsync(templateId);
             var character = await _characterDbAccess.GetByIdAsync(fromCharacter.Id);
 
             if (template == null)

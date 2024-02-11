@@ -22,23 +22,23 @@ namespace EveMailHelper.BusinessDataAccess
             _context.IndustryBlueprints.Remove(blueprint);
         }
 
-        public async Task<ICollection<IndustryBlueprint>> GetAll()
+        public async Task<ICollection<IndustryBlueprint>> GetAllAsync()
         {
             return await _context.IndustryBlueprints.ToListAsync();
         }
 
-        public async Task<IndustryBlueprint?> GetById(int EveId)
+        public async Task<IndustryBlueprint?> GetByIdAsync(int EveId)
         {
             return await _context.IndustryBlueprints.Where(x => x.TypeId == EveId).FirstOrDefaultAsync();
         }
 
-        public async Task<IndustryBlueprint?> GetByName(string blueprintName)
+        public async Task<IndustryBlueprint?> GetByNameAsync(string blueprintName)
         {
             return await _context.IndustryBlueprints.Where(x => x.Type.TypeName == blueprintName)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<TableData<IndustryBlueprint>> GetPaginated(
+        public async Task<TableData<IndustryBlueprint>> GetPaginatedAsync(
             string grpFilter, string searchString, TableState state)
         {
             IQueryable<IndustryBlueprint> query;
@@ -49,11 +49,11 @@ namespace EveMailHelper.BusinessDataAccess
                     select blueprint;
 
             query = query.Where(
-                x => x.Type.TypeName.Contains(searchString)
-                || x.Type.Group.GroupName.Contains(searchString)
+                x => x.Type.TypeName.Contains(searchString) 
+                || (x.Type.Group != null && x.Type.Group.GroupName.Contains(searchString))
                 );
             if (!string.IsNullOrEmpty(grpFilter))
-                query = query.Where(x => x.Type.Group.GroupName.Contains(grpFilter));
+                query = query.Where(x => (x.Type.Group != null && x.Type.Group.GroupName.Contains(grpFilter)));
             
             query = state.SortLabel switch
             {

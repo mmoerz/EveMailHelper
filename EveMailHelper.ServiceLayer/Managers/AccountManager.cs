@@ -54,13 +54,13 @@ namespace EveMailHelper.ServiceLayer.Managers
         public async Task<TableData<EveAccount>> GetEveAccountsPaginated(
             Account account, string searchString, TableState state)
         {
-            return await _accountDbAccess.GetEveAccountsPaginated(account, searchString, state);
+            return await _accountDbAccess.GetEveAccountsPaginatedAsync(account, searchString, state);
         }
 
         public async Task<TableData<Character>> GetCharactersPaginated(
             Account account, EveAccount eveAccount, string searchString, TableState state)
         {
-            return await _characterDbAccess.GetCharactersPaginated(account, eveAccount, searchString, state);
+            return await _characterDbAccess.GetCharactersPaginatedAsync(account, eveAccount, searchString, state);
         }
     }
 }

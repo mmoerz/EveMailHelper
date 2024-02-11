@@ -14,7 +14,7 @@ namespace EveMailHelper.BusinessDataAccess
             _context = context;
         }
 
-        public async Task<ChatFile> GetById(Guid id)
+        public async Task<ChatFile> GetByIdAsync(Guid id)
         {
             var result = await _context.ChatFiles.Where(x => x.Id == id)
                 .FirstAsync();
@@ -28,9 +28,9 @@ namespace EveMailHelper.BusinessDataAccess
             return chatfile;
         }
 
-        public async Task Remove(Guid id)
+        public async Task RemoveAsync(Guid id)
         {
-            var chatFile = await GetById(id);
+            var chatFile = await GetByIdAsync(id);
             _context.ChatFiles.Remove(chatFile);
         }
     }

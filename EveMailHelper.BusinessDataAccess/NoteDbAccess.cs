@@ -21,17 +21,17 @@ namespace EveMailHelper.BusinessDataAccess
             _context.Notes.Remove(note);
         }
 
-        public async Task<ICollection<Note>> GetAll()
+        public async Task<ICollection<Note>> GetAllAsync()
         {
             return await _context.Notes.ToListAsync();
         }
 
-        public async Task<Note?> GetById(Guid id)
+        public async Task<Note?> GetByIdAsync(Guid id)
         {
             return await _context.Notes.Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<TableData<Note>> GetPaginated(string searchString, TableState state)
+        public async Task<TableData<Note>> GetPaginatedAsync(string searchString, TableState state)
         {
             IQueryable<Note> query = from mail in _context.Notes
                                                 select mail;

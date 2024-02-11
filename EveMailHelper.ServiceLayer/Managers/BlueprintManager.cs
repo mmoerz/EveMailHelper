@@ -38,12 +38,12 @@ namespace EveMailHelper.ServiceLayer.Managers
         public async Task<TableData<IndustryBlueprint>> GetBlueprintsPaginated(
             string groupFilter, string searchString, TableState state)
         {
-            return await _blueprintDbAccess.GetPaginated(groupFilter, searchString, state);
+            return await _blueprintDbAccess.GetPaginatedAsync(groupFilter, searchString, state);
         }
 
         public async Task<List<IndustryActivity>> GetBlueprintActivity(int EveId)
         {
-            return await _industryActivityDbAccess.GetByIdDeep(EveId);
+            return await _industryActivityDbAccess.GetByIdDeepAsync(EveId);
         }
 
         public async Task<BlueprintComponent> GetBlueprintComponentsList(

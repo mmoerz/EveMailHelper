@@ -43,12 +43,12 @@ namespace EveMailHelper.BusinessLibrary.Services
 
         public async Task<TableData<Note>> GetPaginated(string searchString, TableState state)
         {
-            return await _dbAccess.GetPaginated(searchString, state);
+            return await _dbAccess.GetPaginatedAsync(searchString, state);
         }
 
         public async Task<Note?> GetById(Guid id)
         {
-            return await _dbAccess.GetById(id);
+            return await _dbAccess.GetByIdAsync(id);
         }
     }
 }

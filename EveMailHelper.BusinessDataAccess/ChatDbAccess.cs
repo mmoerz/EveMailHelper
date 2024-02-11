@@ -21,14 +21,14 @@ namespace EveMailHelper.BusinessDataAccess
             return await _context.Chats.ToListAsync();
         }
 
-        public async Task<Chat> GetById(Guid id)
+        public async Task<Chat> GetByIdAsync(Guid id)
         {
             var result = await _context.Chats.Where(x => x.Id == id).FirstOrDefaultAsync();
             _ = result ?? throw new NullReferenceException($"guid {id} not a valid ChatId");
             return result;
         }
 
-        public async Task<TableData<Chat>> GetPaginated(string searchString, TableState state)
+        public async Task<TableData<Chat>> GetPaginatedAsync(string searchString, TableState state)
         {
             IQueryable<Chat> query = from ch in _context.Chats
                                                 select ch;

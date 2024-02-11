@@ -88,7 +88,7 @@ namespace EveMailHelper.BusinessDataAccess
             return query.ToList();
         }
 
-        public async Task<TableData<Character>> GetCharactersPaginated(Account account, EveAccount? eveaccount, string searchString, TableState state)
+        public async Task<TableData<Character>> GetCharactersPaginatedAsync(Account account, EveAccount? eveaccount, string searchString, TableState state)
         {
             IQueryable<Character> query = from ch in _context.Characters
                                           where ch.AccountId == account.Id

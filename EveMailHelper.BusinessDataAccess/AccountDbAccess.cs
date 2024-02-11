@@ -25,10 +25,11 @@ namespace EveMailHelper.BusinessDataAccess
                 .Include(x => x.EveAccounts)
                 // ?? eveaccount->characters?
                 .Include(x => x.Characters)
-                .First();
+                .Single();
         }
 
-        public async Task<TableData<EveAccount>> GetEveAccountsPaginated(Account account, string searchString, TableState state)
+        public async Task<TableData<EveAccount>> GetEveAccountsPaginatedAsync(
+            Account account, string searchString, TableState state)
         {
             IQueryable<EveAccount> query = from eveaccount in _context.EveAccounts
                                            where eveaccount.Id == account.Id

@@ -52,7 +52,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
                 // check for Mail in the database with this eveMailId
                 try
                 {
-                    newDbMail = await _dbAccess.GetByEveId(esMail.MailId.Value);
+                    newDbMail = await _dbAccess.GetByEveIdAsync(esMail.MailId.Value);
                     newDbMail.Owner = dto.Owner;
                     _dbAccess.Update(newDbMail);
                 }

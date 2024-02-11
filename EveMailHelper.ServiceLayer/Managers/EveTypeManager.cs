@@ -49,7 +49,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
 
         public async Task<EveType> GetByName(string eveTypeName)
         {
-            return await _eveTypeDbAccess.GetByName(eveTypeName);
+            return await _eveTypeDbAccess.GetByNameAsync(eveTypeName);
         }
 
     }

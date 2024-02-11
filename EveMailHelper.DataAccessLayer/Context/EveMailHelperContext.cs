@@ -6,6 +6,7 @@ using EveMailHelper.DataModels.Security;
 using EveMailHelper.DataModels.Sde;
 using EveMailHelper.DataModels.Sde.Character;
 using EveMailHelper.DataModels.Sde.Map;
+using EveMailHelper.DataModels.Market;
 
 namespace EveMailHelper.DataAccessLayer.Context
 {
@@ -91,6 +92,12 @@ namespace EveMailHelper.DataAccessLayer.Context
         public virtual DbSet<Faction> Factions { get; set; } = null!;
         public virtual DbSet<NpcCorporation> NpcCorporations { get; set; } = null!;
 
+        #endregion
+
+        #region
+        // now this is getting tricky here
+        // we archive market data here
+        public virtual DbSet<MarketOrder> ArchivedMarketOrders { get; set; } = null!;
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

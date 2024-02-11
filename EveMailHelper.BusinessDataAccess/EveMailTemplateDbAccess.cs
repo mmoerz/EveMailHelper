@@ -16,17 +16,17 @@ namespace EveMailHelper.BusinessDataAccess
             _context = context;
         }
 
-        public async Task<ICollection<EveMailTemplate>> GetAll()
+        public async Task<ICollection<EveMailTemplate>> GetAllAsync()
         {
             return await _context.EveMailTemplates.ToListAsync();
         }
 
-        public async Task<EveMailTemplate?> GetById(Guid id)
+        public async Task<EveMailTemplate?> GetByIdAsync(Guid id)
         {
             return await _context.EveMailTemplates.Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<TableData<EveMailTemplate>> GetPaginated(string searchString, TableState state)
+        public async Task<TableData<EveMailTemplate>> GetPaginatedAsync(string searchString, TableState state)
         {
             IQueryable<EveMailTemplate> query = from mail in _context.EveMailTemplates
                                                 select mail;

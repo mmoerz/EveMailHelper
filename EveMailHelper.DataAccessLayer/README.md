@@ -105,3 +105,5 @@ For an example of dbcontextFactory for ASP.NET Core see
 [ApplicationDbContext](https://docs.microsoft.com/en-us/ef/core/dbcontext-configuration/) in the Microsoft documentation.
 
 [Package Manager Console EF Core Command Reference](https://docs.microsoft.com/en-us/ef/core/cli/powershell?msclkid=be8cf4dbcf7f11ec9a8f52d9400bf9b3)
+
+* temporary tables (tables with an automated history) https://learn.microsoft.com/en-us/ef/core/providers/sql-server/temporal-tables https://devblogs.microsoft.com/dotnet/prime-your-flux-capacitor-sql-server-temporal-tables-in-ef-core-6-0/ https://www.c-sharpcorner.com/article/working-with-temporal-tables-in-ef-core-6-0/

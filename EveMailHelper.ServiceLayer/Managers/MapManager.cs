@@ -41,7 +41,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
 
         public async Task<IList<string>> SearchForRegionName(string regionNamePart)
         {
-            var regions = await _mapDbAccess.SearchForRegionName(regionNamePart);
+            var regions = await _mapDbAccess.SearchForRegionNameAsync(regionNamePart);
             IList<string> result = new List<string>();
             foreach (var region in regions)
             {
@@ -52,7 +52,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
 
         public async Task<Region> GetRegionByName(string eveTypeName)
         {
-            return await _mapDbAccess.GetRegionByName(eveTypeName);
+            return await _mapDbAccess.GetRegionByNameAsync(eveTypeName);
         }
     }
 }

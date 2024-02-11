@@ -36,17 +36,17 @@ namespace EveMailHelper.BusinessLibrary.Services
 
         public async Task<TableData<EveMailTemplate>> GetPaginated(string searchString, TableState state)
         {
-            return await _dbAccess.GetPaginated(searchString, state);
+            return await _dbAccess.GetPaginatedAsync(searchString, state);
         }
 
         public async Task<ICollection<EveMailTemplate>> GetAll()
         {
-            return await _dbAccess.GetAll();
+            return await _dbAccess.GetAllAsync();
         }
 
         public async Task<EveMailTemplate?> GetById(Guid id)
         {
-            return await _dbAccess.GetById(id);
+            return await _dbAccess.GetByIdAsync(id);
         }
     }
 }

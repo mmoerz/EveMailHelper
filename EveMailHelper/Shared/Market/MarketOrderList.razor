@@ -39,20 +39,26 @@
         <col style="width:40px" />
         <col style="width:100px" />
         <col style="width:220px" />
+        <col style="width:220px" />
+        <col style="width:100px" />
         <col />
         <col />
     </ColGroup>
     <HeaderContent>
         <MudTh><MudTableSortLabel SortLabel="IsBuy" T="EVEStandard.Models.MarketOrder">Is Buy</MudTableSortLabel> </MudTh>
         <MudTh><MudTableSortLabel SortLabel="Price" T="EVEStandard.Models.MarketOrder">Price</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Issued" T="EVEStandard.Models.MarketOrder">Duration</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Issued" T="EVEStandard.Models.MarketOrder">Issued</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortLabel="Range" T="EVEStandard.Models.MarketOrder">Range</MudTableSortLabel></MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="IsBuy">@context.IsBuyOrder</MudTd>
         <MudTd DataLabel="Price">@context.Price</MudTd>
+        <MudTd DataLabel="Duration">@context.Duration</MudTd>
         <MudTd DataLabel="Issued">@context.Issued</MudTd>
         <MudTd DataLabel="Range">@context.Range</MudTd>
+        
     </RowTemplate>
     <PagerContent>
         <MudTablePager HidePageNumber="false" />

@@ -20,31 +20,31 @@ namespace EveMailHelper.BusinessDataAccess
             _context = context;
         }
 
-        public async Task<ICollection<Region>> GetAllRegions()
+        public async Task<ICollection<Region>> GetAllRegionsAsync()
         {
             return await _context.Regions.ToListAsync();
         }
 
-        public async Task<Region> GetRegionById(int id)
+        public async Task<Region> GetRegionByIdAsync(int id)
         {
             var result = await _context.Regions.Where(x => x.EveId == id).FirstOrDefaultAsync();
             _ = result ?? throw new NullReferenceException($"int {id} not a valid RegionId");
             return result;
         }
 
-        public async Task<Region> GetRegionByName(string regionName)
+        public async Task<Region> GetRegionByNameAsync(string regionName)
         {
             var result = await _context.Regions.Where(x => x.Name == regionName).FirstOrDefaultAsync();
             _ = result ?? throw new NullReferenceException($"int {regionName} not a valid regionname");
             return result;
         }
 
-        public async Task<IList<Region>> SearchForRegionName(string regionNamePart)
+        public async Task<IList<Region>> SearchForRegionNameAsync(string regionNamePart)
         {
             return await _context.Regions.Where(x => x.Name.Contains(regionNamePart)).ToListAsync();
         }
 
-        public async Task<TableData<Region>> GetPaginated(string searchString, TableState state)
+        public async Task<TableData<Region>> GetPaginatedAsync(string searchString, TableState state)
         {
             IQueryable<Region> query = from reg in _context.Regions
                                        join faction in _context.Factions 

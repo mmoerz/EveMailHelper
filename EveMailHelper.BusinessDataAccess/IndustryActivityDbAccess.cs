@@ -17,17 +17,17 @@ namespace EveMailHelper.BusinessDataAccess
             _context = context;
         }
 
-        public async Task<ICollection<IndustryActivity>> GetAll()
+        public async Task<ICollection<IndustryActivity>> GetAllAsync()
         {
             return await _context.IndustryActivities.ToListAsync();
         }
 
-        public async Task<IndustryActivity?> GetById(int EveId)
+        public async Task<IndustryActivity?> GetByIdAsync(int EveId)
         {
             return await _context.IndustryActivities.Where(x => x.TypeId == EveId).FirstOrDefaultAsync();
         }
 
-        public async Task<List<IndustryActivity>> GetByIdDeep(int EveId)
+        public async Task<List<IndustryActivity>> GetByIdDeepAsync(int EveId)
         {
             return await _context.IndustryActivities
                 .Where(x => x.TypeId == EveId)
@@ -62,13 +62,13 @@ namespace EveMailHelper.BusinessDataAccess
                 .ToListAsync();
         }
 
-        public async Task<IndustryActivity?> GetByName(string blueprintName)
+        public async Task<IndustryActivity?> GetByNameAsync(string blueprintName)
         {
             return await _context.IndustryActivities.Where(x => x.Type.TypeName == blueprintName)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<TableData<IndustryActivity>> GetPaginated(
+        public async Task<TableData<IndustryActivity>> GetPaginatedAsync(
             string grpFilter, string searchString, TableState state)
         {
             IQueryable<IndustryActivity> query;

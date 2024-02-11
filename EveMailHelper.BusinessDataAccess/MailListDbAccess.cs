@@ -33,7 +33,7 @@ namespace EveMailHelper.BusinessDataAccess
                 .ToList();
         }
 
-        public async Task<TableData<MailList>> GetEveAccountsPaginated(string searchString, TableState state)
+        public async Task<TableData<MailList>> GetEveAccountsPaginatedAsync(string searchString, TableState state)
         {
             IQueryable<MailList> query = from alliance in _context.MailLists
                                              //where alliance.Id == account.Id

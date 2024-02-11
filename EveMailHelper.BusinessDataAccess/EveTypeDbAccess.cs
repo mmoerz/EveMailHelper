@@ -21,19 +21,19 @@ namespace EveMailHelper.BusinessDataAccess
             _context = context;
         }
 
-        public async Task<ICollection<EveType>> GetAll()
+        public async Task<ICollection<EveType>> GetAllAsync()
         {
             return await _context.EveTypes.ToListAsync();
         }
 
-        public async Task<EveType> GetById(int id)
+        public async Task<EveType> GetByIdAsync(int id)
         {
             var result = await _context.EveTypes.Where(x => x.EveId == id).FirstOrDefaultAsync();
             _ = result ?? throw new NullReferenceException($"int {id} not a valid RegionId");
             return result;
         }
 
-        public async Task<EveType> GetByName(string regionName)
+        public async Task<EveType> GetByNameAsync(string regionName)
         {
             var result = await _context.EveTypes.Where(x => x.TypeName == regionName).FirstOrDefaultAsync();
             _ = result ?? throw new NullReferenceException($"int {regionName} not a valid regionname");
@@ -45,7 +45,7 @@ namespace EveMailHelper.BusinessDataAccess
             return await _context.EveTypes.Where(x => x.TypeName.Contains(regionNamePart)).ToListAsync();
         }
 
-        public async Task<TableData<EveType>> GetPaginated(string searchString, TableState state)
+        public async Task<TableData<EveType>> GetPaginatedAsync(string searchString, TableState state)
         {
             IQueryable<EveType> query = from etype in _context.EveTypes
                                        select etype;

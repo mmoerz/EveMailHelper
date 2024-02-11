@@ -22,7 +22,7 @@ namespace EveMailHelper.BusinessDataAccess
             await _context.Mails.AddAsync(eveMail);
         }
 
-        public async Task<Mail> GetByEveId(long eveId)
+        public async Task<Mail> GetByEveIdAsync(long eveId)
         {
             return await _context.Mails
                 .Where(x => x.EveId == eveId)
@@ -60,7 +60,7 @@ namespace EveMailHelper.BusinessDataAccess
             }
         }
 
-        public async Task<List<string>> GetReceiversFiltered(IEnumerable<string> CharacterNames, DateTime notAfterDateTime)
+        public async Task<List<string>> GetReceiversFilteredAsync(IEnumerable<string> CharacterNames, DateTime notAfterDateTime)
         {
             var notAfterParam = new SqlParameter("notAfterDateTime", notAfterDateTime);
 

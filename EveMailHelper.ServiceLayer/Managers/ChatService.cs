@@ -39,7 +39,7 @@ namespace EveMailHelper.BusinessLibrary.Services
         public async Task<Chat> UpdateTracked(Chat chat)
         {
             _ = chat ?? throw new ArgumentNullException(nameof(chat));
-            var helper = await _dbAccess.GetById(chat.Id);
+            var helper = await _dbAccess.GetByIdAsync(chat.Id);
             helper.CopyShallowNoId(chat);
             _dbAccess.Update(chat);
             return chat;
@@ -47,17 +47,17 @@ namespace EveMailHelper.BusinessLibrary.Services
 
         public async Task<TableData<Chat>> GetPaginated(string searchString, TableState state)
         {
-            return await _dbAccess.GetPaginated(searchString, state);
+            return await _dbAccess.GetPaginatedAsync(searchString, state);
         }
 
         public async Task<Chat?> GetById(Guid id)
         {
-            return await _dbAccess.GetById(id);
+            return await _dbAccess.GetByIdAsync(id);
         }
 
         public async Task<ChatFile> GetChatFileById(Guid id)
         {
-            return await _dbAccessChatFile.GetById(id);
+            return await _dbAccessChatFile.GetByIdAsync(id);
         }
 
         public async Task<ChatFile> UpdateChatFile(ChatFile chatFile)
@@ -69,7 +69,7 @@ namespace EveMailHelper.BusinessLibrary.Services
 
         public async Task RemoveChatFile(Guid id)
         {
-            await _dbAccessChatFile.Remove(id);
+            await _dbAccessChatFile.RemoveAsync(id);
             await _dbContext.SaveChangesAsync();
         }
     }
