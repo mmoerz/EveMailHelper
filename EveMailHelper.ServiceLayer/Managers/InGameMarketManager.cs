@@ -3,6 +3,7 @@ using EveMailHelper.BusinessLibrary.Complex;
 using EveMailHelper.BusinessLibrary.Complex.dto;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataModels;
+using EveMailHelper.DataModels.Dto;
 using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.ServiceLayer.Utilities;
 using EveMailHelper.ServiceLibrary.Managers;
@@ -45,6 +46,11 @@ namespace EveMailHelper.ServiceLayer.Managers
             _authenticationManager = authenticationManager;
             _esiClient = esiClient;
             _sSOv2 = ssov2;
+        }
+
+        public Task<SellBuyPriceDTO> ArchivedBuySellPrice(int regionId, int eveTypeId, int maxAgeInMinutes)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<List<EVEStandard.Models.MarketOrder>> LoadMarketPrice(int regionId, int typeId, int page)

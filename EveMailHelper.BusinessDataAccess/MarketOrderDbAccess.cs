@@ -7,6 +7,7 @@ using EveMailHelper.DataModels;
 using EveNatTools.ServiceLibrary.Utilities;
 using EveMailHelper.DataModels.Market;
 using EveMailHelper.DataModels.Sde.Map;
+using EveMailHelper.DataModels.Dto;
 
 namespace EveMailHelper.BusinessDataAccess
 {
@@ -34,7 +35,7 @@ namespace EveMailHelper.BusinessDataAccess
         {
             return await _context.MarketOrders.ToListAsync();
         }
-        
+
         public async Task<MarketOrder?> GetByIdAsync(int orderId)
         {
             return await _context.MarketOrders.Where(x => x.EveId == orderId).SingleAsync();
@@ -43,6 +44,43 @@ namespace EveMailHelper.BusinessDataAccess
         public async Task<List<MarketOrder>> GetByTypeIdAsync(int eveTypeId)
         {
             return await _context.MarketOrders.Where(x => x.TypeId == eveTypeId).ToListAsync();
+        }
+
+        public async Task<double> GetAgeForTypeIdAsync(int eveTypeId)
+        {
+            return await _context.MarketOrders
+                .Where(x => x.TypeId == eveTypeId)
+                .GroupBy(x => x.TypeId)
+                .Select(x => DateTime.UtcNow.Subtract(x.Min(min => min.lastUpdated)).TotalMinutes)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<SellBuyPriceDTO> GetSellBuyForTypeIdAsync(int eveTypeId)
+        {
+            var query =
+                from marketorder in _context.MarketOrders
+                where marketorder.TypeId == eveTypeId
+                group marketorder by marketorder.IsBuyOrder
+                into g
+                select new
+                {
+                    IsBuyOrder = g.Key,
+                    min = g.Min(x => x.Price),
+                    max = g.Max(x => x.Price),
+                };
+            var result = await query.ToListAsync();
+
+            //var result = await _context.MarketOrders
+            //    .Where(x => x.TypeId == eveTypeId)
+            //    .GroupBy(x => x.IsBuyOrder
+            //        //,resultSelector: (key, list) => new { IsBuyOrder = key, min = list.Min(), max = list.Max()}
+            //        )
+            //    .Select(x => x.Min)
+            //    .ToListAsync();
+            double buyMax = result.Where(x => x.IsBuyOrder == true).Single().max;
+            double sellMin = result.Where(x => x.IsBuyOrder == false).Single().min;
+
+            return new SellBuyPriceDTO(sellMin, buyMax);
         }
 
         public List<long> GetIdsForEveType(int eveTypeId)

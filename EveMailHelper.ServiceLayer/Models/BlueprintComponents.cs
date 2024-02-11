@@ -1,14 +1,16 @@
-﻿using EveMailHelper.DataModels.Sde;
+﻿using System.Collections;
+
+using EveMailHelper.DataModels.Sde;
 
 using static MudBlazor.Icons;
 
 namespace EveMailHelper.ServiceLayer.Models
 {
-    public class BlueprintComponent
+    public class BlueprintComponents : IEnumerable<BlueprintComponents>
     {
-        public BlueprintComponent() 
+        public BlueprintComponents() 
         { 
-            SubComponents = new List<BlueprintComponent>();
+            SubComponents = new List<BlueprintComponents>();
         }
 
         /// <summary>
@@ -39,6 +41,16 @@ namespace EveMailHelper.ServiceLayer.Models
             }
         }
 
-        public ICollection<BlueprintComponent> SubComponents { get; set; }
+        public IList<BlueprintComponents> SubComponents { get; set; }
+
+        public IEnumerator<BlueprintComponents> GetEnumerator()
+        {
+            return new BlueprintComponentIterator(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new BlueprintComponentIterator(this);
+        }
     }
 }

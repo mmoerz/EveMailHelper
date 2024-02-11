@@ -46,7 +46,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             return await _industryActivityDbAccess.GetByIdDeepAsync(EveId);
         }
 
-        public async Task<BlueprintComponent> GetBlueprintComponentsList(
+        public async Task<BlueprintComponents> GetBlueprintComponentsList(
             IndustryBlueprint blueprint,
             int filterActivity = 0
             )
@@ -63,7 +63,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             var components = await GetBlueprintComponentsForActivity(activity, 0, filterActivity);
 
             var first = activity.Products.First();
-            BlueprintComponent main = new()
+            BlueprintComponents main = new()
             {
                 EveId = activity.Type.EveId,
                 ProductionDepth = 0,
@@ -77,19 +77,19 @@ namespace EveMailHelper.ServiceLayer.Managers
             return main;
         }
 
-        protected async Task<List<BlueprintComponent>> GetBlueprintComponentsForActivity(
+        protected async Task<List<BlueprintComponents>> GetBlueprintComponentsForActivity(
             IndustryActivity activity,
             int productionDepth = 0,
             int filterActivityId = 0)
         {
             _ = activity ?? throw new Exception("activity is null");
 
-            var Components = new List<BlueprintComponent>();
+            var Components = new List<BlueprintComponents>();
 
             // not producing activities should be filtered
             foreach (var material in activity.Materials)
             {
-                var component = new BlueprintComponent()
+                var component = new BlueprintComponents()
                 {
                     EveId = material.MaterialType.EveId,
                     ProductionDepth = productionDepth + 1,

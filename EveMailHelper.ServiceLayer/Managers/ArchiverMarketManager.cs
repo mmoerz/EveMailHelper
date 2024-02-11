@@ -1,6 +1,7 @@
 ﻿using EveMailHelper.BusinessDataAccess;
 using EveMailHelper.BusinessLibrary.Complex;
 using EveMailHelper.DataAccessLayer.Context;
+using EveMailHelper.DataModels.Dto;
 using EveMailHelper.DataModels.Market;
 using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.ServiceLayer.Utilities;
@@ -8,6 +9,7 @@ using EveMailHelper.ServiceLayer.Utilities;
 using EVEStandard;
 
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 using MudBlazor;
@@ -38,15 +40,41 @@ namespace EveMailHelper.ServiceLayer.Managers
         }
 
         public async Task<List<MarketOrder>> ArchivedMarketPrice(
-            int regionId, int typeId, int page)
+            int regionId, int typeId, int page, int maxAgeInMinutes)
         {
-            var esiList = await base.LoadMarketPrice(regionId, typeId, page);
-            List<MarketOrder> marketOrders = esiList.MapToMarketOrderList<EVEStandard.Models.MarketOrder>();
-            marketOrders.ForEach(m => m.lastUpdated = DateTime.UtcNow);
+            List<MarketOrder> marketOrders;
+            var age = await _marketorderDbAccess.GetAgeForTypeIdAsync(typeId);
 
-            return _updateMarketOrdersForOneEveType.RunAction(marketOrders);
+            if (age == null || age > (double)maxAgeInMinutes)
+            {
+                var esiList = await base.LoadMarketPrice(regionId, typeId, page);
+                marketOrders = esiList.MapToMarketOrderList<EVEStandard.Models.MarketOrder>();
+                marketOrders.ForEach(m => m.lastUpdated = DateTime.UtcNow);
+                marketOrders = _updateMarketOrdersForOneEveType.RunAction(marketOrders);
+                _dbContext.SaveChanges();
+            }
+            else
+                marketOrders = await _marketorderDbAccess.GetByTypeIdAsync(typeId);
+
+            return marketOrders;
         }
 
+        public async new Task<SellBuyPriceDTO> ArchivedBuySellPrice(
+            int regionId, int eveTypeId, int maxAgeInMinutes)
+        {
+            List<MarketOrder> marketOrders;
+            var age = await _marketorderDbAccess.GetAgeForTypeIdAsync(eveTypeId);
+
+            if (age == 0 || age > (double)maxAgeInMinutes)
+            {
+                var esiList = await base.LoadMarketPrice(regionId, eveTypeId, 1);
+                marketOrders = esiList.MapToMarketOrderList<EVEStandard.Models.MarketOrder>();
+                marketOrders.ForEach(m => m.lastUpdated = DateTime.UtcNow);
+                marketOrders = _updateMarketOrdersForOneEveType.RunAction(marketOrders);
+                //_dbContext.SaveChanges();
+            }
+            return await _marketorderDbAccess.GetSellBuyForTypeIdAsync(eveTypeId);
+        }
 
     }
 }

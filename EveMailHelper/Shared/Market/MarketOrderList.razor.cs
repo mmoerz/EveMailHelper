@@ -13,7 +13,6 @@ namespace EveMailHelper.Web.Shared.Market
     {
         #region injections
         [Inject] IMarketManager MarketManager { get; set; } = null!;
-
         #endregion
 
         #region parameters

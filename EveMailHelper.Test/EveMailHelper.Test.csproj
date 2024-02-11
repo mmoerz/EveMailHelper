@@ -28,9 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EveMailHelper.BusinessDataAccess\EveMailHelper.BusinessDataAccess.csproj" />
     <ProjectReference Include="..\EveMailHelper.BusinessLibrary\EveMailHelper.BusinessLibrary.csproj" />
     <ProjectReference Include="..\EveMailHelper.ChatLogParser\EveMailHelper.ChatLogParser.csproj" />
     <ProjectReference Include="..\EveMailHelper.DataAccessLayer\EveMailHelper.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\EveMailHelper.DataModels\EveMailHelper.DataModels.csproj" />
+    <ProjectReference Include="..\EveMailHelper.ServiceLayer\EveMailHelper.ServiceLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

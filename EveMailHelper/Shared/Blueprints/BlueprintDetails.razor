@@ -5,9 +5,9 @@
           FixedHeader="true"
           FixedFooter="true"
           ReadOnly="true"
-          ServerData=@(new Func<TableState, Task<TableData<BlueprintComponent>>>(ServerReload))
+          ServerData=@(new Func<TableState, Task<TableData<BlueprintComponents>>>(ServerReload))
           SortLabel="Sortierung"
-          T="BlueprintComponent"
+          T="BlueprintComponents"
           @ref="_table">
     <ToolBarContent>
         <MudPaper Elevation="0">

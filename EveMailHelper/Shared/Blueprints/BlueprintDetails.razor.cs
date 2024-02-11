@@ -17,12 +17,12 @@ namespace EveMailHelper.Web.Shared.Blueprints
     {
         #region injections
         [Inject] IBlueprintManager BlueprintManager { get; set; } = null!;
+        [Inject] IMarketManager MarketManager { get; set; } = null!;
+        [Inject] IMapManager MapManager { get; set; } = null!;
         #endregion
 
-        private MudTable<BlueprintComponent> _table = null!;
-        private BlueprintComponent _mainProduct = null!;
-        private IList<BlueprintComponent> _blueprintComponents = new List<BlueprintComponent>();
-
+        private MudTable<BlueprintComponents> _table = null!;
+        private BlueprintComponents _mainProduct = new BlueprintComponents();
         private IndustryBlueprint _blueprint = new();
 
         #region parameters
@@ -43,6 +43,17 @@ namespace EveMailHelper.Web.Shared.Blueprints
         public string BlueprintName { get; set; } = "no Blueprint";
         #endregion
 
+        // TODO Region is fixed, should be 'selectable'
+        private int RegionId = -1;
+        private int MaxAgeInMinutes = 60;
+
+        protected override async Task OnInitializedAsync()
+        {
+            var region = await MapManager.GetRegionByName("The Forge");
+            _ = region ?? throw new Exception("Jita region not found");
+            RegionId = region.EveId;
+        }
+
         public void Reload()
         {
             _table?.ReloadServerData();
@@ -51,20 +62,31 @@ namespace EveMailHelper.Web.Shared.Blueprints
         /// <summary>
         /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>
-        private async Task<TableData<BlueprintComponent>> ServerReload(TableState state)
+        private async Task<TableData<BlueprintComponents>> ServerReload(TableState state)
         {
-            TableData<BlueprintComponent> data = new();
+            TableData<BlueprintComponents> data = new();
 
             if (_blueprint != null && _blueprint.TypeId != 0)
             {
                 // TODO: ugly ugly reference to use '11' as an activity filter directly
                 _mainProduct = await BlueprintManager.GetBlueprintComponentsList(_blueprint, 11);
-                _blueprintComponents = _mainProduct.SubComponents.ToList();
-                _blueprintComponents.ToFlatList();
+                //_blueprintComponents = _mainProduct.SubComponents.ToList();
+                //_blueprintComponents.ToFlatList();
             }
 
-            data.TotalItems = _blueprintComponents.Count;
-            data.Items = _blueprintComponents;
+            data.TotalItems = _mainProduct.Count();
+            //_blueprintComponents.Count; 
+            data.Items = _mainProduct;//_blueprintComponents;
+
+            if (_mainProduct.EveId > 0) { 
+                // Todo: hmm, check is fine but we are splitting stuff all over here
+                foreach (var item in data.Items)
+                {
+                    var sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, item.EveId, MaxAgeInMinutes);
+                    item.PricePerUnit = sellbuyPrice.SellPrice;
+                    item.PriceSum = item.PricePerUnit * item.Quantity;
+                }
+            }
 
             return data;
         }
@@ -76,9 +98,9 @@ namespace EveMailHelper.Web.Shared.Blueprints
             return string.Format("ml-{0}", (depth-1)*2);
         }
 
-        public void SetModels(List<BlueprintComponent> value)
+        public void SetModel(BlueprintComponents value)
         {
-            _blueprintComponents = value;
+            _mainProduct = value;
         }
     }
 }
