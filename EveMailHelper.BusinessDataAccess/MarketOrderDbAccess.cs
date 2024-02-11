@@ -10,39 +10,54 @@ using EveMailHelper.DataModels.Sde.Map;
 
 namespace EveMailHelper.BusinessDataAccess
 {
-    public class ArchivedMarketOrderDbAccess
+    public class MarketOrderDbAccess
     {
         private readonly EveMailHelperContext _context;
-        public ArchivedMarketOrderDbAccess(EveMailHelperContext context)
+        public MarketOrderDbAccess(EveMailHelperContext context)
         {
             _context = context;
         }
 
         public void Delete(MarketOrder marketOrder)
         {
-            _context.ArchivedMarketOrders.Remove(marketOrder);
+            _context.MarketOrders.Remove(marketOrder);
+        }
+
+        public void DeleteById(long orderId)
+        {
+            MarketOrder helper = new() { EveId = orderId };
+            _context.Attach(helper);
+            _context.MarketOrders.Remove(helper);
         }
 
         public async Task<ICollection<MarketOrder>> GetAllAsync()
         {
-            return await _context.ArchivedMarketOrders.ToListAsync();
+            return await _context.MarketOrders.ToListAsync();
         }
         
         public async Task<MarketOrder?> GetByIdAsync(int orderId)
         {
-            return await _context.ArchivedMarketOrders.Where(x => x.EveId == orderId).SingleAsync();
+            return await _context.MarketOrders.Where(x => x.EveId == orderId).SingleAsync();
         }
 
         public async Task<List<MarketOrder>> GetByTypeIdAsync(int eveTypeId)
         {
-            return await _context.ArchivedMarketOrders.Where(x => x.TypeId == eveTypeId).ToListAsync();
+            return await _context.MarketOrders.Where(x => x.TypeId == eveTypeId).ToListAsync();
+        }
+
+        public List<long> GetIdsForEveType(int eveTypeId)
+        {
+            return _context.MarketOrders
+                .Where(x => x.TypeId == eveTypeId)
+                .Select(c => c.EveId)
+                .ToList();
         }
 
         public async Task<TableData<MarketOrder>> GetTypePaginatedAsync(
             int eveTypeId, string searchString, TableState state, bool? isBuyOrder)
         {
             IQueryable<MarketOrder> query = 
-                from marketorder in _context.ArchivedMarketOrders
+                from marketorder in _context.MarketOrders
                 join solarsystem in _context.SolarSystems
                     on marketorder.SolarSystemId equals solarsystem.EveId
                 where marketorder.TypeId == eveTypeId
@@ -77,12 +92,12 @@ namespace EveMailHelper.BusinessDataAccess
 
         public void Add(MarketOrder marketorder)
         {
-            _context.ArchivedMarketOrders.Add(marketorder);
+            _context.MarketOrders.Add(marketorder);
         }
 
         public void Update(MarketOrder marketorder)
         {
-            _context.ArchivedMarketOrders.Update(marketorder);
+            _context.MarketOrders.Update(marketorder);
         }
     }
 }

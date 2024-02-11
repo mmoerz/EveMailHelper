@@ -8,12 +8,12 @@ using EveMailHelper.DataModels.Market;
 
 namespace EveMailHelper.BusinessLibrary.Complex
 {
-    public class UpdateMarketOrderAction : IBizAction<MarketOrder, MarketOrder>
+    public class UpdateMarketOrderAction : IBizAction<List<MarketOrder>, List<MarketOrder>>
     {
-        readonly MailDbAccess _dbAccess;
+        readonly MarketOrderDbAccess _dbAccess;
         private List<ValidationResult> _errors = new();
 
-        public UpdateEveMailAction(MailDbAccess dbAccess)
+        public UpdateMarketOrderAction(MarketOrderDbAccess dbAccess)
         {
             _dbAccess = dbAccess;
         }
@@ -22,12 +22,34 @@ namespace EveMailHelper.BusinessLibrary.Complex
 
         public bool HasErrors => _errors.Any();
 
-        public Mail Action(Mail dto)
+        public List<MarketOrder> Action(List<MarketOrder> dto)
         {
             _ = dto ?? throw new ArgumentNullException(nameof(dto));
+            if (dto.Count == 0)
+                throw new ArgumentException($"cannot update empty list of marketorders");
 
-            _dbAccess.Update(dto);
+            int eveTypeId = dto.First().TypeId;
+            var storedMarketOrdersIds = _dbAccess.GetIdsForEveType(eveTypeId);
 
+            foreach(var marketorder in dto)
+            {
+                if (storedMarketOrdersIds.Where(x => x == marketorder.EveId).Any())
+                {
+                    _dbAccess.Update(marketorder);
+                }
+                else
+                    _dbAccess.Add(marketorder);
+            }
+
+            // delete all marketorders that have been removed
+            foreach(var storedId in storedMarketOrdersIds)
+            {
+                if (!dto.Where(x => x.EveId == storedId).Any())
+                {
+                    _dbAccess.DeleteById(storedId);
+                }
+            }
+            
             return dto;
         }
     }
