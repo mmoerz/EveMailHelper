@@ -2,7 +2,7 @@
 
 namespace EveMailHelper.ServiceLayer.Interfaces
 {
-    public interface IInGameMarketManager
+    public interface IMarketManager
     {
         Task<List<MarketOrder>> LoadMarketPrice(int regionId, int typeId, int page);
     }

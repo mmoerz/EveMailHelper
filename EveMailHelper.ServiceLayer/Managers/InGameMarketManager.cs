@@ -21,15 +21,15 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EveMailHelper.ServiceLayer.Managers
 {
-    public class InGameMarketManager : IInGameMarketManager
+    public class InGameMarketManager : IMarketManager
     {
-        private readonly EveMailHelperContext _dbContext;
-        private readonly AuthenticationStateProvider _authenticationStateProvider;
-        private readonly IAuthenticationManager _authenticationManager;
-        private readonly EVEStandardAPI _esiClient;
-        private readonly SSOv2 _sSOv2;
+        protected readonly EveMailHelperContext _dbContext;
+        protected readonly AuthenticationStateProvider _authenticationStateProvider;
+        protected readonly IAuthenticationManager _authenticationManager;
+        protected readonly EVEStandardAPI _esiClient;
+        protected readonly SSOv2 _sSOv2;
 
-        private readonly MapDbAccess _mapDbAccess;
+        protected readonly MapDbAccess _mapDbAccess;
 
         public InGameMarketManager(
             AuthenticationStateProvider authenticationStateProvider,
@@ -53,6 +53,10 @@ namespace EveMailHelper.ServiceLayer.Managers
             //AuthDTO auth = await _authenticationManager.GetAuthDTOForPrincipal(user);
 
             var esiresult = await _esiClient.Market.ListOrdersInRegionV1Async(regionId, typeId, 1);
+            _ = esiresult ?? throw new Exception("LoadMarketPrice esi result null");
+
+            if (esiresult.RemainingErrors != 0)
+                throw new Exception("errors on esicall");
 
             return esiresult.Model;
         }

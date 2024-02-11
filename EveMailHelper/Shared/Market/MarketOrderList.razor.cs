@@ -12,7 +12,7 @@ namespace EveMailHelper.Web.Shared.Market
     public partial class MarketOrderList : ComponentBase
     {
         #region injections
-        [Inject] IInGameMarketManager MarketManager { get; set; } = null!;
+        [Inject] IMarketManager MarketManager { get; set; } = null!;
 
         #endregion
 
