@@ -67,6 +67,15 @@ namespace EveMailHelper.ServiceLayer.Managers
             return esiresult.Model;
         }
 
+        public async Task<List<EVEStandard.Models.MarketPrice>> LoadPrices()
+        {
+            var esiresult = await _esiClient.Market.ListMarketPricesV1Async();
+            _ = esiresult ?? throw new Exception("LoadPrices esi result is null");
 
+            if (esiresult.RemainingErrors != 0)
+                throw new Exception("errors on esicall");
+
+            return esiresult.Model;
+        }
     }
 }

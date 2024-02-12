@@ -26,7 +26,7 @@ namespace EveMailHelper.ServiceLayer.Models
         public double ComponentBestPriceSum
         { get { return BlueprintComponents.BestPriceSum(); } }
 
-        public BlueprintComponents BlueprintComponents { get; set; } = new BlueprintComponents();
+        public BlueprintComponentTree BlueprintComponents { get; set; } = new BlueprintComponentTree();
 
         /// <summary>
         /// gets the price sum for the components for the given 'depth' in the tree of components

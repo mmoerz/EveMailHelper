@@ -26,14 +26,14 @@ namespace EveMailHelper.Test.ServiceLayer
 
         [Theory]
         [MemberData(nameof(BlueprintComponentDataGenerator.GetComponentsProductionDepth), MemberType = typeof(BlueprintComponentDataGenerator))]
-        public void TestProductionDepth(int expected, BlueprintComponents sut)
+        public void TestProductionDepth(int expected, BlueprintComponentTree sut)
         {
             sut.ProductionDepth.ShouldBe(expected);
         }
                 
         [Theory]
         [MemberData(nameof(BlueprintComponentDataGenerator.GetPriceSum), MemberType = typeof(BlueprintComponentDataGenerator))]
-        public void TestPriceSum(BlueprintComponents sut, double expected)
+        public void TestPriceSum(BlueprintComponentTree sut, double expected)
         {
             var result = sut.PriceSum;
             result.ShouldBeEquivalentTo(expected);
@@ -41,7 +41,7 @@ namespace EveMailHelper.Test.ServiceLayer
 
         [Theory]
         [MemberData(nameof(BlueprintComponentDataGenerator.GetVolumeSum), MemberType = typeof(BlueprintComponentDataGenerator))]
-        public void TestVolumeSum(BlueprintComponents sut, double expected)
+        public void TestVolumeSum(BlueprintComponentTree sut, double expected)
         {
             var result = sut.VolumeSum;
             result.ShouldBeEquivalentTo(expected);
@@ -49,7 +49,7 @@ namespace EveMailHelper.Test.ServiceLayer
 
         [Theory]
         [MemberData(nameof(BlueprintComponentDataGenerator.GetBestPriceSum), MemberType = typeof(BlueprintComponentDataGenerator))]
-        public void TestBestPriceSum(BlueprintComponents sut, double expected)
+        public void TestBestPriceSum(BlueprintComponentTree sut, double expected)
         {
             var result = sut.BestPriceSum();
             result.ShouldBeEquivalentTo(expected);
@@ -57,7 +57,7 @@ namespace EveMailHelper.Test.ServiceLayer
 
         [Theory]
         [MemberData(nameof(BlueprintComponentDataGenerator.GetIsProducing), MemberType = typeof(BlueprintComponentDataGenerator))]
-        public void TestIsProducingBetter(BlueprintComponents sut, bool expected)
+        public void TestIsProducingBetter(BlueprintComponentTree sut, bool expected)
         {
             var result = sut.IsProducingBetter;
             result.ShouldBeEquivalentTo(expected);

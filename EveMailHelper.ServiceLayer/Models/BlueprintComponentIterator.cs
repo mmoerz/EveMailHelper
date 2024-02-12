@@ -10,18 +10,18 @@ using EVEStandard.Models;
 
 namespace EveMailHelper.ServiceLayer.Models
 {
-    public class BlueprintComponentIterator : IEnumerator<BlueprintComponents>
+    public class BlueprintComponentIterator : IEnumerator<BlueprintComponentTree>
     {
         protected class NavTree
         {
-            public NavTree(BlueprintComponents component, NavTree? prevLevel = null, NavTree? nextLevel = null)
+            public NavTree(BlueprintComponentTree component, NavTree? prevLevel = null, NavTree? nextLevel = null)
             {
                 item = component;
                 this.prevLevel = prevLevel;
                 this.nextLevel = nextLevel;
             }
 
-            public BlueprintComponents item;
+            public BlueprintComponentTree item;
             public int SubComponentIndex = -1;
 
             public NavTree? prevLevel;
@@ -30,12 +30,12 @@ namespace EveMailHelper.ServiceLayer.Models
 
         private NavTree? _navTree;
 
-        private BlueprintComponents _rootComponent;
-        private BlueprintComponents _currentComponent;
+        private BlueprintComponentTree _rootComponent;
+        private BlueprintComponentTree _currentComponent;
 
-        private BlueprintComponents _previousComponent;
+        private BlueprintComponentTree _previousComponent;
 
-        public BlueprintComponentIterator(BlueprintComponents root) 
+        public BlueprintComponentIterator(BlueprintComponentTree root) 
         {
             _rootComponent = root;
             _currentComponent = _rootComponent;
@@ -44,7 +44,7 @@ namespace EveMailHelper.ServiceLayer.Models
             _navTree = new NavTree(root);
         }
 
-        public BlueprintComponents Current
+        public BlueprintComponentTree Current
         {
             get { return _currentComponent; }
         }

@@ -11,7 +11,7 @@ namespace EveMailHelper.Test.Data
 {
     public class BlueprintComponentDataGenerator
     {
-        public static readonly List<BlueprintComponents> _componentData1 = new()
+        public static readonly List<BlueprintComponentTree> _componentData1 = new()
         {
             new()
             {
@@ -19,7 +19,7 @@ namespace EveMailHelper.Test.Data
                 Quantity = 200,
                 PricePerUnit = 300,
                 QuantityFromBlueprint = 200,
-                SubComponents = new List<BlueprintComponents>
+                SubComponents = new List<BlueprintComponentTree>
                 {
                     new()
                     {
@@ -27,7 +27,7 @@ namespace EveMailHelper.Test.Data
                         Quantity = 10,
                         PricePerUnit = 30,
                         QuantityFromBlueprint = 20,
-                        SubComponents = new List<BlueprintComponents>
+                        SubComponents = new List<BlueprintComponentTree>
                         {
                             new()
                             {
@@ -58,7 +58,7 @@ namespace EveMailHelper.Test.Data
                         Quantity = 1,
                         PricePerUnit = 3,
                         QuantityFromBlueprint = 2,
-                        SubComponents = new List<BlueprintComponents>
+                        SubComponents = new List<BlueprintComponentTree>
                         {
                             new()
                             {
@@ -87,7 +87,7 @@ namespace EveMailHelper.Test.Data
             }
         };
 
-        public static readonly List<BlueprintComponents> _componentData2 = new()
+        public static readonly List<BlueprintComponentTree> _componentData2 = new()
         {
             new()
             {
@@ -98,7 +98,7 @@ namespace EveMailHelper.Test.Data
             }
         };
 
-        public static readonly List<BlueprintComponents> _componentData3 = new()
+        public static readonly List<BlueprintComponentTree> _componentData3 = new()
         {
             new()
             {
@@ -176,7 +176,7 @@ namespace EveMailHelper.Test.Data
                             },
         };
 
-        public static readonly List<BlueprintComponents> Enumerated1 = new()
+        public static readonly List<BlueprintComponentTree> Enumerated1 = new()
         {
             _componentData1[0].SubComponents[0],
             _componentData1[0].SubComponents[0].SubComponents[0],
@@ -188,7 +188,7 @@ namespace EveMailHelper.Test.Data
             _componentData1[0].SubComponents[1].SubComponents[2],
         };
 
-        public static readonly List<Tuple<int, BlueprintComponents>> selection1 = new()
+        public static readonly List<Tuple<int, BlueprintComponentTree>> selection1 = new()
         {
             new(1, _componentData1[0].SubComponents[0]),
             new(2, _componentData1[0].SubComponents[0].SubComponents[1]),

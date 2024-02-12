@@ -76,5 +76,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             return await _marketorderDbAccess.GetSellBuyForTypeIdAsync(eveTypeId);
         }
 
+        
+
     }
 }

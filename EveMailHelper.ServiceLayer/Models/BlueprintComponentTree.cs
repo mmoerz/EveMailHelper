@@ -6,11 +6,11 @@ using static MudBlazor.Icons;
 
 namespace EveMailHelper.ServiceLayer.Models
 {
-    public class BlueprintComponents : IEnumerable<BlueprintComponents>
+    public class BlueprintComponentTree : IEnumerable<BlueprintComponentTree>
     {
-        public BlueprintComponents() 
+        public BlueprintComponentTree() 
         { 
-            SubComponents = new List<BlueprintComponents>();
+            SubComponents = new List<BlueprintComponentTree>();
         }
 
         /// <summary>
@@ -46,6 +46,8 @@ namespace EveMailHelper.ServiceLayer.Models
 
         public int QuantityFromBlueprint { get; set; }
 
+        public double JobCost { get; set; }
+
         public double ForcedQuantityMultiplier 
         {
             get
@@ -56,13 +58,13 @@ namespace EveMailHelper.ServiceLayer.Models
             }
         }
 
-        protected BlueprintComponents? _parent; 
-        public BlueprintComponents? Parent 
+        protected BlueprintComponentTree? _parent; 
+        public BlueprintComponentTree? Parent 
         { get { return _parent; } }
 
-        public IList<BlueprintComponents> SubComponents { get; set; }
+        public IList<BlueprintComponentTree> SubComponents { get; set; }
 
-        public IEnumerator<BlueprintComponents> GetEnumerator()
+        public IEnumerator<BlueprintComponentTree> GetEnumerator()
         {
             return new BlueprintComponentIterator(this);
         }
@@ -72,12 +74,12 @@ namespace EveMailHelper.ServiceLayer.Models
             return new BlueprintComponentIterator(this);
         }
 
-        protected void SetParent(BlueprintComponents component)
+        protected void SetParent(BlueprintComponentTree component)
         {
             _parent = component;
         }
 
-        public void Add(BlueprintComponents component)
+        public void Add(BlueprintComponentTree component)
         {
             if (SubComponents.Contains(component))
                 return;
