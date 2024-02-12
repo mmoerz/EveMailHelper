@@ -52,7 +52,7 @@
                 @context.ProductionDepth: @context.Name
             </MudPaper>
         </MudTd>
-        <MudTd DataLabel="Volume">@context.Volume</MudTd>
+        <MudTd DataLabel="Volume">@context.VolumeSum</MudTd>
         <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
         <MudTd DataLabel="BPQuantity">@context.QuantityFromBlueprint</MudTd>
         <MudTd DataLabel="FQuantity">@context.ForcedQuantityMultiplier</MudTd>
@@ -61,7 +61,9 @@
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteEmail(context)"></MudIconButton>
                     -->
         </MudTd>
-        <MudTh DataLabel="Sum">@context.PriceSum</MudTh>
+        <MudTh DataLabel="Sum">
+            <MudText Color="@GetColorForPriceSum(@context)">@context.PriceSum</MudText>
+        </MudTh>
     </RowTemplate>
     <PagerContent>
             

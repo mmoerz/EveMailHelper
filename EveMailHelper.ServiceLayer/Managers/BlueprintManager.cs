@@ -60,44 +60,46 @@ namespace EveMailHelper.ServiceLayer.Managers
             if (activity == null)
                 throw new Exception("Oh weh blueprint ohne Activity");
 
-            var components = await GetBlueprintComponentsForActivity(activity, 0, filterActivity);
-
             var first = activity.Products.Single();
             BlueprintComponents main = new()
             {
                 EveId = first.ProductTypeId, // would be the blueprint eveTypeId --> activity.Type.EveId,
-                ProductionDepth = 0,
                 Name = first.ProductType.TypeName,
                 Quantity = 0,
                 QuantityFromBlueprint = first.Quantity,
                 Volume = first.ProductType.Volume ?? 0.0,
-                SubComponents = components,
+                //SubComponents = components,
             };
+
+            var components = await GetBlueprintComponentsForActivity(activity, filterActivity, main);
 
             return main;
         }
 
-        protected async Task<List<BlueprintComponents>> GetBlueprintComponentsForActivity(
+        protected async Task<BlueprintComponents> GetBlueprintComponentsForActivity(
             IndustryActivity activity,
-            int productionDepth = 0,
-            int filterActivityId = 0)
+            //int productionDepth = 0,
+            int filterActivityId,
+            BlueprintComponents parentComponent)
         {
             _ = activity ?? throw new Exception("activity is null");
-
-            var Components = new List<BlueprintComponents>();
 
             // not producing activities should be filtered
             foreach (var material in activity.Materials)
             {
+                // just to have a test against null (should not happen)
+                if (material.MaterialType == null)
+                    throw new Exception("material.MaterialType is null");
+
                 var component = new BlueprintComponents()
                 {
                     EveId = material.MaterialType.EveId,
-                    ProductionDepth = productionDepth + 1,
+                    //ProductionDepth = productionDepth + 1,
                     Name = material.MaterialType.TypeName,
                     Quantity = material.Quantity,
                     Volume = material.MaterialType?.Volume ?? 0.0,
                 };
-
+                
                 // now let's check if the material can be produced (has a blueprint)
                 // and add it as a subcomponent
                 var producedBy = await _industryActivityDbAccess.FindForProduct(
@@ -108,17 +110,21 @@ namespace EveMailHelper.ServiceLayer.Managers
                     var result = first.Products.Where(x => x.ProductTypeId == material.MaterialType.EveId).First();
 
                     component.QuantityFromBlueprint = result.Quantity;
-                    
-                    component.SubComponents = await GetBlueprintComponentsForActivity(
-                        first, 
-                        productionDepth + 1, 
-                        filterActivityId);
+
+                    //component.SubComponents = await GetBlueprintComponentsForActivity(
+                    //    first, 
+                    //    productionDepth + 1, 
+                    //    filterActivityId);
+                    var call = await GetBlueprintComponentsForActivity(
+                        first,
+                        filterActivityId,
+                        component);
                 }
 
-                Components.Add(component);
+                parentComponent.Add(component);
             }
 
-            return Components;
+            return parentComponent;
         }
 
     }

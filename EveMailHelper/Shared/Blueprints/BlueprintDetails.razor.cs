@@ -84,9 +84,7 @@ namespace EveMailHelper.Web.Shared.Blueprints
                 {
                     var sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, item.EveId, MaxAgeInMinutes);
                     item.PricePerUnit = sellbuyPrice.SellPrice;
-                    item.PriceSum = item.PricePerUnit * item.Quantity;
-                    if (item.Quantity == 0 && item.QuantityFromBlueprint > 0)
-                        item.PriceSum = item.PricePerUnit * item.QuantityFromBlueprint;
+                                        
                 }
             }
 
@@ -98,6 +96,14 @@ namespace EveMailHelper.Web.Shared.Blueprints
             if (depth == 1)
                 return "";
             return string.Format("ml-{0}", (depth-1)*2);
+        }
+
+        private MudBlazor.Color GetColorForPriceSum(BlueprintComponents component)
+        {
+            if (component.IsProducingBetter)
+                return Color.Warning;
+            else
+                return Color.Secondary;
         }
 
         public void SetModel(BlueprintComponents value)
