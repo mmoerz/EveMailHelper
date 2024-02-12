@@ -51,7 +51,7 @@ namespace EveMailHelper.BusinessDataAccess
             return await _context.MarketOrders
                 .Where(x => x.TypeId == eveTypeId)
                 .GroupBy(x => x.TypeId)
-                .Select(x => DateTime.UtcNow.Subtract(x.Min(min => min.lastUpdated)).TotalMinutes)
+                .Select(x => DateTime.UtcNow.Subtract(x.Min(min => min.LastUpdatedFromEve)).TotalMinutes)
                 .FirstOrDefaultAsync();
         }
 

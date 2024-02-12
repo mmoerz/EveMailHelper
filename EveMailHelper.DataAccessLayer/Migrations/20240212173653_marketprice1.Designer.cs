@@ -4,6 +4,7 @@ using EveMailHelper.DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EveMailHelper.DataAccessLayer.Migrations
 {
     [DbContext(typeof(EveMailHelperContext))]
-    partial class EveMailHelperContextModelSnapshot : ModelSnapshot
+    [Migration("20240212173653_marketprice1")]
+    partial class marketprice1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -385,11 +387,11 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         new
                         {
                             Id = new Guid("11110000-0000-0000-0000-000011110000"),
-                            DateFounded = new DateTime(2024, 2, 12, 18, 48, 37, 757, DateTimeKind.Local).AddTicks(2141),
+                            DateFounded = new DateTime(2024, 2, 12, 18, 36, 52, 726, DateTimeKind.Local).AddTicks(6594),
                             Description = "Noname Default",
                             EveDeletedInGame = false,
                             EveId = 0,
-                            EveLastUpdated = new DateTime(2024, 2, 12, 17, 48, 37, 757, DateTimeKind.Utc).AddTicks(2114),
+                            EveLastUpdated = new DateTime(2024, 2, 12, 17, 36, 52, 726, DateTimeKind.Utc).AddTicks(6572),
                             MemberCount = 0,
                             Name = "Noname Default",
                             TaxRate = 0f,
@@ -582,9 +584,6 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.Property<DateTime>("Issued")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("LastUpdatedFromEve")
-                        .HasColumnType("datetime2");
-
                     b.Property<long>("LocationId")
                         .HasColumnType("bigint");
 
@@ -621,6 +620,9 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.Property<int>("VolumeTotal")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("lastUpdated")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("EveId");
 
                     b.HasIndex("SolarSystemId");
@@ -651,9 +653,6 @@ namespace EveMailHelper.DataAccessLayer.Migrations
 
                     b.Property<double>("AveragePrice")
                         .HasColumnType("float");
-
-                    b.Property<DateTime>("LastUpdatedFromEve")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("PeriodEnd")
                         .ValueGeneratedOnAddOrUpdate()

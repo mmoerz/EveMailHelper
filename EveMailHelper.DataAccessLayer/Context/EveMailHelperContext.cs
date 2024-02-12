@@ -98,6 +98,8 @@ namespace EveMailHelper.DataAccessLayer.Context
         // now this is getting tricky here
         // we archive market data here
         public virtual DbSet<MarketOrder> MarketOrders { get; set; } = null!;
+        public virtual DbSet<MarketPrice> MarketPrices { get; set; } = null!;
+
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

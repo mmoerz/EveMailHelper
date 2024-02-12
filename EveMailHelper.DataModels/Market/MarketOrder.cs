@@ -4,7 +4,7 @@ using EveMailHelper.DataModels.Sde.Map;
 
 namespace EveMailHelper.DataModels.Market
 {
-    public partial class MarketOrder
+    public partial class MarketOrder : IBaseUpdateableEveObject
     {
         public long EveId { get; set; }
         public int Duration { get; set; }
@@ -19,10 +19,9 @@ namespace EveMailHelper.DataModels.Market
         public int VolumeRemain { get; set; }
         public int VolumeTotal { get; set; }
 
-        public DateTime lastUpdated { get; set; } = DateTime.Now;
+        public DateTime LastUpdatedFromEve { get; set; } = DateTime.Now;
 
         public virtual EveType EveType { get; set; } = null!;
         public virtual SolarSystem SolarSystem { get; set; } = null!;
-        
     }
 }

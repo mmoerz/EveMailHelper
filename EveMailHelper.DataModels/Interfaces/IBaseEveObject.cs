@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace EveMailHelper.DataModels.Interfaces
 {
+    /// <summary>
+    /// will become obsolete when converting to UpdateableEveObjects
+    /// </summary>
     public interface IBaseEveObject
     {
         /// <summary>

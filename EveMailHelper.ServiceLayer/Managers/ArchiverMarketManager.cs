@@ -45,11 +45,11 @@ namespace EveMailHelper.ServiceLayer.Managers
             List<MarketOrder> marketOrders;
             var age = await _marketorderDbAccess.GetAgeForTypeIdAsync(typeId);
 
-            if (age == null || age > (double)maxAgeInMinutes)
+            if (age == 0 || age > (double)maxAgeInMinutes)
             {
                 var esiList = await base.LoadMarketPrice(regionId, typeId, page);
                 marketOrders = esiList.MapToMarketOrderList<EVEStandard.Models.MarketOrder>();
-                marketOrders.ForEach(m => m.lastUpdated = DateTime.UtcNow);
+                marketOrders.ForEach(m => m.LastUpdatedFromEve = DateTime.UtcNow);
                 marketOrders = _updateMarketOrdersForOneEveType.RunAction(marketOrders);
                 _dbContext.SaveChanges();
             }
@@ -69,7 +69,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             {
                 var esiList = await base.LoadMarketPrice(regionId, eveTypeId, 1);
                 marketOrders = esiList.MapToMarketOrderList<EVEStandard.Models.MarketOrder>();
-                marketOrders.ForEach(m => m.lastUpdated = DateTime.UtcNow);
+                marketOrders.ForEach(m => m.LastUpdatedFromEve = DateTime.UtcNow);
                 marketOrders = _updateMarketOrdersForOneEveType.RunAction(marketOrders);
                 //_dbContext.SaveChanges();
             }
