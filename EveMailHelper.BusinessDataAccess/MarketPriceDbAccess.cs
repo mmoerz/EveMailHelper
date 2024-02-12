@@ -45,12 +45,12 @@ namespace EveMailHelper.BusinessDataAccess
             return await query.ToListAsync();
         }
 
-        public async Task<MarketPrice?> GetByIdAsync(int eveTypeid)
+        public async Task<MarketPrice> GetByIdAsync(int eveTypeid)
         {
             return await _context.MarketPrices.Where(x => x.EveTypeId == eveTypeid).SingleAsync();
         }
-        
-        public async Task<double> GetAgeForTypeIdAsync(int eveTypeId)
+
+        public async Task<double> GetAgeForIdAsync(int eveTypeId)
         {
             return await _context.MarketPrices
                 .Where(x => x.EveTypeId == eveTypeId)

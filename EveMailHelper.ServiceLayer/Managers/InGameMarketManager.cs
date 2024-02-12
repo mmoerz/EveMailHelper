@@ -1,24 +1,13 @@
 ﻿using EveMailHelper.BusinessDataAccess;
-using EveMailHelper.BusinessLibrary.Complex;
-using EveMailHelper.BusinessLibrary.Complex.dto;
 using EveMailHelper.DataAccessLayer.Context;
-using EveMailHelper.DataModels;
 using EveMailHelper.DataModels.Dto;
+using EveMailHelper.DataModels.Market;
 using EveMailHelper.ServiceLayer.Interfaces;
-using EveMailHelper.ServiceLayer.Utilities;
-using EveMailHelper.ServiceLibrary.Managers;
-
-using EveNatTools.ServiceLibrary.Utilities;
 
 using EVEStandard;
-using EVEStandard.Models.API;
 
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
-
-using MudBlazor;
-
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EveMailHelper.ServiceLayer.Managers
 {
@@ -53,6 +42,11 @@ namespace EveMailHelper.ServiceLayer.Managers
             throw new NotImplementedException();
         }
 
+        public Task<MarketPrice> GetMarketPrice(int eveTypeId, int maxAgeInMinutes)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<EVEStandard.Models.MarketOrder>> LoadMarketPrice(int regionId, int typeId, int page)
         {
             //var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
@@ -77,5 +71,6 @@ namespace EveMailHelper.ServiceLayer.Managers
 
             return esiresult.Model;
         }
+        
     }
 }

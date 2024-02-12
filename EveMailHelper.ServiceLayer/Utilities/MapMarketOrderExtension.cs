@@ -8,7 +8,7 @@ using EveMailHelper.DataModels.Market;
 
 namespace EveMailHelper.ServiceLayer.Utilities
 {
-    public static class MapExtensions
+    public static class MapMarketOrderExtension
     {
         public static void MapFrom(this MarketOrder marketOrder, EVEStandard.Models.MarketOrder mapFrom)
         {
@@ -33,7 +33,7 @@ namespace EveMailHelper.ServiceLayer.Utilities
 
             foreach (T item in list)
             {
-                MarketOrder order = new MarketOrder();
+                var order = new MarketOrder();
                 order.MapFrom(item);
                 result.Add(order);
             }

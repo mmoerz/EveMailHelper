@@ -3,8 +3,11 @@ using EveMailHelper.BusinessLibrary.Complex;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataModels.Dto;
 using EveMailHelper.DataModels.Market;
+using EveMailHelper.DataModels.Sde;
 using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.ServiceLayer.Utilities;
+
+using EveNatTools.BusinessLogicLibrary;
 
 using EVEStandard;
 
@@ -21,8 +24,9 @@ namespace EveMailHelper.ServiceLayer.Managers
     public class ArchiverMarketManager : InGameMarketManager, IMarketManager
     {
         private readonly RunnerWriteDb<List<MarketOrder>, List<MarketOrder>> _updateMarketOrdersForOneEveType;
+        private readonly RunnerWriteDbAsync<List<MarketPrice>, List<MarketPrice>> _updateMarketPrices;
         private readonly MarketOrderDbAccess _marketorderDbAccess;
-
+        private readonly MarketPriceDbAccess _marketpriceDbAccess;
         public ArchiverMarketManager(
             AuthenticationStateProvider authenticationStateProvider,
             IAuthenticationManager authenticationManager,
@@ -35,8 +39,11 @@ namespace EveMailHelper.ServiceLayer.Managers
             if (_dbContext == null)
                 throw new Exception("aargs I died");
             _marketorderDbAccess = new MarketOrderDbAccess(_dbContext);
+            _marketpriceDbAccess = new MarketPriceDbAccess(_dbContext);
             _updateMarketOrdersForOneEveType = new RunnerWriteDb<List<MarketOrder>, List<MarketOrder>>
                 (new UpdateMarketOrderAction(_marketorderDbAccess), _dbContext);
+            _updateMarketPrices = new RunnerWriteDbAsync<List<MarketPrice>, List<MarketPrice>>
+                (new UpdateMarketPriceAction(_marketpriceDbAccess), _dbContext );
         }
 
         public async Task<List<MarketOrder>> ArchivedMarketPrice(
@@ -71,12 +78,24 @@ namespace EveMailHelper.ServiceLayer.Managers
                 marketOrders = esiList.MapToMarketOrderList<EVEStandard.Models.MarketOrder>();
                 marketOrders.ForEach(m => m.LastUpdatedFromEve = DateTime.UtcNow);
                 marketOrders = _updateMarketOrdersForOneEveType.RunAction(marketOrders);
-                //_dbContext.SaveChanges();
             }
             return await _marketorderDbAccess.GetSellBuyForTypeIdAsync(eveTypeId);
         }
 
-        
+        public async new Task<MarketPrice> GetMarketPrice(int eveTypeId, int maxAgeInMinutes)
+        {
+            List<MarketPrice> marketPrices;
+            var age = await _marketpriceDbAccess.GetAgeForIdAsync(eveTypeId);
+
+            if (age == 0 || age > (double)maxAgeInMinutes)
+            {
+                var esiList = await base.LoadPrices();
+                marketPrices = esiList.MapToMarketPriceList<EVEStandard.Models.MarketPrice>();
+                marketPrices.ForEach(m => m.LastUpdatedFromEve = DateTime.UtcNow);
+                marketPrices = await _updateMarketPrices.RunAction(marketPrices);
+            }
+            return await _marketpriceDbAccess.GetByIdAsync(eveTypeId);
+        }
 
     }
 }

@@ -24,11 +24,15 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EveMailHelper.ServiceLayer.Interfaces
 {
-    public class ProductionManager
+    public class ProductionManager : IProductionManager
     {
+        private readonly IMarketManager _marketManager;
+
         private readonly EveMailHelperContext _dbContext;
 
         private readonly MapDbAccess _mapDbAccess;
+
+        private int MaxAgeInMinutes = 60;
 
         /// <summary>
         /// fixed at 4%
@@ -37,12 +41,14 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         /// <summary>
         /// Only applicable to alpha clones, set to 0.25%
         /// </summary>
-        private readonly double AlphaCloneTax = 0.0025; 
+        private readonly double AlphaCloneTax = 0.0025;
 
         public ProductionManager(
+            IMarketManager marketManager,
             IDbContextFactory<EveMailHelperContext> dbContextFactory
             )
         {
+            _marketManager = marketManager;
             _dbContext = dbContextFactory.CreateDbContext();
             _mapDbAccess = new MapDbAccess(_dbContext);
 
@@ -52,16 +58,16 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         // Buildplan with costs, system ??, station ??, time to run
         // add additional costs to buildplan
 
-        public void AddProductionCosts(
+        public async Task AddProductionCosts(
             ProductionPlan productionPlan, double systemCostIndex, double structureBonuses, double facilityTax)
         {
-            foreach(var component in productionPlan.BlueprintComponents)
+            foreach (var component in productionPlan.BlueprintComponents)
             {
-                Produce(component, systemCostIndex, structureBonuses, facilityTax);
+                await Produce(component, systemCostIndex, structureBonuses, facilityTax);
             }
         }
 
-        protected void Produce(
+        protected async Task Produce(
             BlueprintComponentTree component, double systemCostIndex, double structureBonuses, double facilityTax)
         {
             // only if subcomponents are present, we continue
@@ -71,11 +77,11 @@ namespace EveMailHelper.ServiceLayer.Interfaces
             if (component.IsBuyingBetter)
                 return;
             // get job costs and store them in the component tree
-            component.JobCost = JobCost(component, systemCostIndex, structureBonuses, facilityTax);
+            component.JobCost = await JobCost(component, systemCostIndex, structureBonuses, facilityTax);
 
-            foreach(var subcomponent in  component.SubComponents)
+            foreach (var subcomponent in component.SubComponents)
             {
-                Produce(subcomponent, systemCostIndex, structureBonuses, facilityTax);
+                await Produce(subcomponent, systemCostIndex, structureBonuses, facilityTax);
             }
         }
 
@@ -92,18 +98,17 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         /// 
         /// Material adjusted price can  be found in ESI /markets/prices/
         /// </remarks>
-        protected double JobCost(
+        protected async Task<double> JobCost(
             BlueprintComponentTree component, double systemCostIndex, double structureBonuses, double facilityTax)
         {
             double totalJobCost = 0;
             double estimatedItemValue = 0;
-            foreach(var subcomponent in component.SubComponents)
+            foreach (var subcomponent in component.SubComponents)
             {
-                var materialAdjustedPrice = // get from esi
-                    0;
-                estimatedItemValue += subcomponent.Quantity * materialAdjustedPrice;
+                var marketPrice = await _marketManager.GetMarketPrice(subcomponent.EveId, MaxAgeInMinutes);
+                estimatedItemValue += subcomponent.Quantity * marketPrice.AdjustedPrice;
             }
-            
+
             totalJobCost = estimatedItemValue *
                 ((systemCostIndex * structureBonuses) * facilityTax * SCCsurcharge * AlphaCloneTax);
             return totalJobCost;
