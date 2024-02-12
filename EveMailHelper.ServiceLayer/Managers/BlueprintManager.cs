@@ -62,10 +62,10 @@ namespace EveMailHelper.ServiceLayer.Managers
 
             var components = await GetBlueprintComponentsForActivity(activity, 0, filterActivity);
 
-            var first = activity.Products.First();
+            var first = activity.Products.Single();
             BlueprintComponents main = new()
             {
-                EveId = activity.Type.EveId,
+                EveId = first.ProductTypeId, // would be the blueprint eveTypeId --> activity.Type.EveId,
                 ProductionDepth = 0,
                 Name = first.ProductType.TypeName,
                 Quantity = 0,
