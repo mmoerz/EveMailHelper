@@ -5,20 +5,20 @@
           FixedHeader="true"
           FixedFooter="true"
           ReadOnly="true"
-          ServerData=@(new Func<TableState, Task<TableData<BlueprintComponentTree>>>(ServerReload))
+          ServerData=@(new Func<TableState, Task<TableData<BlueprintComponent>>>(ServerReload))
           SortLabel="Sortierung"
-          T="BlueprintComponentTree"
+          T="BlueprintComponent"
           @ref="_table">
     <ToolBarContent>
         <MudPaper Elevation="0">
             <MudText Typo="Typo.h6">@BlueprintName</MudText>
         </MudPaper>
-        @if (_mainProduct != null) {
+        @if (_mainPlan != null) {
             <MudPaper Elevation="0" Class="ml-4">
-                <MudText>@_mainProduct.QuantityFromBlueprint</MudText>
+                <MudText>@_mainPlan.ProductQuantity</MudText>
             </MudPaper>
             <MudPaper Elevation="0" Class="ml-4">
-                <MudText>@_mainProduct.Name </MudText>
+                <MudText>@_mainPlan.ProductName </MudText>
             </MudPaper>
         }
     </ToolBarContent>

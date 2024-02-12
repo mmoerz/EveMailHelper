@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,11 @@ using System.Threading.Tasks;
 
 using EveMailHelper.DataModels.Sde;
 
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+
 namespace EveMailHelper.ServiceLayer.Models
 {
-    public class ProductionPlan
+    public class ProductionPlan : IEnumerable<BlueprintComponent>, IBlueprintComponentTree
     {
         // hmm, ideen>
         // 'filter' oder 'limitierung' fuer bestimmte 'activities'
@@ -18,15 +21,46 @@ namespace EveMailHelper.ServiceLayer.Models
         { get { return Blueprint.Type.TypeName; } }
         public IndustryBlueprint Blueprint { get; set; } = null!;
 
-        public EveType Product { get; set; } = null!;
+        public EveType? Product { get; set; } = null;
         public int ProductQuantity { get; set; }
+        public string ProductName
+        { get { return Product?.TypeName ?? string.Empty; } }
+        public double ProductVolume 
+        { get { return Product?.Volume ?? 0.0; } }
         public double ProductPrice { get; set; }
         public double ProductPriceSum 
         { get { return ProductPrice * ProductQuantity; } }
         public double ComponentBestPriceSum
-        { get { return BlueprintComponents.BestPriceSum(); } }
+        { 
+            get {
+                double subBestPrice = 0.0;
+                foreach (var component in SubComponents)
+                {
+                    subBestPrice += component.BestPriceSum();
+                }
+                return subBestPrice;
+            }
+        }
+        public double BestPriceSum
+        {
+            get
+            {
+                if (ComponentBestPriceSum < ProductPriceSum)
+                    return ComponentBestPriceSum;
+                return ProductPriceSum;
+            }
+        }
 
-        public BlueprintComponentTree BlueprintComponents { get; set; } = new BlueprintComponentTree();
+        public IList<BlueprintComponent> SubComponents { get; set; } = new List<BlueprintComponent>();
+
+        public int ProductionDepth
+        { get { return 0; } }
+
+        public void Add(BlueprintComponent component)
+        {
+            component.SetParent(this);
+            SubComponents.Add(component);
+        }
 
         /// <summary>
         /// gets the price sum for the components for the given 'depth' in the tree of components
@@ -39,10 +73,22 @@ namespace EveMailHelper.ServiceLayer.Models
         /// <returns></returns>
         public double ComponentPriceSumDepth(int depth)
         {
-            return BlueprintComponents.BestPriceSumWithDepthLimit(depth);
+            throw new NotImplementedException();
+            //return BlueprintComponents.BestPriceSumWithDepthLimit(depth);
         }
 
         
 
+        public IEnumerator<BlueprintComponent> GetEnumerator()
+        {
+            return new ProductionPlanIterator(this);
+        }
+
+        
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new ProductionPlanIterator(this);
+        }
     }
 }

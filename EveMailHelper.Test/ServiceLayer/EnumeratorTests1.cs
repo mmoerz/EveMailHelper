@@ -26,44 +26,44 @@ namespace EveMailHelper.Test.ServiceLayer
         
         public void Test1()
         {
-            var sut = new BlueprintComponentTree()
+            var sut = new BlueprintComponent()
             {
                 Name = "TopLevel",
                 SubComponents = new[]
                 {
-                    new BlueprintComponentTree()
+                    new BlueprintComponent()
                     {
                         Name = "L1 item1",
                         SubComponents = new[]
                         {
-                            new BlueprintComponentTree()
+                            new BlueprintComponent()
                             {
                                 Name = "L2-1 item1"
                             },
-                            new BlueprintComponentTree()
+                            new BlueprintComponent()
                             {
                                 Name = "L2-1 item2"
                             },
-                            new BlueprintComponentTree()
+                            new BlueprintComponent()
                             {
                                 Name = "L2-1 item3"
                             }
                         }
                     },
-                    new BlueprintComponentTree()
+                    new BlueprintComponent()
                     {
                         Name = "L1 item2",
                         SubComponents = new[]
                         {
-                            new BlueprintComponentTree()
+                            new BlueprintComponent()
                             {
                                 Name = "L2-2 item1"
                             },
-                            new BlueprintComponentTree()
+                            new BlueprintComponent()
                             {
                                 Name = "L2-2 item2"
                             },
-                            new BlueprintComponentTree()
+                            new BlueprintComponent()
                             {
                                 Name = "L2-2 item3"
                             }
@@ -95,44 +95,44 @@ namespace EveMailHelper.Test.ServiceLayer
        
         public void TestCount()
         {
-            BlueprintComponentTree sut = new BlueprintComponentTree()
+            BlueprintComponent sut = new BlueprintComponent()
             {
                 Name = "TopLevel",
                 SubComponents = new[]
                 {
-                    new BlueprintComponentTree()
+                    new BlueprintComponent()
                     {
                         Name = "L1 item1",
                         SubComponents = new[]
                         {
-                            new BlueprintComponentTree()
+                            new BlueprintComponent()
                             {
                                 Name = "L2-1 item1"
                             },
-                            new BlueprintComponentTree()
+                            new BlueprintComponent()
                             {
                                 Name = "L2-1 item2"
                             },
-                            new BlueprintComponentTree()
+                            new BlueprintComponent()
                             {
                                 Name = "L2-1 item3"
                             }
                         }
                     },
-                    new BlueprintComponentTree()
+                    new BlueprintComponent()
                     {
                         Name = "L1 item2",
                         SubComponents = new[]
                         {
-                            new BlueprintComponentTree()
+                            new BlueprintComponent()
                             {
                                 Name = "L2-2 item1"
                             },
-                            new BlueprintComponentTree()
+                            new BlueprintComponent()
                             {
                                 Name = "L2-2 item2"
                             },
-                            new BlueprintComponentTree()
+                            new BlueprintComponent()
                             {
                                 Name = "L2-2 item3"
                             }

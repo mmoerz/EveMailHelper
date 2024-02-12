@@ -8,7 +8,7 @@ using EveMailHelper.DataModels.Market;
 
 namespace EveMailHelper.BusinessLibrary.Complex
 {
-    public class UpdateMarketOrderAction : IBizAction<List<MarketOrder>, List<MarketOrder>>
+    public class UpdateMarketOrderAction : IBizActionAsync<List<MarketOrder>, List<MarketOrder>>
     {
         readonly MarketOrderDbAccess _dbAccess;
         private List<ValidationResult> _errors = new();
@@ -22,14 +22,14 @@ namespace EveMailHelper.BusinessLibrary.Complex
 
         public bool HasErrors => _errors.Any();
 
-        public List<MarketOrder> Action(List<MarketOrder> dto)
+        public async Task<List<MarketOrder>> ActionAsync(List<MarketOrder> dto)
         {
             _ = dto ?? throw new ArgumentNullException(nameof(dto));
             if (dto.Count == 0)
                 throw new ArgumentException($"cannot update empty list of marketorders");
 
             int eveTypeId = dto.First().TypeId;
-            var storedMarketOrdersIds = _dbAccess.GetIdsForEveType(eveTypeId);
+            var storedMarketOrdersIds = await _dbAccess.GetIdsForEveTypeAsync(eveTypeId);
 
             foreach(var marketorder in dto)
             {

@@ -91,6 +91,14 @@ namespace EveMailHelper.BusinessDataAccess
                 .ToList();
         }
 
+        public async Task<List<long>> GetIdsForEveTypeAsync(int eveTypeId)
+        {
+            return await _context.MarketOrders
+                .Where(x => x.TypeId == eveTypeId)
+                .Select(c => c.EveId)
+                .ToListAsync();
+        }
+
         public async Task<TableData<MarketOrder>> GetTypePaginatedAsync(
             int eveTypeId, string searchString, TableState state, bool? isBuyOrder)
         {

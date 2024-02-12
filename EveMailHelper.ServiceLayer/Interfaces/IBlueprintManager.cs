@@ -8,7 +8,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
     public interface IBlueprintManager
     {
         Task<List<IndustryActivity>> GetBlueprintActivity(int EveId);
-        Task<BlueprintComponentTree> GetBlueprintComponentsList(IndustryBlueprint blueprint, int filterActivity = 0);
+        Task<ProductionPlan> GetBlueprintComponentsList(IndustryBlueprint blueprint, int filterActivity = 0);
         Task<TableData<IndustryBlueprint>> GetBlueprintsPaginated(string groupFilter, string searchString, TableState state);
     }
 }

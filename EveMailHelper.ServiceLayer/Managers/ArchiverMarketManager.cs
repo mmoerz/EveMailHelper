@@ -23,7 +23,7 @@ namespace EveMailHelper.ServiceLayer.Managers
 {
     public class ArchiverMarketManager : InGameMarketManager, IMarketManager
     {
-        private readonly RunnerWriteDb<List<MarketOrder>, List<MarketOrder>> _updateMarketOrdersForOneEveType;
+        private readonly RunnerWriteDbAsync<List<MarketOrder>, List<MarketOrder>> _updateMarketOrdersForOneEveType;
         private readonly RunnerWriteDbAsync<List<MarketPrice>, List<MarketPrice>> _updateMarketPrices;
         private readonly MarketOrderDbAccess _marketorderDbAccess;
         private readonly MarketPriceDbAccess _marketpriceDbAccess;
@@ -40,7 +40,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 throw new Exception("aargs I died");
             _marketorderDbAccess = new MarketOrderDbAccess(_dbContext);
             _marketpriceDbAccess = new MarketPriceDbAccess(_dbContext);
-            _updateMarketOrdersForOneEveType = new RunnerWriteDb<List<MarketOrder>, List<MarketOrder>>
+            _updateMarketOrdersForOneEveType = new RunnerWriteDbAsync<List<MarketOrder>, List<MarketOrder>>
                 (new UpdateMarketOrderAction(_marketorderDbAccess), _dbContext);
             _updateMarketPrices = new RunnerWriteDbAsync<List<MarketPrice>, List<MarketPrice>>
                 (new UpdateMarketPriceAction(_marketpriceDbAccess), _dbContext );
@@ -57,8 +57,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 var esiList = await base.LoadMarketPrice(regionId, typeId, page);
                 marketOrders = esiList.MapToMarketOrderList<EVEStandard.Models.MarketOrder>();
                 marketOrders.ForEach(m => m.LastUpdatedFromEve = DateTime.UtcNow);
-                marketOrders = _updateMarketOrdersForOneEveType.RunAction(marketOrders);
-                _dbContext.SaveChanges();
+                marketOrders = await _updateMarketOrdersForOneEveType.RunAction(marketOrders);
             }
             else
                 marketOrders = await _marketorderDbAccess.GetByTypeIdAsync(typeId);
@@ -77,7 +76,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 var esiList = await base.LoadMarketPrice(regionId, eveTypeId, 1);
                 marketOrders = esiList.MapToMarketOrderList<EVEStandard.Models.MarketOrder>();
                 marketOrders.ForEach(m => m.LastUpdatedFromEve = DateTime.UtcNow);
-                marketOrders = _updateMarketOrdersForOneEveType.RunAction(marketOrders);
+                marketOrders = await _updateMarketOrdersForOneEveType.RunAction(marketOrders);
             }
             return await _marketorderDbAccess.GetSellBuyForTypeIdAsync(eveTypeId);
         }

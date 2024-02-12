@@ -61,14 +61,14 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         public async Task AddProductionCosts(
             ProductionPlan productionPlan, double systemCostIndex, double structureBonuses, double facilityTax)
         {
-            foreach (var component in productionPlan.BlueprintComponents)
+            foreach (var component in productionPlan.SubComponents)
             {
                 await Produce(component, systemCostIndex, structureBonuses, facilityTax);
             }
         }
 
         protected async Task Produce(
-            BlueprintComponentTree component, double systemCostIndex, double structureBonuses, double facilityTax)
+            BlueprintComponent component, double systemCostIndex, double structureBonuses, double facilityTax)
         {
             // only if subcomponents are present, we continue
             if (!component.SubComponents.Any())
@@ -99,7 +99,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         /// Material adjusted price can  be found in ESI /markets/prices/
         /// </remarks>
         protected async Task<double> JobCost(
-            BlueprintComponentTree component, double systemCostIndex, double structureBonuses, double facilityTax)
+            BlueprintComponent component, double systemCostIndex, double structureBonuses, double facilityTax)
         {
             double totalJobCost = 0;
             double estimatedItemValue = 0;

@@ -6,11 +6,12 @@ using static MudBlazor.Icons;
 
 namespace EveMailHelper.ServiceLayer.Models
 {
-    public class BlueprintComponentTree : IEnumerable<BlueprintComponentTree>
+    
+    public class BlueprintComponent : IEnumerable<BlueprintComponent>, IBlueprintComponentTree
     {
-        public BlueprintComponentTree() 
-        { 
-            SubComponents = new List<BlueprintComponentTree>();
+        public BlueprintComponent()
+        {
+            SubComponents = new List<BlueprintComponent>();
         }
 
         /// <summary>
@@ -23,22 +24,23 @@ namespace EveMailHelper.ServiceLayer.Models
         /// <remarks>
         /// blueprint is zero, direct materials of blueprint are 1, ...
         /// </remarks>
-        public int ProductionDepth { 
+        public int ProductionDepth
+        {
             get
             {
                 int depth = 0;
                 if (Parent != null)
                     depth = Parent.ProductionDepth + 1;
-                
+
                 return depth;
-            } 
+            }
         }
 
         public string Name { get; set; } = null!;
         public double Volume { get; set; }
         public int Quantity { get; set; }
         public double PricePerUnit { get; set; }
-        public double PriceSum 
+        public double PriceSum
         { get { return Quantity * PricePerUnit; } }
 
         public double VolumeSum
@@ -48,7 +50,7 @@ namespace EveMailHelper.ServiceLayer.Models
 
         public double JobCost { get; set; }
 
-        public double ForcedQuantityMultiplier 
+        public double ForcedQuantityMultiplier
         {
             get
             {
@@ -58,13 +60,9 @@ namespace EveMailHelper.ServiceLayer.Models
             }
         }
 
-        protected BlueprintComponentTree? _parent; 
-        public BlueprintComponentTree? Parent 
-        { get { return _parent; } }
+        public IList<BlueprintComponent> SubComponents { get; set; }
 
-        public IList<BlueprintComponentTree> SubComponents { get; set; }
-
-        public IEnumerator<BlueprintComponentTree> GetEnumerator()
+        public IEnumerator<BlueprintComponent> GetEnumerator()
         {
             return new BlueprintComponentIterator(this);
         }
@@ -74,28 +72,22 @@ namespace EveMailHelper.ServiceLayer.Models
             return new BlueprintComponentIterator(this);
         }
 
-        protected void SetParent(BlueprintComponentTree component)
+        protected IBlueprintComponentTree? _parent;
+        public IBlueprintComponentTree? Parent
+        { get { return _parent; } }
+
+        public void SetParent(IBlueprintComponentTree component)
         {
             _parent = component;
         }
 
-        public void Add(BlueprintComponentTree component)
+        public void Add(BlueprintComponent component)
         {
             if (SubComponents.Contains(component))
                 return;
 
             component.SetParent(this);
             SubComponents.Add(component);
-        }
-
-        protected int RecursiveProductionDepth()
-        {
-            int depth = 0;
-            if (Parent != null)
-            {
-                depth = Parent.RecursiveProductionDepth() + 1;
-            }
-            return depth;
         }
 
         public bool IsBuyingBetter
@@ -129,7 +121,7 @@ namespace EveMailHelper.ServiceLayer.Models
             {
                 foreach (var component in SubComponents)
                 {
-                    sum += component.BestPriceSumWithDepthLimit(depth -1);
+                    sum += component.BestPriceSumWithDepthLimit(depth - 1);
                 }
             }
             if (sum > PriceSum)

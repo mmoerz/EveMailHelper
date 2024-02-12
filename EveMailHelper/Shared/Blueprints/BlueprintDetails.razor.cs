@@ -19,10 +19,11 @@ namespace EveMailHelper.Web.Shared.Blueprints
         [Inject] IBlueprintManager BlueprintManager { get; set; } = null!;
         [Inject] IMarketManager MarketManager { get; set; } = null!;
         [Inject] IMapManager MapManager { get; set; } = null!;
+        [Inject] IProductionManager ProductionManager { get; set; } = null!;
         #endregion
 
-        private MudTable<BlueprintComponentTree> _table = null!;
-        private BlueprintComponentTree _mainProduct = new BlueprintComponentTree();
+        private MudTable<BlueprintComponent> _table = null!;
+        private ProductionPlan _mainPlan = new ProductionPlan();
         private IndustryBlueprint _blueprint = new();
 
         #region parameters
@@ -46,6 +47,9 @@ namespace EveMailHelper.Web.Shared.Blueprints
         // TODO Region is fixed, should be 'selectable'
         private int RegionId = -1;
         private int MaxAgeInMinutes = 60;
+        private double SystemCostIndex = 0;
+        private double StructureBonuses = 0;
+        private double FacilityTax = 1;
 
         protected override async Task OnInitializedAsync()
         {
@@ -62,31 +66,27 @@ namespace EveMailHelper.Web.Shared.Blueprints
         /// <summary>
         /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>
-        private async Task<TableData<BlueprintComponentTree>> ServerReload(TableState state)
+        private async Task<TableData<BlueprintComponent>> ServerReload(TableState state)
         {
-            TableData<BlueprintComponentTree> data = new();
+            TableData<BlueprintComponent> data = new();
 
             if (_blueprint != null && _blueprint.TypeId != 0)
             {
                 // TODO: ugly ugly reference to use '11' as an activity filter directly
-                _mainProduct = await BlueprintManager.GetBlueprintComponentsList(_blueprint, 11);
-                //_blueprintComponents = _mainProduct.SubComponents.ToList();
-                //_blueprintComponents.ToFlatList();
-            }
-
-            data.TotalItems = _mainProduct.Count();
-            //_blueprintComponents.Count; 
-            data.Items = _mainProduct;//_blueprintComponents;
-
-            if (_mainProduct.EveId > 0) { 
-                // Todo: hmm, check is fine but we are splitting stuff all over here
-                foreach (var item in data.Items)
+                _mainPlan = await BlueprintManager.GetBlueprintComponentsList(_blueprint, 11);
+                if (_mainPlan.Product != null && _mainPlan.Product.EveId > 0)
                 {
-                    var sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, item.EveId, MaxAgeInMinutes);
-                    item.PricePerUnit = sellbuyPrice.SellPrice;
-                                        
+                    foreach (var item in _mainPlan.SubComponents)
+                    {
+                        var sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, item.EveId, MaxAgeInMinutes);
+                        item.PricePerUnit = sellbuyPrice.SellPrice;
+                    }
+                    //await ProductionManager.AddProductionCosts(_mainPlan, SystemCostIndex, StructureBonuses, FacilityTax);
                 }
             }
+
+            data.TotalItems = _mainPlan.SubComponents.Count();
+            data.Items = _mainPlan; //.BlueprintComponents;
 
             return data;
         }
@@ -98,7 +98,7 @@ namespace EveMailHelper.Web.Shared.Blueprints
             return string.Format("ml-{0}", (depth-1)*2);
         }
 
-        private MudBlazor.Color GetColorForPriceSum(BlueprintComponentTree component)
+        private MudBlazor.Color GetColorForPriceSum(BlueprintComponent component)
         {
             if (component.SubComponents.Count == 0)
                 return Color.Primary;
@@ -109,9 +109,5 @@ namespace EveMailHelper.Web.Shared.Blueprints
                 return Color.Secondary;
         }
 
-        public void SetModel(BlueprintComponentTree value)
-        {
-            _mainProduct = value;
-        }
     }
 }

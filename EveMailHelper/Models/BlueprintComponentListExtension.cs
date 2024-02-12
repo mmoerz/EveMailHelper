@@ -6,7 +6,7 @@ namespace EveMailHelper.Web.Models
 {
     public static class BlueprintComponentListExtension
     {
-        public static void ToFlatList<T>(this IList<T> list) where T : BlueprintComponentTree
+        public static void ToFlatList<T>(this IList<T> list) where T : BlueprintComponent
         {
             int i = 0;
             int insertPos = 0;

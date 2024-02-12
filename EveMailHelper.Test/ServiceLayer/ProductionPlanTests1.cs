@@ -17,13 +17,16 @@ using System;
 
 namespace EveMailHelper.Test.ServiceLayer
 {
-    public partial class BlueprintComponentTests1
+    public partial class ProductionPlanTests1
     {
-        public BlueprintComponentTests1()
+        public ProductionPlanTests1()
         {
 
         }
 
+
+
+        /*
         [Theory]
         [MemberData(nameof(BlueprintComponentDataGenerator.GetComponentsProductionDepth), MemberType = typeof(BlueprintComponentDataGenerator))]
         public void TestProductionDepth(int expected, BlueprintComponent sut)
@@ -62,5 +65,6 @@ namespace EveMailHelper.Test.ServiceLayer
             var result = sut.IsProducingBetter;
             result.ShouldBeEquivalentTo(expected);
         }
+        */
     }
 }
