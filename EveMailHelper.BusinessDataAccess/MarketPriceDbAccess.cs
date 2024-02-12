@@ -36,6 +36,15 @@ namespace EveMailHelper.BusinessDataAccess
             return await _context.MarketPrices.ToListAsync();
         }
 
+        public async Task<List<int>> GetAllIdsAsync()
+        {
+            var query =
+                from marketprice in _context.MarketPrices
+                select marketprice.EveTypeId;
+
+            return await query.ToListAsync();
+        }
+
         public async Task<MarketPrice?> GetByIdAsync(int eveTypeid)
         {
             return await _context.MarketPrices.Where(x => x.EveTypeId == eveTypeid).SingleAsync();
