@@ -100,8 +100,11 @@ namespace EveMailHelper.Web.Shared.Blueprints
 
         private MudBlazor.Color GetColorForPriceSum(BlueprintComponents component)
         {
+            if (component.SubComponents.Count == 0)
+                return Color.Primary;
+
             if (component.IsProducingBetter)
-                return Color.Warning;
+                return Color.Success;
             else
                 return Color.Secondary;
         }

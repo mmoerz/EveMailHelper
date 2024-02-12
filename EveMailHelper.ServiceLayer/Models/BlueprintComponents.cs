@@ -79,6 +79,9 @@ namespace EveMailHelper.ServiceLayer.Models
 
         public void Add(BlueprintComponents component)
         {
+            if (SubComponents.Contains(component))
+                return;
+
             component.SetParent(this);
             SubComponents.Add(component);
         }
@@ -94,7 +97,7 @@ namespace EveMailHelper.ServiceLayer.Models
         }
 
         public bool IsBuyingBetter
-        { get { return BestPriceSum() >= PriceSum; } }
+        { get { return !IsProducingBetter; } }
 
         public bool IsProducingBetter
         { get { return BestPriceSum() < PriceSum; } }
@@ -102,19 +105,24 @@ namespace EveMailHelper.ServiceLayer.Models
         public double BestPriceSum()
         {
             double sum = 0;
+            if (SubComponents.Count == 0)
+                return PriceSum;
+
             foreach (var component in SubComponents)
             {
                 sum += component.BestPriceSum();
             }
-            if (sum < PriceSum)
+            if (sum > PriceSum)
                 sum = PriceSum;
             return sum;
         }
 
         public double BestPriceSumWithDepthLimit(int depth)
         {
-
             double sum = 0;
+            if (SubComponents.Count == 0)
+                return PriceSum;
+
             if (depth > 1)
             {
                 foreach (var component in SubComponents)
@@ -122,7 +130,7 @@ namespace EveMailHelper.ServiceLayer.Models
                     sum += component.BestPriceSumWithDepthLimit(depth -1);
                 }
             }
-            if (sum < PriceSum)
+            if (sum > PriceSum)
                 sum = PriceSum;
             return sum;
         }

@@ -52,17 +52,25 @@
                 @context.ProductionDepth: @context.Name
             </MudPaper>
         </MudTd>
-        <MudTd DataLabel="Volume">@context.VolumeSum</MudTd>
-        <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
-        <MudTd DataLabel="BPQuantity">@context.QuantityFromBlueprint</MudTd>
-        <MudTd DataLabel="FQuantity">@context.ForcedQuantityMultiplier</MudTd>
-        <MudTd DataLabel="Price">@context.PricePerUnit
-                <!--
-                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteEmail(context)"></MudIconButton>
-                    -->
+        <MudTd DataLabel="Volume">
+            <MudText Align="Align.Right">@context.VolumeSum</MudText>
+        </MudTd>
+        <MudTd DataLabel="Quantity">
+            <MudText Align="Align.Right">@context.Quantity</MudText>
+        </MudTd>
+        <MudTd DataLabel="BPQuantity">
+            <MudText Align="Align.Right">@context.QuantityFromBlueprint</MudText>
+        </MudTd>
+        <MudTd DataLabel="FQuantity">
+            <MudText Align="Align.Right">@context.ForcedQuantityMultiplier</MudText>
+        </MudTd>
+        <MudTd DataLabel="Price">
+            <MudText Align="Align.Right">@($"{context.PricePerUnit:#,##0.00}")</MudText>
         </MudTd>
         <MudTh DataLabel="Sum">
-            <MudText Color="@GetColorForPriceSum(@context)">@context.PriceSum</MudText>
+            <MudText Align="Align.Right" Color="@GetColorForPriceSum(@context)">
+                 @($"{context.PriceSum:#,##0.00}")
+            </MudText>
         </MudTh>
     </RowTemplate>
     <PagerContent>

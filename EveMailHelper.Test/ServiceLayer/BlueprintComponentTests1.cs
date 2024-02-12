@@ -26,7 +26,7 @@ namespace EveMailHelper.Test.ServiceLayer
 
         [Theory]
         [MemberData(nameof(BlueprintComponentDataGenerator.GetComponentsProductionDepth), MemberType = typeof(BlueprintComponentDataGenerator))]
-        public void TestBestPriceSum1(int expected, BlueprintComponents sut)
+        public void TestProductionDepth(int expected, BlueprintComponents sut)
         {
             sut.ProductionDepth.ShouldBe(expected);
         }
@@ -36,6 +36,30 @@ namespace EveMailHelper.Test.ServiceLayer
         public void TestPriceSum(BlueprintComponents sut, double expected)
         {
             var result = sut.PriceSum;
+            result.ShouldBeEquivalentTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(BlueprintComponentDataGenerator.GetVolumeSum), MemberType = typeof(BlueprintComponentDataGenerator))]
+        public void TestVolumeSum(BlueprintComponents sut, double expected)
+        {
+            var result = sut.VolumeSum;
+            result.ShouldBeEquivalentTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(BlueprintComponentDataGenerator.GetBestPriceSum), MemberType = typeof(BlueprintComponentDataGenerator))]
+        public void TestBestPriceSum(BlueprintComponents sut, double expected)
+        {
+            var result = sut.BestPriceSum();
+            result.ShouldBeEquivalentTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(BlueprintComponentDataGenerator.GetIsProducing), MemberType = typeof(BlueprintComponentDataGenerator))]
+        public void TestIsProducingBetter(BlueprintComponents sut, bool expected)
+        {
+            var result = sut.IsProducingBetter;
             result.ShouldBeEquivalentTo(expected);
         }
     }

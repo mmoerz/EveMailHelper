@@ -105,6 +105,7 @@ namespace EveMailHelper.Test.Data
                 Name = "TopLevel",
                 Quantity = 200,
                 PricePerUnit = 300,
+                Volume = 10,
                 QuantityFromBlueprint = 200,
             },
                     new()
@@ -112,12 +113,14 @@ namespace EveMailHelper.Test.Data
                         Name = "L1 item1",
                         Quantity = 10,
                         PricePerUnit = 30,
+                        Volume = 11,
                         QuantityFromBlueprint = 20,
                     },
                             new()
                             {
                                 Quantity = 1,
                                 PricePerUnit = 3,
+                                Volume = 111,
                                 QuantityFromBlueprint = 2,
                                 Name = "L2-1 item1"
                             },
@@ -125,6 +128,7 @@ namespace EveMailHelper.Test.Data
                             {
                                 Quantity = 2,
                                 PricePerUnit = 4,
+                                Volume = 112,
                                 QuantityFromBlueprint = 4,
                                 Name = "L2-1 item2"
                             },
@@ -132,22 +136,25 @@ namespace EveMailHelper.Test.Data
                             {
                                 Quantity = 3,
                                 PricePerUnit = 5,
+                                Volume = 113,
                                 QuantityFromBlueprint = 6,
                                 Name = "L2-1 item3"
                             },
-                        
-                    
+
+
                     new ()
                     {
                         Name = "L1 item2",
                         Quantity = 1,
                         PricePerUnit = 3,
+                        Volume = 12,
                         QuantityFromBlueprint = 2,
                     },
                             new()
                             {
                                 Quantity = 1,
                                 PricePerUnit = 3,
+                                Volume = 121,
                                 QuantityFromBlueprint = 2,
                                 Name = "L2-2 item1"
                             },
@@ -155,6 +162,7 @@ namespace EveMailHelper.Test.Data
                             {
                                 Quantity = 1,
                                 PricePerUnit = 3,
+                                Volume = 122,
                                 QuantityFromBlueprint = 2,
                                 Name = "L2-2 item2"
                             },
@@ -162,13 +170,10 @@ namespace EveMailHelper.Test.Data
                             {
                                 Quantity = 1,
                                 PricePerUnit = 3,
+                                Volume = 123,
                                 QuantityFromBlueprint = 2,
                                 Name = "L2-2 item3"
                             },
-                        
-                    
-                
-            
         };
 
         public static readonly List<BlueprintComponents> Enumerated1 = new()
@@ -183,8 +188,8 @@ namespace EveMailHelper.Test.Data
             _componentData1[0].SubComponents[1].SubComponents[2],
         };
 
-        public static readonly List<Tuple<int,BlueprintComponents>> selection1 = new()
-        { 
+        public static readonly List<Tuple<int, BlueprintComponents>> selection1 = new()
+        {
             new(1, _componentData1[0].SubComponents[0]),
             new(2, _componentData1[0].SubComponents[0].SubComponents[1]),
             new(0, _componentData1[0])
@@ -230,6 +235,43 @@ namespace EveMailHelper.Test.Data
         {
             yield return new object[] { _componentData3[0], 60000.0 };
             yield return new object[] { _componentData3[4], 15.0 };
+        }
+
+        public static IEnumerable<object[]> GetVolumeSum()
+        {
+            yield return new object[] { _componentData3[0], 2000.0 };
+            yield return new object[] { _componentData3[4], 339.0 };
+        }
+
+        public static IEnumerable<object[]> GetBestPriceSum()
+        {
+            _componentData3[0].Add(_componentData3[1]);
+            _componentData3[1].Add(_componentData3[2]);
+            _componentData3[1].Add(_componentData3[3]);
+            _componentData3[1].Add(_componentData3[4]);
+            _componentData3[0].Add(_componentData3[5]);
+            _componentData3[5].Add(_componentData3[6]);
+            _componentData3[5].Add(_componentData3[7]);
+            _componentData3[5].Add(_componentData3[8]);
+
+            yield return new object[] { _componentData3[1], 26.0 };
+            yield return new object[] { _componentData3[5], 3.0 };
+            yield return new object[] { _componentData3[0], 29.0 };
+        }
+
+        public static IEnumerable<object[]> GetIsProducing()
+        {
+            _componentData3[0].Add(_componentData3[1]);
+            _componentData3[1].Add(_componentData3[2]);
+            _componentData3[1].Add(_componentData3[3]);
+            _componentData3[1].Add(_componentData3[4]);
+            _componentData3[0].Add(_componentData3[5]);
+            _componentData3[5].Add(_componentData3[6]);
+            _componentData3[5].Add(_componentData3[7]);
+            _componentData3[5].Add(_componentData3[8]);
+
+            yield return new object[] { _componentData3[1], true };
+            yield return new object[] { _componentData3[5], false };
         }
     }
 }
