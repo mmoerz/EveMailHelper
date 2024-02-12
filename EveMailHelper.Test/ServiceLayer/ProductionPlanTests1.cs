@@ -23,17 +23,20 @@ namespace EveMailHelper.Test.ServiceLayer
         {
 
         }
-
-
-
-        /*
+        
         [Theory]
-        [MemberData(nameof(BlueprintComponentDataGenerator.GetComponentsProductionDepth), MemberType = typeof(BlueprintComponentDataGenerator))]
-        public void TestProductionDepth(int expected, BlueprintComponent sut)
+        [MemberData(nameof(ProductionPlanDataGenerator.GetPlanAndExpectedEnumerationDataGenerator), MemberType = typeof(ProductionPlanDataGenerator))]
+        public void TestEnumeration1(ProductionPlan sut, List<BlueprintComponent> expectedItems)
         {
-            sut.ProductionDepth.ShouldBe(expected);
+            int i = 0;
+            foreach (BlueprintComponent item in sut) 
+            {
+                item.ShouldBeEquivalentTo(expectedItems[i]);
+                i++;
+            }
         }
-                
+
+        /*        
         [Theory]
         [MemberData(nameof(BlueprintComponentDataGenerator.GetPriceSum), MemberType = typeof(BlueprintComponentDataGenerator))]
         public void TestPriceSum(BlueprintComponent sut, double expected)
