@@ -168,7 +168,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
             BuyList buyList = new BuyList();
 
             // check if it's cost effective to build
-            if (plan.IsBuildingBetter)
+            if (plan.IsProducingBetter)
             {
                 foreach(var component in plan.SubComponents)
                 {

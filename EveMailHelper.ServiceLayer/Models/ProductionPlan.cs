@@ -51,8 +51,9 @@ namespace EveMailHelper.ServiceLayer.Models
         {
             get
             {
-                if (ComponentBestPriceSum < ProductPriceSum)
-                    return ComponentBestPriceSum;
+                var JobAndComponentPrice = JobCost + ComponentBestPriceSum;
+                if (JobAndComponentPrice < ProductPriceSum)
+                    return JobAndComponentPrice;
                 return ProductPriceSum;
             }
         }

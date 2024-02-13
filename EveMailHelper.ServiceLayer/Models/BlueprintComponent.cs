@@ -14,10 +14,18 @@ namespace EveMailHelper.ServiceLayer.Models
             SubComponents = new List<BlueprintComponent>();
         }
 
+        #region properties
         /// <summary>
         /// eveId for further querying the ESI API
         /// </summary>
         public EveType EveType { get; set; } = null!;
+        public string Name { get; set; } = null!;
+        public double Volume { get; set; }
+        public int Quantity { get; set; }
+        public double PricePerUnit { get; set; }
+        public int QuantityFromBlueprint { get; set; }
+        public double JobCost { get; set; }
+        public IList<BlueprintComponent> SubComponents { get; set; }
         /// <summary>
         /// depth in the hierachy of the product chain.
         /// </summary>
@@ -35,20 +43,15 @@ namespace EveMailHelper.ServiceLayer.Models
                 return depth;
             }
         }
-
-        public string Name { get; set; } = null!;
-        public double Volume { get; set; }
-        public int Quantity { get; set; }
-        public double PricePerUnit { get; set; }
+                
         public double PriceSum
         { get { return Quantity * PricePerUnit; } }
-
         public double VolumeSum
         { get { return Volume * Quantity; } }
-
-        public int QuantityFromBlueprint { get; set; }
-
-        public double JobCost { get; set; }
+        public bool IsBuyingBetter
+        { get { return !IsProducingBetter; } }
+        public bool IsProducingBetter
+        { get { return BestPriceSum() < PriceSum; } }
 
         public double ForcedQuantityMultiplier
         {
@@ -60,7 +63,10 @@ namespace EveMailHelper.ServiceLayer.Models
             }
         }
 
-        public IList<BlueprintComponent> SubComponents { get; set; }
+        protected IBlueprintComponentTree? _parent;
+        public IBlueprintComponentTree? Parent
+        { get { return _parent; } }
+        #endregion
 
         public IEnumerator<BlueprintComponent> GetEnumerator()
         {
@@ -71,10 +77,6 @@ namespace EveMailHelper.ServiceLayer.Models
         {
             return new BlueprintComponentIterator(this);
         }
-
-        protected IBlueprintComponentTree? _parent;
-        public IBlueprintComponentTree? Parent
-        { get { return _parent; } }
 
         public void SetParent(IBlueprintComponentTree component)
         {
@@ -88,27 +90,6 @@ namespace EveMailHelper.ServiceLayer.Models
 
             component.SetParent(this);
             SubComponents.Add(component);
-        }
-
-        public bool IsBuyingBetter
-        { get { return !IsProducingBetter; } }
-
-        public bool IsProducingBetter
-        { get { return BestPriceSum() < PriceSum; } }
-
-        public double BestPriceSum()
-        {
-            double sum = 0;
-            if (SubComponents.Count == 0)
-                return PriceSum;
-
-            foreach (var component in SubComponents)
-            {
-                sum += component.BestPriceSum();
-            }
-            if (sum > PriceSum)
-                sum = PriceSum;
-            return sum;
         }
 
         public double BestPriceSumWithDepthLimit(int depth)
@@ -125,6 +106,26 @@ namespace EveMailHelper.ServiceLayer.Models
                 }
             }
             if (sum > PriceSum)
+                sum = PriceSum;
+            return sum;
+        }
+
+        public double BestPriceSum()
+        {
+            double sum = 0;
+            // no subcomponents, so nothing to produce and no job costs
+            if (SubComponents.Count == 0)
+                return PriceSum;
+
+            sum = JobCost;
+            foreach (var component in SubComponents)
+            {
+                sum += component.BestPriceSum();
+            }
+            sum /= ForcedQuantityMultiplier;
+            // not sure what is better in case of cheaper buying
+            // to return a single 'batch' (or the full 2 batches)
+            if (sum > PriceSum )
                 sum = PriceSum;
             return sum;
         }
