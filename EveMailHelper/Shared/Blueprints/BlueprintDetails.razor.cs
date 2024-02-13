@@ -78,20 +78,23 @@ namespace EveMailHelper.Web.Shared.Blueprints
             try { 
             if (_blueprint != null && _blueprint.TypeId != 0)
             {
-                // TODO: ugly ugly reference to use '11' as an activity filter directly
-                _mainPlan = await BlueprintManager.GetBlueprintComponentsList(_blueprint, 11);
-                if (_mainPlan.Product != null && _mainPlan.Product.EveId > 0)
-                {
-                    var sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, _mainPlan.Product.EveId, MaxAgeInMinutes);
-                    _mainPlan.ProductPrice = sellbuyPrice.SellPrice;
-                    foreach (var item in _mainPlan)
-                    {
-                        sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, item.EveId, MaxAgeInMinutes);
-                        item.PricePerUnit = sellbuyPrice.SellPrice;
-                    }
-                    await ProductionManager.AddProductionCosts(
-                        _mainPlan, SystemCostIndex, StructureBonuses, FacilityTax, isAlphaClone: false);
-                }
+                _mainPlan = await ProductionManager.GetProductionPlan(_blueprint, new List<int>() { 11 },
+                    RegionId, SystemCostIndex, StructureBonuses, FacilityTax, isAlphaClone: false);
+
+                //// TODO: ugly ugly reference to use '11' as an activity filter directly
+                //_mainPlan = await BlueprintManager.GetBlueprintComponentsList(_blueprint, 11);
+                //if (_mainPlan.Product != null && _mainPlan.Product.EveId > 0)
+                //{
+                //    var sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, _mainPlan.Product.EveId, MaxAgeInMinutes);
+                //    _mainPlan.ProductPrice = sellbuyPrice.SellPrice;
+                //    foreach (var item in _mainPlan)
+                //    {
+                //        sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, item.EveId, MaxAgeInMinutes);
+                //        item.PricePerUnit = sellbuyPrice.SellPrice;
+                //    }
+                //    await ProductionManager.AddProductionCosts(
+                //        _mainPlan, SystemCostIndex, StructureBonuses, FacilityTax, isAlphaClone: false);
+                //}
             }
             } catch(Exception ex)  
             {

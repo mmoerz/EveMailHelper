@@ -13,6 +13,7 @@ using EveMailHelper.ServiceLibrary.Managers;
 using EveNatTools.ServiceLibrary.Utilities;
 
 using EVEStandard;
+using EVEStandard.Models;
 using EVEStandard.Models.API;
 
 using Microsoft.AspNetCore.Components.Authorization;
@@ -27,6 +28,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
     public class ProductionManager : IProductionManager
     {
         private readonly IMarketManager _marketManager;
+        private readonly IBlueprintManager _blueprintManager;
 
         private readonly EveMailHelperContext _dbContext;
 
@@ -45,13 +47,42 @@ namespace EveMailHelper.ServiceLayer.Interfaces
 
         public ProductionManager(
             IMarketManager marketManager,
+            IBlueprintManager blueprintManager,
             IDbContextFactory<EveMailHelperContext> dbContextFactory
             )
         {
             _marketManager = marketManager;
+            _blueprintManager = blueprintManager;
             _dbContext = dbContextFactory.CreateDbContext();
             _mapDbAccess = new MapDbAccess(_dbContext);
+        }
 
+        public async Task<ProductionPlan> GetProductionPlan(
+            IndustryBlueprint blueprint, IList<int> activityFilerIds,
+            int regionId, double systemCostIndex, double structureBonuses, double facilityTax,
+            bool isAlphaClone
+            )
+        {
+            _ = blueprint ?? throw new ArgumentNullException(nameof(blueprint));
+            if (blueprint.TypeId == 0)
+                throw new Exception("blueprint.TypeId is zero");
+            
+            // Todo: fix static activityfilter id
+            var plan = await _blueprintManager.GetBlueprintComponentsList(blueprint, 11);
+            if (plan.Product != null && plan.Product.EveId > 0)
+            {
+                var sellbuyPrice = await _marketManager.ArchivedBuySellPrice(
+                    regionId, plan.Product.EveId, MaxAgeInMinutes);
+                plan.ProductPrice = sellbuyPrice.SellPrice;
+                foreach (var item in plan)
+                {
+                    sellbuyPrice = await _marketManager.ArchivedBuySellPrice(
+                        regionId, item.EveId, MaxAgeInMinutes);
+                    item.PricePerUnit = sellbuyPrice.SellPrice;
+                }
+                await AddProductionCosts(plan, systemCostIndex, structureBonuses, facilityTax, isAlphaClone);
+            }
+            return plan;
         }
 
         // handover
