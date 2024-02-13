@@ -163,13 +163,17 @@ namespace EveMailHelper.ServiceLayer.Interfaces
                 return 0.0;
         }
 
-        public async Task<BuyList> DeriveBestPriceBuyListFromPlan(ProductionPlan plan, int NumberOfRuns)
+        public BuyList DeriveBestPriceBuyListFromPlan(ProductionPlan plan, int NumberOfRuns)
         {
             BuyList buyList = new BuyList();
 
             // check if it's cost effective to build
             if (plan.IsProducingBetter)
             {
+                var minimumNumberOfRuns = plan.GetMinNumberOfRuns();
+                var modulo = NumberOfRuns % minimumNumberOfRuns;
+                if (modulo > 0)
+                    throw new Exception($"Number of Runs must be a multiple of {minimumNumberOfRuns}");
                 foreach(var component in plan.SubComponents)
                 {
                     buyList.Merge(RecursiveBestPriceBuyList(component, NumberOfRuns));
@@ -187,7 +191,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
                 buyList.ItemList.Add(new()
                 {
                     EveType = component.EveType,
-                    Quantity = component.Quantity,
+                    Quantity = component.Quantity * NumberOfRuns,
                 }
                 );
                 return buyList;

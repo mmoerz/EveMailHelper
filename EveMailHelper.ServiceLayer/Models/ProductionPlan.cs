@@ -106,5 +106,31 @@ namespace EveMailHelper.ServiceLayer.Models
         {
             return new ProductionPlanIterator(this);
         }
+
+        // shitty stuff to remove later ?
+        public int GetMinNumberOfRuns()
+        {
+            int MinimumNumberOfRuns = 1;
+            var ForcedMultiplierList = new List<double>();
+            foreach (var component in SubComponents)
+            {
+                ForcedMultiplierList.AddRange(component.GetForcedMultipliers());
+            }
+            List<int> FullnumbersOnly = new();
+            foreach(var item in ForcedMultiplierList) {
+                if (item >= 1)
+                    FullnumbersOnly.Add((int)item);
+            }
+            var distinct = FullnumbersOnly.Distinct().ToList();
+
+            // not a perfect solution here, should actually compute the set of
+            // smallest dividers within that list of numbers
+            // but since i don't think that this will matter to much, i don't care
+            foreach(var item in distinct)
+            {
+                MinimumNumberOfRuns *= item;
+            }
+            return MinimumNumberOfRuns;
+        }
     }
 }

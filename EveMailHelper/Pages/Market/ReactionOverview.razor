@@ -1,7 +1,7 @@
 ﻿@page "/Market/ReactionOverview"
 @using EveMailHelper.Web.Shared.Reactions
 @using EveMailHelper.Web.Shared.Blueprints
-
+@using EveMailHelper.Web.Shared.Market
 
 <!--
 <MudCard Elevation="4">
@@ -28,4 +28,26 @@
         </BlueprintDetails>
         
     </MudCardContent>
+    
 </MudCard>
+@if (ToBuyList != null && ToBuyList.ItemList.Count() > 0)
+{
+    <MudCard Elevation="4" Class="mt-4">
+        <MudCardHeader>
+            <MudText Typo="Typo.h6">BuyList</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            <BuyListDetails @BList="@ToBuyList">
+                <BuyListContent Context="buyList">
+                    @foreach (var item in buyList.ItemList)
+                    {
+                        <MudItem>
+                            <MudText>@item.EveType.TypeName</MudText>
+                            <MudText>@item.Quantity</MudText>
+                        </MudItem>
+                    }
+                </BuyListContent>
+            </BuyListDetails>
+        </MudCardContent>
+    </MudCard>
+}

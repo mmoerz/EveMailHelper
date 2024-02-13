@@ -1,0 +1,9 @@
+﻿@using EveMailHelper.DataModels.Market
+
+@if (BList is not null)
+{
+    <MudPaper>
+        <MudText Typo="Typo.h3">Production Plan</MudText>
+        @BuyListContent(BList)
+    </MudPaper>
+}

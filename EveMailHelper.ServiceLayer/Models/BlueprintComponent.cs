@@ -2,6 +2,10 @@
 
 using EveMailHelper.DataModels.Sde;
 
+using EVEStandard.Models;
+
+using MudBlazor.Services;
+
 using static MudBlazor.Icons;
 
 namespace EveMailHelper.ServiceLayer.Models
@@ -147,5 +151,21 @@ namespace EveMailHelper.ServiceLayer.Models
                 volume += VolumeSum;
             return volume;
         }
+
+        public List<double> GetForcedMultipliers()
+        {
+            var result = new List<double>();
+            if (IsProducingBetter)
+                result.Add(ForcedQuantityMultiplier);
+
+            foreach (var component in SubComponents)
+            {
+                var subresult = component.GetForcedMultipliers();
+                result.AddRange(subresult);
+            }
+            return result.Distinct().ToList();
+        }
+
+        
     }
 }

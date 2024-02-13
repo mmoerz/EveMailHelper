@@ -29,5 +29,13 @@ namespace EveMailHelper.DataModels.Market
             }
             return result;
         }
+
+        public void CopyShallow(BuyList buyList)
+        {
+            Id = buyList.Id;
+            Name = buyList.Name;
+            CreateDate = buyList.CreateDate;
+            ItemList = buyList.ItemList;
+        }
     }
 }

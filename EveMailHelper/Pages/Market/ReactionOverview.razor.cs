@@ -10,6 +10,7 @@ using EveMailHelper.Web.Shared.Blueprints;
 using EveMailHelper.DataModels.Sde;
 using EveMailHelper.Web.Models;
 using EveMailHelper.ServiceLayer.Models;
+using EveMailHelper.DataModels.Market;
 
 namespace EveMailHelper.Web.Pages.Market
 {
@@ -36,6 +37,8 @@ namespace EveMailHelper.Web.Pages.Market
 
         private ProductionPlan productionPlan {  get; set; } = new();
 
+        private BuyList ToBuyList { get; set; } = new();
+
         private int RegionId { get; set; } = -1;
         private double SystemCostIndex { get; set; } = 4.51;
         private double StructureBonuses { get; set; } = 1;
@@ -55,6 +58,9 @@ namespace EveMailHelper.Web.Pages.Market
                         blueprint, new List<int>() { 11 },
                         RegionId, SystemCostIndex, StructureBonuses, FacilityTax, IsAlphaClone);
                     productionPlan.ShallowCopy(newplan);
+                    var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
+                        newplan, 10);
+                    ToBuyList.CopyShallow(newBuyList);
                 }
             }
             catch (Exception ex)
