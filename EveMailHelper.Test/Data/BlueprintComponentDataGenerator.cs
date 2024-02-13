@@ -106,7 +106,7 @@ namespace EveMailHelper.Test.Data
                 Quantity = 200,
                 PricePerUnit = 300,
                 Volume = 10,
-                QuantityFromBlueprint = 200,
+                QuantityFromBlueprint = 100,
             },
                     new()
                     {
@@ -121,7 +121,7 @@ namespace EveMailHelper.Test.Data
                                 Quantity = 1,
                                 PricePerUnit = 3,
                                 Volume = 111,
-                                QuantityFromBlueprint = 2,
+                                QuantityFromBlueprint = 0,
                                 Name = "L2-1 item1"
                             },
                             new()
@@ -129,7 +129,7 @@ namespace EveMailHelper.Test.Data
                                 Quantity = 2,
                                 PricePerUnit = 4,
                                 Volume = 112,
-                                QuantityFromBlueprint = 4,
+                                
                                 Name = "L2-1 item2"
                             },
                             new()
@@ -241,6 +241,29 @@ namespace EveMailHelper.Test.Data
         {
             yield return new object[] { _componentData3[0], 2000.0 };
             yield return new object[] { _componentData3[4], 339.0 };
+        }
+
+        public static IEnumerable<object[]> GetForcedMultiplier()
+        {
+            _componentData3[0].Add(_componentData3[1]);
+            _componentData3[1].Add(_componentData3[2]);
+            _componentData3[1].Add(_componentData3[3]);
+            _componentData3[1].Add(_componentData3[4]);
+            _componentData3[0].Add(_componentData3[5]);
+            _componentData3[5].Add(_componentData3[6]);
+            _componentData3[5].Add(_componentData3[7]);
+            _componentData3[5].Add(_componentData3[8]);
+
+            // double output
+            yield return new object[] { _componentData3[1], 2.0 };
+            // no subcomponents therefore always 1
+            yield return new object[] { _componentData3[2], 1.0 };
+            yield return new object[] { _componentData3[2], 1.0 };
+            yield return new object[] { _componentData3[3], 1.0 };
+            // tripple output
+            yield return new object[] { _componentData3[5], 2.0 };
+            // half needed
+            yield return new object[] { _componentData3[0], 0.5 };
         }
 
         public static IEnumerable<object[]> GetBestPriceSum()

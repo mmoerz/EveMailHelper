@@ -48,6 +48,14 @@ namespace EveMailHelper.Test.ServiceLayer
         }
 
         [Theory]
+        [MemberData(nameof(BlueprintComponentDataGenerator.GetForcedMultiplier), MemberType = typeof(BlueprintComponentDataGenerator))]
+        public void TestForcedMultiplier(BlueprintComponent sut, double expected)
+        {
+            var result = sut.ForcedQuantityMultiplier;
+            result.ShouldBeEquivalentTo(expected);
+        }
+
+        [Theory]
         [MemberData(nameof(BlueprintComponentDataGenerator.GetBestPriceSum), MemberType = typeof(BlueprintComponentDataGenerator))]
         public void TestBestPriceSum(BlueprintComponent sut, double expected)
         {

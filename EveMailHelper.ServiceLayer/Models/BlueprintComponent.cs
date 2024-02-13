@@ -57,9 +57,12 @@ namespace EveMailHelper.ServiceLayer.Models
         {
             get
             {
+                if (SubComponents.Count() == 0)
+                    return 1.0;
+
                 return Quantity != 0 ?
                     (double)QuantityFromBlueprint / (double)Quantity
-                    : 0;
+                    : 1.0;
             }
         }
 
