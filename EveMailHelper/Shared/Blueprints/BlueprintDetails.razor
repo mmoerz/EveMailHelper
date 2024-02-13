@@ -20,31 +20,29 @@
             <MudPaper Elevation="0" Class="ml-4">
                 <MudText>@_mainPlan.ProductName </MudText>
             </MudPaper>
+            <MudPaper Elevation="0" Class="ml-4">
+                <MudText>@_mainPlan.ProductPriceSum</MudText>
+            </MudPaper>
         }
     </ToolBarContent>
     <ColGroup>
         <col style="width:220px" />
-        <col style="width:120px" />
+        <col style="width:80px" />
+        <col style="width:80px" />
+        <col style="width:90px" />
         <col style="width:100px" />
-        <col style="width:120px" />
-        <col style="width:120px" />
-        <col />
+        <col style="width:140px" />
+        <col style="width:180px" />
         <col />
     </ColGroup>
     <HeaderContent>
-        <MudTh><MudTableSortLabel SortLabel="TypeName" T="Character">Name</MudTableSortLabel> </MudTh>
-        <MudTh><MudTableSortLabel SortLabel="Volume" T="Character">Volume</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="Quantity" T="Character">Quantity</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="BPQuantity" T="Character">BPQuantity</MudTableSortLabel></MudTh>
-            <MudTh>
-                <MudTableSortLabel SortLabel="FQuantity" T="Character">
-                    ForcedQuantity
-                </MudTableSortLabel>
-            </MudTh>
-        <MudTh><MudTableSortLabel SortLabel="Price" T="Character">Price per Unit</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="Sum" T="Character">Sum</MudTableSortLabel></MudTh>
-            
-        <MudTh></MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Volume</MudTh>
+        <MudTh>Quantity</MudTh>
+        <MudTh>BPQuantity</MudTh>
+        <MudTh>ForcedQuantity</MudTh>
+        <MudTh>Price per Unit</MudTh>
+        <MudTh>Sum</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="TypeName">
@@ -77,3 +75,10 @@
             
     </PagerContent>
 </MudTable>
+<BuildPlan Plan="@_mainPlan">
+    <BuildPlanContent Context="Plan">
+        <MudText>@Plan.ProductName</MudText>
+            <MudText>Production Costs</MudText>
+        <MudText>@Plan.JobCost</MudText>
+    </BuildPlanContent>
+</BuildPlan>

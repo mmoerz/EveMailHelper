@@ -45,7 +45,7 @@ namespace EveMailHelper.BusinessLibrary.Complex
             {
                 if (!dto.Where(x => x.EveTypeId == storedId).Any())
                 {
-                    _dbAccess.DeleteById(storedId);
+                    _dbAccess.DeleteByIdAsync(storedId);
                 }
             }
             

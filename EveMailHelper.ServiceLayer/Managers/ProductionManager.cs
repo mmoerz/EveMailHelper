@@ -35,13 +35,13 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         private int MaxAgeInMinutes = 60;
 
         /// <summary>
-        /// fixed at 4%
+        /// fixed at 4%, but not sure Eve change notes says 0.25%
         /// </summary>
-        private readonly double SCCsurcharge = 0.04;
+        private readonly double SCCsurcharge = 4;
         /// <summary>
         /// Only applicable to alpha clones, set to 0.25%
         /// </summary>
-        private readonly double AlphaCloneTax = 0.0025;
+        private readonly double AlphaCloneTax = 0.25;
 
         public ProductionManager(
             IMarketManager marketManager,
@@ -59,16 +59,20 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         // add additional costs to buildplan
 
         public async Task AddProductionCosts(
-            ProductionPlan productionPlan, double systemCostIndex, double structureBonuses, double facilityTax)
+            ProductionPlan productionPlan, double systemCostIndex, double structureBonuses, double facilityTax,
+            bool isAlphaClone)
         {
+            productionPlan.JobCost = await JobCost(productionPlan, systemCostIndex, structureBonuses,
+                facilityTax, isAlphaClone);
             foreach (var component in productionPlan.SubComponents)
             {
-                await Produce(component, systemCostIndex, structureBonuses, facilityTax);
+                await Produce(component, systemCostIndex, structureBonuses, facilityTax, isAlphaClone);
             }
         }
 
         protected async Task Produce(
-            BlueprintComponent component, double systemCostIndex, double structureBonuses, double facilityTax)
+            BlueprintComponent component, double systemCostIndex, double structureBonuses, double facilityTax,
+            bool isAlphaClone)
         {
             // only if subcomponents are present, we continue
             if (!component.SubComponents.Any())
@@ -77,11 +81,11 @@ namespace EveMailHelper.ServiceLayer.Interfaces
             if (component.IsBuyingBetter)
                 return;
             // get job costs and store them in the component tree
-            component.JobCost = await JobCost(component, systemCostIndex, structureBonuses, facilityTax);
+            component.JobCost = await JobCost(component, systemCostIndex, structureBonuses, facilityTax, isAlphaClone);
 
             foreach (var subcomponent in component.SubComponents)
             {
-                await Produce(subcomponent, systemCostIndex, structureBonuses, facilityTax);
+                await Produce(subcomponent, systemCostIndex, structureBonuses, facilityTax, isAlphaClone);
             }
         }
 
@@ -99,7 +103,8 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         /// Material adjusted price can  be found in ESI /markets/prices/
         /// </remarks>
         protected async Task<double> JobCost(
-            BlueprintComponent component, double systemCostIndex, double structureBonuses, double facilityTax)
+            IBlueprintComponentTree component, double systemCostIndex, double structureBonuses, double facilityTax,
+            bool isAlphaClone)
         {
             double totalJobCost = 0;
             double estimatedItemValue = 0;
@@ -109,9 +114,18 @@ namespace EveMailHelper.ServiceLayer.Interfaces
                 estimatedItemValue += subcomponent.Quantity * marketPrice.AdjustedPrice;
             }
 
-            totalJobCost = estimatedItemValue *
-                ((systemCostIndex * structureBonuses) * facilityTax * SCCsurcharge * AlphaCloneTax);
+            totalJobCost = estimatedItemValue / 100 *
+                ((systemCostIndex * structureBonuses) + facilityTax + SCCsurcharge +
+                  AlphaCloneTaxIfApplicable(isAlphaClone));
             return totalJobCost;
+        }
+
+        protected double AlphaCloneTaxIfApplicable(bool isApplicable)
+        {
+            if (isApplicable)
+                return AlphaCloneTax;
+            else
+                return 0.0;
         }
     }
 }

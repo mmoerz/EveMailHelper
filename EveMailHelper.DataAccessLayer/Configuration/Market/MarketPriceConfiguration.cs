@@ -17,10 +17,11 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Market
                 .IsRequired()
                 .ValueGeneratedNever();
 
-            builder.HasOne(a => a.EveType)
-                .WithMany()
-                .HasForeignKey(a => a.EveTypeId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+            // thx shitty data integrity
+            //builder.HasOne(a => a.EveType)
+            //    .WithMany()
+            //    .HasForeignKey(a => a.EveTypeId)
+            //    .OnDelete(DeleteBehavior.ClientCascade);
 
         }
     }

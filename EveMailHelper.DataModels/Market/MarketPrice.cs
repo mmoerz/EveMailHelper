@@ -18,6 +18,8 @@ namespace EveMailHelper.DataModels.Market
 
         public DateTime LastUpdatedFromEve { get; set; } = DateTime.UtcNow;
 
-        public EveType EveType { get; set; } = null!;
+        // I die here, ...
+        // data integrity is shitty as expected
+        //public EveType EveType { get; set; } = null!;
     }
 }

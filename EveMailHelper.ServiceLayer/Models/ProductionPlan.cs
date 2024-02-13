@@ -28,8 +28,9 @@ namespace EveMailHelper.ServiceLayer.Models
         public double ProductVolume 
         { get { return Product?.Volume ?? 0.0; } }
         public double ProductPrice { get; set; }
-        public double ProductPriceSum 
+        public double ProductPriceSum
         { get { return ProductPrice * ProductQuantity; } }
+        public double JobCost { get; set; }
         public double ComponentBestPriceSum
         { 
             get {

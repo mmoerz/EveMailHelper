@@ -1,0 +1,9 @@
+﻿@using EveMailHelper.ServiceLayer.Models
+
+@if (Plan is not null)
+{
+    <MudPaper>
+        <MudText Typo="Typo.h2">Production Plan</MudText>
+        @BuildPlanContent(Plan)
+    </MudPaper>
+}

@@ -23,8 +23,14 @@ namespace EveMailHelper.BusinessLibrary.Complex
         public async Task<Tout> RunAction(Tin dataIn)
         {
             var result = await _actionClass.ActionAsync(dataIn);
-            if (!HasErrors)
-                await _context.SaveChangesAsync();
+            try
+            {
+                if (!HasErrors)
+                    await _context.SaveChangesAsync();
+            } catch (Exception ex)
+            {
+                int x = 1;
+            }
             return result;
         }
     }

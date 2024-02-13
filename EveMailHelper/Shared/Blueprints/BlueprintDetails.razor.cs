@@ -10,6 +10,7 @@ using System.Linq;
 using EveMailHelper.ServiceLayer.Models;
 using EveMailHelper.ServiceLayer.Managers;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using EVEStandard.Models;
 
 namespace EveMailHelper.Web.Shared.Blueprints
 {
@@ -42,14 +43,16 @@ namespace EveMailHelper.Web.Shared.Blueprints
 
         [Parameter]
         public string BlueprintName { get; set; } = "no Blueprint";
+
+
         #endregion
 
         // TODO Region is fixed, should be 'selectable'
         private int RegionId = -1;
         private int MaxAgeInMinutes = 60;
-        private double SystemCostIndex = 0;
-        private double StructureBonuses = 0;
-        private double FacilityTax = 1;
+        private double SystemCostIndex = 4.46; // systemcostindex = %
+        private double StructureBonuses = 1; // no bonus (1)
+        private double FacilityTax = 1; // 1%
 
         protected override async Task OnInitializedAsync()
         {
@@ -63,6 +66,8 @@ namespace EveMailHelper.Web.Shared.Blueprints
             _table?.ReloadServerData();
         }
 
+        public double SleepFucker = 1;
+
         /// <summary>
         /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>
@@ -70,23 +75,32 @@ namespace EveMailHelper.Web.Shared.Blueprints
         {
             TableData<BlueprintComponent> data = new();
 
+            try { 
             if (_blueprint != null && _blueprint.TypeId != 0)
             {
                 // TODO: ugly ugly reference to use '11' as an activity filter directly
                 _mainPlan = await BlueprintManager.GetBlueprintComponentsList(_blueprint, 11);
                 if (_mainPlan.Product != null && _mainPlan.Product.EveId > 0)
                 {
-                    foreach (var item in _mainPlan.SubComponents)
+                    var sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, _mainPlan.Product.EveId, MaxAgeInMinutes);
+                    _mainPlan.ProductPrice = sellbuyPrice.SellPrice;
+                    foreach (var item in _mainPlan)
                     {
-                        var sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, item.EveId, MaxAgeInMinutes);
+                        sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, item.EveId, MaxAgeInMinutes);
                         item.PricePerUnit = sellbuyPrice.SellPrice;
                     }
-                    //await ProductionManager.AddProductionCosts(_mainPlan, SystemCostIndex, StructureBonuses, FacilityTax);
+                    await ProductionManager.AddProductionCosts(
+                        _mainPlan, SystemCostIndex, StructureBonuses, FacilityTax, isAlphaClone: false);
                 }
+            }
+            } catch(Exception ex)  
+            {
+                int x = 1;
             }
 
             data.TotalItems = _mainPlan.SubComponents.Count();
-            data.Items = _mainPlan; //.BlueprintComponents;
+            data.Items = _mainPlan;
+            SleepFucker = _mainPlan.JobCost;
 
             return data;
         }
@@ -109,5 +123,12 @@ namespace EveMailHelper.Web.Shared.Blueprints
                 return Color.Secondary;
         }
 
+        public string SomeFooBarText = "";
+        public int count = 0;
+        private void OnClickTest()
+        {
+            count++;
+            SomeFooBarText = $"Button was pressed {count} times";
+        }
     }
 }
