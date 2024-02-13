@@ -56,6 +56,14 @@ namespace EveMailHelper.Test.ServiceLayer
         }
 
         [Theory]
+        [MemberData(nameof(BlueprintComponentDataGenerator.GetSimpleBestPriceSum), MemberType = typeof(BlueprintComponentDataGenerator))]
+        public void TestSimpleBestPriceSum(BlueprintComponent sut, double expected)
+        {
+            var result = sut.BestPriceSum();
+            result.ShouldBeEquivalentTo(expected);
+        }
+
+        [Theory]
         [MemberData(nameof(BlueprintComponentDataGenerator.GetBestPriceSum), MemberType = typeof(BlueprintComponentDataGenerator))]
         public void TestBestPriceSum(BlueprintComponent sut, double expected)
         {
