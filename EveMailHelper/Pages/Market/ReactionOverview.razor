@@ -3,17 +3,18 @@
 @using EveMailHelper.Web.Shared.Blueprints
 
 
+<!--
 <MudCard Elevation="4">
     <MudCardHeader>
         <MudText Typo="Typo.h6">Reaction Overview</MudText>
     </MudCardHeader>
 </MudCard>
-<ReactionList OnBlueprintSelected="BlueprintSelected"></ReactionList>
-<!-- 
-
-<CharacterList OnCharacterSelect="CharacterSelected" @ref="ListOfCharacters">
-
 -->
+<MudItem xs="12" sm="6" md="4">
+    <MudNumericField @bind-Value="SystemCostIndex" Label="Systemcost Index" Variant="Variant.Filled" Min="0.0" />
+</MudItem>
+
+<ReactionList OnBlueprintSelected="BlueprintSelected"></ReactionList>
 
 <MudCard Elevation="4" Class="mt-4">
     <MudCardHeader>

@@ -1,4 +1,6 @@
 ﻿using EveMailHelper.DataModels.Interfaces;
+using EveMailHelper.DataModels.Market;
+
 using System;
 using System.Collections.Generic;
 
@@ -11,6 +13,7 @@ namespace EveMailHelper.DataModels.Sde
             Materials = new HashSet<IndustryActivityMaterial>();
             Probabilities = new HashSet<IndustryActivityProbability>();
             Products = new HashSet<IndustryActivityProduct>();
+            NormalizeProductionCosts = new HashSet<NormalizeProductionCost>();
         }
         public int TypeId { get; set; }
         public int ActivityId { get; set; }
@@ -24,5 +27,7 @@ namespace EveMailHelper.DataModels.Sde
         public virtual ICollection<IndustryActivityMaterial> Materials { get; set; }
         public virtual ICollection<IndustryActivityProbability> Probabilities { get; set; }
         public virtual ICollection<IndustryActivityProduct> Products { get; set; }
+
+        public virtual ICollection<NormalizeProductionCost> NormalizeProductionCosts { get; set; }
     }
 }

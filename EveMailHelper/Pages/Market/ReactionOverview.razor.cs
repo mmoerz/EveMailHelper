@@ -36,8 +36,6 @@ namespace EveMailHelper.Web.Pages.Market
 
         private ProductionPlan productionPlan {  get; set; } = new();
 
-        private string selectedBlueprintName { get; set; } = "none";
-
         private int RegionId { get; set; } = -1;
         private double SystemCostIndex { get; set; } = 4.51;
         private double StructureBonuses { get; set; } = 1;
@@ -53,7 +51,6 @@ namespace EveMailHelper.Web.Pages.Market
                 if (blueprint != null && blueprint.TypeId != 0)
                 {
                     selectedBlueprint.CopyShallow(blueprint);
-                    selectedBlueprintName = blueprint.Type.TypeName;
                     var newplan = await ProductionManager.GetProductionPlan(
                         blueprint, new List<int>() { 11 },
                         RegionId, SystemCostIndex, StructureBonuses, FacilityTax, IsAlphaClone);
