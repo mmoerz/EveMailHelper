@@ -11,6 +11,7 @@ using EveMailHelper.DataModels.Sde;
 using EveMailHelper.Web.Models;
 using EveMailHelper.ServiceLayer.Models;
 using EveMailHelper.DataModels.Market;
+using EveMailHelper.Web.Shared.Market;
 
 namespace EveMailHelper.Web.Pages.Market
 {
@@ -35,15 +36,23 @@ namespace EveMailHelper.Web.Pages.Market
 
         private IndustryBlueprint selectedBlueprint { get; set; } = new();
 
-        private ProductionPlan productionPlan {  get; set; } = new();
+        private ProductionPlan ProdPlan {  get; set; } = new();
 
+        private BuyListDetails BuyListComponent { get; set; } = null!;
         private BuyList ToBuyList { get; set; } = new();
+
+        private BuildPlan BuildPlanDetails = null!;
 
         private int RegionId { get; set; } = -1;
         private double SystemCostIndex { get; set; } = 4.51;
         private double StructureBonuses { get; set; } = 1;
         private double FacilityTax { get; set; } = 1;
         private bool IsAlphaClone { get; set; } = false;
+
+        private int NumberOfRuns { get; set; } = 1;
+        private int NumberOfRunsMin { get; set; } = 1;
+
+        private double MaterialConsumption { get; set; } = -2.6;
 
         private async void BlueprintSelected(IndustryBlueprint blueprint)
         {
@@ -57,10 +66,15 @@ namespace EveMailHelper.Web.Pages.Market
                     var newplan = await ProductionManager.GetProductionPlan(
                         blueprint, new List<int>() { 11 },
                         RegionId, SystemCostIndex, StructureBonuses, FacilityTax, IsAlphaClone);
-                    productionPlan.ShallowCopy(newplan);
+                    ProdPlan.ShallowCopy(newplan);
+                    NumberOfRunsMin = newplan.GetMinNumberOfRuns();
+                    if (NumberOfRuns < NumberOfRunsMin)
+                        NumberOfRuns = NumberOfRunsMin;
                     var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
                         newplan, 10);
                     ToBuyList.CopyShallow(newBuyList);
+                    BuyListComponent.RefreshTheFucker();
+                    BuildPlanDetails.RefreshTheFucker();
                 }
             }
             catch (Exception ex)

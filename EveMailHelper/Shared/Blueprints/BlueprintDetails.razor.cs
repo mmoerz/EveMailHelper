@@ -25,9 +25,6 @@ namespace EveMailHelper.Web.Shared.Blueprints
         #endregion
 
         private MudTable<BlueprintComponent> _table = null!;
-        //private ProductionPlan _mainPlan = new ProductionPlan();
-        //private IndustryBlueprint _blueprint = new();
-        private BuildPlan BuildPlanDetails = null!;
 
         #region parameters
         //[Parameter]
@@ -55,8 +52,6 @@ namespace EveMailHelper.Web.Shared.Blueprints
             _table?.ReloadServerData();
         }
 
-        public double SleepFucker = 1;
-
         /// <summary>
         /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>
@@ -66,10 +61,6 @@ namespace EveMailHelper.Web.Shared.Blueprints
 
             data.TotalItems = Plan.Count();
             data.Items = Plan;
-            SleepFucker = Plan.JobCost;
-
-            if (BuildPlanDetails != null)
-                BuildPlanDetails.RefreshTheFucker();
 
             return data;
         }
@@ -90,14 +81,6 @@ namespace EveMailHelper.Web.Shared.Blueprints
                 return Color.Success;
             else
                 return Color.Secondary;
-        }
-
-        public string SomeFooBarText = "";
-        public int count = 0;
-        private void OnClickTest()
-        {
-            count++;
-            SomeFooBarText = $"Button was pressed {count} times";
         }
     }
 }

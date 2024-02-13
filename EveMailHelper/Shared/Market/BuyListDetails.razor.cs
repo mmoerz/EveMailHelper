@@ -29,7 +29,7 @@ namespace EveMailHelper.Web.Shared.Market
 
         #region parameters
         [Parameter]
-        public BuyList? BList {  get; set; }
+        public BuyList? BuyList {  get; set; }
         // TODO Region is fixed, should be 'selectable'
         
         [Parameter] 

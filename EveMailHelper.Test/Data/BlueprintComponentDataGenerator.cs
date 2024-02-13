@@ -258,6 +258,88 @@ namespace EveMailHelper.Test.Data
                             },
         };
 
+        public static readonly List<BlueprintComponent> _componentData5 = new()
+        {
+            new()
+            {
+                Name = "TopLevel",
+                Quantity = 200,
+                PricePerUnit = 300,
+                Volume = 10,
+                QuantityFromBlueprint = 100,
+                JobCost = 100,
+            },
+                    new()
+                    {
+                        Name = "L1 item1",
+                        Quantity = 10,
+                        PricePerUnit = 30,
+                        Volume = 11,
+                        QuantityFromBlueprint = 20,
+                        JobCost = 200,
+                    },
+                            new()
+                            {
+                                Quantity = 1,
+                                PricePerUnit = 3,
+                                Volume = 111,
+                                QuantityFromBlueprint = 0,
+                                Name = "L2-1 item1",
+                                JobCost = 10000,
+                            },
+                            new()
+                            {
+                                Quantity = 2,
+                                PricePerUnit = 4,
+                                Volume = 112,
+
+                                Name = "L2-1 item2"
+                            },
+                            new()
+                            {
+                                Quantity = 3,
+                                PricePerUnit = 5,
+                                Volume = 113,
+                                QuantityFromBlueprint = 6,
+                                Name = "L2-1 item3"
+                            },
+
+
+                    new ()
+                    {
+                        Name = "L1 item2",
+                        Quantity = 1,
+                        PricePerUnit = 3,
+                        Volume = 12,
+                        QuantityFromBlueprint = 2,
+                        JobCost = 300,
+                    },
+                            new()
+                            {
+                                Quantity = 1,
+                                PricePerUnit = 3,
+                                Volume = 121,
+                                QuantityFromBlueprint = 2,
+                                Name = "L2-2 item1"
+                            },
+                            new()
+                            {
+                                Quantity = 1,
+                                PricePerUnit = 3,
+                                Volume = 122,
+                                QuantityFromBlueprint = 2,
+                                Name = "L2-2 item2"
+                            },
+                            new()
+                            {
+                                Quantity = 1,
+                                PricePerUnit = 3,
+                                Volume = 123,
+                                QuantityFromBlueprint = 2,
+                                Name = "L2-2 item3"
+                            },
+        };
+
         public static readonly List<BlueprintComponent> Enumerated1 = new()
         {
             _componentData1[0].SubComponents[0],

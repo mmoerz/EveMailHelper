@@ -1,9 +1,11 @@
 ﻿@using EveMailHelper.DataModels.Market
 
-@if (BList is not null)
+@if (BuyList is not null)
 {
     <MudPaper>
-        <MudText Typo="Typo.h3">Production Plan</MudText>
-        @BuyListContent(BList)
+        <!--
+        <MudText Typo="Typo.h6">Buylist</MudText>
+        -->
+        @BuyListContent(BuyList)
     </MudPaper>
 }

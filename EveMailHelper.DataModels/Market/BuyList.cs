@@ -19,6 +19,7 @@ namespace EveMailHelper.DataModels.Market
 
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        public int NumberOfRuns;
 
         public DateTime CreateDate { get; set; } = DateTime.UtcNow;
 

@@ -71,7 +71,7 @@ namespace EveNatTools.BusinessLogicLibrary
             {
                 if (accountId.StartsWith("#")) 
                 {
-                    accountId = accountId.Substring(1);
+                    accountId = accountId[1..];
                 }
                 authInfo.AccountId = new Guid(accountId);
             }

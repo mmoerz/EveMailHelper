@@ -10,44 +10,56 @@
     </MudCardHeader>
 </MudCard>
 -->
-<MudItem xs="12" sm="6" md="4">
-    <MudNumericField @bind-Value="SystemCostIndex" Label="Systemcost Index" Variant="Variant.Filled" Min="0.0" />
+<MudStack Row="true">
+<MudItem xs="6" sm="3" md="2">
+    <MudNumericField @bind-Value="SystemCostIndex" Label="Systemcost Index" Min="0.0" />
 </MudItem>
+<MudItem xs="6" sm="3" md="2">
+    <MudNumericField @bind-Value="NumberOfRuns" Label="Number Of Runs" Variant="Variant.Filled" Min="@NumberOfRunsMin" />
+</MudItem>
+<MudItem xs="6" sm="3" md="2">
+    <MudNumericField @bind-Value="MaterialConsumption" Label="MaterialConsumption" Variant="Variant.Filled" Min="-2.6" />
+</MudItem>
+</MudStack>
 
 <ReactionList OnBlueprintSelected="BlueprintSelected"></ReactionList>
+<MudItem Class="mt-4"></MudItem>
 
-<MudCard Elevation="4" Class="mt-4">
-    <MudCardHeader>
-        <MudText Typo="Typo.h6">Reactions</MudText>
-    </MudCardHeader>
-    <MudCardContent>
-        
+<MudGrid>
+    <MudItem xs="9">
         <BlueprintDetails 
-            Plan="@productionPlan" 
+            Plan="@ProdPlan" 
             @ref="ProductionPlanDisplay">
         </BlueprintDetails>
-        
-    </MudCardContent>
-    
-</MudCard>
-@if (ToBuyList != null && ToBuyList.ItemList.Count() > 0)
-{
-    <MudCard Elevation="4" Class="mt-4">
-        <MudCardHeader>
-            <MudText Typo="Typo.h6">BuyList</MudText>
-        </MudCardHeader>
-        <MudCardContent>
-            <BuyListDetails @BList="@ToBuyList">
-                <BuyListContent Context="buyList">
+    </MudItem>
+    <MudItem xs="3">
+        <MudCard Elevation="4">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6">BuyList</MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <BuyListDetails BuyList="@ToBuyList" @ref="BuyListComponent">
+                    <BuyListContent Context="buyList">
                     @foreach (var item in buyList.ItemList)
                     {
-                        <MudItem>
+                        <MudStack Row="true">
                             <MudText>@item.EveType.TypeName</MudText>
-                            <MudText>@item.Quantity</MudText>
-                        </MudItem>
+                                <MudText>@item.Quantity</MudText>
+                        </MudStack>
                     }
-                </BuyListContent>
-            </BuyListDetails>
-        </MudCardContent>
-    </MudCard>
-}
+                    </BuyListContent>
+                </BuyListDetails>
+
+                <BuildPlan Plan="@ProdPlan" @ref="BuildPlanDetails">
+                    <BuildPlanContent Context="Plan">
+                        <MudText>@Plan.ProductName</MudText>
+                        <MudText>@Plan.ProductQuantity</MudText>
+                        <MudText>Production Costs</MudText>
+                        <MudText>@Plan.JobCost</MudText>
+                        <MudText></MudText>
+                    </BuildPlanContent>
+                </BuildPlan>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>

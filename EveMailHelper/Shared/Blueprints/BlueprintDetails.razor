@@ -31,8 +31,8 @@
         <col style="width:220px" />
         <col style="width:80px" />
         <col style="width:80px" />
-        <col style="width:90px" />
-        <col style="width:100px" />
+        <col style="width:80px" />
+        <col style="width:80px" />
         <col style="width:140px" />
         <col style="width:180px" />
         <col />
@@ -41,8 +41,8 @@
         <MudTh>Name</MudTh>
         <MudTh>Volume</MudTh>
         <MudTh>Quantity</MudTh>
-        <MudTh>BPQuantity</MudTh>
-        <MudTh>ForcedQuantity</MudTh>
+        <MudTh>BPQ</MudTh>
+        <MudTh>Force</MudTh>
         <MudTh>Price per Unit</MudTh>
         <MudTh>Sum</MudTh>
     </HeaderContent>
@@ -77,12 +77,3 @@
             
     </PagerContent>
 </MudTable>
-<BuildPlan Plan="@Plan" @ref="BuildPlanDetails">
-    <BuildPlanContent Context="Plan">
-        <MudText>@Plan.ProductName</MudText>
-        <MudText>@Plan.ProductQuantity</MudText>
-        <MudText>Production Costs</MudText>
-        <MudText>@Plan.JobCost</MudText>
-        <MudText>@SleepFucker</MudText>
-    </BuildPlanContent>
-</BuildPlan>

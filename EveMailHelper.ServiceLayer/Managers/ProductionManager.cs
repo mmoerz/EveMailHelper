@@ -165,7 +165,11 @@ namespace EveMailHelper.ServiceLayer.Interfaces
 
         public BuyList DeriveBestPriceBuyListFromPlan(ProductionPlan plan, int NumberOfRuns)
         {
-            BuyList buyList = new BuyList();
+            BuyList buyList = new()
+            {
+                Name = plan.ProductName,
+                NumberOfRuns = NumberOfRuns,
+            };
 
             // check if it's cost effective to build
             if (plan.IsProducingBetter)
