@@ -1,4 +1,6 @@
-﻿using EveMailHelper.BusinessDataAccess;
+﻿using System.ComponentModel;
+
+using EveMailHelper.BusinessDataAccess;
 using EveMailHelper.BusinessLibrary.Complex;
 using EveMailHelper.BusinessLibrary.Complex.dto;
 using EveMailHelper.DataAccessLayer.Context;
@@ -74,7 +76,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
             {
                 var sellbuyPrice = await _marketManager.ArchivedBuySellPrice(
                     regionId, plan.Product.EveId, MaxAgeInMinutes);
-                plan.ProductPrice = sellbuyPrice.SellPrice;
+                plan.ProductPricePerUnit = sellbuyPrice.SellPrice;
                 foreach (var item in plan)
                 {
                     sellbuyPrice = await _marketManager.ArchivedBuySellPrice(
@@ -167,7 +169,12 @@ namespace EveMailHelper.ServiceLayer.Interfaces
 
             // check if it's cost effective to build
             if (plan.IsBuildingBetter)
-
+            {
+                foreach(var component in plan.SubComponents)
+                {
+                    buyList.Merge(RecursiveBestPriceBuyList(component, NumberOfRuns));
+                }
+            }
 
             return buyList;
         }
@@ -189,9 +196,9 @@ namespace EveMailHelper.ServiceLayer.Interfaces
             int subComponentsNumberOfRuns = (int)(NumberOfRuns / component.ForcedQuantityMultiplier);
             foreach ( var subComponent in component.SubComponents)
             {
-                RecursiveBestPriceBuyList(subComponent, subComponentsNumberOfRuns);
+                buyList.Merge(RecursiveBestPriceBuyList(subComponent, subComponentsNumberOfRuns));
             }
-
+            return buyList;
         }
     }
 }

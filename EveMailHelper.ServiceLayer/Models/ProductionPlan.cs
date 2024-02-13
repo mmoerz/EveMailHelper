@@ -25,31 +25,20 @@ namespace EveMailHelper.ServiceLayer.Models
         public double ProductVolume
         { get { return Product?.Volume ?? 0.0; } }
         public double ProductPriceSum
-        { get { return ProductPrice * ProductQuantity; } }
+        { get { return ProductPricePerUnit * ProductQuantity; } }
         public int ProductionDepth
         { get { return 0; } }
-
-        public IndustryBlueprint Blueprint { get; set; } = null!;
-        public EveType? Product { get; set; } = null;
-        public int ProductQuantity { get; set; }
-        public double ProductPrice { get; set; }
-        public double JobCost { get; set; }
-        public IList<BlueprintComponent> SubComponents { get; set; } = new List<BlueprintComponent>();
-        #endregion
-
-        public void ShallowCopy(ProductionPlan plan)
-        {
-            Blueprint = plan.Blueprint;
-            Product = plan.Product;
-            ProductQuantity = plan.ProductQuantity;
-            ProductPrice = plan.ProductPrice;
-            JobCost = plan.JobCost;
-            SubComponents = plan.SubComponents;
-        }
+        public double PriceSum
+        { get { return ProductQuantity * ProductPricePerUnit; } }
+        public bool IsBuyingBetter
+        { get { return !IsProducingBetter; } }
+        public bool IsProducingBetter
+        { get { return BestPriceSum < PriceSum; } }
 
         public double ComponentBestPriceSum
-        { 
-            get {
+        {
+            get
+            {
                 double subBestPrice = 0.0;
                 foreach (var component in SubComponents)
                 {
@@ -67,6 +56,24 @@ namespace EveMailHelper.ServiceLayer.Models
                 return ProductPriceSum;
             }
         }
+
+        public IndustryBlueprint Blueprint { get; set; } = null!;
+        public EveType? Product { get; set; } = null;
+        public int ProductQuantity { get; set; }
+        public double ProductPricePerUnit { get; set; }
+        public double JobCost { get; set; }
+        public IList<BlueprintComponent> SubComponents { get; set; } = new List<BlueprintComponent>();
+        #endregion
+
+        public void ShallowCopy(ProductionPlan plan)
+        {
+            Blueprint = plan.Blueprint;
+            Product = plan.Product;
+            ProductQuantity = plan.ProductQuantity;
+            ProductPricePerUnit = plan.ProductPricePerUnit;
+            JobCost = plan.JobCost;
+            SubComponents = plan.SubComponents;
+        }      
 
         public void Add(BlueprintComponent component)
         {
