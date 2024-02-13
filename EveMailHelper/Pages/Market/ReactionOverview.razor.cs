@@ -39,7 +39,7 @@ namespace EveMailHelper.Web.Pages.Market
         private string selectedBlueprintName { get; set; } = "none";
 
         private int RegionId { get; set; } = -1;
-        private double SystemCostIndex { get; set; } = 4.46;
+        private double SystemCostIndex { get; set; } = 4.51;
         private double StructureBonuses { get; set; } = 1;
         private double FacilityTax { get; set; } = 1;
         private bool IsAlphaClone { get; set; } = false;

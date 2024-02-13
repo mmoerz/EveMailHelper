@@ -54,6 +54,10 @@ namespace EveMailHelper.Web.Shared.Blueprints
             }
         }
 
+        /// <summary>
+        /// yeah, i know, however it ate my nerves
+        /// maybe i will correct this name, but most likely not
+        /// </summary>
         public void RefreshTheFucker()
         {
             StateHasChanged();
