@@ -17,7 +17,7 @@ namespace EveMailHelper.ServiceLayer.Models
         /// <summary>
         /// eveId for further querying the ESI API
         /// </summary>
-        public int EveId { get; set; } = -1;
+        public EveType EveType { get; set; } = null!;
         /// <summary>
         /// depth in the hierachy of the product chain.
         /// </summary>

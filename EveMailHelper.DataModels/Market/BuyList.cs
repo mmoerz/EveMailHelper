@@ -10,7 +10,7 @@ using EveMailHelper.DataModels.Sde;
 
 namespace EveMailHelper.DataModels.Market
 {
-    public class BuyList
+    public partial class BuyList
     {
         public BuyList()
         {

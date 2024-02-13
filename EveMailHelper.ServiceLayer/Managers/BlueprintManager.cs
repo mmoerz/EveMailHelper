@@ -91,7 +91,7 @@ namespace EveMailHelper.ServiceLayer.Managers
 
                 var component = new BlueprintComponent()
                 {
-                    EveId = material.MaterialType.EveId,
+                    EveType = material.MaterialType,
                     Name = material.MaterialType.TypeName,
                     Quantity = material.Quantity,
                     Volume = material.MaterialType?.Volume ?? 0.0,

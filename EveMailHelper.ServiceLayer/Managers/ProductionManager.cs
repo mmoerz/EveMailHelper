@@ -3,6 +3,7 @@ using EveMailHelper.BusinessLibrary.Complex;
 using EveMailHelper.BusinessLibrary.Complex.dto;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataModels;
+using EveMailHelper.DataModels.Market;
 using EveMailHelper.DataModels.Sde;
 using EveMailHelper.DataModels.Sde.Map;
 using EveMailHelper.ServiceLayer.Managers;
@@ -77,7 +78,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
                 foreach (var item in plan)
                 {
                     sellbuyPrice = await _marketManager.ArchivedBuySellPrice(
-                        regionId, item.EveId, MaxAgeInMinutes);
+                        regionId, item.EveType.EveId, MaxAgeInMinutes);
                     item.PricePerUnit = sellbuyPrice.SellPrice;
                 }
                 await AddProductionCosts(plan, systemCostIndex, structureBonuses, facilityTax, isAlphaClone);
@@ -141,7 +142,8 @@ namespace EveMailHelper.ServiceLayer.Interfaces
             double estimatedItemValue = 0;
             foreach (var subcomponent in component.SubComponents)
             {
-                var marketPrice = await _marketManager.GetMarketPrice(subcomponent.EveId, MaxAgeInMinutes);
+                var marketPrice = 
+                    await _marketManager.GetMarketPrice(subcomponent.EveType.EveId, MaxAgeInMinutes);
                 estimatedItemValue += subcomponent.Quantity * marketPrice.AdjustedPrice;
             }
 
@@ -157,6 +159,39 @@ namespace EveMailHelper.ServiceLayer.Interfaces
                 return AlphaCloneTax;
             else
                 return 0.0;
+        }
+
+        public async Task<BuyList> DeriveBestPriceBuyListFromPlan(ProductionPlan plan, int NumberOfRuns)
+        {
+            BuyList buyList = new BuyList();
+
+            // check if it's cost effective to build
+            if (plan.IsBuildingBetter)
+
+
+            return buyList;
+        }
+
+        protected BuyList RecursiveBestPriceBuyList(BlueprintComponent component, int NumberOfRuns)
+        {
+            BuyList buyList = new();
+            if (component.IsBuyingBetter)
+            {
+                buyList.ItemList.Add(new()
+                {
+                    EveType = component.EveType,
+                    Quantity = component.Quantity,
+                }
+                );
+                return buyList;
+            }
+
+            int subComponentsNumberOfRuns = (int)(NumberOfRuns / component.ForcedQuantityMultiplier);
+            foreach ( var subComponent in component.SubComponents)
+            {
+                RecursiveBestPriceBuyList(subComponent, subComponentsNumberOfRuns);
+            }
+
         }
     }
 }
