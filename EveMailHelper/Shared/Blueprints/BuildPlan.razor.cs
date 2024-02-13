@@ -54,51 +54,9 @@ namespace EveMailHelper.Web.Shared.Blueprints
             }
         }
 
-        public void Reload()
+        public void RefreshTheFucker()
         {
-            //_table?.ReloadServerData();
-        }
-
-        public double SleepFucker = 1;
-
-        /// <summary>
-        /// Here we simulate getting the paged, filtered and ordered data from the server
-        /// </summary>
-        //private async Task<TableData<BlueprintComponent>> ServerReload(TableState state)
-        //{
-        //    TableData<BlueprintComponent> data = new();
-
-        //    if (_blueprint != null && _blueprint.TypeId != 0)
-        //    {
-        //        // TODO: ugly ugly reference to use '11' as an activity filter directly
-        //        _mainPlan = await BlueprintManager.GetBlueprintComponentsList(_blueprint, 11);
-        //        if (_mainPlan.Product != null && _mainPlan.Product.EveId > 0)
-        //        {
-        //            var sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, _mainPlan.Product.EveId, MaxAgeInMinutes);
-        //            _mainPlan.ProductPrice = sellbuyPrice.SellPrice;
-        //            foreach (var item in _mainPlan)
-        //            {
-        //                sellbuyPrice = await MarketManager.ArchivedBuySellPrice(RegionId, item.EveId, MaxAgeInMinutes);
-        //                item.PricePerUnit = sellbuyPrice.SellPrice;
-        //            }
-        //            await ProductionManager.AddProductionCosts(
-        //                _mainPlan, SystemCostIndex, StructureBonuses, FacilityTax, isAlphaClone: false);
-        //        }
-        //    }
-
-        //    data.TotalItems = _mainPlan.SubComponents.Count();
-        //    data.Items = _mainPlan;
-        //    SleepFucker = _mainPlan.JobCost;
-
-        //    return data;
-        //}
-
-        public string SomeFooBarText = "";
-        public int count = 0;
-        private void OnClickTest()
-        {
-            count++;
-            SomeFooBarText = $"Button was pressed {count} times";
+            StateHasChanged();
         }
     }
 }

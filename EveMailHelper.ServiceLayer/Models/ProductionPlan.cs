@@ -14,23 +14,39 @@ namespace EveMailHelper.ServiceLayer.Models
     public class ProductionPlan : IEnumerable<BlueprintComponent>, IBlueprintComponentTree
     {
         // hmm, ideen>
-        // 'filter' oder 'limitierung' fuer bestimmte 'activities'
+        // todo: 'filter' oder 'limitierung' fuer bestimmte 'activities'
         public ProductionPlan() { }
 
+        #region properties
         public string BlueprintName 
         { get { return Blueprint.Type.TypeName; } }
-        public IndustryBlueprint Blueprint { get; set; } = null!;
-
-        public EveType? Product { get; set; } = null;
-        public int ProductQuantity { get; set; }
         public string ProductName
         { get { return Product?.TypeName ?? string.Empty; } }
-        public double ProductVolume 
+        public double ProductVolume
         { get { return Product?.Volume ?? 0.0; } }
-        public double ProductPrice { get; set; }
         public double ProductPriceSum
         { get { return ProductPrice * ProductQuantity; } }
+        public int ProductionDepth
+        { get { return 0; } }
+
+        public IndustryBlueprint Blueprint { get; set; } = null!;
+        public EveType? Product { get; set; } = null;
+        public int ProductQuantity { get; set; }
+        public double ProductPrice { get; set; }
         public double JobCost { get; set; }
+        public IList<BlueprintComponent> SubComponents { get; set; } = new List<BlueprintComponent>();
+        #endregion
+
+        public void ShallowCopy(ProductionPlan plan)
+        {
+            Blueprint = plan.Blueprint;
+            Product = plan.Product;
+            ProductQuantity = plan.ProductQuantity;
+            ProductPrice = plan.ProductPrice;
+            JobCost = plan.JobCost;
+            SubComponents = plan.SubComponents;
+        }
+
         public double ComponentBestPriceSum
         { 
             get {
@@ -51,11 +67,6 @@ namespace EveMailHelper.ServiceLayer.Models
                 return ProductPriceSum;
             }
         }
-
-        public IList<BlueprintComponent> SubComponents { get; set; } = new List<BlueprintComponent>();
-
-        public int ProductionDepth
-        { get { return 0; } }
 
         public void Add(BlueprintComponent component)
         {
@@ -78,14 +89,10 @@ namespace EveMailHelper.ServiceLayer.Models
             //return BlueprintComponents.BestPriceSumWithDepthLimit(depth);
         }
 
-        
-
         public IEnumerator<BlueprintComponent> GetEnumerator()
         {
             return new ProductionPlanIterator(this);
         }
-
-        
 
         IEnumerator IEnumerable.GetEnumerator()
         {
