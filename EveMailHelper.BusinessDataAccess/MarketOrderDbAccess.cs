@@ -33,22 +33,31 @@ namespace EveMailHelper.BusinessDataAccess
 
         public async Task<ICollection<MarketOrder>> GetAllAsync()
         {
-            return await _context.MarketOrders.ToListAsync();
+            return await _context.MarketOrders
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<MarketOrder?> GetByIdAsync(int orderId)
         {
-            return await _context.MarketOrders.Where(x => x.EveId == orderId).SingleAsync();
+            return await _context.MarketOrders
+                .Where(x => x.EveId == orderId)
+                .AsNoTracking()
+                .SingleAsync();
         }
 
         public async Task<List<MarketOrder>> GetByTypeIdAsync(int eveTypeId)
         {
-            return await _context.MarketOrders.Where(x => x.TypeId == eveTypeId).ToListAsync();
+            return await _context.MarketOrders
+                .AsNoTracking()
+                .Where(x => x.TypeId == eveTypeId)
+                .ToListAsync();
         }
 
         public async Task<double> GetAgeForTypeIdAsync(int eveTypeId)
         {
             return await _context.MarketOrders
+                .AsNoTracking()
                 .Where(x => x.TypeId == eveTypeId)
                 .GroupBy(x => x.TypeId)
                 .Select(x => DateTime.UtcNow.Subtract(x.Min(min => min.LastUpdatedFromEve)).TotalMinutes)
@@ -68,7 +77,7 @@ namespace EveMailHelper.BusinessDataAccess
                     min = g.Min(x => x.Price),
                     max = g.Max(x => x.Price),
                 };
-            var result = await query.ToListAsync();
+            var result = await query.AsNoTracking().ToListAsync();
 
             //var result = await _context.MarketOrders
             //    .Where(x => x.TypeId == eveTypeId)
@@ -86,6 +95,7 @@ namespace EveMailHelper.BusinessDataAccess
         public List<long> GetIdsForEveType(int eveTypeId)
         {
             return _context.MarketOrders
+                .AsNoTracking()
                 .Where(x => x.TypeId == eveTypeId)
                 .Select(c => c.EveId)
                 .ToList();
@@ -94,6 +104,7 @@ namespace EveMailHelper.BusinessDataAccess
         public async Task<List<long>> GetIdsForEveTypeAsync(int eveTypeId)
         {
             return await _context.MarketOrders
+                .AsNoTracking()
                 .Where(x => x.TypeId == eveTypeId)
                 .Select(c => c.EveId)
                 .ToListAsync();

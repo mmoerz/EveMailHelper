@@ -34,6 +34,8 @@ namespace EveMailHelper.BusinessDataAccess
         {
             // best performance in .net core 6.0
             // but does not work if there is already an object attached with that id
+            // since we always return untracked objects, this is ok
+            // (there's only one place where data is updated & added)
             MarketPrice helper = new() { EveTypeId = eveTypeId };
             _context.Attach(helper);
             // this is the safe way to remove the id
@@ -68,14 +70,6 @@ namespace EveMailHelper.BusinessDataAccess
         {
             try
             {
-                //var query = from marketprice in _context.MarketPrices
-                //            where marketprice.EveTypeId == eveTypeId
-                //            select marketprice;
-                ////select DateTime.UtcNow.Subtract(marketprice.LastUpdatedFromEve).TotalMinutes;
-                //var help = await _context.MarketPrices.Where(x => x.EveTypeId == eveTypeId).SingleAsync();
-                
-                //age = DateTime.UtcNow.Subtract(help.LastUpdatedFromEve).TotalMinutes;
-
                 return await _context.MarketPrices
                     .Where(x => x.EveTypeId == eveTypeId)
                     .AsNoTracking()
