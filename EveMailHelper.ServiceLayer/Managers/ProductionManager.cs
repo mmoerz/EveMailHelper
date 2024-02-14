@@ -36,7 +36,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
 
         private readonly EveMailHelperContext _dbContext;
 
-        private readonly MapDbAccess _mapDbAccess;
+        private readonly NormalizedProductionCostDbAccess _normalizedProdcutionCostDbAccess;
 
         private int MaxAgeInMinutes = 60;
 
@@ -58,7 +58,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
             _marketManager = marketManager;
             _blueprintManager = blueprintManager;
             _dbContext = dbContextFactory.CreateDbContext();
-            _mapDbAccess = new MapDbAccess(_dbContext);
+            _normalizedProdcutionCostDbAccess = new NormalizedProductionCostDbAccess(_dbContext);
         }
 
         public async Task<ProductionPlan> GetProductionPlan(
@@ -224,6 +224,12 @@ namespace EveMailHelper.ServiceLayer.Interfaces
             public double ComponentCost;
         }
 
+        public async Task<NormalizeProductionCost> CacheProductionCostAsync(ProductionPlan plan, int NumberOfRuns)
+        {
+            var result = DeriveProductionCost(plan, NumberOfRuns);
+            return await _normalizedProdcutionCostDbAccess.AddOrUpdateAsync(result);
+        }
+
         // Direct build using the top level blueprint and it's required components
         // Bestprice build - replacing buying components by building them if this is cheaper
         // compare to quantity * current marketprice
@@ -264,8 +270,6 @@ namespace EveMailHelper.ServiceLayer.Interfaces
                     result.BestPriceComponentCost += subresult.ComponentCost;
                 }
             }
-
-
 
             return result;
         }

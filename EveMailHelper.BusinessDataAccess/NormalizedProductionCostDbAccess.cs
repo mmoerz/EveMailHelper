@@ -29,7 +29,7 @@ namespace EveMailHelper.BusinessDataAccess
         /// </summary>
         /// <param name="prodCost">cost data to update</param>
         /// <returns>a tracked entity</returns>
-        public async Task<NormalizeProductionCost> AddOrUpdate(NormalizeProductionCost prodCost)
+        public async Task<NormalizeProductionCost> AddOrUpdateAsync(NormalizeProductionCost prodCost)
         {
             var found = await _context.NormalizeProductionCosts
                 .Where(x => x.EveTypeId == prodCost.EveTypeId && x.ActivityId == prodCost.ActivityId)
