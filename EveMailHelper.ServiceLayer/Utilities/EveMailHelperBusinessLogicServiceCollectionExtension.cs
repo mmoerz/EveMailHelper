@@ -1,5 +1,4 @@
 ﻿using EveMailHelper.ServiceLayer.Interfaces;
-using EveMailHelper.BusinessLibrary.Services;
 
 using Microsoft.Extensions.DependencyInjection;
 using EveMailHelper.ServiceLayer.Managers;

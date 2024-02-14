@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EveMailHelper.DataModels.Sde;
+using EveMailHelper.ServiceLayer.Utilities;
+
+using EVEStandard.Models;
 
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
@@ -30,33 +33,33 @@ namespace EveMailHelper.ServiceLayer.Models
         { get { return 0; } }
         public double PriceSum
         { get { return ProductQuantity * ProductPricePerUnit; } }
-        public bool IsBuyingBetter
-        { get { return !IsProducingBetter; } }
-        public bool IsProducingBetter
-        { get { return BestPriceSum < PriceSum; } }
+        //public bool IsBuyingBetter
+        //{ get { return !IsProducingBetter; } }
+        //public bool IsProducingBetter
+        //{ get { return BestPriceSum < PriceSum; } }
 
-        public double ComponentBestPriceSum
-        {
-            get
-            {
-                double subBestPrice = 0.0;
-                foreach (var component in SubComponents)
-                {
-                    subBestPrice += component.BestPriceSum();
-                }
-                return subBestPrice;
-            }
-        }
-        public double BestPriceSum
-        {
-            get
-            {
-                var JobAndComponentPrice = JobCost + ComponentBestPriceSum;
-                if (JobAndComponentPrice < ProductPriceSum)
-                    return JobAndComponentPrice;
-                return ProductPriceSum;
-            }
-        }
+        //public double ComponentBestPriceSum
+        //{
+        //    get
+        //    {
+        //        double subBestPrice = 0.0;
+        //        foreach (var component in SubComponents)
+        //        {
+        //            subBestPrice += component.BestPriceSum();
+        //        }
+        //        return subBestPrice;
+        //    }
+        //}
+        //public double BestPriceSum
+        //{
+        //    get
+        //    {
+        //        var JobAndComponentPrice = JobCost + ComponentBestPriceSum;
+        //        if (JobAndComponentPrice < ProductPriceSum)
+        //            return JobAndComponentPrice;
+        //        return ProductPriceSum;
+        //    }
+        //}
 
         public IndustryBlueprint Blueprint { get; set; } = null!;
         public IndustryActivity Activity { get; set; } = null!;
@@ -92,11 +95,11 @@ namespace EveMailHelper.ServiceLayer.Models
         /// </remarks>
         /// <param name="level"></param>
         /// <returns></returns>
-        public double ComponentPriceSumDepth(int depth)
-        {
-            throw new NotImplementedException();
-            //return BlueprintComponents.BestPriceSumWithDepthLimit(depth);
-        }
+        //public double ComponentPriceSumDepth(int depth)
+        //{
+        //    throw new NotImplementedException();
+        //    //return BlueprintComponents.BestPriceSumWithDepthLimit(depth);
+        //}
 
         public IEnumerator<BlueprintComponent> GetEnumerator()
         {
@@ -106,32 +109,6 @@ namespace EveMailHelper.ServiceLayer.Models
         IEnumerator IEnumerable.GetEnumerator()
         {
             return new ProductionPlanIterator(this);
-        }
-
-        // shitty stuff to remove later ?
-        public int GetMinNumberOfRuns()
-        {
-            int MinimumNumberOfRuns = 1;
-            var ForcedMultiplierList = new List<double>();
-            foreach (var component in SubComponents)
-            {
-                ForcedMultiplierList.AddRange(component.GetForcedMultipliers());
-            }
-            List<int> FullnumbersOnly = new();
-            foreach(var item in ForcedMultiplierList) {
-                if (item >= 1)
-                    FullnumbersOnly.Add((int)item);
-            }
-            var distinct = FullnumbersOnly.Distinct().ToList();
-
-            // not a perfect solution here, should actually compute the set of
-            // smallest dividers within that list of numbers
-            // but since i don't think that this will matter to much, i don't care
-            foreach(var item in distinct)
-            {
-                MinimumNumberOfRuns *= item;
-            }
-            return MinimumNumberOfRuns;
         }
     }
 }

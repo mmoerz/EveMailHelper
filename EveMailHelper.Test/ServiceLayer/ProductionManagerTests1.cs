@@ -15,6 +15,7 @@ using Xunit;
 using EveMailHelper.Test.Data;
 using System;
 using EveMailHelper.ServiceLayer.Interfaces;
+using EveMailHelper.ServiceLayer.Utilities;
 
 namespace EveMailHelper.Test.ServiceLayer
 {
@@ -46,7 +47,8 @@ namespace EveMailHelper.Test.ServiceLayer
         [MemberData(nameof(ProductionPlanDataGenerator.GetMinimumNumberOfRuns), MemberType = typeof(ProductionPlanDataGenerator))]
         public void TestPriceSum(ProductionPlan sut, int expected)
         {
-            var result = sut.GetMinNumberOfRuns();
+            ProductionPlanAnalyzer analyzer = new(sut);
+            var result = analyzer.GetMinNumberOfRuns(false);
             result.ShouldBeEquivalentTo(expected);
         }
         /*

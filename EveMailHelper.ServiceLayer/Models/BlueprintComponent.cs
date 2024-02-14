@@ -52,11 +52,7 @@ namespace EveMailHelper.ServiceLayer.Models
         { get { return Quantity * PricePerUnit; } }
         public double VolumeSum
         { get { return Volume * Quantity; } }
-        public bool IsBuyingBetter
-        { get { return !IsProducingBetter; } }
-        public bool IsProducingBetter
-        { get { return BestPriceSum() < PriceSum; } }
-
+        
         public double ForcedQuantityMultiplier
         {
             get
@@ -99,73 +95,74 @@ namespace EveMailHelper.ServiceLayer.Models
             SubComponents.Add(component);
         }
 
-        public double BestPriceSumWithDepthLimit(int depth)
-        {
-            double sum = 0;
-            if (SubComponents.Count == 0)
-                return PriceSum;
+        //TODO: remove the stuff below - it's business logic (and not data storage)
 
-            if (depth > 1)
-            {
-                foreach (var component in SubComponents)
-                {
-                    sum += component.BestPriceSumWithDepthLimit(depth - 1);
-                }
-            }
-            if (sum > PriceSum)
-                sum = PriceSum;
-            return sum;
-        }
+        //public double BestPriceSumWithDepthLimit(int depth)
+        //{
+        //    double sum = 0;
+        //    if (SubComponents.Count == 0)
+        //        return PriceSum;
 
-        public double BestPriceSum()
-        {
-            double sum = 0;
-            // no subcomponents, so nothing to produce and no job costs
-            if (SubComponents.Count == 0)
-                return PriceSum;
+        //    if (depth > 1)
+        //    {
+        //        foreach (var component in SubComponents)
+        //        {
+        //            sum += component.BestPriceSumWithDepthLimit(depth - 1);
+        //        }
+        //    }
+        //    if (sum > PriceSum)
+        //        sum = PriceSum;
+        //    return sum;
+        //}
 
-            sum = JobCost;
-            foreach (var component in SubComponents)
-            {
-                sum += component.BestPriceSum();
-            }
-            sum /= ForcedQuantityMultiplier;
-            // not sure what is better in case of cheaper buying
-            // to return a single 'batch' (or the full 2 batches)
-            if (sum > PriceSum )
-                sum = PriceSum;
-            return sum;
-        }
+        //public double BestPriceSum()
+        //{
+        //    double sum = 0;
+        //    // no subcomponents, so nothing to produce and no job costs
+        //    if (SubComponents.Count == 0)
+        //        return PriceSum;
 
-        public double BestPriceVolumeSum()
-        {
-            double volume = 0;
-            if (IsProducingBetter)
-            {
-                foreach (var component in SubComponents)
-                {
-                    volume += component.BestPriceVolumeSum();
-                }
-            }
-            else
-                volume += VolumeSum;
-            return volume;
-        }
+        //    sum = JobCost;
+        //    foreach (var component in SubComponents)
+        //    {
+        //        sum += component.BestPriceSum();
+        //    }
+        //    sum /= ForcedQuantityMultiplier;
+        //    // not sure what is better in case of cheaper buying
+        //    // to return a single 'batch' (or the full 2 batches)
+        //    if (sum > PriceSum )
+        //        sum = PriceSum;
+        //    return sum;
+        //}
 
-        public List<double> GetForcedMultipliers()
-        {
-            var result = new List<double>();
-            if (IsProducingBetter)
-                result.Add(ForcedQuantityMultiplier);
+        //public double BestPriceVolumeSum()
+        //{
+        //    double volume = 0;
+        //    if (IsProducingBetter)
+        //    {
+        //        foreach (var component in SubComponents)
+        //        {
+        //            volume += component.BestPriceVolumeSum();
+        //        }
+        //    }
+        //    else
+        //        volume += VolumeSum;
+        //    return volume;
+        //}
 
-            foreach (var component in SubComponents)
-            {
-                var subresult = component.GetForcedMultipliers();
-                result.AddRange(subresult);
-            }
-            return result.Distinct().ToList();
-        }
+        //public List<double> GetForcedMultipliers()
+        //{
+        //    var result = new List<double>();
+        //    if (IsProducingBetter)
+        //        result.Add(ForcedQuantityMultiplier);
 
+        //    foreach (var component in SubComponents)
+        //    {
+        //        var subresult = component.GetForcedMultipliers();
+        //        result.AddRange(subresult);
+        //    }
+        //    return result.Distinct().ToList();
+        //}
         
     }
 }

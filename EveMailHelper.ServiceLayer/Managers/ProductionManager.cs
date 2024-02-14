@@ -114,7 +114,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             if (!component.SubComponents.Any())
                 return;
             // buy or produce?
-            if (component.IsBuyingBetter)
+            if (BlueprintAnalyzer.IsBuyingComponentBetter(component))
                 return;
             // get job costs and store them in the component tree
             component.JobCost = await JobCost(component, systemCostIndex, structureBonuses, facilityTax, isAlphaClone);
@@ -165,8 +165,10 @@ namespace EveMailHelper.ServiceLayer.Managers
                 return 0.0;
         }
 
-        public BuyList DeriveBestPriceBuyListFromPlan(ProductionPlan plan, int NumberOfRuns)
+        public BuyList DeriveBestPriceBuyListFromPlan(
+            ProductionPlan plan, int NumberOfRuns)
         {
+            ProductionPlanAnalyzer analyzer = new(plan);
             BuyList buyList = new()
             {
                 Name = plan.ProductName,
@@ -174,10 +176,11 @@ namespace EveMailHelper.ServiceLayer.Managers
             };
 
             // check if it's cost effective to build
-            if (plan.IsProducingBetter)
+            if (analyzer.IsProducingBetter())
             {
                 int minimumNumberOfRuns;
-                if (!NumberOfRunsIsValid(plan, NumberOfRuns, out minimumNumberOfRuns))
+                if (!analyzer.NumberOfRunsIsValid(NumberOfRuns, onlyUseBestPricePath:true,
+                    out minimumNumberOfRuns))
                     throw new Exception($"Number of Runs must be a multiple of {minimumNumberOfRuns}");
                 foreach (var component in plan.SubComponents)
                 {
@@ -188,19 +191,10 @@ namespace EveMailHelper.ServiceLayer.Managers
             return buyList;
         }
 
-        public bool NumberOfRunsIsValid(ProductionPlan plan, int NumberOfRuns, out int minimumNumberOfRuns)
-        {
-            minimumNumberOfRuns = plan.GetMinNumberOfRuns();
-            var modulo = NumberOfRuns % minimumNumberOfRuns;
-            if (modulo > 0)
-                return false;
-            return true;
-        }
-
         protected BuyList RecursiveBestPriceBuyList(BlueprintComponent component, int NumberOfRuns)
         {
             BuyList buyList = new();
-            if (component.IsBuyingBetter)
+            if (BlueprintAnalyzer.IsBuyingComponentBetter(component))
             {
                 buyList.ItemList.Add(new()
                 {
@@ -239,6 +233,9 @@ namespace EveMailHelper.ServiceLayer.Managers
         public NormalizeProductionCost DeriveProductionCost(ProductionPlan plan, int NumberOfRuns)
         {
             _ = plan.Product ?? throw new Exception("ProductionPlan with empty product");
+
+            ProductionPlanAnalyzer analyzer = new(plan);
+
             NormalizeProductionCost result = new()
             {
                 // MUST BE SET!!!
@@ -259,10 +256,11 @@ namespace EveMailHelper.ServiceLayer.Managers
             // we are aggregating information (throwing away details about how the price was calculated)
             result.BestPriceJobCost = result.DirectJobCost;
             result.BestPriceComponentCost = result.BestPriceComponentCost;
-            if (plan.IsProducingBetter)
+            if (analyzer.IsProducingBetter())
             {
                 int minimumNumberOfRuns;
-                if (!NumberOfRunsIsValid(plan, NumberOfRuns, out minimumNumberOfRuns))
+                if (!analyzer.NumberOfRunsIsValid(NumberOfRuns, onlyUseBestPricePath: true, 
+                    out minimumNumberOfRuns))
                     throw new Exception($"Number of Runs must be a multiple of {minimumNumberOfRuns}");
                 result.BestPriceJobCost = 0;
                 result.BestPriceComponentCost = 0;
@@ -282,7 +280,7 @@ namespace EveMailHelper.ServiceLayer.Managers
         {
             var result = new ProductionCost();
             BuyList buyList = new();
-            if (component.IsBuyingBetter)
+            if (BlueprintAnalyzer.IsBuyingComponentBetter(component))
             {
                 result.ComponentCost = component.PriceSum * NumberOfRuns;
                 return result;

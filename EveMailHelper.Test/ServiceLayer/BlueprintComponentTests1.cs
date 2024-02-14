@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Xunit;
 using EveMailHelper.Test.Data;
 using System;
+using EveMailHelper.ServiceLayer.Utilities;
 
 namespace EveMailHelper.Test.ServiceLayer
 {
@@ -59,7 +60,7 @@ namespace EveMailHelper.Test.ServiceLayer
         [MemberData(nameof(BlueprintComponentDataGenerator.GetSimpleBestPriceSum), MemberType = typeof(BlueprintComponentDataGenerator))]
         public void TestSimpleBestPriceSum(BlueprintComponent sut, double expected)
         {
-            var result = sut.BestPriceSum();
+            var result = BlueprintAnalyzer.BestPriceSum(sut);
             result.ShouldBeEquivalentTo(expected);
         }
 
@@ -67,7 +68,7 @@ namespace EveMailHelper.Test.ServiceLayer
         [MemberData(nameof(BlueprintComponentDataGenerator.GetBestPriceSum), MemberType = typeof(BlueprintComponentDataGenerator))]
         public void TestBestPriceSum(BlueprintComponent sut, double expected)
         {
-            var result = sut.BestPriceSum();
+            var result = BlueprintAnalyzer.BestPriceSum(sut);
             result.ShouldBeEquivalentTo(expected);
         }
 
@@ -75,7 +76,7 @@ namespace EveMailHelper.Test.ServiceLayer
         [MemberData(nameof(BlueprintComponentDataGenerator.GetIsProducing), MemberType = typeof(BlueprintComponentDataGenerator))]
         public void TestIsProducingBetter(BlueprintComponent sut, bool expected)
         {
-            var result = sut.IsProducingBetter;
+            var result = BlueprintAnalyzer.IsProducingComponentBetter(sut);
             result.ShouldBeEquivalentTo(expected);
         }
     }
