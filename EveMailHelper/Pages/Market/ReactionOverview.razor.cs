@@ -12,6 +12,7 @@ using EveMailHelper.Web.Models;
 using EveMailHelper.ServiceLayer.Models;
 using EveMailHelper.DataModels.Market;
 using EveMailHelper.Web.Shared.Market;
+using EveMailHelper.ServiceLayer.Utilities;
 
 namespace EveMailHelper.Web.Pages.Market
 {
@@ -67,7 +68,8 @@ namespace EveMailHelper.Web.Pages.Market
                         blueprint, new List<int>() { 11 },
                         RegionId, SystemCostIndex, StructureBonuses, FacilityTax, IsAlphaClone);
                     ProdPlan.ShallowCopy(newplan);
-                    NumberOfRunsMin = newplan.GetMinNumberOfRuns();
+                    ProductionPlanAnalyzer analyzer = new(newplan);
+                    NumberOfRunsMin = analyzer.GetMinNumberOfRuns(true);
                     if (NumberOfRuns < NumberOfRunsMin)
                         NumberOfRuns = NumberOfRunsMin;
                     var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(

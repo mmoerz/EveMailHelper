@@ -155,9 +155,8 @@ namespace EveMailHelper.ServiceLibrary.Managers
 
         public Account GetAccountFromPrincipal(ClaimsPrincipal principal)
         {
-            var accountId = principal.FindFirst(CLAIM_ACCOUNT_ID);
-            if (accountId == null)
-                throw new Exception("no User already authenticated");
+            var accountId = principal.FindFirst(CLAIM_ACCOUNT_ID) 
+                ?? throw new Exception("no User already authenticated");
             var parsed = Guid.TryParse(accountId.Value.ToString(), out Guid accountGuid);
             if (!parsed)
                 throw new Exception("account id not a valid Guid");
@@ -168,9 +167,8 @@ namespace EveMailHelper.ServiceLibrary.Managers
 
         public EveAccount GetEveAccountFromPrincipal(ClaimsPrincipal principal)
         {
-            var eveaccountId = principal.FindFirst(CLAIM_EVEACCOUNT_ID);
-            if (eveaccountId == null)
-                throw new Exception("no User already authenticated");
+            var eveaccountId = principal.FindFirst(CLAIM_EVEACCOUNT_ID)
+                ?? throw new Exception("no User already authenticated");
             var parsed = Guid.TryParse(eveaccountId.Value.ToString(), out Guid accountGuid);
             if (!parsed)
                 throw new Exception("eveaccount id not a valid Guid");
@@ -232,9 +230,8 @@ namespace EveMailHelper.ServiceLibrary.Managers
         {
             _ = character ?? throw new ArgumentNullException(nameof(character));
 
-            var authInfo = GetLastAuthInfoForCharacter(character);
-            if (authInfo == null)
-                throw new InvalidOperationException($"Cannot request new token when no refresh token can be found for the character {character.Name}");
+            var authInfo = GetLastAuthInfoForCharacter(character)
+                ?? throw new InvalidOperationException($"Cannot request new token when no refresh token can be found for the character {character.Name}");
             var accessTokenDetails = await _sso.GetNewBasicAuthAccessAndRefreshTokenAsync(authInfo.RefreshToken);
 
             UpdateAccessToken(authInfo, accessTokenDetails);

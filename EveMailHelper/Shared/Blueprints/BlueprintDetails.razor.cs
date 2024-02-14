@@ -12,6 +12,7 @@ using EveMailHelper.ServiceLayer.Managers;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using EVEStandard.Models;
 using System.Security.Permissions;
+using EveMailHelper.ServiceLayer.Utilities;
 
 namespace EveMailHelper.Web.Shared.Blueprints
 {
@@ -77,7 +78,7 @@ namespace EveMailHelper.Web.Shared.Blueprints
             if (component.SubComponents.Count == 0)
                 return Color.Primary;
 
-            if (component.IsProducingBetter)
+            if (BlueprintAnalyzer.IsBuyingComponentBetter(component))
                 return Color.Success;
             else
                 return Color.Secondary;
