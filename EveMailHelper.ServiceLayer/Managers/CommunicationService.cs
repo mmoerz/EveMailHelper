@@ -12,7 +12,7 @@ using EveMailHelper.ServiceLayer.Interfaces;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using EveMailHelper.BusinessLibrary.Complex.dto;
 
-namespace EveMailHelper.BusinessLibrary.Managers
+namespace EveMailHelper.ServiceLibrary.Managers
 {
     public class CommunicationService : ICommunicationService
     {

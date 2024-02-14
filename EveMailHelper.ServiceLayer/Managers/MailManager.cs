@@ -13,7 +13,7 @@ using EveMailHelper.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using EveNatTools.ServiceLibrary.Utilities;
 
-namespace EveMailHelper.BusinessLibrary.Managers
+namespace EveMailHelper.ServiceLibrary.Managers
 {
     public class MailManager : IMailManager
     {

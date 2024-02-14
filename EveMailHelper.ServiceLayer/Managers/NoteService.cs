@@ -8,7 +8,7 @@ using EveMailHelper.BusinessDataAccess;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.ServiceLayer.Interfaces;
 
-namespace EveMailHelper.BusinessLibrary.Services
+namespace EveMailHelper.ServiceLibrary.Services
 {
     public class NoteService : INoteService
     {
