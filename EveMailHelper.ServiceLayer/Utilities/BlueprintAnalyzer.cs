@@ -69,8 +69,9 @@ namespace EveMailHelper.ServiceLayer.Utilities
         public List<double> GetForcedMultipliers(
             BlueprintComponent component, bool onlyUseBestPricePath)
         {
+            BlueprintAnalyzer analyzer = new(component, materialModifier);
             var result = new List<double>();
-            if (!onlyUseBestPricePath || IsProducingComponentBetter())
+            if (!onlyUseBestPricePath || analyzer.IsProducingComponentBetter())
             {
                 result.Add(component.ForcedQuantityMultiplier);
                 foreach (var subComponent in component.SubComponents)
