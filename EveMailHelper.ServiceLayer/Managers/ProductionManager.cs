@@ -226,6 +226,8 @@ namespace EveMailHelper.ServiceLayer.Interfaces
 
         public async Task<NormalizeProductionCost> CacheProductionCostAsync(ProductionPlan plan, int NumberOfRuns)
         {
+            //Todo: check if the db already contains this data ??
+
             var result = DeriveProductionCost(plan, NumberOfRuns);
             return await _normalizedProdcutionCostDbAccess.AddOrUpdateAsync(result);
         }
