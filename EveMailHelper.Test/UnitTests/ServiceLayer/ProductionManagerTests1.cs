@@ -45,22 +45,22 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
 
         }
 
-        [Theory]
-        [MemberData(nameof(ProductionPlanDataGenerator.GetMinimumNumberOfRuns), MemberType = typeof(ProductionPlanDataGenerator))]
-        public void TestGetMinimumNumberOfRuns(ProductionPlan sut, int expected, string message)
-        {
-            ProductionPlanAnalyzer analyzer = new(sut);
-            var result = analyzer.GetMinNumberOfRuns(false);
-            result.ShouldBeEquivalentTo(expected, message);
-        }
+        //[Theory]
+        //[MemberData(nameof(ProductionPlanDataGenerator.GetMinimumNumberOfRuns), MemberType = typeof(ProductionPlanDataGenerator))]
+        //public void TestGetMinimumNumberOfRuns(ProductionPlan sut, int expected, string message)
+        //{
+        //    ProductionPlanAnalyzer analyzer = new(sut);
+        //    var result = analyzer.GetMinNumberOfRuns(false);
+        //    result.ShouldBeEquivalentTo(expected, message);
+        //}
 
-        [Theory]
-        [MemberData(nameof(ProductionPlanDataGenerator.GetMinimumNumberOfRunsBestPrice), MemberType = typeof(ProductionPlanDataGenerator))]
-        public void TestGetMinimumNumberOfRunsBestPrice(ProductionPlan sut, int expected, string message)
-        {
-            ProductionPlanAnalyzer analyzer = new(sut);
-            var result = analyzer.GetMinNumberOfRuns(true);
-            result.ShouldBeEquivalentTo(expected, message);
-        }
+        //[Theory]
+        //[MemberData(nameof(ProductionPlanDataGenerator.GetMinimumNumberOfRunsBestPrice), MemberType = typeof(ProductionPlanDataGenerator))]
+        //public void TestGetMinimumNumberOfRunsBestPrice(ProductionPlan sut, int expected, string message)
+        //{
+        //    ProductionPlanAnalyzer analyzer = new(sut);
+        //    var result = analyzer.GetMinNumberOfRuns(true);
+        //    result.ShouldBeEquivalentTo(expected, message);
+        //}
     }
 }

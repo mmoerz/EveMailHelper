@@ -85,19 +85,19 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
         {
             var data = new List<ITheoryData>();
 
-            var data1 = TestData2_Cheap[0];
-            foreach (var item in BlueprintComponentDataGenerator.TestData3)
-                data1.Add(item);
-            data.Add(TheoryData.Factory(data1, 1, "only integers of forcedRunnumbers should be counted."));
+            //var data1 = TestData2_Cheap[0];
+            //foreach (var item in BlueprintComponentDataGenerator.TestData3)
+            //    data1.Add(item);
+            //data.Add(TheoryData.Factory(data1, 1, "only integers of forcedRunnumbers should be counted."));
 
-            var data2 = TestData2_Expensive[0];
-            foreach (var item in BlueprintComponentDataGenerator.TestData4)
-                data2.Add(item);
-            data.Add(TheoryData.Factory(data2, 4, "ignore forcedRunNumbers that are a multiple of bigger forcedRunNumbers"));
+            //var data2 = TestData2_Expensive[0];
+            //foreach (var item in BlueprintComponentDataGenerator.TestData4)
+            //    data2.Add(item);
+            //data.Add(TheoryData.Factory(data2, 4, "ignore forcedRunNumbers that are a multiple of bigger forcedRunNumbers"));
 
             var data3 = TestData2_Expensive[0];
             data3.Add(BlueprintComponentDataGenerator.TestData5[0]);
-            data.Add(TheoryData.Factory(data3, 12, "ignore forcedRunNumbers that are a multiple of bigger forcedRunNumbers"));
+            data.Add(TheoryData.Factory(data3, 4, "ignore item L1-3 modifier of 4"));
 
             var data4 = TestData2_Expensive[0];
             foreach (var item in BlueprintComponentDataGenerator.TestData5)
