@@ -9,7 +9,7 @@ using EveMailHelper.BusinessLibrary.Complex;
 using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.ServiceLayer.Interfaces;
 
-namespace EveMailHelper.BusinessLibrary.Services
+namespace EveMailHelper.BusinessLibrary.Managers
 {
     public class EveMailTemplateService : IEveMailTemplateService
     {

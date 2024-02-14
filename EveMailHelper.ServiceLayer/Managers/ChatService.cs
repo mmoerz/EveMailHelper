@@ -9,7 +9,7 @@ using EveMailHelper.BusinessDataAccess;
 using EveMailHelper.BusinessLibrary.Utilities;
 using EveMailHelper.ServiceLayer.Interfaces;
 
-namespace EveMailHelper.BusinessLibrary.Services
+namespace EveMailHelper.BusinessLibrary.Managers
 {
     public class ChatService : IChatService
     {

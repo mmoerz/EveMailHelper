@@ -5,6 +5,7 @@ using EveMailHelper.DataAccessLayer.Context;
 using EveMailHelper.DataModels;
 using EveMailHelper.DataModels.Sde;
 using EveMailHelper.DataModels.Sde.Map;
+using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.ServiceLayer.Managers;
 using EveMailHelper.ServiceLayer.Utilities;
 using EveMailHelper.ServiceLibrary.Managers;
@@ -21,7 +22,7 @@ using MudBlazor;
 
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace EveMailHelper.ServiceLayer.Interfaces
+namespace EveMailHelper.ServiceLayer.Managers
 {
     public class MapManager : IMapManager
     {

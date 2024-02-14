@@ -21,7 +21,7 @@ using MudBlazor;
 
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace EveMailHelper.ServiceLayer.Interfaces
+namespace EveMailHelper.ServiceLayer.Managers
 {
     public class AutoDataUpdateManager
     {

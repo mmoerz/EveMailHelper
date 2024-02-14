@@ -9,6 +9,7 @@ using EveMailHelper.DataModels;
 using EveMailHelper.DataModels.Market;
 using EveMailHelper.DataModels.Sde;
 using EveMailHelper.DataModels.Sde.Map;
+using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.ServiceLayer.Managers;
 using EveMailHelper.ServiceLayer.Models;
 using EveMailHelper.ServiceLayer.Utilities;
@@ -27,7 +28,7 @@ using MudBlazor;
 
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace EveMailHelper.ServiceLayer.Interfaces
+namespace EveMailHelper.ServiceLayer.Managers
 {
     public class ProductionManager : IProductionManager
     {
