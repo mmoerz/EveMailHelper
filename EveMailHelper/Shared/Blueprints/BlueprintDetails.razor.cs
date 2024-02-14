@@ -70,5 +70,11 @@ namespace EveMailHelper.Web.Shared.Blueprints
             else
                 return Color.Secondary;
         }
+
+        private double MyPriceSum(BlueprintComponent component)
+        {
+            BlueprintAnalyzer analyzer = new(component, MaterialModifier);
+            return analyzer.PriceSum();
+        }
     }
 }
