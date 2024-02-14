@@ -337,16 +337,16 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
         public static IEnumerable<object[]> GetVolumeSum()
         {
             var data = new List<ITheoryData>();
-            var mod = 2.64;
+            var mod = -2.64;
 
             BlueprintAnalyzer sut1 = new(TestData2[0], mod);
-            data.Add(TheoryData.Factory(sut1, 974, "volume must be exact"));
+            data.Add(TheoryData.Factory(sut1, 9800, "volume must be exact"));
 
             BlueprintAnalyzer sut2 = new(TestData3[1], mod);
-            data.Add(TheoryData.Factory(sut2, 300, "volume must be exact"));
+            data.Add(TheoryData.Factory(sut2, 39000, "volume must be exact"));
 
-            BlueprintAnalyzer sut3 = new(TestData2[0], 0);
-            data.Add(TheoryData.Factory(sut3, 1000, "volume must be exact"));
+            BlueprintAnalyzer sut3 = new(TestData3[3], 0);
+            data.Add(TheoryData.Factory(sut3, 1200000, "volume must be exact"));
 
             return data.ConvertAll(d => d.ToParameterArray());
         }
@@ -374,16 +374,16 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             var mod = 0;
 
             BlueprintAnalyzer sut1 = new(TestData5[1], mod);
-            data.Add(TheoryData.Factory(sut1, 974, "best price of component with subcomponents"));
+            data.Add(TheoryData.Factory(sut1, 13, "best price of component with subcomponents"));
 
             BlueprintAnalyzer sut2 = new(TestData5[5], mod);
-            data.Add(TheoryData.Factory(sut2, 974, "best price of component with subcomponents"));
+            data.Add(TheoryData.Factory(sut2, 3, "best price of component with subcomponents"));
 
             BlueprintAnalyzer sut3 = new(TestData5[9], mod);
-            data.Add(TheoryData.Factory(sut3, 974, "best price of component with subcomponents"));
+            data.Add(TheoryData.Factory(sut3, 2.25, "best price of component with subcomponents"));
 
             BlueprintAnalyzer sut4 = new(TestData5[0], mod);
-            data.Add(TheoryData.Factory(sut4, 974, "best price of three levels"));
+            data.Add(TheoryData.Factory(sut4, 18.25, "best price of three levels"));
 
             return data.ConvertAll(d => d.ToParameterArray());
         }
@@ -396,7 +396,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             BlueprintAnalyzer sut1 = new(TestData4[1], mod);
             data.Add(TheoryData.Factory(sut1, true, "must produce because cheaper than buying"));
 
-            BlueprintAnalyzer sut2 = new(TestData4[5], mod);
+            BlueprintAnalyzer sut2 = new(TestData5[5], mod);
             data.Add(TheoryData.Factory(sut2, false, "buying is cheaper"));
 
             BlueprintAnalyzer sut3 = new(TestData4[0], mod);
