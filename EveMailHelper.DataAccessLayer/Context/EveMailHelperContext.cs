@@ -99,6 +99,7 @@ namespace EveMailHelper.DataAccessLayer.Context
         // we archive market data here
         public virtual DbSet<MarketOrder> MarketOrders { get; set; } = null!;
         public virtual DbSet<MarketPrice> MarketPrices { get; set; } = null!;
+        public virtual DbSet<NormalizeProductionCost> NormalizeProductionCosts { get; set; } = null!;
 
         #endregion
 

@@ -65,6 +65,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             ProductionPlan plan = new()
             {
                 Blueprint = blueprint,
+                Activity = activity,
                 Product = product.ProductType,
                 ProductQuantity = product.Quantity,
             };

@@ -59,6 +59,7 @@ namespace EveMailHelper.ServiceLayer.Models
         }
 
         public IndustryBlueprint Blueprint { get; set; } = null!;
+        public IndustryActivity Activity { get; set; } = null!;
         public EveType? Product { get; set; } = null;
         public int ProductQuantity { get; set; }
         public double ProductPricePerUnit { get; set; }

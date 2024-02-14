@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Numerics;
 
 using EveMailHelper.BusinessDataAccess;
 using EveMailHelper.BusinessLibrary.Complex;
@@ -69,7 +70,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
             _ = blueprint ?? throw new ArgumentNullException(nameof(blueprint));
             if (blueprint.TypeId == 0)
                 throw new Exception("blueprint.TypeId is zero");
-            
+
             // Todo: fix static activityfilter id
             var plan = await _blueprintManager.GetBlueprintComponentsList(blueprint, 11);
             if (plan.Product != null && plan.Product.EveId > 0)
@@ -144,7 +145,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
             double estimatedItemValue = 0;
             foreach (var subcomponent in component.SubComponents)
             {
-                var marketPrice = 
+                var marketPrice =
                     await _marketManager.GetMarketPrice(subcomponent.EveType.EveId, MaxAgeInMinutes);
                 estimatedItemValue += subcomponent.Quantity * marketPrice.AdjustedPrice;
             }
@@ -174,17 +175,25 @@ namespace EveMailHelper.ServiceLayer.Interfaces
             // check if it's cost effective to build
             if (plan.IsProducingBetter)
             {
-                var minimumNumberOfRuns = plan.GetMinNumberOfRuns();
-                var modulo = NumberOfRuns % minimumNumberOfRuns;
-                if (modulo > 0)
+                int minimumNumberOfRuns;
+                if (!NumberOfRunsIsValid(plan, NumberOfRuns, out minimumNumberOfRuns))
                     throw new Exception($"Number of Runs must be a multiple of {minimumNumberOfRuns}");
-                foreach(var component in plan.SubComponents)
+                foreach (var component in plan.SubComponents)
                 {
                     buyList.Merge(RecursiveBestPriceBuyList(component, NumberOfRuns));
                 }
             }
 
             return buyList;
+        }
+
+        public bool NumberOfRunsIsValid(ProductionPlan plan, int NumberOfRuns, out int minimumNumberOfRuns)
+        {
+            minimumNumberOfRuns = plan.GetMinNumberOfRuns();
+            var modulo = NumberOfRuns % minimumNumberOfRuns;
+            if (modulo > 0)
+                return false;
+            return true;
         }
 
         protected BuyList RecursiveBestPriceBuyList(BlueprintComponent component, int NumberOfRuns)
@@ -202,11 +211,85 @@ namespace EveMailHelper.ServiceLayer.Interfaces
             }
 
             int subComponentsNumberOfRuns = (int)(NumberOfRuns / component.ForcedQuantityMultiplier);
-            foreach ( var subComponent in component.SubComponents)
+            foreach (var subComponent in component.SubComponents)
             {
                 buyList.Merge(RecursiveBestPriceBuyList(subComponent, subComponentsNumberOfRuns));
             }
             return buyList;
+        }
+
+        public class ProductionCost
+        {
+            public double JobCost;
+            public double ComponentCost;
+        }
+
+        // Direct build using the top level blueprint and it's required components
+        // Bestprice build - replacing buying components by building them if this is cheaper
+        // compare to quantity * current marketprice
+        public NormalizeProductionCost DeriveProductionCost(ProductionPlan plan, int NumberOfRuns)
+        {
+            _ = plan.Product ?? throw new Exception("ProductionPlan with empty product");
+            NormalizeProductionCost result = new()
+            {
+                // MUST BE SET!!!
+                EveType = plan.Activity.Type, // connection to activity
+                IndustryActivity = plan.Activity,
+                NumberOfRuns = NumberOfRuns,
+                Product = plan.Product,
+                ProductQuantity = plan.ProductQuantity,
+                ProductPricePerUnit = plan.ProductPricePerUnit,
+                DirectJobCost = plan.JobCost,
+            };
+
+            foreach (var subComponent in plan.SubComponents)
+            {
+                result.DirectComponentCost += subComponent.PriceSum;
+            }
+            // here comes the complex part, selecting the best price articles
+            // we are aggregating information (throwing away details about how the price was calculated)
+            result.BestPriceJobCost = result.DirectJobCost;
+            result.BestPriceComponentCost = result.BestPriceComponentCost;
+            if (plan.IsProducingBetter)
+            {
+                int minimumNumberOfRuns;
+                if (!NumberOfRunsIsValid(plan, NumberOfRuns, out minimumNumberOfRuns))
+                    throw new Exception($"Number of Runs must be a multiple of {minimumNumberOfRuns}");
+                result.BestPriceJobCost = 0;
+                result.BestPriceComponentCost = 0;
+                foreach (var component in plan.SubComponents)
+                {
+                    var subresult = RecursiveBestPriceProductionCost(component, NumberOfRuns);
+                    result.BestPriceJobCost += subresult.JobCost;
+                    result.BestPriceComponentCost += subresult.ComponentCost;
+                }
+            }
+
+
+
+            return result;
+        }
+
+        protected ProductionCost RecursiveBestPriceProductionCost(
+            BlueprintComponent component, int NumberOfRuns)
+        {
+            var result = new ProductionCost();
+            BuyList buyList = new();
+            if (component.IsBuyingBetter)
+            {
+                result.ComponentCost = component.PriceSum * NumberOfRuns;
+                return result;
+            }
+
+            result.JobCost += component.JobCost;
+            int subComponentsNumberOfRuns = (int)(NumberOfRuns / component.ForcedQuantityMultiplier);
+            foreach (var subComponent in component.SubComponents)
+            {
+                var subresult = RecursiveBestPriceProductionCost(component, NumberOfRuns);
+                result.JobCost += subresult.JobCost;
+                result.ComponentCost += subresult.ComponentCost;
+            }
+            return result;
         }
     }
 }
