@@ -41,7 +41,7 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
             bc2.Add(bc22);
             bc2.Add(bc23);
             */
-            sut.DeriveBestPriceBuyListFromPlan(plan,10);
+            sut.DeriveBestPriceBuyListFromPlan(plan,10,0.0);
 
         }
 

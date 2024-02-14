@@ -65,6 +65,7 @@ namespace EveMailHelper.ServiceLayer.Managers
         public async Task<ProductionPlan> GetProductionPlan(
             IndustryBlueprint blueprint, IList<int> activityFilerIds,
             int regionId, double systemCostIndex, double structureBonuses, double facilityTax,
+            double materialModifier,
             bool isAlphaClone
             )
         {
@@ -85,7 +86,8 @@ namespace EveMailHelper.ServiceLayer.Managers
                         regionId, item.EveType.EveId, MaxAgeInMinutes);
                     item.PricePerUnit = sellbuyPrice.SellPrice;
                 }
-                await AddProductionCosts(plan, systemCostIndex, structureBonuses, facilityTax, isAlphaClone);
+                await AddProductionCosts(plan, systemCostIndex, structureBonuses, facilityTax,
+                    materialModifier,  isAlphaClone);
             }
             return plan;
         }
@@ -95,33 +97,38 @@ namespace EveMailHelper.ServiceLayer.Managers
         // add additional costs to buildplan
 
         public async Task AddProductionCosts(
-            ProductionPlan productionPlan, double systemCostIndex, double structureBonuses, double facilityTax,
+            ProductionPlan productionPlan, 
+            double systemCostIndex, double structureBonuses, double facilityTax, double materialModifier,
             bool isAlphaClone)
         {
             productionPlan.JobCost = await JobCost(productionPlan, systemCostIndex, structureBonuses,
                 facilityTax, isAlphaClone);
             foreach (var component in productionPlan.SubComponents)
             {
-                await Produce(component, systemCostIndex, structureBonuses, facilityTax, isAlphaClone);
+                await Produce(component, systemCostIndex, structureBonuses, facilityTax, materialModifier,
+                    isAlphaClone);
             }
         }
 
         protected async Task Produce(
-            BlueprintComponent component, double systemCostIndex, double structureBonuses, double facilityTax,
+            BlueprintComponent component, 
+            double systemCostIndex, double structureBonuses, double facilityTax, double materialModifier,
             bool isAlphaClone)
         {
             // only if subcomponents are present, we continue
             if (!component.SubComponents.Any())
                 return;
             // buy or produce?
-            if (BlueprintAnalyzer.IsBuyingComponentBetter(component))
+            BlueprintAnalyzer analyzer = new(component, materialModifier);
+            if (analyzer.IsBuyingComponentBetter())
                 return;
             // get job costs and store them in the component tree
             component.JobCost = await JobCost(component, systemCostIndex, structureBonuses, facilityTax, isAlphaClone);
 
             foreach (var subcomponent in component.SubComponents)
             {
-                await Produce(subcomponent, systemCostIndex, structureBonuses, facilityTax, isAlphaClone);
+                await Produce(subcomponent, systemCostIndex, structureBonuses, facilityTax, materialModifier,
+                    isAlphaClone);
             }
         }
 
@@ -166,7 +173,7 @@ namespace EveMailHelper.ServiceLayer.Managers
         }
 
         public BuyList DeriveBestPriceBuyListFromPlan(
-            ProductionPlan plan, int NumberOfRuns)
+            ProductionPlan plan, int NumberOfRuns, double materialModifier)
         {
             ProductionPlanAnalyzer analyzer = new(plan);
             BuyList buyList = new()
@@ -184,17 +191,19 @@ namespace EveMailHelper.ServiceLayer.Managers
                     throw new Exception($"Number of Runs must be a multiple of {minimumNumberOfRuns}");
                 foreach (var component in plan.SubComponents)
                 {
-                    buyList.Merge(RecursiveBestPriceBuyList(component, NumberOfRuns));
+                    buyList.Merge(RecursiveBestPriceBuyList(component, NumberOfRuns, materialModifier));
                 }
             }
 
             return buyList;
         }
 
-        protected BuyList RecursiveBestPriceBuyList(BlueprintComponent component, int NumberOfRuns)
+        protected BuyList RecursiveBestPriceBuyList(
+            BlueprintComponent component, int NumberOfRuns, double materialModifier)
         {
+            BlueprintAnalyzer analyzer = new(component, materialModifier);
             BuyList buyList = new();
-            if (BlueprintAnalyzer.IsBuyingComponentBetter(component))
+            if (analyzer.IsBuyingComponentBetter())
             {
                 buyList.ItemList.Add(new()
                 {
@@ -208,7 +217,9 @@ namespace EveMailHelper.ServiceLayer.Managers
             int subComponentsNumberOfRuns = (int)(NumberOfRuns / component.ForcedQuantityMultiplier);
             foreach (var subComponent in component.SubComponents)
             {
-                buyList.Merge(RecursiveBestPriceBuyList(subComponent, subComponentsNumberOfRuns));
+                buyList.Merge(RecursiveBestPriceBuyList(subComponent,
+                                                        subComponentsNumberOfRuns,
+                                                        materialModifier));
             }
             return buyList;
         }
@@ -219,18 +230,20 @@ namespace EveMailHelper.ServiceLayer.Managers
             public double ComponentCost;
         }
 
-        public async Task<NormalizeProductionCost> CacheProductionCostAsync(ProductionPlan plan, int NumberOfRuns)
+        public async Task<NormalizeProductionCost> CacheProductionCostAsync(
+            ProductionPlan plan, int NumberOfRuns, double materialModifier)
         {
             //Todo: check if the db already contains this data ??
 
-            var result = DeriveProductionCost(plan, NumberOfRuns);
+            var result = DeriveProductionCost(plan, NumberOfRuns, materialModifier);
             return await _normalizedProdcutionCostDbAccess.AddOrUpdateAsync(result);
         }
 
         // Direct build using the top level blueprint and it's required components
         // Bestprice build - replacing buying components by building them if this is cheaper
         // compare to quantity * current marketprice
-        public NormalizeProductionCost DeriveProductionCost(ProductionPlan plan, int NumberOfRuns)
+        public NormalizeProductionCost DeriveProductionCost(
+            ProductionPlan plan, int NumberOfRuns, double materialModifier)
         {
             _ = plan.Product ?? throw new Exception("ProductionPlan with empty product");
 
@@ -250,7 +263,8 @@ namespace EveMailHelper.ServiceLayer.Managers
 
             foreach (var subComponent in plan.SubComponents)
             {
-                result.DirectComponentCost += subComponent.PriceSum;
+                BlueprintAnalyzer blueprintAnalyzer = new(subComponent, materialModifier);
+                result.DirectComponentCost += blueprintAnalyzer.PriceSum();
             }
             // here comes the complex part, selecting the best price articles
             // we are aggregating information (throwing away details about how the price was calculated)
@@ -266,7 +280,8 @@ namespace EveMailHelper.ServiceLayer.Managers
                 result.BestPriceComponentCost = 0;
                 foreach (var component in plan.SubComponents)
                 {
-                    var subresult = RecursiveBestPriceProductionCost(component, NumberOfRuns);
+                    var subresult = 
+                        RecursiveBestPriceProductionCost(component, NumberOfRuns, materialModifier);
                     result.BestPriceJobCost += subresult.JobCost;
                     result.BestPriceComponentCost += subresult.ComponentCost;
                 }
@@ -276,13 +291,14 @@ namespace EveMailHelper.ServiceLayer.Managers
         }
 
         protected ProductionCost RecursiveBestPriceProductionCost(
-            BlueprintComponent component, int NumberOfRuns)
+            BlueprintComponent component, int NumberOfRuns, double materialModifier)
         {
+            BlueprintAnalyzer blueprintAnalyzer = new(component, materialModifier);
             var result = new ProductionCost();
             BuyList buyList = new();
-            if (BlueprintAnalyzer.IsBuyingComponentBetter(component))
+            if (blueprintAnalyzer.IsBuyingComponentBetter())
             {
-                result.ComponentCost = component.PriceSum * NumberOfRuns;
+                result.ComponentCost = blueprintAnalyzer.PriceSum() * NumberOfRuns;
                 return result;
             }
 
@@ -290,7 +306,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             int subComponentsNumberOfRuns = (int)(NumberOfRuns / component.ForcedQuantityMultiplier);
             foreach (var subComponent in component.SubComponents)
             {
-                var subresult = RecursiveBestPriceProductionCost(component, NumberOfRuns);
+                var subresult = RecursiveBestPriceProductionCost(component, NumberOfRuns, materialModifier);
                 result.JobCost += subresult.JobCost;
                 result.ComponentCost += subresult.ComponentCost;
             }

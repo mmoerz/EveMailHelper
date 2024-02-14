@@ -66,14 +66,15 @@ namespace EveMailHelper.Web.Pages.Market
                     selectedBlueprint.CopyShallow(blueprint);
                     var newplan = await ProductionManager.GetProductionPlan(
                         blueprint, new List<int>() { 11 },
-                        RegionId, SystemCostIndex, StructureBonuses, FacilityTax, IsAlphaClone);
+                        RegionId, SystemCostIndex, StructureBonuses, FacilityTax, MaterialConsumption,
+                        IsAlphaClone);
                     ProdPlan.ShallowCopy(newplan);
                     ProductionPlanAnalyzer analyzer = new(newplan);
                     NumberOfRunsMin = analyzer.GetMinNumberOfRuns(true);
                     if (NumberOfRuns < NumberOfRunsMin)
                         NumberOfRuns = NumberOfRunsMin;
                     var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
-                        newplan, 10);
+                        newplan, 10, MaterialConsumption);
                     ToBuyList.CopyShallow(newBuyList);
                     BuyListComponent.RefreshTheFucker();
                     BuildPlanDetails.RefreshTheFucker();

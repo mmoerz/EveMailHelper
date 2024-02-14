@@ -47,11 +47,13 @@ namespace EveMailHelper.ServiceLayer.Models
                 return depth;
             }
         }
-                
-        public double PriceSum
-        { get { return Quantity * PricePerUnit; } }
-        public double VolumeSum
-        { get { return Volume * Quantity; } }
+        
+        // killed for good because, they are modified by the facilities material modifier
+        // and therefore useless here
+        //public double PriceSum
+        //{ get { return Quantity * PricePerUnit; } }
+        //public double VolumeSum
+        //{ get { return Volume * Quantity; } }
         
         public double ForcedQuantityMultiplier
         {

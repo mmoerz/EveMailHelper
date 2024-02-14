@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EveMailHelper.ServiceLayer.Models;
+using EveMailHelper.Test.Tools;
 
 namespace EveMailHelper.Test.UnitTests.DataGenerators
 {
@@ -188,8 +189,8 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     new()
                     {
                         Name = "L1 item2",
-                        Quantity = 1,
-                        PricePerUnit = 3,
+                        Quantity = 6,
+                        PricePerUnit = 300,
                         QuantityFromBlueprint = 3,
                     },
                     new()
@@ -217,7 +218,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     {
                         Name = "L1 item3",
                         Quantity = 1,
-                        PricePerUnit = 300,
+                        PricePerUnit = 3,
                         QuantityFromBlueprint = 4,
                     },
                     new()
@@ -256,6 +257,41 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                 result[9].Add(result[12]);
                 return result;
             }
+        }
+
+
+
+        public static IEnumerable<object[]> GetComponentsProductionDepth()
+        {
+            var data = new List<ITheoryData>();
+
+            var data1 = TestData4;
+            
+            data.Add(TheoryData.Factory(TestData4[0], 1, "root node has depth 1"));
+            data.Add(TheoryData.Factory(TestData4[1], 2, "subnode has depth 2"));
+            data.Add(TheoryData.Factory(TestData4[2], 3, "sub sub node has depth 3"));
+            data.Add(TheoryData.Factory(TestData4[3], 3, "sub sub node has depth 3"));
+            data.Add(TheoryData.Factory(TestData4[4], 3, "sub sub node has depth 3"));
+            data.Add(TheoryData.Factory(TestData4[5], 2, "subnode has depth 2"));
+            data.Add(TheoryData.Factory(TestData4[6], 3, "sub sub node has depth 3"));
+            data.Add(TheoryData.Factory(TestData4[7], 3, "sub sub node has depth 3"));
+            data.Add(TheoryData.Factory(TestData4[8], 3, "sub sub node has depth 3"));
+
+            return data.ConvertAll(d => d.ToParameterArray());
+        }
+
+        public static IEnumerable<object[]> GetForcedMultiplier()
+        {
+            var data = new List<ITheoryData>();
+
+            data.Add(TheoryData.Factory(TestData5[1], 2.0, "doubled by the multiplier"));
+            data.Add(TheoryData.Factory(TestData5[2], 2.0, "endnode must always be 1"));
+            data.Add(TheoryData.Factory(TestData5[3], 2.0, "endnode must always be 1"));
+            data.Add(TheoryData.Factory(TestData5[4], 2.0, "endnode must always be 1"));
+            data.Add(TheoryData.Factory(TestData5[5], 2.0, "halfed by the multiplier"));
+            data.Add(TheoryData.Factory(TestData5[9], 1.0, "building is worse therefore 1"));
+
+            return data.ConvertAll(d => d.ToParameterArray());
         }
         /*
         public static readonly List<BlueprintComponent> _componentData2 = new()
@@ -578,28 +614,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             yield return new object[] { _componentData3[4], 339.0 };
         }
 
-        public static IEnumerable<object[]> GetForcedMultiplier()
-        {
-            _componentData3[0].Add(_componentData3[1]);
-            _componentData3[1].Add(_componentData3[2]);
-            _componentData3[1].Add(_componentData3[3]);
-            _componentData3[1].Add(_componentData3[4]);
-            _componentData3[0].Add(_componentData3[5]);
-            _componentData3[5].Add(_componentData3[6]);
-            _componentData3[5].Add(_componentData3[7]);
-            _componentData3[5].Add(_componentData3[8]);
-
-            // double output
-            yield return new object[] { _componentData3[1], 2.0 };
-            // no subcomponents therefore always 1
-            yield return new object[] { _componentData3[2], 1.0 };
-            yield return new object[] { _componentData3[2], 1.0 };
-            yield return new object[] { _componentData3[3], 1.0 };
-            // tripple output
-            yield return new object[] { _componentData3[5], 2.0 };
-            // half needed
-            yield return new object[] { _componentData3[0], 0.5 };
-        }
+        
 
         public static IEnumerable<object[]> GetSimpleBestPriceSum()
         {

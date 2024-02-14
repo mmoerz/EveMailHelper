@@ -28,24 +28,10 @@ namespace EveMailHelper.Web.Shared.Blueprints
         private MudTable<BlueprintComponent> _table = null!;
 
         #region parameters
-        //[Parameter]
-        //public IndustryBlueprint Blueprint
-        //{
-        //    get
-        //    {
-        //        return _blueprint;
-        //    }
-        //    set 
-        //    {
-        //        _blueprint = value;
-        //    }
-        //}
-
-        //[Parameter]
-        //public string BlueprintName { get; set; } = "no Blueprint";
-
         [Parameter]
-        public ProductionPlan Plan { get; set; } = new(); 
+        public ProductionPlan Plan { get; set; } = new();
+        [Parameter]
+        public double MaterialModifier { get; set; }
         #endregion
 
         public void Reload()
@@ -75,10 +61,11 @@ namespace EveMailHelper.Web.Shared.Blueprints
 
         private MudBlazor.Color GetColorForPriceSum(BlueprintComponent component)
         {
+            BlueprintAnalyzer blueprintAnalyzer = new(component, MaterialModifier);
             if (component.SubComponents.Count == 0)
                 return Color.Primary;
 
-            if (BlueprintAnalyzer.IsBuyingComponentBetter(component))
+            if (blueprintAnalyzer.IsBuyingComponentBetter())
                 return Color.Success;
             else
                 return Color.Secondary;

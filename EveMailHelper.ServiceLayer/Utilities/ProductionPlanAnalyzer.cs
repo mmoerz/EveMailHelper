@@ -10,11 +10,13 @@ namespace EveMailHelper.ServiceLayer.Utilities
 {
     public class ProductionPlanAnalyzer
     {
-        ProductionPlan _plan;
+        private ProductionPlan _plan;
+        private double _materialModifier;
 
-        public ProductionPlanAnalyzer(ProductionPlan plan) 
+        public ProductionPlanAnalyzer(ProductionPlan plan, double materialModifier = 0.0) 
         { 
             _plan = plan;
+            _materialModifier = materialModifier;
         }
 
         public double ComponentBestPriceSum()
@@ -22,7 +24,8 @@ namespace EveMailHelper.ServiceLayer.Utilities
             double subBestPrice = 0.0;
             foreach (var component in _plan.SubComponents)
             {
-                subBestPrice += BlueprintAnalyzer.BestPriceSum(component);
+                BlueprintAnalyzer analyzer = new(component, _materialModifier);
+                subBestPrice += analyzer.BestPriceSum();
             }
             return subBestPrice;
         }
@@ -55,14 +58,15 @@ namespace EveMailHelper.ServiceLayer.Utilities
         public int GetMinNumberOfRuns(bool onlyUseBestPricePath)
         {
             var ForcedMultiplierList = new List<double>();
-            BlueprintAnalyzer analyzer = new BlueprintAnalyzer();
 
             if (!onlyUseBestPricePath || IsProducingBetter())
             {
                 foreach (var component in _plan.SubComponents)
                 {
+                    BlueprintAnalyzer analyzer = new(component, _materialModifier);
                     ForcedMultiplierList.AddRange(
-                        BlueprintAnalyzer.GetForcedMultipliers(component, onlyUseBestPricePath));
+                        analyzer.GetForcedMultipliers(component, onlyUseBestPricePath)
+                        );
                 }
             }
 

@@ -20,7 +20,7 @@ using Xunit;
 
 namespace EveMailHelper.Test.UnitTests.ServiceLayer
 {
-    public class ProductionAnalyzerTests1
+    public class ProductionPlanAnalyzerTests1
     {
         [Theory]
         [MemberData(nameof(ProductionPlanAnalyzerDataGenerator.GetMinimumNumberOfRuns), MemberType = typeof(ProductionPlanAnalyzerDataGenerator))]
