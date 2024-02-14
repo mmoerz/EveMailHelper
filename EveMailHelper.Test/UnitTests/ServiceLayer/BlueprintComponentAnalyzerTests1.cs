@@ -24,7 +24,7 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
     {
         [Theory]
         [MemberData(nameof(BlueprintComponentAnalyzerDataGenerator.ModifiedQuantity_2_64), MemberType = typeof(BlueprintComponentAnalyzerDataGenerator))]
-        public void TestGetMinimumNumberOfRuns(BlueprintAnalyzer sut, int expected, string message)
+        public void TestModifiedQuantity(BlueprintAnalyzer sut, int expected, string message)
         {
             int result = sut.ModifiedQuantity();
             result.ShouldBeEquivalentTo(expected, message);
@@ -40,7 +40,7 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
 
         [Theory]
         [MemberData(nameof(BlueprintComponentAnalyzerDataGenerator.GetVolumeSum), MemberType = typeof(BlueprintComponentAnalyzerDataGenerator))]
-        public void TestVolumeSum(BlueprintAnalyzer sut, double expected)
+        public void TestVolumeSum(BlueprintAnalyzer sut, double expected, string message)
         {
             double result = sut.VolumeSum();
             result.ShouldBeEquivalentTo(expected);
@@ -48,7 +48,7 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
 
         [Theory]
         [MemberData(nameof(BlueprintComponentAnalyzerDataGenerator.GetSimpleBestPriceSum), MemberType = typeof(BlueprintComponentAnalyzerDataGenerator))]
-        public void TestSimpleBestPriceSum(BlueprintAnalyzer sut, double expected)
+        public void TestSimpleBestPriceSum(BlueprintAnalyzer sut, double expected, string message)
         {
             var result = sut.BestPriceSum();
             result.ShouldBeEquivalentTo(expected);
@@ -56,7 +56,7 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
 
         [Theory]
         [MemberData(nameof(BlueprintComponentAnalyzerDataGenerator.GetBestPriceSum), MemberType = typeof(BlueprintComponentAnalyzerDataGenerator))]
-        public void TestBestPriceSum(BlueprintAnalyzer sut, double expected)
+        public void TestBestPriceSum(BlueprintAnalyzer sut, double expected, string message)
         {
             var result = sut.BestPriceSum();
             result.ShouldBeEquivalentTo(expected);
@@ -64,7 +64,7 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
 
         [Theory]
         [MemberData(nameof(BlueprintComponentAnalyzerDataGenerator.GetIsProducing), MemberType = typeof(BlueprintComponentAnalyzerDataGenerator))]
-        public void TestIsProducingBetter(BlueprintAnalyzer sut, bool expected)
+        public void TestIsProducingBetter(BlueprintAnalyzer sut, bool expected, string message)
         {
             var result = sut.IsProducingComponentBetter();
             result.ShouldBeEquivalentTo(expected);

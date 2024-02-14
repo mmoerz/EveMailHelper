@@ -163,6 +163,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     }
                 };
                 result[0].Add(result[1]);
+                result[0].Add(result[5]);
                 result[1].Add(result[2]);
                 result[1].Add(result[3]);
                 result[1].Add(result[4]);
@@ -289,7 +290,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
         public static IEnumerable<object[]> ModifiedQuantity_2_64()
         {
             var data = new List<ITheoryData>();
-            var mod = 2.64;
+            var mod = -2.64;
 
             BlueprintAnalyzer sut1 = new(TestData3[0], mod);
             data.Add(TheoryData.Factory(sut1, 98, "must reduce quantity correctly"));
@@ -310,10 +311,10 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             data.Add(TheoryData.Factory(sut6, 9736, "must reduce quantity correctly"));
 
 
-            BlueprintAnalyzer sut7 = new(TestData3[0], mod);
+            BlueprintAnalyzer sut7 = new(TestData3[0], 0);
             data.Add(TheoryData.Factory(sut7, 100, "no reduction"));
 
-            BlueprintAnalyzer sut8 = new(TestData3[5], mod);
+            BlueprintAnalyzer sut8 = new(TestData3[5], 0);
             data.Add(TheoryData.Factory(sut8, 10000, "no reduction"));
 
             return data.ConvertAll(d => d.ToParameterArray());
@@ -322,13 +323,13 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
         public static IEnumerable<object[]> GetPriceSum()
         {
             var data = new List<ITheoryData>();
-            var mod = 2.64;
+            var mod = 0;
 
             BlueprintAnalyzer sut1 = new(TestData2[0], mod);
-            data.Add(TheoryData.Factory(sut1, 60000.0, "price must be exact"));
+            data.Add(TheoryData.Factory(sut1, 30000.0, "price must be exact"));
 
             BlueprintAnalyzer sut2 = new(TestData3[1], mod);
-            data.Add(TheoryData.Factory(sut2, 300, "price must be exact"));
+            data.Add(TheoryData.Factory(sut2, 10000.0, "price must be exact"));
 
             return data.ConvertAll(d => d.ToParameterArray());
         }
@@ -356,13 +357,13 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             var mod = 0;
 
             BlueprintAnalyzer sut1 = new(TestData4[1], mod);
-            data.Add(TheoryData.Factory(sut1, 974, "best price of component with subcomponents"));
+            data.Add(TheoryData.Factory(sut1, 13, "best price of component with subcomponents"));
 
             BlueprintAnalyzer sut2 = new(TestData4[5], mod);
-            data.Add(TheoryData.Factory(sut2, 974, "best price of component with subcomponents"));
+            data.Add(TheoryData.Factory(sut2, 2.25, "best price of component with subcomponents"));
 
             BlueprintAnalyzer sut3 = new(TestData4[0], mod);
-            data.Add(TheoryData.Factory(sut3, 974, "best price of three levels"));
+            data.Add(TheoryData.Factory(sut3, 15.25, "best price of three levels"));
 
             return data.ConvertAll(d => d.ToParameterArray());
         }

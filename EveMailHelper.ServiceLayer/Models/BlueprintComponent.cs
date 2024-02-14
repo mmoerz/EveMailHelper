@@ -40,7 +40,7 @@ namespace EveMailHelper.ServiceLayer.Models
         {
             get
             {
-                int depth = 0;
+                int depth = 1;
                 if (Parent != null)
                     depth = Parent.ProductionDepth + 1;
 
