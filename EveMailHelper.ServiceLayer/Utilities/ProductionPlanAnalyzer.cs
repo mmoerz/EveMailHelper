@@ -13,7 +13,7 @@ namespace EveMailHelper.ServiceLayer.Utilities
         private ProductionPlan _plan;
         private double _materialModifier;
 
-        public ProductionPlanAnalyzer(ProductionPlan plan, double materialModifier = 0.0) 
+        public ProductionPlanAnalyzer(ProductionPlan plan, double materialModifier) 
         { 
             _plan = plan;
             _materialModifier = materialModifier;

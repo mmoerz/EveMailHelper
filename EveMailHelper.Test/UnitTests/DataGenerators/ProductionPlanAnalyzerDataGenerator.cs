@@ -348,26 +348,27 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
         public static IEnumerable<object[]> GetMinimumNumberOfRuns()
         {
             var data = new List<ITheoryData>();
+            double mod = 0;
 
             var data1 = TestData2_Cheap[0];
             data1.Add(TestData6[0]);
-            ProductionPlanAnalyzer sut1 = new(data1);
+            ProductionPlanAnalyzer sut1 = new(data1, 0);
             data.Add(TheoryData.Factory(sut1, 1, "only integers of forcedRunnumbers should be counted."));
 
             var data2 = TestData2_Expensive[0];
             foreach (var item in BlueprintComponentDataGenerator.TestData4)
                 data2.Add(item);
-            ProductionPlanAnalyzer sut2 = new(data2);
+            ProductionPlanAnalyzer sut2 = new(data2, 0);
             data.Add(TheoryData.Factory(sut2, 4, "ignore forcedRunNumbers that are a multiple of bigger forcedRunNumbers"));
 
             var data3 = TestData2_Expensive[0];
             data3.Add(TestData5[0]);
-            ProductionPlanAnalyzer sut3 = new(data3);
+            ProductionPlanAnalyzer sut3 = new(data3, 0);
             data.Add(TheoryData.Factory(sut3, 30, "ignore forcedRunNumbers that are a multiple of bigger forcedRunNumbers"));
 
             var data4 = TestData2_Expensive[0];
             data4.Add(TestData7[0]);
-            ProductionPlanAnalyzer sut4 = new(data4);
+            ProductionPlanAnalyzer sut4 = new(data4, 0);
             data.Add(TheoryData.Factory(sut4, 4, "ignore forcedRunNumbers that are a multiple of bigger forcedRunNumbers"));
             
             return data.ConvertAll(d => d.ToParameterArray());
@@ -379,23 +380,23 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
 
             var data1 = TestData2_Cheap[0];
             data1.Add(TestData6[0]);
-            ProductionPlanAnalyzer sut1 = new(data1);
+            ProductionPlanAnalyzer sut1 = new(data1, 0);
             data.Add(TheoryData.Factory(sut1, 1, "only integers of forcedRunNumbers should be counted."));
 
             var data2 = TestData2_Expensive[0];
             foreach (var item in BlueprintComponentDataGenerator.TestData4)
                 data2.Add(item);
-            ProductionPlanAnalyzer sut2 = new(data2);
+            ProductionPlanAnalyzer sut2 = new(data2, 0);
             data.Add(TheoryData.Factory(sut2, 4, "ignore forcedRunNumbers that are a multiple of bigger forcedRunNumbers"));
 
             var data3 = TestData2_Expensive[0];
             data3.Add(TestData5[0]);
-            ProductionPlanAnalyzer sut3 = new(data3);
+            ProductionPlanAnalyzer sut3 = new(data3, 0);
             data.Add(TheoryData.Factory(sut3, 6, "ignore item L1-3 5-multiplier"));
 
             var data4 = TestData2_Expensive[0];
             data4.Add(TestData7[0]);
-            ProductionPlanAnalyzer sut4 = new(data4);
+            ProductionPlanAnalyzer sut4 = new(data4, 0);
             data.Add(TheoryData.Factory(sut4, 4, "ignore item L1-2 3-multiplier"));
 
             return data.ConvertAll(d => d.ToParameterArray());

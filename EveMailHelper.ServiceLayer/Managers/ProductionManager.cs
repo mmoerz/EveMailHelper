@@ -175,7 +175,7 @@ namespace EveMailHelper.ServiceLayer.Managers
         public BuyList DeriveBestPriceBuyListFromPlan(
             ProductionPlan plan, int NumberOfRuns, double materialModifier)
         {
-            ProductionPlanAnalyzer analyzer = new(plan);
+            ProductionPlanAnalyzer analyzer = new(plan, materialModifier);
             BuyList buyList = new()
             {
                 Name = plan.ProductName,
@@ -247,7 +247,7 @@ namespace EveMailHelper.ServiceLayer.Managers
         {
             _ = plan.Product ?? throw new Exception("ProductionPlan with empty product");
 
-            ProductionPlanAnalyzer analyzer = new(plan);
+            ProductionPlanAnalyzer analyzer = new(plan, materialModifier);
 
             NormalizeProductionCost result = new()
             {

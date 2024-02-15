@@ -69,7 +69,7 @@ namespace EveMailHelper.Web.Pages.Market
                         RegionId, SystemCostIndex, StructureBonuses, FacilityTax, MaterialConsumption,
                         IsAlphaClone);
                     ProdPlan.ShallowCopy(newplan);
-                    ProductionPlanAnalyzer analyzer = new(newplan);
+                    ProductionPlanAnalyzer analyzer = new(newplan, MaterialConsumption);
                     NumberOfRunsMin = analyzer.GetMinNumberOfRuns(true);
                     if (NumberOfRuns < NumberOfRunsMin)
                         NumberOfRuns = NumberOfRunsMin;
