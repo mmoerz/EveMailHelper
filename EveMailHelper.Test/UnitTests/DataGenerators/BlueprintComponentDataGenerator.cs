@@ -262,7 +262,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
         }
 
         /// <summary>
-        /// Fail data because L1 item1 has 0 QuantityFromBlueprint
+        /// Fail data because L1 item1 has 0 Quantity
         /// </summary>
         public static List<BlueprintComponent> TestData6
         {
@@ -273,9 +273,9 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     new ()
                     {
                         Name = "L1 item1",
-                        Quantity = 10,
+                        Quantity = 0,
                         PricePerUnit = 30,
-                        QuantityFromBlueprint = 0,
+                        QuantityFromBlueprint = 10,
                     },
                     new ()
                     {
@@ -308,7 +308,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
         }
 
         /// <summary>
-        /// Fail data because L1 item1 has 0 Quantity
+        /// Fail data because L1 item1 has 0 QuantityFromBlueprint
         /// </summary>
         public static List<BlueprintComponent> TestData7
         {
@@ -319,9 +319,9 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     new ()
                     {
                         Name = "L1 item1",
-                        Quantity = 0,
+                        Quantity = 10,
                         PricePerUnit = 30,
-                        QuantityFromBlueprint = 230,
+                        QuantityFromBlueprint = 0,
                     },
                     new ()
                     {
@@ -390,8 +390,10 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
         {
             var data = new List<ITheoryData>();
 
-            data.Add(TheoryData.FailFactory(TestData6[0], "must fail because 0 Blueprintquantity for producing item"));
-            data.Add(TheoryData.FailFactory(TestData7[0], "must fail because 0 Blueprintquantity for producing item"));
+            data.Add(TheoryData.FailFactory2(TestData6[0], "Quantity must not be 0.", 
+                "must fail because 0 Blueprintquantity for producing item"));
+            data.Add(TheoryData.FailFactory2(TestData7[0], "QuantityFromBlueprint must not be 0.",
+                "must fail because 0 Blueprintquantity for producing item"));
 
             return data.ConvertAll(d => d.ToParameterArray());
         }

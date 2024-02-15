@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EveMailHelper.ServiceLayer.Models;
+using EveMailHelper.ServiceLayer.Utilities;
 using EveMailHelper.Test.UnitTests.DataGenerators;
+
+using FluentAssertions;
 
 using Shouldly;
 
@@ -28,6 +31,15 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
         {
             var result = sut.ForcedQuantityMultiplier;
             result.ShouldBeEquivalentTo(expected, message);
+        }
+
+        [Theory]
+        [MemberData(nameof(BlueprintComponentDataGenerator.GetBlueprintFail1), MemberType = typeof(BlueprintComponentDataGenerator))]
+        public void BlueprintQuantityZero1(BlueprintComponent sut, string expectederrmsg, string message)
+        {
+            Action action = () => { var x = sut.ForcedQuantityMultiplier; };
+            action.Should().Throw<Exception>()
+                .WithMessage(expectederrmsg, message);
         }
     }
 }
