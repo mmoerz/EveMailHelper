@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EveMailHelper.ServiceLayer.Models;
+using EveMailHelper.ServiceLayer.Utilities;
 using EveMailHelper.Test.Tools;
 
 namespace EveMailHelper.Test.UnitTests.DataGenerators
@@ -260,6 +261,98 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             }
         }
 
+        /// <summary>
+        /// Fail data because L1 item1 has 0 QuantityFromBlueprint
+        /// </summary>
+        public static List<BlueprintComponent> TestData6
+        {
+            get
+            {
+                var result = new List<BlueprintComponent>()
+                {
+                    new ()
+                    {
+                        Name = "L1 item1",
+                        Quantity = 10,
+                        PricePerUnit = 30,
+                        QuantityFromBlueprint = 0,
+                    },
+                    new ()
+                    {
+                        Quantity = 1,
+                        PricePerUnit = 3,
+                        QuantityFromBlueprint = 2,
+                        Name = "L2-1 item1"
+                    },
+                    new()
+                    {
+                        Quantity = 2,
+                        PricePerUnit = 4,
+                        QuantityFromBlueprint = 4,
+                        Name = "L2-1 item2"
+                    },
+                    new()
+                    {
+                        Quantity = 3,
+                        PricePerUnit = 5,
+                        QuantityFromBlueprint = 6,
+                        Name = "L2-1 item3"
+                    }
+                };
+                result[0].Add(result[1]);
+                result[0].Add(result[2]);
+                result[0].Add(result[3]);
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Fail data because L1 item1 has 0 Quantity
+        /// </summary>
+        public static List<BlueprintComponent> TestData7
+        {
+            get
+            {
+                var result = new List<BlueprintComponent>()
+                {
+                    new ()
+                    {
+                        Name = "L1 item1",
+                        Quantity = 0,
+                        PricePerUnit = 30,
+                        QuantityFromBlueprint = 230,
+                    },
+                    new ()
+                    {
+                        Quantity = 1,
+                        PricePerUnit = 3,
+                        QuantityFromBlueprint = 2,
+                        Name = "L2-1 item1"
+                    },
+                    new()
+                    {
+                        Quantity = 2,
+                        PricePerUnit = 4,
+                        QuantityFromBlueprint = 4,
+                        Name = "L2-1 item2"
+                    },
+                    new()
+                    {
+                        Quantity = 3,
+                        PricePerUnit = 5,
+                        QuantityFromBlueprint = 6,
+                        Name = "L2-1 item3"
+                    }
+                };
+                result[0].Add(result[1]);
+                result[0].Add(result[2]);
+                result[0].Add(result[3]);
+
+                return result;
+            }
+        }
+
         public static IEnumerable<object[]> GetComponentsProductionDepth()
         {
             var data = new List<ITheoryData>();
@@ -292,6 +385,25 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
 
             return data.ConvertAll(d => d.ToParameterArray());
         }
-        
+
+        public static IEnumerable<object[]> GetBlueprintFail1()
+        {
+            var data = new List<ITheoryData>();
+
+            data.Add(TheoryData.FailFactory(TestData6[0], "must fail because 0 Blueprintquantity for producing item"));
+            data.Add(TheoryData.FailFactory(TestData7[0], "must fail because 0 Blueprintquantity for producing item"));
+
+            return data.ConvertAll(d => d.ToParameterArray());
+        }
+
+        public static IEnumerable<object[]> GetBlueprintFail2()
+        {
+            var data = new List<ITheoryData>();
+            
+            data.Add(TheoryData.FailFactory(TestData7[0], "must fail because 0 Blueprintquantity for producing item"));
+
+            return data.ConvertAll(d => d.ToParameterArray());
+        }
+
     }
 }

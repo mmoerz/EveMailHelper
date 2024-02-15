@@ -25,7 +25,7 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
     {
         [Theory]
         [AutoDomainData]
-        public void FirstTest(
+        public void DeriveBestPriceBuyListFromPlan1(
             ProductionManager sut
             //ProductionPlan plan1
         )
@@ -45,7 +45,13 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
 
         }
 
-
+        //[Theory]
+        //[MemberData(nameof(ProductionPlanDataGenerator.DeriveBestPriceBuyListFromPlan), MemberType = typeof(ProductionPlanDataGenerator))]
+        //public void TestDeriveBestPriceBuyListFromPlan(BlueprintComponent sut, double expected)
+        //{
+        //    var result = sut.PriceSum;
+        //    result.ShouldBeEquivalentTo(expected);
+        //}
 
         //[Theory]
         //[MemberData(nameof(ProductionPlanDataGenerator.GetMinimumNumberOfRuns), MemberType = typeof(ProductionPlanDataGenerator))]

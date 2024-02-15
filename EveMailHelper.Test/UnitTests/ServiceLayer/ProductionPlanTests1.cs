@@ -35,15 +35,9 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
                 i++;
             }
         }
-            /*        
-            [Theory]
-            [MemberData(nameof(BlueprintComponentDataGenerator.GetPriceSum), MemberType = typeof(BlueprintComponentDataGenerator))]
-            public void TestPriceSum(BlueprintComponent sut, double expected)
-            {
-                var result = sut.PriceSum;
-                result.ShouldBeEquivalentTo(expected);
-            }
-
+                    
+        
+            /*
             [Theory]
             [MemberData(nameof(BlueprintComponentDataGenerator.GetVolumeSum), MemberType = typeof(BlueprintComponentDataGenerator))]
             public void TestVolumeSum(BlueprintComponent sut, double expected)

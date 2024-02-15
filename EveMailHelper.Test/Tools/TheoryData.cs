@@ -150,7 +150,7 @@ namespace EveMailHelper.Test.Tools
 
         public override object[] ToParameterArray()
         {
-            var output = new object[3];
+            var output = new object[2];
             _ = SystemUnderTest ?? throw new NullReferenceException(nameof(SystemUnderTest));
             _ = Description ?? throw new NullReferenceException(nameof(SystemUnderTest));
             output[0] = SystemUnderTest;

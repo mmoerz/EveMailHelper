@@ -12,7 +12,11 @@ Install-Package Microsoft.Extensions.Configuration.UserSecrets
 Install-Package Microsoft.Extensions.PlatformAbstractions
 Install-Package xunit
 Install-Package xunit.runner.visualstudio
+
+Install-Package FluentAssertions
 ```
+
+
 
 # Knowlegebase
 

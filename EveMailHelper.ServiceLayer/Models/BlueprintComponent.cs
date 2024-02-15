@@ -59,12 +59,15 @@ namespace EveMailHelper.ServiceLayer.Models
         {
             get
             {
+                if (Quantity == 0)
+                    throw new Exception("Quantity must not be 0");
+                if (QuantityFromBlueprint == 0)
+                    throw new Exception("Quantity from Blueprint must not be 0.");
+
                 if (SubComponents.Count() == 0)
                     return 1.0;
 
-                return Quantity != 0 ?
-                    (double)QuantityFromBlueprint / (double)Quantity
-                    : 1.0;
+                return (double)QuantityFromBlueprint / (double)Quantity;
             }
         }
 

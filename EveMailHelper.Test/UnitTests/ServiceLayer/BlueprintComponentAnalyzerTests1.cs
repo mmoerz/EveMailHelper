@@ -12,6 +12,8 @@ using EveMailHelper.ServiceLayer.Utilities;
 using EveMailHelper.Test.Tools;
 using EveMailHelper.Test.UnitTests.DataGenerators;
 
+using FluentAssertions;
+
 using Moq;
 
 using Shouldly;
@@ -43,7 +45,7 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
         public void TestVolumeSum(BlueprintAnalyzer sut, double expected, string message)
         {
             double result = sut.VolumeSum();
-            result.ShouldBeEquivalentTo(expected);
+            result.ShouldBeEquivalentTo(expected, message);
         }
 
         [Theory]
@@ -51,7 +53,7 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
         public void TestSimpleBestPriceSum(BlueprintAnalyzer sut, double expected, string message)
         {
             var result = sut.BestPriceSum();
-            result.ShouldBeEquivalentTo(expected);
+            result.ShouldBeEquivalentTo(expected, message);
         }
 
         [Theory]
@@ -59,7 +61,7 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
         public void TestBestPriceSum(BlueprintAnalyzer sut, double expected, string message)
         {
             var result = sut.BestPriceSum();
-            result.ShouldBeEquivalentTo(expected);
+            result.ShouldBeEquivalentTo(expected, message);
         }
 
         [Theory]
@@ -67,7 +69,16 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
         public void TestIsProducingBetter(BlueprintAnalyzer sut, bool expected, string message)
         {
             var result = sut.IsProducingComponentBetter();
-            result.ShouldBeEquivalentTo(expected);
+            result.ShouldBeEquivalentTo(expected, message);
+        }
+
+        [Theory]
+        [MemberData(nameof(BlueprintComponentAnalyzerDataGenerator.GetBlueprintFail1), MemberType = typeof(BlueprintComponentAnalyzerDataGenerator))]
+        public void BlueprintQuantityZero1(BlueprintAnalyzer sut, string message)
+        {
+            Action action = () => { sut.PriceSum(); };
+            action.Should().Throw<InvalidOperationException>()
+                .WithMessage(message);
         }
     }
 }

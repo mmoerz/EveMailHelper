@@ -43,7 +43,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
         {
             get
             {
-                return new ()
+                return new()
                 {
                     new BlueprintComponent {
                         Name = "TopLevel",
@@ -287,6 +287,8 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             }
         }
 
+        
+
         public static IEnumerable<object[]> ModifiedQuantity_2_64()
         {
             var data = new List<ITheoryData>();
@@ -405,5 +407,26 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             return data.ConvertAll(d => d.ToParameterArray());
         }
 
+        public static IEnumerable<object[]> GetBlueprintFail1()
+        {
+            var data = new List<ITheoryData>();
+            var mod = 0;
+
+            BlueprintAnalyzer sut1 = new(BlueprintComponentDataGenerator.TestData6[0], mod);
+            data.Add(TheoryData.FailFactory(sut1, "must fail because 0 Blueprintquantity for producing item"));
+            BlueprintAnalyzer sut2 = new(BlueprintComponentDataGenerator.TestData7[0], mod);
+            data.Add(TheoryData.FailFactory(sut2, "must fail because 0 Blueprintquantity for producing item"));
+
+            return data.ConvertAll(d => d.ToParameterArray());
+        }
+
+        public static IEnumerable<object[]> GetBlueprintFail2()
+        {
+            var data = new List<ITheoryData>();
+            var mod = 0;
+
+            
+            return data.ConvertAll(d => d.ToParameterArray());
+        }
     }
 }
