@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace EveMailHelper.ServiceLayer.Models
 {
-    public class ProductionPlan : IEnumerable<BlueprintComponent>, IBlueprintComponentTree
+    public class ProductionPlan : IEnumerable<BlueprintComponent>
     {
         // hmm, ideen>
         // todo: 'filter' oder 'limitierung' fuer bestimmte 'activities'
@@ -37,10 +37,22 @@ namespace EveMailHelper.ServiceLayer.Models
         public IndustryBlueprint Blueprint { get; set; } = null!;
         public IndustryActivity Activity { get; set; } = null!;
         public EveType? Product { get; set; } = null;
-        public int ProductQuantity { get; set; }
-        public double ProductPricePerUnit { get; set; }
-        public double JobCost { get; set; }
-        public IList<BlueprintComponent> SubComponents { get; set; } = new List<BlueprintComponent>();
+        public int ProductQuantity {
+            get { return Root.Quantity; } 
+            set { 
+                Root.Quantity = value;
+                Root.QuantityFromBlueprint = value;
+            }
+        }
+        public double ProductPricePerUnit { 
+            get { return Root.PricePerUnit; }
+            set { Root.PricePerUnit = value; } 
+        }
+        public double JobCost { 
+            get { return Root.JobCost; }
+            set { Root.JobCost = value; } 
+        }
+        public BlueprintComponent Root { get; set; } = new();
         #endregion
 
         public void ShallowCopy(ProductionPlan plan)
@@ -50,23 +62,22 @@ namespace EveMailHelper.ServiceLayer.Models
             ProductQuantity = plan.ProductQuantity;
             ProductPricePerUnit = plan.ProductPricePerUnit;
             JobCost = plan.JobCost;
-            SubComponents = plan.SubComponents;
+            Root = plan.Root;
         }      
 
         public void Add(BlueprintComponent component)
         {
-            component.SetParent(this);
-            SubComponents.Add(component);
+            Root.Add(component);
         }
 
         public IEnumerator<BlueprintComponent> GetEnumerator()
         {
-            return new ProductionPlanIterator(this);
+            return new ProductionPlanIterator(Root);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return new ProductionPlanIterator(this);
+            return new ProductionPlanIterator(Root);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace EveMailHelper.ServiceLayer.Utilities
         public double ComponentBestPriceSum()
         {
             double subBestPrice = 0.0;
-            foreach (var component in _plan.SubComponents)
+            foreach (var component in _plan.Root.SubComponents)
             {
                 BlueprintAnalyzer analyzer = new(component, _materialModifier);
                 subBestPrice += analyzer.BestPriceSum();
@@ -61,7 +61,7 @@ namespace EveMailHelper.ServiceLayer.Utilities
 
             if (!onlyUseBestPricePath || IsProducingBetter())
             {
-                foreach (var component in _plan.SubComponents)
+                foreach (var component in _plan.Root.SubComponents)
                 {
                     BlueprintAnalyzer analyzer = new(component, _materialModifier);
                     ForcedMultiplierList.AddRange(

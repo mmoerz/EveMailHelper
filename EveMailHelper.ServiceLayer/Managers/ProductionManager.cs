@@ -101,9 +101,9 @@ namespace EveMailHelper.ServiceLayer.Managers
             double systemCostIndex, double structureBonuses, double facilityTax, double materialModifier,
             bool isAlphaClone)
         {
-            productionPlan.JobCost = await JobCost(productionPlan, systemCostIndex, structureBonuses,
+            productionPlan.JobCost = await JobCost(productionPlan.Root, systemCostIndex, structureBonuses,
                 facilityTax, isAlphaClone);
-            foreach (var component in productionPlan.SubComponents)
+            foreach (var component in productionPlan.Root.SubComponents)
             {
                 await Produce(component, systemCostIndex, structureBonuses, facilityTax, materialModifier,
                     isAlphaClone);
@@ -123,6 +123,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             if (analyzer.IsBuyingComponentBetter())
                 return;
             // get job costs and store them in the component tree
+            // not a good use ...
             component.JobCost = await JobCost(component, systemCostIndex, structureBonuses, facilityTax, isAlphaClone);
 
             foreach (var subcomponent in component.SubComponents)
@@ -146,7 +147,7 @@ namespace EveMailHelper.ServiceLayer.Managers
         /// Material adjusted price can  be found in ESI /markets/prices/
         /// </remarks>
         protected async Task<double> JobCost(
-            IBlueprintComponentTree component, double systemCostIndex, double structureBonuses, double facilityTax,
+            BlueprintComponent component, double systemCostIndex, double structureBonuses, double facilityTax,
             bool isAlphaClone)
         {
             double totalJobCost = 0;
@@ -189,7 +190,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 if (!analyzer.NumberOfRunsIsValid(NumberOfRuns, onlyUseBestPricePath:true,
                     out minimumNumberOfRuns))
                     throw new Exception($"Number of Runs must be a multiple of {minimumNumberOfRuns}");
-                foreach (var component in plan.SubComponents)
+                foreach (var component in plan.Root.SubComponents)
                 {
                     buyList.Merge(RecursiveBestPriceBuyList(component, NumberOfRuns, materialModifier));
                 }
@@ -207,8 +208,11 @@ namespace EveMailHelper.ServiceLayer.Managers
             {
                 buyList.ItemList.Add(new()
                 {
+                    // NumberOfRuns is multiplied by all multipliers on the parent's path
                     EveType = component.EveType,
-                    Quantity = component.Quantity * NumberOfRuns,
+                    Quantity = analyzer.ModifiedQuantity() * NumberOfRuns,
+                    Price = analyzer.PriceSum() * NumberOfRuns,
+                    Volume = analyzer.VolumeSum() * NumberOfRuns,
                 }
                 );
                 return buyList;
@@ -261,7 +265,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 DirectJobCost = plan.JobCost,
             };
 
-            foreach (var subComponent in plan.SubComponents)
+            foreach (var subComponent in plan.Root.SubComponents)
             {
                 BlueprintAnalyzer blueprintAnalyzer = new(subComponent, materialModifier);
                 result.DirectComponentCost += blueprintAnalyzer.PriceSum();
@@ -278,7 +282,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                     throw new Exception($"Number of Runs must be a multiple of {minimumNumberOfRuns}");
                 result.BestPriceJobCost = 0;
                 result.BestPriceComponentCost = 0;
-                foreach (var component in plan.SubComponents)
+                foreach (var component in plan.Root.SubComponents)
                 {
                     var subresult = 
                         RecursiveBestPriceProductionCost(component, NumberOfRuns, materialModifier);

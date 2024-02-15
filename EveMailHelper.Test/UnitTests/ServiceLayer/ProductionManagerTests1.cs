@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 using AutoFixture.Xunit2;
 
+using EveMailHelper.DataModels.Sde;
 using EveMailHelper.ServiceLayer.Managers;
 using EveMailHelper.ServiceLayer.Models;
 using EveMailHelper.ServiceLayer.Utilities;
 using EveMailHelper.Test.Tools;
 using EveMailHelper.Test.UnitTests.DataGenerators;
+
+using FluentAssertions;
+
+using Microsoft.Extensions.Options;
 
 using Moq;
 
@@ -27,22 +32,28 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
         [AutoDomainData]
         public void DeriveBestPriceBuyListFromPlan1(
             ProductionManager sut
+            //,EveType eveType
             //ProductionPlan plan1
+
         )
         {
-            ProductionPlan plan = ProductionPlanDataGenerator.TestData2[0];
-            /*
-            plan.Add(bc1);
-            plan.Add(bc2);
-            bc1.Add(bc11);
-            bc1.Add(bc12);
-            bc1.Add(bc13);
-            bc2.Add(bc21);
-            bc2.Add(bc22);
-            bc2.Add(bc23);
-            */
-            sut.DeriveBestPriceBuyListFromPlan(plan,10,0.0);
-
+            var numberOfRuns = 10;
+            ProductionPlan plan = ProductionPlanDataGenerator.SingleSimplePlan;
+            var expected = ProductionPlanDataGenerator.GetExpectedBuyList1(numberOfRuns);
+            
+            var result = sut.DeriveBestPriceBuyListFromPlan(plan, numberOfRuns, 0.0);
+            result.Should().BeEquivalentTo(expected,
+                Options => Options.Excluding(x => x.Id)
+                                    .Excluding(x => x.CreateDate)
+                                    .Excluding(x => x.ItemList)
+                                    );
+            result.ItemList.Should().BeEquivalentTo(expected.ItemList,
+                Options => Options.Excluding(i => i.Id)
+                .Excluding(i => i.BuyList)
+                .Excluding(i => i.BuyListId)
+                .Excluding(i => i.EveType)
+                .Excluding(i => i.EveTypeId)
+                );
         }
 
         //[Theory]

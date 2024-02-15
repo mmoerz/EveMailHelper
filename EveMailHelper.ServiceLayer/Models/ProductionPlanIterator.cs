@@ -7,14 +7,14 @@ namespace EveMailHelper.ServiceLayer.Models
     {
         protected class NavTree
         {
-            public NavTree(IBlueprintComponentTree component, NavTree? prevLevel = null, NavTree? nextLevel = null)
+            public NavTree(BlueprintComponent component, NavTree? prevLevel = null, NavTree? nextLevel = null)
             {
                 item = component;
                 this.prevLevel = prevLevel;
                 this.nextLevel = nextLevel;
             }
 
-            public IBlueprintComponentTree item;
+            public BlueprintComponent item;
             public int SubComponentIndex = -1;
 
             public NavTree? prevLevel;
@@ -23,11 +23,12 @@ namespace EveMailHelper.ServiceLayer.Models
 
         private NavTree? _navTree;
 
-        private IBlueprintComponentTree _rootComponent;
-        private IBlueprintComponentTree _currentComponent;
+        private BlueprintComponent _rootComponent;
+        private BlueprintComponent _currentComponent;
 
-        public ProductionPlanIterator(IBlueprintComponentTree root)
+        public ProductionPlanIterator(BlueprintComponent root)
         {
+            // TODO: fix this 'trick' by simulating a nonexistent root item
             _rootComponent = root;
             _currentComponent = _rootComponent;
 

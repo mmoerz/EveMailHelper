@@ -79,12 +79,26 @@ namespace EveMailHelper.ServiceLayer.Utilities
                 foreach (var subComponent in component.SubComponents)
                 {
                     var subresult = GetForcedMultipliers(subComponent, onlyUseBestPricePath);
+                    // 1 - 2 - 2 - 1 (over 4 levels) means 4 as a minimum number of runs as result 
+                    subresult.ForEach(x => x *= component.ForcedQuantityMultiplier);
                     result.AddRange(subresult);
                 }
             }
             return result.Distinct().ToList();
         }
 
-        
+        public double GetMultiplierForcedByParentPath(BlueprintComponent component)
+        {
+            if (component.Parent == null)
+                return component.ForcedQuantityMultiplier;
+
+            var multiplierForcedByParentPath = GetMultiplierForcedByParentPath(component.Parent);
+            return multiplierForcedByParentPath * component.ForcedQuantityMultiplier;
+        }
+
+        public double GetCombinedMultiplier(int NumberOfRuns)
+        {
+            return NumberOfRuns / GetMultiplierForcedByParentPath(component);
+        }
     }
 }

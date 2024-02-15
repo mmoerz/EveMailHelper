@@ -14,6 +14,7 @@ using MudBlazor;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,20 +69,28 @@ namespace EveMailHelper.ServiceLayer.Managers
                 Activity = activity,
                 Product = product.ProductType,
                 ProductQuantity = product.Quantity,
+                //ProductQuantityFromBlueprint = product.Quantity
             };
 
-            await GetBlueprintComponentsForActivity(activity, filterActivity, plan);
+            var resultList = await GetBlueprintComponentsForActivity(activity, filterActivity);
+            foreach(var item in resultList)
+            {
+                plan.Add(item);
+            }
 
             return plan;
         }
 
-        protected async Task GetBlueprintComponentsForActivity(
+        protected async Task<List<BlueprintComponent>> GetBlueprintComponentsForActivity(
             IndustryActivity activity,
             //int productionDepth = 0,
-            int filterActivityId,
-            IBlueprintComponentTree parentComponent)
+            int filterActivityId)
+            //,
+            //IBlueprintComponentTree parentComponent)
         {
             _ = activity ?? throw new Exception("activity is null");
+
+            List<BlueprintComponent> componentList = new();
 
             // not producing activities should be filtered
             foreach (var material in activity.Materials)
@@ -97,6 +106,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                     Quantity = material.Quantity,
                     Volume = material.MaterialType?.Volume ?? 0.0,
                 };
+                componentList.Add(component);
                 
                 // now let's check if the material can be produced (has a blueprint)
                 // and add it as a subcomponent
@@ -109,14 +119,12 @@ namespace EveMailHelper.ServiceLayer.Managers
 
                     component.QuantityFromBlueprint = result.Quantity;
 
-                    await GetBlueprintComponentsForActivity(
-                        first,
-                        filterActivityId,
-                        component);
+                    var resultList = await GetBlueprintComponentsForActivity(first, filterActivityId);
+                    component.AddRange(resultList);
                 }
 
-                parentComponent.Add(component);
             }
+            return componentList;
         }
     }
 }

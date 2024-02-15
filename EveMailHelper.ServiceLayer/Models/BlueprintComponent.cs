@@ -11,7 +11,7 @@ using static MudBlazor.Icons;
 namespace EveMailHelper.ServiceLayer.Models
 {
     
-    public class BlueprintComponent : IBlueprintComponentTree
+    public class BlueprintComponent 
     {
         public BlueprintComponent()
         {
@@ -61,34 +61,44 @@ namespace EveMailHelper.ServiceLayer.Models
             {
                 if (Quantity == 0)
                     throw new Exception("Quantity must not be 0.");
-                if (QuantityFromBlueprint == 0)
-                    throw new Exception("QuantityFromBlueprint must not be 0.");
-
+                
                 if (SubComponents.Count() == 0)
                     return 1.0;
+                
+                if (QuantityFromBlueprint == 0)
+                    throw new Exception("QuantityFromBlueprint must not be 0.");
 
                 return (double)QuantityFromBlueprint / (double)Quantity;
             }
         }
 
-        protected IBlueprintComponentTree? _parent;
-        public IBlueprintComponentTree? Parent
+        protected BlueprintComponent? _parent;
+        public BlueprintComponent Parent
         { get { return _parent; } }
         #endregion
                 
 
-        public void SetParent(IBlueprintComponentTree component)
-        {
-            _parent = component;
-        }
+        //public void SetParent(BlueprintComponent component)
+        //{
+        //    _parent = component;
+        //}
 
         public void Add(BlueprintComponent component)
         {
             if (SubComponents.Contains(component))
                 return;
 
-            component.SetParent(this);
+            //component.SetParent(this);
+            component._parent = this;
             SubComponents.Add(component);
+        }
+
+        public void AddRange(IList<BlueprintComponent> components)
+        {
+            foreach(var item in components)
+            {
+                Add(item);
+            }
         }
     }
 }

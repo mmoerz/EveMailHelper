@@ -4,8 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using EveMailHelper.DataModels.Market;
+using EveMailHelper.DataModels.Sde;
 using EveMailHelper.ServiceLayer.Models;
 using EveMailHelper.Test.Tools;
+
+using Moq;
 
 namespace EveMailHelper.Test.UnitTests.DataGenerators
 {
@@ -19,7 +23,8 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                 {
                     new ()
                     {
-                        SubComponents = new List<BlueprintComponent>()
+                        Root = new() {
+                            SubComponents = new List<BlueprintComponent>()
                         {
                             new()
                             {
@@ -85,6 +90,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                             }
                         }
                     }
+                }
                 };
             }
         }
@@ -96,19 +102,144 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             var sut1 = TestData1[0];
             List<BlueprintComponent> Enumerated1 = new()
             {
-                sut1.SubComponents[0],
-                sut1.SubComponents[0].SubComponents[0],
-                sut1.SubComponents[0].SubComponents[1],
-                sut1.SubComponents[0].SubComponents[2],
-                sut1.SubComponents[1],
-                sut1.SubComponents[1].SubComponents[0],
-                sut1.SubComponents[1].SubComponents[1],
-                sut1.SubComponents[1].SubComponents[2],
+                sut1.Root.SubComponents[0],
+                sut1.Root.SubComponents[0].SubComponents[0],
+                sut1.Root.SubComponents[0].SubComponents[1],
+                sut1.Root.SubComponents[0].SubComponents[2],
+                sut1.Root.SubComponents[1],
+                sut1.Root.SubComponents[1].SubComponents[0],
+                sut1.Root.SubComponents[1].SubComponents[1],
+                sut1.Root.SubComponents[1].SubComponents[2],
             };
 
             data.Add(TheoryData.Factory(sut1, Enumerated1, "a deterministic list of items"));
 
             return data.ConvertAll(d => d.ToParameterArray());
+        }
+
+        public static List<BlueprintComponent> componentData1
+        {
+            get
+            {
+                var type1 = new Mock<EveType>();
+                type1.SetupSet(t => t.TypeName = "L1 item");
+
+                var type2 = new Mock<EveType>();
+                type2.SetupSet(t => t.TypeName = "L2-1 item");
+
+                var type3 = new Mock<EveType>();
+                type3.SetupSet(t => t.TypeName = "L2-2 item");
+
+                var type4 = new Mock<EveType>();
+                type4.SetupSet(t => t.TypeName = "L2-3 item");
+
+                var result =  new List<BlueprintComponent>()
+                {
+                    new()
+                    {
+                        Quantity = 10,
+                        PricePerUnit = 300000,
+                        Volume = 11,
+                        QuantityFromBlueprint = 20,
+                        JobCost = 200,
+                        EveType = type1.Object,
+                    },
+                    new()
+                    {
+                        Quantity = 100,
+                        PricePerUnit = 3,
+                        Volume = 100,
+                        QuantityFromBlueprint = 0,
+                        Name = "L2-1 item1",
+                        JobCost = 10000,
+                        EveType = type2.Object,
+                    },
+                    new()
+                    {
+                        Quantity = 200,
+                        PricePerUnit = 4,
+                        Volume = 300,
+                        Name = "L2-1 item2",
+                        EveType = type3.Object
+                    },
+                    new()
+                    {
+                        Quantity = 400,
+                        PricePerUnit = 5,
+                        Volume = 0.5,
+                        QuantityFromBlueprint = 6,
+                        Name = "L2-1 item3",
+                        EveType = type4.Object
+                    }
+                };
+                result[0].Add(result[1]);
+                result[0].Add(result[2]);
+                result[0].Add(result[3]);
+
+                return result;
+            }
+        }
+
+        public static ProductionPlan SingleSimplePlan
+        {
+            get
+            {
+                var bprintTypeMock = new Mock<EveType>();
+                var bprintMock = new Mock<IndustryBlueprint>();
+                var productMock = new Mock<EveType>();
+
+                bprintTypeMock.SetupSet(t => t.TypeName = "Mocked Blueprint");
+
+                bprintMock.Setup(bp => bp.Type).Returns(bprintTypeMock.Object);
+
+                productMock.SetupSet(c => {
+                    c.TypeName = "Mockakaffee";
+                    c.Volume = 10.0; 
+                });
+                
+                var result = new ProductionPlan()
+                {
+                    Blueprint = bprintMock.Object,
+                    Product = productMock.Object,
+                    ProductQuantity = 10,
+                    ProductPricePerUnit = 30000,
+                    JobCost = 200,
+                    
+                };
+                result.Add(componentData1[0]);
+                return result;
+            }
+        }
+
+        public static BuyList GetExpectedBuyList1(int numberOfRuns)
+        {
+            int forcedMulti = 2;
+            return new BuyList()
+            {
+                Name = "Mockakaffee",
+                NumberOfRuns = numberOfRuns,
+                ItemList = new[]
+                {
+                    new BuyListItem()
+                    {
+                        Price = 300 * numberOfRuns / forcedMulti,
+                        Quantity = 100 * numberOfRuns / forcedMulti,
+                        Volume = 10000 * numberOfRuns / forcedMulti
+                    },
+                    new BuyListItem()
+                    {
+                        Price = 800 * numberOfRuns / forcedMulti,
+                        Quantity = 200 * numberOfRuns / forcedMulti,
+                        Volume = 60000 * numberOfRuns / forcedMulti
+                    },
+                    new BuyListItem()
+                    {
+                        Price = 2000 * numberOfRuns / forcedMulti,
+                        Quantity = 400 * numberOfRuns / forcedMulti,
+                        Volume = 200 * numberOfRuns / forcedMulti
+                    }
+                }
+            };
         }
 
         public static List<ProductionPlan> TestData2

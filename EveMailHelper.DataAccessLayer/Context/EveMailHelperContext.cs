@@ -100,6 +100,7 @@ namespace EveMailHelper.DataAccessLayer.Context
         public virtual DbSet<MarketOrder> MarketOrders { get; set; } = null!;
         public virtual DbSet<MarketPrice> MarketPrices { get; set; } = null!;
         public virtual DbSet<NormalizeProductionCost> NormalizeProductionCosts { get; set; } = null!;
+        public virtual DbSet<BuyList> BuyLists { get; set; } = null!;
 
         #endregion
 

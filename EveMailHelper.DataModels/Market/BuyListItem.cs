@@ -18,6 +18,7 @@ namespace EveMailHelper.DataModels.Market
         public int EveTypeId { get; set; }
         public double Quantity { get; set; }
         public double Price { get; set; }
+        public double Volume { get; set; }
 
         public virtual BuyList BuyList { get; set; } = null!;
         public virtual EveType EveType { get; set; } = null!;
