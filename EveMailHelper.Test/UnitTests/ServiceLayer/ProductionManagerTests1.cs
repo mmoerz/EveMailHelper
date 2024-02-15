@@ -56,13 +56,33 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
                 );
         }
 
-        //[Theory]
-        //[MemberData(nameof(ProductionPlanDataGenerator.DeriveBestPriceBuyListFromPlan), MemberType = typeof(ProductionPlanDataGenerator))]
-        //public void TestDeriveBestPriceBuyListFromPlan(BlueprintComponent sut, double expected)
-        //{
-        //    var result = sut.PriceSum;
-        //    result.ShouldBeEquivalentTo(expected);
-        //}
+        [Theory]
+        [AutoDomainData]
+        public void DeriveBestPriceBuyListFromPlan2(
+            ProductionManager sut
+        //,EveType eveType
+        //ProductionPlan plan1
+
+        )
+        {
+            var numberOfRuns = 10;
+            ProductionPlan plan = ProductionPlanDataGenerator.SinglePlan;
+            var expected = ProductionPlanDataGenerator.GetExpectedBuyList2(numberOfRuns);
+
+            var result = sut.DeriveBestPriceBuyListFromPlan(plan, numberOfRuns, 0.0);
+            result.Should().BeEquivalentTo(expected,
+                Options => Options.Excluding(x => x.Id)
+                                    .Excluding(x => x.CreateDate)
+                                    .Excluding(x => x.ItemList)
+                                    );
+            result.ItemList.Should().BeEquivalentTo(expected.ItemList,
+                Options => Options.Excluding(i => i.Id)
+                .Excluding(i => i.BuyList)
+                .Excluding(i => i.BuyListId)
+                .Excluding(i => i.EveType)
+                .Excluding(i => i.EveTypeId)
+                );
+        }
 
         //[Theory]
         //[MemberData(nameof(ProductionPlanDataGenerator.GetMinimumNumberOfRuns), MemberType = typeof(ProductionPlanDataGenerator))]

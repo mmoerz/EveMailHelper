@@ -242,6 +242,267 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             };
         }
 
+        public static List<BlueprintComponent> componentData2
+        {
+            get
+            {
+                var type1 = new Mock<EveType>();
+                type1.SetupSet(t => t.TypeName = "L1 item 1");
+
+                var type2 = new Mock<EveType>();
+                type2.SetupSet(t => t.TypeName = "L2-1 item 1");
+
+                var type3 = new Mock<EveType>();
+                type3.SetupSet(t => t.TypeName = "L2-1 item 2");
+
+                var type4 = new Mock<EveType>();
+                type4.SetupSet(t => t.TypeName = "L2-1 item 3");
+
+                var type5 = new Mock<EveType>();
+                type5.SetupSet(t => t.TypeName = "L1 item 2");
+
+                var type6 = new Mock<EveType>();
+                type6.SetupSet(t => t.TypeName = "L2-2 item 1");
+
+                var type7 = new Mock<EveType>();
+                type7.SetupSet(t => t.TypeName = "L2-2 item 2");
+
+                var type8 = new Mock<EveType>();
+                type8.SetupSet(t => t.TypeName = "L2-2 item 3");
+
+                var type9 = new Mock<EveType>();
+                type9.SetupSet(t => t.TypeName = "L1 item 3");
+
+                var type10 = new Mock<EveType>();
+                type10.SetupSet(t => t.TypeName = "L1 item 4");
+
+                var type11 = new Mock<EveType>();
+                type11.SetupSet(t => t.TypeName = "L2-4 item 1");
+
+                var type12 = new Mock<EveType>();
+                type12.SetupSet(t => t.TypeName = "L2-4 item 2");
+
+                var result = new List<BlueprintComponent>()
+                {
+                    new()
+                    {
+                        Quantity = 10,
+                        PricePerUnit = 300000,
+                        Volume = 11,
+                        QuantityFromBlueprint = 20,
+                        Name = "L1 item 1",
+                        JobCost = 200,
+                        EveType = type1.Object,
+                    },
+                    new()
+                    {
+                        Quantity = 100,
+                        PricePerUnit = 3,
+                        Volume = 100,
+                        QuantityFromBlueprint = 0,
+                        Name = "L2-1 item1",
+                        JobCost = 10000,
+                        EveType = type2.Object,
+                    },
+                    new()
+                    {
+                        Quantity = 200,
+                        PricePerUnit = 4,
+                        Volume = 300,
+                        Name = "L2-1 item2",
+                        EveType = type3.Object
+                    },
+                    new()
+                    {
+                        Quantity = 400,
+                        PricePerUnit = 5,
+                        Volume = 0.5,
+                        QuantityFromBlueprint = 6,
+                        Name = "L2-1 item3",
+                        EveType = type4.Object
+                    },
+                    new()
+                    {
+                        Quantity = 10,
+                        PricePerUnit = 30,
+                        Volume = 90,
+                        QuantityFromBlueprint = 30,
+                        Name = "L1 item 2", // L1 item 2
+                        JobCost = 400,
+                        EveType = type5.Object,
+                    },
+                    new()
+                    {
+                        Quantity = 100,
+                        PricePerUnit = 300,
+                        Volume = 8,
+                        QuantityFromBlueprint = 0,
+                        Name = "L2-2 item1",
+                        JobCost = 10000,
+                        EveType = type6.Object,
+                    },
+                    new()
+                    {
+                        Quantity = 200,
+                        PricePerUnit = 4,
+                        Volume = 3,
+                        Name = "L2-2 item2",
+                        EveType = type7.Object
+                    },
+                    new()
+                    {
+                        Quantity = 400,
+                        PricePerUnit = 5,
+                        Volume = 1.5,
+                        QuantityFromBlueprint = 6,
+                        Name = "L2-2 item3",
+                        EveType = type8.Object
+                    },
+                    new()
+                    {
+                        Quantity = 25,
+                        PricePerUnit = 30,
+                        Volume = 20,
+                        QuantityFromBlueprint = 20,
+                        Name = "L1 item 3", // - item 3
+                        JobCost = 200,
+                        EveType = type9.Object,
+                    },
+                    new()
+                    {
+                        Quantity = 40,
+                        PricePerUnit = 100000,
+                        Volume = 15,
+                        QuantityFromBlueprint = 10,
+                        Name = "L1 item 4",
+                        JobCost = 200,
+                        EveType = type10.Object,
+                    },
+                    new()
+                    {
+                        Quantity = 200,
+                        PricePerUnit = 10,
+                        Volume = 10,
+                        QuantityFromBlueprint = 0,
+                        Name = "L2-4 item1",
+                        JobCost = 10000,
+                        EveType = type11.Object,
+                    },
+                    new()
+                    {
+                        Quantity = 300,
+                        PricePerUnit = 4,
+                        Volume = 2.5,
+                        Name = "L2-4 item2",
+                        EveType = type12.Object
+                    },
+                };
+                result[0].Add(result[1]);
+                result[0].Add(result[2]);
+                result[0].Add(result[3]);
+                result[4].Add(result[5]);
+                result[4].Add(result[6]);
+                result[4].Add(result[7]);
+
+                result[9].Add(result[10]);
+                result[9].Add(result[11]);
+
+                return result;
+            }
+        }
+
+        public static ProductionPlan SinglePlan
+        {
+            get
+            {
+                var bprintTypeMock = new Mock<EveType>();
+                var bprintMock = new Mock<IndustryBlueprint>();
+                var productMock = new Mock<EveType>();
+
+                bprintTypeMock.SetupSet(t => t.TypeName = "Mocked Blueprint2");
+
+                bprintMock.Setup(bp => bp.Type).Returns(bprintTypeMock.Object);
+
+                productMock.SetupSet(c => {
+                    c.TypeName = "Mocka";
+                    c.Volume = 20.0;
+                });
+
+                var result = new ProductionPlan()
+                {
+                    Blueprint = bprintMock.Object,
+                    Product = productMock.Object,
+                    ProductQuantity = 400,
+                    ProductPricePerUnit = 50000,
+                    JobCost = 1300,
+
+                };
+                var components = componentData2;
+
+                result.Add(components[0]);
+                result.Add(components[4]);
+                result.Add(components[8]);
+                result.Add(components[9]);
+                return result;
+            }
+        }
+
+        public static BuyList GetExpectedBuyList2(int numberOfRuns)
+        {
+            int forcedMulti = 2;
+            double forcedMulti2 = 0.25;
+            return new BuyList()
+            {
+                Name = "Mocka",
+                NumberOfRuns = numberOfRuns,
+                ItemList = new[]
+                {
+                    new BuyListItem()
+                    {
+                        Price = 300 * numberOfRuns / forcedMulti,
+                        Quantity = 100 * numberOfRuns / forcedMulti,
+                        Volume = 10000 * numberOfRuns / forcedMulti
+                    },
+                    new BuyListItem()
+                    {
+                        Price = 800 * numberOfRuns / forcedMulti,
+                        Quantity = 200 * numberOfRuns / forcedMulti,
+                        Volume = 60000 * numberOfRuns / forcedMulti
+                    },
+                    new BuyListItem()
+                    {
+                        Price = 2000 * numberOfRuns / forcedMulti,
+                        Quantity = 400 * numberOfRuns / forcedMulti,
+                        Volume = 200 * numberOfRuns / forcedMulti
+                    },
+                    new BuyListItem() // only L1 - item2 (directbuy)
+                    {
+                        Price = 300 * numberOfRuns,
+                        Quantity = 10 * numberOfRuns,
+                        Volume = 900 * numberOfRuns
+                    },
+                    new BuyListItem() // L1 - item3
+                    {
+                        Price = 750 * numberOfRuns,
+                        Quantity = 25 * numberOfRuns,
+                        Volume = 500 * numberOfRuns
+                    },
+                    new BuyListItem() // L2-4 item 1
+                    {
+                        Price = 2000 * numberOfRuns / forcedMulti2,
+                        Quantity = 200 * numberOfRuns / forcedMulti2,
+                        Volume = 2000 * numberOfRuns / forcedMulti2
+                    },
+                    new BuyListItem() // L2-4 item 2
+                    {
+                        Price = 1200 * numberOfRuns / forcedMulti2,
+                        Quantity = 300 * numberOfRuns / forcedMulti2,
+                        Volume = 300 * 2.5 * numberOfRuns / forcedMulti2
+                    },
+                }
+            };
+        }
+
         public static List<ProductionPlan> TestData2
         {
             get
