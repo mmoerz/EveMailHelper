@@ -37,5 +37,7 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
             var result = sut.GetMinNumberOfRuns(true);
             result.ShouldBeEquivalentTo(expected, message);
         }
+
+        
     }
 }

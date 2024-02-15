@@ -30,7 +30,7 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
             //ProductionPlan plan1
         )
         {
-            ProductionPlan plan = ProductionPlanDataGenerator.TestData2_Cheap[0];
+            ProductionPlan plan = ProductionPlanDataGenerator.TestData2[0];
             /*
             plan.Add(bc1);
             plan.Add(bc2);
@@ -44,6 +44,8 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
             sut.DeriveBestPriceBuyListFromPlan(plan,10,0.0);
 
         }
+
+
 
         //[Theory]
         //[MemberData(nameof(ProductionPlanDataGenerator.GetMinimumNumberOfRuns), MemberType = typeof(ProductionPlanDataGenerator))]
