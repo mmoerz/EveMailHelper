@@ -21,6 +21,8 @@ namespace EveMailHelper.ServiceLayer.Utilities
 
         public int ModifiedQuantity()
         {
+            if (component.Quantity == 0)
+                throw new Exception("Quantity must not be 0.");
             double modifier = component.Quantity / 100 * materialModifier;
             return (int)Math.Ceiling(component.Quantity + modifier);
         }

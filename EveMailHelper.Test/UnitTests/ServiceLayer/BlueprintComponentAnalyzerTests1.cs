@@ -72,13 +72,22 @@ namespace EveMailHelper.Test.UnitTests.ServiceLayer
             result.ShouldBeEquivalentTo(expected, message);
         }
 
-        //[Theory]
-        //[MemberData(nameof(BlueprintComponentAnalyzerDataGenerator.GetBlueprintFail1), MemberType = typeof(BlueprintComponentAnalyzerDataGenerator))]
-        //public void BlueprintQuantityZero1(BlueprintAnalyzer sut, string expectederrmsg, string message)
-        //{
-        //    Action action = () => { sut.For(); };
-        //    action.Should().Throw<Exception>()
-        //        .WithMessage(expectederrmsg, message);
-        //}
+        [Theory]
+        [MemberData(nameof(BlueprintComponentAnalyzerDataGenerator.GetBlueprintFail1), MemberType = typeof(BlueprintComponentAnalyzerDataGenerator))]
+        public void BlueprintQuantityZero1(BlueprintAnalyzer sut, string expectederrmsg, string message)
+        {
+            Action action = () => { sut.BestPriceSum(); };
+            action.Should().Throw<Exception>()
+                .WithMessage(expectederrmsg, message);
+        }
+
+        [Theory]
+        [MemberData(nameof(BlueprintComponentAnalyzerDataGenerator.GetBlueprintFail2), MemberType = typeof(BlueprintComponentAnalyzerDataGenerator))]
+        public void BlueprintQuantityZero2(BlueprintAnalyzer sut, string expectederrmsg, string message)
+        {
+            Action action = () => { sut.PriceSum(); };
+            action.Should().Throw<Exception>()
+                .WithMessage(expectederrmsg, message);
+        }
     }
 }
