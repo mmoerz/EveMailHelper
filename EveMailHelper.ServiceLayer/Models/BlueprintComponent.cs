@@ -11,7 +11,7 @@ using static MudBlazor.Icons;
 namespace EveMailHelper.ServiceLayer.Models
 {
     
-    public class BlueprintComponent : IEnumerable<BlueprintComponent>, IBlueprintComponentTree
+    public class BlueprintComponent : IBlueprintComponentTree
     {
         public BlueprintComponent()
         {
@@ -72,16 +72,7 @@ namespace EveMailHelper.ServiceLayer.Models
         public IBlueprintComponentTree? Parent
         { get { return _parent; } }
         #endregion
-
-        public IEnumerator<BlueprintComponent> GetEnumerator()
-        {
-            return new BlueprintComponentIterator(this);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return new BlueprintComponentIterator(this);
-        }
+                
 
         public void SetParent(IBlueprintComponentTree component)
         {
@@ -96,75 +87,5 @@ namespace EveMailHelper.ServiceLayer.Models
             component.SetParent(this);
             SubComponents.Add(component);
         }
-
-        //TODO: remove the stuff below - it's business logic (and not data storage)
-
-        //public double BestPriceSumWithDepthLimit(int depth)
-        //{
-        //    double sum = 0;
-        //    if (SubComponents.Count == 0)
-        //        return PriceSum;
-
-        //    if (depth > 1)
-        //    {
-        //        foreach (var component in SubComponents)
-        //        {
-        //            sum += component.BestPriceSumWithDepthLimit(depth - 1);
-        //        }
-        //    }
-        //    if (sum > PriceSum)
-        //        sum = PriceSum;
-        //    return sum;
-        //}
-
-        //public double BestPriceSum()
-        //{
-        //    double sum = 0;
-        //    // no subcomponents, so nothing to produce and no job costs
-        //    if (SubComponents.Count == 0)
-        //        return PriceSum;
-
-        //    sum = JobCost;
-        //    foreach (var component in SubComponents)
-        //    {
-        //        sum += component.BestPriceSum();
-        //    }
-        //    sum /= ForcedQuantityMultiplier;
-        //    // not sure what is better in case of cheaper buying
-        //    // to return a single 'batch' (or the full 2 batches)
-        //    if (sum > PriceSum )
-        //        sum = PriceSum;
-        //    return sum;
-        //}
-
-        //public double BestPriceVolumeSum()
-        //{
-        //    double volume = 0;
-        //    if (IsProducingBetter)
-        //    {
-        //        foreach (var component in SubComponents)
-        //        {
-        //            volume += component.BestPriceVolumeSum();
-        //        }
-        //    }
-        //    else
-        //        volume += VolumeSum;
-        //    return volume;
-        //}
-
-        //public List<double> GetForcedMultipliers()
-        //{
-        //    var result = new List<double>();
-        //    if (IsProducingBetter)
-        //        result.Add(ForcedQuantityMultiplier);
-
-        //    foreach (var component in SubComponents)
-        //    {
-        //        var subresult = component.GetForcedMultipliers();
-        //        result.AddRange(subresult);
-        //    }
-        //    return result.Distinct().ToList();
-        //}
-        
     }
 }
