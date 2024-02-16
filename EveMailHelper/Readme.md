@@ -67,6 +67,8 @@ simply deploy to a zip file.
 
 [Rendering Html string in c# Blazor](https://stackoverflow.com/questions/50604366/is-there-an-equivalent-to-html-raw-in-blazor)
 
+[OnChange for Mud(Inputs)](https://stackoverflow.com/questions/76135253/mudblazor-mudnumericfield-call-a-function-on-oninput)
+
 # development notes
 - set in the project's properties Debug>Enable Windows Auhtentication 
   and disable the Debug>Enable anonymous Authentication

@@ -137,6 +137,6 @@ namespace EveMailHelper.Web.Pages.Market
             ToBuyList.CopyShallow(newBuyList);
 
             RefreshSubComponents();
-        }       
+        }
     }
 }

@@ -17,6 +17,13 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Market
             builder.Property(a => a.ActivityId)
                 .IsRequired();
 
+            builder.Property(a => a.DirectCostSum)
+                .HasComputedColumnSql("[DirectJobCost] + [DirectComponentCost]");
+            builder.Property(a => a.BestPriceSum)
+                .HasComputedColumnSql("[BestPriceJobCost] + [BestPriceComponentCost]");
+            builder.Property(a => a.ProductCostSum)
+                .HasComputedColumnSql("[ProductQuantity] * [ProductPricePerUnit]");
+
             builder.HasOne(a => a.EveType)
                 .WithMany()
                 .HasForeignKey(a => a.EveTypeId)
