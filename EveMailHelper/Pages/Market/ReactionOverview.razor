@@ -15,7 +15,14 @@
     <MudNumericField @bind-Value="SystemCostIndex" Label="Systemcost Index" Min="0.0" />
 </MudItem>
 <MudItem xs="6" sm="3" md="2">
-    <MudNumericField @bind-Value="NumberOfRuns" Label="Number Of Runs" Variant="Variant.Filled" Min="@NumberOfRunsMin" />
+    <MudNumericField Value="@NumberOfRuns" 
+                     Label="Number Of Runs" 
+                     Variant="Variant.Filled" 
+                     Min="@NumberOfRunsMin"
+                     Step="@NumberOfRunsMin"
+                     ValueChanged="(int newvalue) => OnNumberOfRunsChanged(newvalue)"
+                     For="@(() => NumberOfRuns)"
+                     @ref="NumberOfRunsField"/>
 </MudItem>
 <MudItem xs="6" sm="3" md="2">
     <MudNumericField @bind-Value="MaterialConsumption" Label="MaterialConsumption" Variant="Variant.Filled" Min="-2.6" />

@@ -13,6 +13,7 @@ using EveMailHelper.ServiceLayer.Models;
 using EveMailHelper.DataModels.Market;
 using EveMailHelper.Web.Shared.Market;
 using EveMailHelper.ServiceLayer.Utilities;
+using MudBlazor;
 
 namespace EveMailHelper.Web.Pages.Market
 {
@@ -37,6 +38,7 @@ namespace EveMailHelper.Web.Pages.Market
         private BlueprintDetails? ProductionPlanDisplay { get; set; } = null!;
         private BuyListDetails BuyListComponent { get; set; } = null!;
         private BuyListTitle BuyListTitleComponent { get; set; } = null!;
+        private MudNumericField<int> NumberOfRunsField {  get; set; } = null!; 
         #endregion
 
         private IndustryBlueprint selectedBlueprint { get; set; } = new();
@@ -55,6 +57,7 @@ namespace EveMailHelper.Web.Pages.Market
 
         private int NumberOfRuns { get; set; } = 1;
         private int NumberOfRunsMin { get; set; } = 1;
+        
 
         private double MaterialConsumption { get; set; } = -2.6;
 
@@ -121,5 +124,19 @@ namespace EveMailHelper.Web.Pages.Market
             if (BuildPlanDetails != null)
                 BuildPlanDetails.RefreshTheFucker();
         }
+
+        public async Task OnNumberOfRunsChanged(int newValue) 
+        {
+            NumberOfRuns = newValue;
+            ProductionPlanAnalyzer analyzer = new(ProdPlan, MaterialConsumption);
+            NumberOfRunsMin = analyzer.GetMinNumberOfRuns(true);
+            if (NumberOfRuns < NumberOfRunsMin)
+                NumberOfRuns = NumberOfRunsMin;
+            var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
+                ProdPlan, NumberOfRuns, MaterialConsumption);
+            ToBuyList.CopyShallow(newBuyList);
+
+            RefreshSubComponents();
+        }       
     }
 }
