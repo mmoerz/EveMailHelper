@@ -34,23 +34,28 @@
         </BlueprintDetails>
     </MudItem>
     <MudItem xs="3">
-        <MudCard Elevation="4">
+        <MudCard Elevation="4" Outlined="true">
             <MudCardHeader>
-                <MudText Typo="Typo.h6">BuyList</MudText>
+                <BuyListTitle BuyList="@ToBuyList" @ref="BuyListTitleComponent"></BuyListTitle>
             </MudCardHeader>
             <MudCardContent>
+                
                 <BuyListDetails BuyList="@ToBuyList" @ref="BuyListComponent">
                     <BuyListContent Context="buyList">
+                        
                     @foreach (var item in buyList.ItemList)
                     {
-                        <MudStack Row="true">
-                            <MudText>@item.EveType.TypeName</MudText>
-                                <MudText>@item.Quantity</MudText>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem Class="">@item.EveType.TypeName</MudItem>
+                            <MudSpacer />
+                            <MudItem Class="pl-1">@item.Quantity</MudItem>
                         </MudStack>
                     }
+                        
                     </BuyListContent>
                 </BuyListDetails>
-
+                
+                <!--
                 <BuildPlan Plan="@ProdPlan" @ref="BuildPlanDetails">
                     <BuildPlanContent Context="Plan">
                         <MudText>@Plan.ProductName</MudText>
@@ -60,6 +65,7 @@
                         <MudText></MudText>
                     </BuildPlanContent>
                 </BuildPlan>
+                -->
             </MudCardContent>
         </MudCard>
     </MudItem>

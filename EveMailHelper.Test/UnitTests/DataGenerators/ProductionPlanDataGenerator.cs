@@ -503,302 +503,179 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             };
         }
 
-        public static List<ProductionPlan> TestData2
+        public static List<BlueprintComponent> componentData3
         {
             get
             {
-                return new()
+                var type1 = new Mock<EveType>();
+                type1.SetupSet(t => t.TypeName = "L1 item 1");
+
+                var type2 = new Mock<EveType>();
+                type2.SetupSet(t => t.TypeName = "L2-1 item 1");
+
+                var type3 = new Mock<EveType>();
+                type3.SetupSet(t => t.TypeName = "L2-1 item 2");
+
+                var type4 = new Mock<EveType>();
+                type4.SetupSet(t => t.TypeName = "L2-1 item 3");
+
+                var type5 = new Mock<EveType>();
+                type5.SetupSet(t => t.TypeName = "L1 item 2");
+
+                var type6 = new Mock<EveType>();
+                type6.SetupSet(t => t.TypeName = "L2-2 item 1");
+
+                var type7 = new Mock<EveType>();
+                type7.SetupSet(t => t.TypeName = "L2-2 item 2");
+
+                var type8 = new Mock<EveType>();
+                type8.SetupSet(t => t.TypeName = "L2-2 item 3");
+
+                var type9 = new Mock<EveType>();
+                type9.SetupSet(t => t.TypeName = "L1 item 3");
+
+                var type10 = new Mock<EveType>();
+                type10.SetupSet(t => t.TypeName = "L1 item 4");
+
+                var type11 = new Mock<EveType>();
+                type11.SetupSet(t => t.TypeName = "L2-4 item 1");
+
+                var type12 = new Mock<EveType>();
+                type12.SetupSet(t => t.TypeName = "L2-4 item 2");
+
+                var result = new List<BlueprintComponent>()
                 {
-                    new ()
+                    new()
                     {
-                        ProductPricePerUnit = 10000,
-                        ProductQuantity = 1000,
-
+                        Quantity = 5,
+                        PricePerUnit = 17600,
+                        Volume = 5,
+                        QuantityFromBlueprint = 0,
+                        Name = "Helium Fuel Block",
+                        JobCost = 0,
+                        EveType = type1.Object,
                     },
-                    new ()
+                    new()
                     {
-                        ProductPricePerUnit = 20000,
-                        ProductQuantity = 2000,
-
+                        Quantity = 100,
+                        PricePerUnit = 3,
+                        Volume = 0.2,
+                        QuantityFromBlueprint = 8457,
+                        Name = "Crystallite Alloy", // L1 item 2
+                        JobCost = 1000,
+                        EveType = type2.Object,
                     },
-                    new ()
+                    new()
                     {
-                        ProductPricePerUnit = 20000,
-                        ProductQuantity = 2000,
-
-                    }
+                        Quantity = 5,
+                        PricePerUnit = 17600,
+                        Volume = 5,
+                        Name = "Helium Fuel Block", // L1 item 3
+                        EveType = type3.Object
+                    },
+                    new()
+                    {
+                        Quantity = 100,
+                        PricePerUnit = 4409,
+                        Volume = 0.05,
+                        QuantityFromBlueprint = 0,
+                        Name = "Cobalt",
+                        EveType = type4.Object
+                    },
+                    new()
+                    {
+                        Quantity = 100,
+                        PricePerUnit = 7990,
+                        Volume = 0.05,
+                        QuantityFromBlueprint = 0,
+                        Name = "Cadmium", 
+                        JobCost = 400,
+                        EveType = type5.Object,
+                    },
+                    new()
+                    {
+                        Quantity = 100,
+                        PricePerUnit = 3282,
+                        Volume = 0.2,
+                        QuantityFromBlueprint = 0,
+                        Name = "Carbon Polymers", // L1 item 3
+                        JobCost = 1000,
+                        EveType = type6.Object,
+                    },
+                    new()
+                    {
+                        Quantity = 5,
+                        PricePerUnit = 17600,
+                        Volume = 5,
+                        Name = "Helium Fuel Block",
+                        EveType = type7.Object
+                    },
+                    new()
+                    {
+                        Quantity = 100,
+                        PricePerUnit = 2150,
+                        Volume = 0.05,
+                        QuantityFromBlueprint = 0,
+                        Name = "Hydrocarbons",
+                        EveType = type8.Object
+                    },
+                    new()
+                    {
+                        Quantity = 100,
+                        PricePerUnit = 2150,
+                        Volume = 0.05,
+                        QuantityFromBlueprint = 0,
+                        Name = "Silicates", 
+                        JobCost = 200,
+                        EveType = type9.Object,
+                    },
                 };
+                result[2].Add(result[3]);
+                result[2].Add(result[4]);
+                result[2].Add(result[5]);
+                result[6].Add(result[7]);
+                result[6].Add(result[8]);
+                result[6].Add(result[9]);
+
+                return result;
             }
         }
 
-        public static readonly List<BlueprintComponent> _componentData2 = new()
+        public static ProductionPlan SinglePlan2
         {
-            new()
+            get
             {
-                Name = "TopLevel",
-                Quantity = 200,
-                PricePerUnit = 300,
-                Volume = 10,
-                QuantityFromBlueprint = 100,
-                JobCost = 100,
-            },
-                    new()
-                    {
-                        Name = "L1 item1",
-                        Quantity = 10,
-                        PricePerUnit = 30,
-                        Volume = 11,
-                        QuantityFromBlueprint = 20,
-                        JobCost = 200,
-                    },
-                            new()
-                            {
-                                Quantity = 1,
-                                PricePerUnit = 3,
-                                Volume = 111,
-                                QuantityFromBlueprint = 0,
-                                Name = "L2-1 item1",
-                                JobCost = 10000,
-                            },
-                            new()
-                            {
-                                Quantity = 2,
-                                PricePerUnit = 4,
-                                Volume = 112,
+                var bprintTypeMock = new Mock<EveType>();
+                var bprintMock = new Mock<IndustryBlueprint>();
+                var productMock = new Mock<EveType>();
 
-                                Name = "L2-1 item2"
-                            },
-                            new()
-                            {
-                                Quantity = 3,
-                                PricePerUnit = 5,
-                                Volume = 113,
-                                QuantityFromBlueprint = 6,
-                                Name = "L2-1 item3"
-                            },
+                bprintTypeMock.SetupSet(t => t.TypeName = "Crystalline Carbonite");
 
+                bprintMock.Setup(bp => bp.Type).Returns(bprintTypeMock.Object);
 
-                    new ()
-                    {
-                        Name = "L1 item2",
-                        Quantity = 1,
-                        PricePerUnit = 3,
-                        Volume = 12,
-                        QuantityFromBlueprint = 2,
-                        JobCost = 300,
-                    },
-                            new()
-                            {
-                                Quantity = 1,
-                                PricePerUnit = 3,
-                                Volume = 121,
-                                QuantityFromBlueprint = 2,
-                                Name = "L2-2 item1"
-                            },
-                            new()
-                            {
-                                Quantity = 1,
-                                PricePerUnit = 3,
-                                Volume = 122,
-                                QuantityFromBlueprint = 2,
-                                Name = "L2-2 item2"
-                            },
-                            new()
-                            {
-                                Quantity = 1,
-                                PricePerUnit = 3,
-                                Volume = 123,
-                                QuantityFromBlueprint = 2,
-                                Name = "L2-2 item3"
-                            },
-        };
+                productMock.SetupSet(c => {
+                    c.TypeName = "Mocka";
+                    c.Volume = 20.0;
+                });
 
-        public static readonly List<BlueprintComponent> _componentData3 = new()
-        {
-            new()
-            {
-                Name = "TopLevel",
-                Quantity = 200,
-                PricePerUnit = 300,
-                Volume = 10,
-                QuantityFromBlueprint = 100,
-                JobCost = 100,
-            },
-                    new()
-                    {
-                        Name = "L1 item1",
-                        Quantity = 10,
-                        PricePerUnit = 30,
-                        Volume = 11,
-                        QuantityFromBlueprint = 20,
-                        JobCost = 200,
-                    },
-                            new()
-                            {
-                                Quantity = 1,
-                                PricePerUnit = 3,
-                                Volume = 111,
-                                QuantityFromBlueprint = 0,
-                                Name = "L2-1 item1",
-                                JobCost = 10000,
-                            },
-                            new()
-                            {
-                                Quantity = 2,
-                                PricePerUnit = 4,
-                                Volume = 112,
+                var result = new ProductionPlan()
+                {
+                    Blueprint = bprintMock.Object,
+                    Product = productMock.Object,
+                    ProductQuantity = 10000,
+                    ProductPricePerUnit = 1660000,
+                    JobCost = 300,
 
-                                Name = "L2-1 item2"
-                            },
-                            new()
-                            {
-                                Quantity = 3,
-                                PricePerUnit = 5,
-                                Volume = 113,
-                                QuantityFromBlueprint = 6,
-                                Name = "L2-1 item3"
-                            },
+                };
+                var components = componentData3;
 
+                result.Add(components[0]);
+                result.Add(components[1]);
+                result.Add(components[2]);
+                result.Add(components[6]);
+                return result;
+            }
+        }
 
-                    new ()
-                    {
-                        Name = "L1 item2",
-                        Quantity = 1,
-                        PricePerUnit = 3000,
-                        Volume = 12,
-                        QuantityFromBlueprint = 3,
-                        JobCost = 300,
-                    },
-                            new()
-                            {
-                                Quantity = 1,
-                                PricePerUnit = 3,
-                                Volume = 121,
-                                QuantityFromBlueprint = 2,
-                                Name = "L2-2 item1"
-                            },
-                            new()
-                            {
-                                Quantity = 1,
-                                PricePerUnit = 3,
-                                Volume = 122,
-                                QuantityFromBlueprint = 2,
-                                Name = "L2-2 item2"
-                            },
-                            new()
-                            {
-                                Quantity = 1,
-                                PricePerUnit = 3,
-                                Volume = 123,
-                                QuantityFromBlueprint = 2,
-                                Name = "L2-2 item3"
-                            },
-        };
-
-        public static readonly List<BlueprintComponent> _componentData4 = new()
-        {
-            new()
-            {
-                Name = "TopLevel",
-                Quantity = 200,
-                PricePerUnit = 300,
-                Volume = 10,
-                QuantityFromBlueprint = 100,
-                JobCost = 100,
-            },
-                    new()
-                    {
-                        Name = "L1 item1",
-                        Quantity = 10,
-                        PricePerUnit = 30,
-                        Volume = 11,
-                        QuantityFromBlueprint = 20,
-                        JobCost = 200,
-                    },
-                            new()
-                            {
-                                Quantity = 1,
-                                PricePerUnit = 3,
-                                Volume = 111,
-                                QuantityFromBlueprint = 0,
-                                Name = "L2-1 item1",
-                                JobCost = 10000,
-                            },
-                            new()
-                            {
-                                Quantity = 2,
-                                PricePerUnit = 4,
-                                Volume = 112,
-
-                                Name = "L2-1 item2"
-                            },
-                            new()
-                            {
-                                Quantity = 3,
-                                PricePerUnit = 5,
-                                Volume = 113,
-                                QuantityFromBlueprint = 6,
-                                Name = "L2-1 item3"
-                            },
-
-
-                    new ()
-                    {
-                        Name = "L1 item2",
-                        Quantity = 1,
-                        PricePerUnit = 3,
-                        Volume = 12,
-                        QuantityFromBlueprint = 2,
-                        JobCost = 300,
-                    },
-                            new()
-                            {
-                                Quantity = 1,
-                                PricePerUnit = 3,
-                                Volume = 121,
-                                QuantityFromBlueprint = 2,
-                                Name = "L2-2 item1"
-                            },
-                            new()
-                            {
-                                Quantity = 1,
-                                PricePerUnit = 3,
-                                Volume = 122,
-                                QuantityFromBlueprint = 2,
-                                Name = "L2-2 item2"
-                            },
-                            new()
-                            {
-                                Quantity = 1,
-                                PricePerUnit = 3,
-                                Volume = 123,
-                                QuantityFromBlueprint = 2,
-                                Name = "L2-2 item3"
-                            },
-        };
-
-        //public static IEnumerable<object[]> GetMinimumNumberOfRuns()
-        //{
-        //    TestData2[0].Add(_componentData2[1]);
-        //    _componentData2[1].Add(_componentData2[2]);
-        //    _componentData2[1].Add(_componentData2[3]);
-        //    _componentData2[1].Add(_componentData2[4]);
-        //    TestData2[0].Add(_componentData2[5]);
-        //    _componentData2[5].Add(_componentData2[6]);
-        //    _componentData2[5].Add(_componentData2[7]);
-        //    _componentData2[5].Add(_componentData2[8]);
-
-        //    TestData2[1].Add(_componentData3[1]);
-        //    _componentData3[1].Add(_componentData3[2]);
-        //    _componentData3[1].Add(_componentData3[3]);
-        //    _componentData3[1].Add(_componentData3[4]);
-        //    TestData2[1].Add(_componentData3[5]);
-        //    _componentData3[5].Add(_componentData3[6]);
-        //    _componentData3[5].Add(_componentData3[7]);
-        //    _componentData3[5].Add(_componentData3[8]);
-
-        //    yield return new object[] { _prodPlanData2[0], 2 };
-        //    yield return new object[] { _prodPlanData2[1], 6 };
-        //}
     }
 }

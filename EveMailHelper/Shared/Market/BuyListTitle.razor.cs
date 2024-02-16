@@ -15,13 +15,10 @@ using EveMailHelper.DataModels.Market;
 
 namespace EveMailHelper.Web.Shared.Market
 {
-    public partial class BuyListDetails : Microsoft.AspNetCore.Components.ComponentBase
+    public partial class BuyListTitle : Microsoft.AspNetCore.Components.ComponentBase
     {
         #region injections
         #endregion
-
-        //private MudTable<BlueprintComponent> _table = null!;
-        //private ProductionPlan _mainPlan = new ProductionPlan();
 
         #region parameters
         [Parameter]
@@ -40,7 +37,7 @@ namespace EveMailHelper.Web.Shared.Market
         /// yeah, i know, however it ate my nerves
         /// maybe i will correct this name, but most likely not
         /// </summary>
-        public void RefreshTheFucker()
+        public void Refresh()
         {
             StateHasChanged();
         }

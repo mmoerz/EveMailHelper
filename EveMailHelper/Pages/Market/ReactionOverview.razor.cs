@@ -27,19 +27,22 @@ namespace EveMailHelper.Web.Pages.Market
         IMapManager MapManager { get; set; } = null!;
         [Inject]
         IProductionManager ProductionManager { get; set; } = null!;
-        
+
         #endregion
 
         #region parameters
         #endregion
 
+        #region displayed components
         private BlueprintDetails? ProductionPlanDisplay { get; set; } = null!;
+        private BuyListDetails BuyListComponent { get; set; } = null!;
+        private BuyListTitle BuyListTitleComponent { get; set; } = null!;
+        #endregion
 
         private IndustryBlueprint selectedBlueprint { get; set; } = new();
 
         private ProductionPlan ProdPlan {  get; set; } = new();
 
-        private BuyListDetails BuyListComponent { get; set; } = null!;
         private BuyList ToBuyList { get; set; } = new();
 
         private BuildPlan BuildPlanDetails = null!;
@@ -74,10 +77,10 @@ namespace EveMailHelper.Web.Pages.Market
                     if (NumberOfRuns < NumberOfRunsMin)
                         NumberOfRuns = NumberOfRunsMin;
                     var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
-                        newplan, 10, MaterialConsumption);
+                        newplan, NumberOfRuns, MaterialConsumption);
                     ToBuyList.CopyShallow(newBuyList);
-                    BuyListComponent.RefreshTheFucker();
-                    BuildPlanDetails.RefreshTheFucker();
+
+                    RefreshSubComponents();
                 }
             }
             catch (Exception ex)
@@ -107,6 +110,16 @@ namespace EveMailHelper.Web.Pages.Market
             var region = await MapManager.GetRegionByName("The Forge");
             _ = region ?? throw new Exception("Jita region not found");
             RegionId = region.EveId;
+        }
+
+        protected void RefreshSubComponents()
+        {
+            if (BuyListTitleComponent != null) 
+                BuyListTitleComponent.Refresh();
+            if (BuyListComponent != null)
+                BuyListComponent.RefreshTheFucker();
+            if (BuildPlanDetails != null)
+                BuildPlanDetails.RefreshTheFucker();
         }
     }
 }
