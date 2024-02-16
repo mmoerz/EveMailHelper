@@ -99,7 +99,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 if (material.MaterialType == null)
                     throw new Exception("material.MaterialType is null");
 
-                var component = new BlueprintComponent()
+                var component = new BlueprintComponent(null)
                 {
                     EveType = material.MaterialType,
                     Name = material.MaterialType.TypeName,

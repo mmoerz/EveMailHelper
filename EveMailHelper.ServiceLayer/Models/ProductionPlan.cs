@@ -52,7 +52,7 @@ namespace EveMailHelper.ServiceLayer.Models
             get { return Root.JobCost; }
             set { Root.JobCost = value; } 
         }
-        public BlueprintComponent Root { get; set; } = new();
+        public BlueprintComponent Root { get; set; } = new(null);
         #endregion
 
         public void ShallowCopy(ProductionPlan plan)

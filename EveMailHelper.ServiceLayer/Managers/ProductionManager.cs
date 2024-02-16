@@ -292,6 +292,11 @@ namespace EveMailHelper.ServiceLayer.Managers
                 }
             }
 
+            // now artificially set the sums (normally loaded from db)
+            result.DirectCostSum = result.DirectJobCost + result.DirectComponentCost;
+            result.BestPriceSum = result.BestPriceJobCost + result.BestPriceComponentCost;
+            result.ProductCostSum = result.ProductQuantity * result.ProductPricePerUnit;
+
             return result;
         }
 

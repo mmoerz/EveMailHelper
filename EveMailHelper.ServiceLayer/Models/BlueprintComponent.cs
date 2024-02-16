@@ -10,11 +10,19 @@ using static MudBlazor.Icons;
 
 namespace EveMailHelper.ServiceLayer.Models
 {
-    
+    /// <summary>
+    /// a simple tree representing the buildplan and subbuildplans for an activity of a blueprint
+    /// </summary>
     public class BlueprintComponent 
     {
-        public BlueprintComponent()
+        public BlueprintComponent() 
         {
+            SubComponents = new List<BlueprintComponent>();
+        }
+
+        public BlueprintComponent(BlueprintComponent? parent) 
+        {
+            SetParent(parent);
             SubComponents = new List<BlueprintComponent>();
         }
 
@@ -30,13 +38,23 @@ namespace EveMailHelper.ServiceLayer.Models
         public int QuantityFromBlueprint { get; set; }
         public double JobCost { get; set; }
         public IList<BlueprintComponent> SubComponents { get; set; }
+
+        private BlueprintComponent? _parent = null;
+        public BlueprintComponent? Parent
+        { get { return _parent; } }
+
+        protected void SetParent(BlueprintComponent? parent)
+        {
+            _parent = parent;
+        }
+
         /// <summary>
         /// depth in the hierachy of the product chain.
         /// </summary>
         /// <remarks>
         /// blueprint is zero, direct materials of blueprint are 1, ...
         /// </remarks>
-        public int ProductionDepth
+        public virtual int ProductionDepth
         {
             get
             {
@@ -47,24 +65,24 @@ namespace EveMailHelper.ServiceLayer.Models
                 return depth;
             }
         }
-        
+
         // killed for good because, they are modified by the facilities material modifier
         // and therefore useless here
         //public double PriceSum
         //{ get { return Quantity * PricePerUnit; } }
         //public double VolumeSum
         //{ get { return Volume * Quantity; } }
-        
+
         public double ForcedQuantityMultiplier
         {
             get
             {
                 if (Quantity == 0)
                     throw new Exception("Quantity must not be 0.");
-                
+
                 if (SubComponents.Count() == 0)
                     return 1.0;
-                
+
                 if (QuantityFromBlueprint == 0)
                     throw new Exception("QuantityFromBlueprint must not be 0.");
 
@@ -72,11 +90,11 @@ namespace EveMailHelper.ServiceLayer.Models
             }
         }
 
-        protected BlueprintComponent? _parent;
-        public BlueprintComponent Parent
-        { get { return _parent; } }
+        //protected BlueprintComponent? _parent;
+        //public BlueprintComponent Parent
+        //{ get { return _parent; } }
         #endregion
-                
+
 
         //public void SetParent(BlueprintComponent component)
         //{
@@ -85,12 +103,14 @@ namespace EveMailHelper.ServiceLayer.Models
 
         public void Add(BlueprintComponent component)
         {
-            if (SubComponents.Contains(component))
+            var comp = component; //as IBlueprintComponentTreeNode;
+            if (comp == null)
+                throw new ArgumentException($"{nameof(component)} is not of type IBlueprintComponentTree");
+            if (SubComponents.Contains(comp))
                 return;
 
-            //component.SetParent(this);
-            component._parent = this;
-            SubComponents.Add(component);
+            comp._parent = this;
+            SubComponents.Add(comp);
         }
 
         public void AddRange(IList<BlueprintComponent> components)

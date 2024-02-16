@@ -28,7 +28,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             {
                 return new List<ProductionPlan>()
                 {
-                    new ProductionPlan {
+                    new() {
                         ProductQuantity = 200,
                         ProductPricePerUnit = 300,
                         JobCost = 200,
@@ -43,7 +43,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             {
                 return new List<ProductionPlan>()
                 {
-                    new ProductionPlan {
+                    new() {
                         ProductQuantity = 200,
                         ProductPricePerUnit = 30000,
                         JobCost = 200,
@@ -52,11 +52,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             }
         }
 
-        public static List<ProductionPlan> TestData3
-        {
-            get
-            {
-                return new ()
+        public static List<ProductionPlan> TestData3 => new()
                 {
                     new ProductionPlan {
                         ProductQuantity = 100,
@@ -74,8 +70,6 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                         JobCost = 900,
                     }
                 };
-            }
-        }
 
         public static List<BlueprintComponent> TestData5
         {

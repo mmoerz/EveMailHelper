@@ -64,11 +64,7 @@
                     </BuyListContent>
                 </BuyListDetails>
                 
-                <ProductionCostDetails NormalizedProductionCost="@NormalizedProdCost" @ref="ProductionCostDetails">
-                    <ProductionCostContent Context="Cost">
-
-                    </ProductionCostContent>
-                </ProductionCostDetails>
+                
 
                 <!--
                 <BuildPlan Plan="@ProdPlan" @ref="BuildPlanDetails">
@@ -83,5 +79,31 @@
                 -->
             </MudCardContent>
         </MudCard>
+        <MudCard>
+            <MudCardHeader>
+                <MudPaper Class=" flex-grow-1" Elevation="0">
+                    <MudItem Typo="@Typo.h6">Production Cost Summary</MudItem>
+                </MudPaper>
+            </MudCardHeader>
+            <MudCardContent>
+                <ProductionCostDetails NormalizedProductionCost="@NormalizedProdCost" @ref="ProductionCostDetails">
+                    <ProductionCostContent Context="Cost">
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem>Buy Costs Sum:</MudItem>
+                            <MudItem>@Cost.ProductCostSum</MudItem>
+                        </MudStack>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem>direct buildcost:</MudItem>
+                            <MudItem>@Cost.DirectCostSum</MudItem>
+                        </MudStack>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem>bestpricebuildcost:</MudItem>
+                            <MudItem>@Cost.BestPriceSum</MudItem>
+                        </MudStack>
+                    </ProductionCostContent>
+                </ProductionCostDetails>
+            </MudCardContent>
+        </MudCard>
+
     </MudItem>
 </MudGrid>
