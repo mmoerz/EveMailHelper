@@ -28,7 +28,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
             {
                 return new List<BlueprintComponent>()
                 {
-                    new BlueprintComponent {
+                    new BlueprintComponent(null) {
                         Name = "TopLevel",
                         Quantity = 100,
                         PricePerUnit = 300,

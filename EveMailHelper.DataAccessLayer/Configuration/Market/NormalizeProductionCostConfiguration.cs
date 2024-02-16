@@ -11,7 +11,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Market
         public void Configure(EntityTypeBuilder<NormalizedProductionCost> builder)
         {
             // a table with an automated history
-            builder.ToTable(nameof(NormalizedProductionCost), "market");
+            builder.ToTable(nameof(NormalizedProductionCost), "market", e => e.IsTemporal());
             builder.HasKey(a => new { a.EveTypeId, a.ActivityId });
             //builder.HasIndex(a => a.ActivityId);
             builder.Property(a => a.ActivityId)
@@ -22,7 +22,7 @@ namespace EveMailHelper.DataAccessLayer.Configuration.Market
             builder.Property(a => a.BestPriceSum)
                 .HasComputedColumnSql("[BestPriceJobCost] + [BestPriceComponentCost]");
             builder.Property(a => a.ProductCostSum)
-                .HasComputedColumnSql("[ProductQuantity] * [ProductPricePerUnit]");
+                .HasComputedColumnSql("[ProductQuantity] * [ProductPricePerUnit] * [NumberOfRuns]");
 
             builder.HasOne(a => a.EveType)
                 .WithMany()

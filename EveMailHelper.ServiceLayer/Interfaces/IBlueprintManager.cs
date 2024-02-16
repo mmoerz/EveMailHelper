@@ -9,6 +9,7 @@ namespace EveMailHelper.ServiceLayer.Interfaces
     {
         Task<List<IndustryActivity>> GetBlueprintActivity(int EveId);
         Task<ProductionPlan> GetBlueprintComponentsList(IndustryBlueprint blueprint, int filterActivity = 0);
+        Task<List<IndustryBlueprint>> GetBlueprintsForActivityId(int activityId);
         Task<TableData<IndustryBlueprint>> GetBlueprintsPaginated(string groupFilter, string searchString, TableState state);
     }
 }

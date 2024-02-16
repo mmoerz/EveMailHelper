@@ -235,13 +235,18 @@ namespace EveMailHelper.ServiceLayer.Managers
             public double ComponentCost;
         }
 
-        public async Task<NormalizedProductionCost> CacheProductionCostAsync(
-            ProductionPlan plan, int NumberOfRuns, double materialModifier)
+        public async Task CacheProductionCostAsync(
+            ProductionPlan plan, int NumberOfRuns, double materialModifier, int MaxAgeInMinutes)
         {
+            double age = await _normalizedProdcutionCostDbAccess.GetAgeForId(plan.Blueprint.Type.EveId);
             //Todo: check if the db already contains this data ??
 
-            var result = DeriveProductionCost(plan, NumberOfRuns, materialModifier);
-            return await _normalizedProdcutionCostDbAccess.AddOrUpdateAsync(result);
+            if (age == 0 || age > MaxAgeInMinutes)
+            {
+                var result = DeriveProductionCost(plan, NumberOfRuns, materialModifier);
+                await _normalizedProdcutionCostDbAccess.AddOrUpdateAsync(result);
+            }
+
         }
 
         // Direct build using the top level blueprint and it's required components
@@ -295,7 +300,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             // now artificially set the sums (normally loaded from db)
             result.DirectCostSum = result.DirectJobCost + result.DirectComponentCost;
             result.BestPriceSum = result.BestPriceJobCost + result.BestPriceComponentCost;
-            result.ProductCostSum = result.ProductQuantity * result.ProductPricePerUnit;
+            result.ProductCostSum = result.ProductQuantity * result.ProductPricePerUnit * NumberOfRuns;
 
             return result;
         }
@@ -311,18 +316,37 @@ namespace EveMailHelper.ServiceLayer.Managers
                 result.ComponentCost = blueprintAnalyzer.PriceSum() * NumberOfRuns;
                 return result;
             }
-
-            result.JobCost += component.JobCost;
+                        
             int subComponentsNumberOfRuns = (int)(NumberOfRuns / component.ForcedQuantityMultiplier);
+            result.JobCost += component.JobCost * subComponentsNumberOfRuns;
             foreach (var subComponent in component.SubComponents)
             {
-                var subresult = RecursiveBestPriceProductionCost(subComponent, NumberOfRuns, materialModifier);
+                var subresult = RecursiveBestPriceProductionCost(subComponent, subComponentsNumberOfRuns, materialModifier);
                 result.JobCost += subresult.JobCost;
                 result.ComponentCost += subresult.ComponentCost;
             }
             return result;
         }
 
-        
+        public async Task PreprocessBlueprintsForActivity(int activityId, int NumberOfRuns, int MaxAgeInMinutes,
+            int regionId, double systemCostIndex, double structureBonuses, double facilityTax,
+            double materialModifier,
+            bool isAlphaClone)
+        { 
+            var blueprintList = await _blueprintManager.GetBlueprintsForActivityId(activityId);
+
+            foreach(var blueprint in blueprintList)
+            {
+                var prodplan = await GetProductionPlan(blueprint, new List<int> { 11 }, regionId, systemCostIndex,
+                    structureBonuses, facilityTax, materialModifier, isAlphaClone);
+
+                await CacheProductionCostAsync(prodplan, NumberOfRuns, materialModifier, MaxAgeInMinutes);
+            }
+        }
+
+        public async Task<TableData<NormalizedProductionCost>> GetPaginatedNormalizedProductionCostAsync(string searchString, TableState state)
+        {
+            return await _normalizedProdcutionCostDbAccess.GetPaginatedAsync(searchString, state);
+        }
     }
 }

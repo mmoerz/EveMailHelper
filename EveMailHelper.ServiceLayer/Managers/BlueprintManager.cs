@@ -37,9 +37,9 @@ namespace EveMailHelper.ServiceLayer.Managers
         }
 
         public async Task<TableData<IndustryBlueprint>> GetBlueprintsPaginated(
-            string groupFilter, string searchString, TableState state)
+            string marketGroupFilter, string searchString, TableState state)
         {
-            return await _blueprintDbAccess.GetPaginatedAsync(groupFilter, searchString, state);
+            return await _blueprintDbAccess.GetPaginatedAsync(marketGroupFilter, searchString, state);
         }
 
         public async Task<List<IndustryActivity>> GetBlueprintActivity(int EveId)
@@ -125,6 +125,11 @@ namespace EveMailHelper.ServiceLayer.Managers
 
             }
             return componentList;
+        }
+
+        public async Task<List<IndustryBlueprint>> GetBlueprintsForActivityId(int activityId)
+        {
+            return await _blueprintDbAccess.GetAllByActivityId(activityId);
         }
     }
 }

@@ -4,6 +4,7 @@ using EveMailHelper.DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EveMailHelper.DataAccessLayer.Migrations
 {
     [DbContext(typeof(EveMailHelperContext))]
-    partial class EveMailHelperContextModelSnapshot : ModelSnapshot
+    [Migration("20240216214933_normalizedProductionCost4")]
+    partial class normalizedProductionCost4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -385,11 +387,11 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         new
                         {
                             Id = new Guid("11110000-0000-0000-0000-000011110000"),
-                            DateFounded = new DateTime(2024, 2, 17, 0, 33, 6, 975, DateTimeKind.Local).AddTicks(3815),
+                            DateFounded = new DateTime(2024, 2, 16, 22, 49, 32, 626, DateTimeKind.Local).AddTicks(8095),
                             Description = "Noname Default",
                             EveDeletedInGame = false,
                             EveId = 0,
-                            EveLastUpdated = new DateTime(2024, 2, 16, 23, 33, 6, 975, DateTimeKind.Utc).AddTicks(3791),
+                            EveLastUpdated = new DateTime(2024, 2, 16, 21, 49, 32, 626, DateTimeKind.Utc).AddTicks(8067),
                             MemberCount = 0,
                             Name = "Noname Default",
                             TaxRate = 0f,
@@ -765,16 +767,6 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.Property<int>("NumberOfRuns")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("PeriodEnd")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("PeriodEnd");
-
-                    b.Property<DateTime>("PeriodStart")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("PeriodStart");
-
                     b.Property<double>("ProductCostSum")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("float")
@@ -794,17 +786,6 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("NormalizedProductionCost", "market");
-
-                    b.ToTable(tb => tb.IsTemporal(ttb =>
-                        {
-                            ttb
-                                .HasPeriodStart("PeriodStart")
-                                .HasColumnName("PeriodStart");
-                            ttb
-                                .HasPeriodEnd("PeriodEnd")
-                                .HasColumnName("PeriodEnd");
-                        }
-                    ));
                 });
 
             modelBuilder.Entity("EveMailHelper.DataModels.Note", b =>

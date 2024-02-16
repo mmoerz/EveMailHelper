@@ -1,0 +1,63 @@
+﻿@using EveMailHelper.DataModels.Market
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+</style>
+
+<MudTable Dense="true"
+          Hover="true"
+          FixedHeader="true"
+          FixedFooter="true"
+          ReadOnly="@readOnly"
+          OnRowClick="RowClickEvent"
+          RowClassFunc="@SelectedRowClassFunc"
+          ServerData=@(new Func<TableState, Task<TableData<NormalizedProductionCost>>>(ServerReload))
+          SortLabel="Sortierung"
+          T="NormalizedProductionCost"
+          @ref="table">
+    <!-- IsEditRowSwitchingBlocked="" -->
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Reaction Formulas</MudText>
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))"
+                      Placeholder="Suche"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium"
+                      Class="mt-0">
+        </MudTextField>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width:220px" />
+        <col style="width:200px" />
+        <col style="width:220px" />
+        <col style="width:200px" />
+        <col />
+        <col />
+    </ColGroup>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortLabel="ProductName" T="NormalizedProductionCost">Product Name</MudTableSortLabel> </MudTh>
+        <MudTh><MudTableSortLabel SortLabel="ProductCostSum" T="NormalizedProductionCost">Marketbuy</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="DirectCostSum" T="NormalizedProductionCost">DirectCostSum</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="BestPriceSum" T="NormalizedProductionCost">BestPriceSum</MudTableSortLabel></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="ProductName">@context.Product.TypeName</MudTd>
+        <MudTd DataLabel="ProductCostSum">@($"{context.ProductCostSum}:#,##0.00}")</MudTd>
+        <MudTd DataLabel="DirectCostSum">@($"{@context.DirectCostSum:#,##0.00}")</MudTd>
+        <MudTd DataLabel="BestPriceSum">@($"{@context.BestPriceSum:#,##0.00}")</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager HidePageNumber="false" />
+    </PagerContent>
+</MudTable>

@@ -38,8 +38,18 @@ namespace EveMailHelper.BusinessDataAccess
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<List<IndustryBlueprint>> GetAllByActivityId(int activityId)
+        {
+            IQueryable<IndustryBlueprint> query =
+                from blueprint in _context.IndustryBlueprints
+                join activity in _context.IndustryActivities on blueprint.TypeId equals activity.TypeId
+                where activity.ActivityId == activityId
+                select blueprint;
+            return await query.ToListAsync();
+        }
+
         public async Task<TableData<IndustryBlueprint>> GetPaginatedAsync(
-            string grpFilter, string searchString, TableState state)
+            string marketGroupFilter, string searchString, TableState state)
         {
             IQueryable<IndustryBlueprint> query;
 
@@ -52,8 +62,10 @@ namespace EveMailHelper.BusinessDataAccess
                 x => x.Type.TypeName.Contains(searchString) 
                 || (x.Type.Group != null && x.Type.Group.GroupName.Contains(searchString))
                 );
-            if (!string.IsNullOrEmpty(grpFilter))
-                query = query.Where(x => (x.Type.Group != null && x.Type.Group.GroupName.Contains(grpFilter)));
+            if (!string.IsNullOrEmpty(marketGroupFilter))
+                query = query.Where(x => (x.Type.MarketGroup != null && 
+                                            x.Type.MarketGroup.MarketGroupName != null && 
+                                            x.Type.MarketGroup.MarketGroupName.Contains(marketGroupFilter)));
             
             query = state.SortLabel switch
             {

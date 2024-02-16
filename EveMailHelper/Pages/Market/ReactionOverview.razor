@@ -88,17 +88,28 @@
             <MudCardContent>
                 <ProductionCostDetails NormalizedProductionCost="@NormalizedProdCost" @ref="ProductionCostDetails">
                     <ProductionCostContent Context="Cost">
+                        
                         <MudStack Row="true" Justify="Justify.SpaceBetween">
                             <MudItem>Buy Costs Sum:</MudItem>
-                            <MudItem>@Cost.ProductCostSum</MudItem>
+                            <MudItem>@($"{@Cost.ProductCostSum:#,##0.00}")</MudItem>
                         </MudStack>
+                        <MudItem Class="ma-1"></MudItem>
                         <MudStack Row="true" Justify="Justify.SpaceBetween">
                             <MudItem>direct buildcost:</MudItem>
-                            <MudItem>@Cost.DirectCostSum</MudItem>
+                            <MudItem>@($"{@Cost.DirectCostSum:#,##0.00}")</MudItem>
                         </MudStack>
                         <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem>direct componentcost:</MudItem>
+                            <MudItem>@($"{@Cost.DirectComponentCost:#,##0.00}")</MudItem>
+                        </MudStack>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem>direct jobcost:</MudItem>
+                            <MudItem>@($"{@Cost.DirectJobCost:#,##0.00}")</MudItem>
+                        </MudStack>
+                        <MudItem Class="ma-1"></MudItem>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
                             <MudItem>bestpricebuildcost:</MudItem>
-                            <MudItem>@Cost.BestPriceSum</MudItem>
+                            <MudItem>@($"{@Cost.BestPriceSum:#,##0.00}")</MudItem>
                         </MudStack>
                     </ProductionCostContent>
                 </ProductionCostDetails>
