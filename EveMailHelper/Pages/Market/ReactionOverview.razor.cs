@@ -35,10 +35,11 @@ namespace EveMailHelper.Web.Pages.Market
         #endregion
 
         #region displayed components
+        private MudNumericField<int> NumberOfRunsField { get; set; } = null!;
         private BlueprintDetails? ProductionPlanDisplay { get; set; } = null!;
         private BuyListDetails BuyListComponent { get; set; } = null!;
         private BuyListTitle BuyListTitleComponent { get; set; } = null!;
-        private MudNumericField<int> NumberOfRunsField {  get; set; } = null!; 
+        private ProductionCostDetails ProductionCostDetails { get; set; } = null!;
         #endregion
 
         private IndustryBlueprint selectedBlueprint { get; set; } = new();
@@ -48,6 +49,8 @@ namespace EveMailHelper.Web.Pages.Market
         private BuyList ToBuyList { get; set; } = new();
 
         private BuildPlan BuildPlanDetails = null!;
+
+        private NormalizedProductionCost NormalizedProdCost = null!;
 
         private int RegionId { get; set; } = -1;
         private double SystemCostIndex { get; set; } = 4.51;
@@ -82,6 +85,8 @@ namespace EveMailHelper.Web.Pages.Market
                     var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
                         newplan, NumberOfRuns, MaterialConsumption);
                     ToBuyList.CopyShallow(newBuyList);
+                    NormalizedProdCost = ProductionManager.DeriveProductionCost(
+                        newplan, NumberOfRuns, MaterialConsumption);
 
                     RefreshSubComponents();
                 }
@@ -123,6 +128,8 @@ namespace EveMailHelper.Web.Pages.Market
                 BuyListComponent.RefreshTheFucker();
             if (BuildPlanDetails != null)
                 BuildPlanDetails.RefreshTheFucker();
+            if (ProductionCostDetails != null)
+                ProductionCostDetails.Refresh();
         }
 
         public async Task OnNumberOfRunsChanged(int newValue) 

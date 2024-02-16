@@ -6,12 +6,12 @@ using EveMailHelper.DataModels.Market;
 
 namespace EveMailHelper.DataAccessLayer.Configuration.Market
 {
-    public partial class NormalizeProductionCostConfiguration : IEntityTypeConfiguration<NormalizeProductionCost>
+    public partial class NormalizeProductionCostConfiguration : IEntityTypeConfiguration<NormalizedProductionCost>
     {
-        public void Configure(EntityTypeBuilder<NormalizeProductionCost> builder)
+        public void Configure(EntityTypeBuilder<NormalizedProductionCost> builder)
         {
             // a table with an automated history
-            builder.ToTable(nameof(NormalizeProductionCost), "market");
+            builder.ToTable(nameof(NormalizedProductionCost), "market");
             builder.HasKey(a => new { a.EveTypeId, a.ActivityId });
             //builder.HasIndex(a => a.ActivityId);
             builder.Property(a => a.ActivityId)

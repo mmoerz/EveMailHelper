@@ -21,6 +21,7 @@ using EVEStandard;
 using EVEStandard.Models;
 using EVEStandard.Models.API;
 
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 
@@ -234,7 +235,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             public double ComponentCost;
         }
 
-        public async Task<NormalizeProductionCost> CacheProductionCostAsync(
+        public async Task<NormalizedProductionCost> CacheProductionCostAsync(
             ProductionPlan plan, int NumberOfRuns, double materialModifier)
         {
             //Todo: check if the db already contains this data ??
@@ -246,14 +247,14 @@ namespace EveMailHelper.ServiceLayer.Managers
         // Direct build using the top level blueprint and it's required components
         // Bestprice build - replacing buying components by building them if this is cheaper
         // compare to quantity * current marketprice
-        public NormalizeProductionCost DeriveProductionCost(
+        public NormalizedProductionCost DeriveProductionCost(
             ProductionPlan plan, int NumberOfRuns, double materialModifier)
         {
             _ = plan.Product ?? throw new Exception("ProductionPlan with empty product");
 
             ProductionPlanAnalyzer analyzer = new(plan, materialModifier);
 
-            NormalizeProductionCost result = new()
+            NormalizedProductionCost result = new()
             {
                 // MUST BE SET!!!
                 EveType = plan.Activity.Type, // connection to activity
@@ -268,20 +269,20 @@ namespace EveMailHelper.ServiceLayer.Managers
             foreach (var subComponent in plan.Root.SubComponents)
             {
                 BlueprintAnalyzer blueprintAnalyzer = new(subComponent, materialModifier);
-                result.DirectComponentCost += blueprintAnalyzer.PriceSum();
+                result.DirectComponentCost += blueprintAnalyzer.PriceSum() * NumberOfRuns;
             }
             // here comes the complex part, selecting the best price articles
             // we are aggregating information (throwing away details about how the price was calculated)
             result.BestPriceJobCost = result.DirectJobCost;
-            result.BestPriceComponentCost = result.BestPriceComponentCost;
+            //result.BestPriceComponentCost = result.BestPriceComponentCost;
             if (analyzer.IsProducingBetter())
             {
                 int minimumNumberOfRuns;
                 if (!analyzer.NumberOfRunsIsValid(NumberOfRuns, onlyUseBestPricePath: true, 
                     out minimumNumberOfRuns))
                     throw new Exception($"Number of Runs must be a multiple of {minimumNumberOfRuns}");
-                result.BestPriceJobCost = 0;
-                result.BestPriceComponentCost = 0;
+                //result.BestPriceJobCost = 0;
+                //result.BestPriceComponentCost = 0;
                 foreach (var component in plan.Root.SubComponents)
                 {
                     var subresult = 
@@ -310,11 +311,13 @@ namespace EveMailHelper.ServiceLayer.Managers
             int subComponentsNumberOfRuns = (int)(NumberOfRuns / component.ForcedQuantityMultiplier);
             foreach (var subComponent in component.SubComponents)
             {
-                var subresult = RecursiveBestPriceProductionCost(component, NumberOfRuns, materialModifier);
+                var subresult = RecursiveBestPriceProductionCost(subComponent, NumberOfRuns, materialModifier);
                 result.JobCost += subresult.JobCost;
                 result.ComponentCost += subresult.ComponentCost;
             }
             return result;
         }
+
+        
     }
 }

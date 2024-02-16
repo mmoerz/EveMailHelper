@@ -14,7 +14,7 @@ namespace EveMailHelper.DataModels.Market
     /// contains the estimated costs for running an activity for a blueprint.
     /// Must be written to the db before the Sum properties have computed values.
     /// </summary>
-    public partial class NormalizeProductionCost : IBaseUpdateableEveObject
+    public partial class NormalizedProductionCost : IBaseUpdateableEveObject
     {
         public int EveTypeId { get; set; }
         public int ActivityId { get; set; }

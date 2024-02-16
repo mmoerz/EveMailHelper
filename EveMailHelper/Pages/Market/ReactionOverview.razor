@@ -43,7 +43,9 @@
     <MudItem xs="3">
         <MudCard Elevation="4" Outlined="true">
             <MudCardHeader>
-                <BuyListTitle BuyList="@ToBuyList" @ref="BuyListTitleComponent"></BuyListTitle>
+                <MudPaper Class=" flex-grow-1" Elevation="0">
+                    <BuyListTitle BuyList="@ToBuyList" @ref="BuyListTitleComponent"></BuyListTitle>
+                </MudPaper>
             </MudCardHeader>
             <MudCardContent>
                 
@@ -62,6 +64,12 @@
                     </BuyListContent>
                 </BuyListDetails>
                 
+                <ProductionCostDetails NormalizedProductionCost="@NormalizedProdCost" @ref="ProductionCostDetails">
+                    <ProductionCostContent Context="Cost">
+
+                    </ProductionCostContent>
+                </ProductionCostDetails>
+
                 <!--
                 <BuildPlan Plan="@ProdPlan" @ref="BuildPlanDetails">
                     <BuildPlanContent Context="Plan">

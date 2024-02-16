@@ -13,7 +13,7 @@ namespace EveMailHelper.DataModels.Sde
             Materials = new HashSet<IndustryActivityMaterial>();
             Probabilities = new HashSet<IndustryActivityProbability>();
             Products = new HashSet<IndustryActivityProduct>();
-            NormalizeProductionCosts = new HashSet<NormalizeProductionCost>();
+            NormalizeProductionCosts = new HashSet<NormalizedProductionCost>();
         }
         public int TypeId { get; set; }
         public int ActivityId { get; set; }
@@ -28,6 +28,6 @@ namespace EveMailHelper.DataModels.Sde
         public virtual ICollection<IndustryActivityProbability> Probabilities { get; set; }
         public virtual ICollection<IndustryActivityProduct> Products { get; set; }
 
-        public virtual ICollection<NormalizeProductionCost> NormalizeProductionCosts { get; set; }
+        public virtual ICollection<NormalizedProductionCost> NormalizeProductionCosts { get; set; }
     }
 }

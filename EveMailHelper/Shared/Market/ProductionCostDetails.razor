@@ -1,0 +1,11 @@
+﻿@using EveMailHelper.DataModels.Market
+
+@if (NormalizedProductionCost is not null)
+{
+    <MudPaper>
+        <!--
+        <MudText Typo="Typo.h6">Buylist</MudText>
+        -->
+        @ProductionCostContent(NormalizedProductionCost)
+    </MudPaper>
+}

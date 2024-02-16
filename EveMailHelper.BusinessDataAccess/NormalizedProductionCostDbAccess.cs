@@ -19,7 +19,7 @@ namespace EveMailHelper.BusinessDataAccess
             _context = context;
         }
 
-        public async Task AddAsync(NormalizeProductionCost prodCost)
+        public async Task AddAsync(NormalizedProductionCost prodCost)
         {
             await _context.NormalizeProductionCosts.AddAsync(prodCost);
         }
@@ -29,7 +29,7 @@ namespace EveMailHelper.BusinessDataAccess
         /// </summary>
         /// <param name="prodCost">cost data to update</param>
         /// <returns>a tracked entity</returns>
-        public async Task<NormalizeProductionCost> AddOrUpdateAsync(NormalizeProductionCost prodCost)
+        public async Task<NormalizedProductionCost> AddOrUpdateAsync(NormalizedProductionCost prodCost)
         {
             var found = await _context.NormalizeProductionCosts
                 .Where(x => x.EveTypeId == prodCost.EveTypeId && x.ActivityId == prodCost.ActivityId)
@@ -47,7 +47,7 @@ namespace EveMailHelper.BusinessDataAccess
         /// </summary>
         /// <param name="prodCost"></param>
         /// <returns></returns>
-        public NormalizeProductionCost Update(NormalizeProductionCost prodCost)
+        public NormalizedProductionCost Update(NormalizedProductionCost prodCost)
         {
             return _context.NormalizeProductionCosts
                 .Update(prodCost)
