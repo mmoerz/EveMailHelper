@@ -53,7 +53,7 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="ProductName">@context.Product.TypeName</MudTd>
-        <MudTd DataLabel="ProductCostSum">@($"{context.ProductCostSum}:#,##0.00}")</MudTd>
+        <MudTd DataLabel="ProductCostSum">@($"{context.ProductCostSum:#,##0.00}")</MudTd>
         <MudTd DataLabel="DirectCostSum">@($"{@context.DirectCostSum:#,##0.00}")</MudTd>
         <MudTd DataLabel="BestPriceSum">@($"{@context.BestPriceSum:#,##0.00}")</MudTd>
     </RowTemplate>

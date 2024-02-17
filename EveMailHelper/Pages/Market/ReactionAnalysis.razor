@@ -1,0 +1,120 @@
+﻿@page "/Market/ReactionAnalysis"
+@using EveMailHelper.Web.Shared.Reactions
+@using EveMailHelper.Web.Shared.Blueprints
+@using EveMailHelper.Web.Shared.Market
+
+<!--
+<MudCard Elevation="4">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Reaction Overview</MudText>
+    </MudCardHeader>
+</MudCard>
+-->
+<MudStack Row="true">
+<MudItem xs="6" sm="3" md="2">
+    <MudNumericField @bind-Value="SystemCostIndex" Label="Systemcost Index" Min="0.0" />
+</MudItem>
+<MudItem xs="6" sm="3" md="2">
+    <MudNumericField Value="@NumberOfRuns" 
+                     Label="Number Of Runs" 
+                     Variant="Variant.Filled" 
+                     Min="@NumberOfRunsMin"
+                     Step="@NumberOfRunsMin"
+                     ValueChanged="(int newvalue) => OnNumberOfRunsChanged(newvalue)"
+                     For="@(() => NumberOfRuns)"
+                     @ref="NumberOfRunsField"/>
+</MudItem>
+<MudItem xs="6" sm="3" md="2">
+    <MudNumericField @bind-Value="MaterialConsumption" Label="MaterialConsumption" Variant="Variant.Filled" Min="-2.6" />
+</MudItem>
+</MudStack>
+
+<ReactionList OnBlueprintSelected="BlueprintSelected"></ReactionList>
+<MudItem Class="mt-4"></MudItem>
+
+<MudGrid>
+    <MudItem xs="9">
+        <BlueprintDetails 
+            Plan="@ProdPlan"
+            MaterialModifier="@MaterialConsumption"
+            @ref="ProductionPlanDisplay">
+        </BlueprintDetails>
+    </MudItem>
+    <MudItem xs="3">
+        <MudCard Elevation="4" Outlined="true">
+            <MudCardHeader>
+                <MudPaper Class=" flex-grow-1" Elevation="0">
+                    <BuyListTitle BuyList="@ToBuyList" @ref="BuyListTitleComponent"></BuyListTitle>
+                </MudPaper>
+            </MudCardHeader>
+            <MudCardContent>
+                
+                <BuyListDetails BuyList="@ToBuyList" @ref="BuyListComponent">
+                    <BuyListContent Context="buyList">
+                        
+                    @foreach (var item in buyList.ItemList)
+                    {
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem Class="">@item.EveType.TypeName</MudItem>
+                            <MudSpacer />
+                            <MudItem Class="pl-1">@item.Quantity</MudItem>
+                        </MudStack>
+                    }
+                        
+                    </BuyListContent>
+                </BuyListDetails>
+                
+                
+
+                <!--
+                <BuildPlan Plan="@ProdPlan" @ref="BuildPlanDetails">
+                    <BuildPlanContent Context="Plan">
+                        <MudText>@Plan.ProductName</MudText>
+                        <MudText>@Plan.ProductQuantity</MudText>
+                        <MudText>Production Costs</MudText>
+                        <MudText>@Plan.JobCost</MudText>
+                        <MudText></MudText>
+                    </BuildPlanContent>
+                </BuildPlan>
+                -->
+            </MudCardContent>
+        </MudCard>
+        <MudCard>
+            <MudCardHeader>
+                <MudPaper Class=" flex-grow-1" Elevation="0">
+                    <MudItem Typo="@Typo.h6">Production Cost Summary</MudItem>
+                </MudPaper>
+            </MudCardHeader>
+            <MudCardContent>
+                <ProductionCostDetails NormalizedProductionCost="@NormalizedProdCost" @ref="ProductionCostDetails">
+                    <ProductionCostContent Context="Cost">
+                        
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem>Buy Costs Sum:</MudItem>
+                            <MudItem>@($"{@Cost.ProductCostSum:#,##0.00}")</MudItem>
+                        </MudStack>
+                        <MudItem Class="ma-1"></MudItem>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem>direct buildcost:</MudItem>
+                            <MudItem>@($"{@Cost.DirectCostSum:#,##0.00}")</MudItem>
+                        </MudStack>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem>direct componentcost:</MudItem>
+                            <MudItem>@($"{@Cost.DirectComponentCost:#,##0.00}")</MudItem>
+                        </MudStack>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem>direct jobcost:</MudItem>
+                            <MudItem>@($"{@Cost.DirectJobCost:#,##0.00}")</MudItem>
+                        </MudStack>
+                        <MudItem Class="ma-1"></MudItem>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem>bestpricebuildcost:</MudItem>
+                            <MudItem>@($"{@Cost.BestPriceSum:#,##0.00}")</MudItem>
+                        </MudStack>
+                    </ProductionCostContent>
+                </ProductionCostDetails>
+            </MudCardContent>
+        </MudCard>
+
+    </MudItem>
+</MudGrid>

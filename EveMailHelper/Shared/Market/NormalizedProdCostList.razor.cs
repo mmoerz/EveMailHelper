@@ -23,6 +23,16 @@ namespace EveMailHelper.Web.Shared.Market
         #region parameters
         [Parameter]
         public EventCallback<NormalizedProductionCost> OnBlueprintSelected { get; set; }
+        [Parameter]
+        public int RegionId { get; set; }
+        [Parameter]
+        public double SystemCostIndex { get; set; }
+        [Parameter]
+        public double StructureBonuses { get; set; }
+        [Parameter]
+        public double FacilityTax { get; set; }
+        [Parameter]
+        public double MaterialConsumptionModifier { get; set; }
         #endregion
 
         #region pagination stuff
@@ -39,19 +49,32 @@ namespace EveMailHelper.Web.Shared.Market
         private NormalizedProductionCost model = null!;
         #endregion
 
-        //protected override async Task OnInitializedAsync()
-        //{
-        //}
+        bool initfinished = false;
+
+        protected override async Task OnInitializedAsync()
+        {
+            await ProductionManager.PreprocessBlueprintsForActivity(11, 18, 60,
+                RegionId, SystemCostIndex, StructureBonuses, FacilityTax, MaterialConsumptionModifier, false);
+            initfinished = true;
+        }
 
         /// <summary>
         /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>
         private async Task<TableData<NormalizedProductionCost>> ServerReload(TableState state)
         {
-            TableData<NormalizedProductionCost> onePage =
-                await ProductionManager.GetPaginatedNormalizedProductionCostAsync(searchString, state);
 
-            //await Task.Delay(300);
+            TableData<NormalizedProductionCost> onePage;
+            if (initfinished)
+                onePage = await ProductionManager.GetPaginatedNormalizedProductionCostAsync(searchString, state);
+            else
+            {
+                onePage = new()
+                {
+                    Items = new List<NormalizedProductionCost>(),
+                    TotalItems = 0
+                };
+            }
 
             return onePage;
         }
