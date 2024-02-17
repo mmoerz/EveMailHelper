@@ -335,21 +335,27 @@ namespace EveMailHelper.ServiceLayer.Managers
             return result;
         }
 
-        public async Task PreprocessBlueprintsForActivity(int activityId, int NumberOfRuns, int MaxAgeInMinutes,
+        public async Task PreprocessBlueprintsForActivity(
+            IProgress<Tuple<int,int>> progressAndMax,
+            int activityId, int NumberOfRuns, int MaxAgeInMinutes,
             int regionId, double systemCostIndex, double structureBonuses, double facilityTax,
             double materialModifier,
             bool isAlphaClone)
         { 
             var blueprintList = await _blueprintManager.GetBlueprintsForActivityId(activityId);
 
-            foreach(var blueprint in blueprintList)
+            var i = 0;
+            progressAndMax.Report(new Tuple<int, int>(i, blueprintList.Count()));
+            foreach (var blueprint in blueprintList)
             {
                 var prodplan = await GetProductionPlan(blueprint, new List<int> { 11 }, regionId, systemCostIndex,
                     structureBonuses, facilityTax, materialModifier, isAlphaClone);
 
                 await CacheProductionCostAsync(prodplan, NumberOfRuns, materialModifier, MaxAgeInMinutes);
+                progressAndMax.Report(new Tuple<int, int>(i++, blueprintList.Count()));
             }
             await _dbContext.SaveChangesAsync();
+            progressAndMax.Report(new Tuple<int, int>(blueprintList.Count(), blueprintList.Count()));
         }
 
         public async Task<TableData<NormalizedProductionCost>> GetPaginatedNormalizedProductionCostAsync(string searchString, TableState state)

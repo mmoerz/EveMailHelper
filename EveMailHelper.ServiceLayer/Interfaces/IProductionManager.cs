@@ -13,6 +13,6 @@ namespace EveMailHelper.ServiceLayer.Interfaces
         NormalizedProductionCost DeriveProductionCost(ProductionPlan plan, int NumberOfRuns, double materialModifier);
         Task<TableData<NormalizedProductionCost>> GetPaginatedNormalizedProductionCostAsync(string searchString, TableState state);
         Task<ProductionPlan> GetProductionPlan(IndustryBlueprint blueprint, IList<int> activityFilerIds, int regionId, double systemCostIndex, double structureBonuses, double facilityTax, double materialModifier, bool isAlphaClone);
-        Task PreprocessBlueprintsForActivity(int activityId, int NumberOfRuns, int MaxAgeInMinutes, int regionId, double systemCostIndex, double structureBonuses, double facilityTax, double materialModifier, bool isAlphaClone);
+        Task PreprocessBlueprintsForActivity(IProgress<Tuple<int, int>> progressAndMax, int activityId, int NumberOfRuns, int MaxAgeInMinutes, int regionId, double systemCostIndex, double structureBonuses, double facilityTax, double materialModifier, bool isAlphaClone);
     }
 }

@@ -13,10 +13,21 @@
             }
 </style>
 
+@if (PreprocessProgress < 100)
+{
+    <MudProgressCircular Color="Color.Default" Value="@PreprocessProgress" />
+    <MudText>@PreprocessProgress</MudText>
+    <MudText>@PreprocessItemMax</MudText>
+    <MudText>@PreprocessItemNr</MudText>
+
+}
+
 <MudTable Dense="true"
           Hover="true"
           FixedHeader="true"
           FixedFooter="true"
+          Loading="Loading"
+          
           ReadOnly="@readOnly"
           OnRowClick="RowClickEvent"
           RowClassFunc="@SelectedRowClassFunc"

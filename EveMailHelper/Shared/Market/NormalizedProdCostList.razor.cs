@@ -51,6 +51,12 @@ namespace EveMailHelper.Web.Shared.Market
 
         bool initfinished = false;
 
+        protected int PreprocessItemNr = 0;
+        protected int PreprocessItemMax = 0;
+        protected int PreprocessProgress = 0;
+
+        protected bool Loading = true;
+
         protected override async Task OnInitializedAsync()
         {
             // hmm region by parameter is -1 ...
@@ -58,8 +64,20 @@ namespace EveMailHelper.Web.Shared.Market
             _ = region ?? throw new Exception("Jita region not found");
             RegionId = region.EveId;
 
-            await ProductionManager.PreprocessBlueprintsForActivity(11, 20, 60,
-                RegionId, SystemCostIndex, StructureBonuses, FacilityTax, MaterialConsumptionModifier, false);
+            await ProductionManager.PreprocessBlueprintsForActivity(
+                new Progress<Tuple<int, int>>((tuple) =>
+                {
+                    PreprocessItemNr = tuple.Item1;
+                    PreprocessItemMax = tuple.Item2;
+                    PreprocessProgress = PreprocessItemNr * 100 / PreprocessItemMax;
+                    if (PreprocessProgress == 100)
+                    {
+                        Loading = false;
+                    }
+                    StateHasChanged();
+                }),
+                11, 20, 60,
+                RegionId, SystemCostIndex, StructureBonuses, FacilityTax, MaterialConsumptionModifier, false); ;
             //initfinished = true;
 
             //table?.ReloadServerData();
