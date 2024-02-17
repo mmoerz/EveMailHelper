@@ -28,6 +28,8 @@ namespace EveMailHelper.Web.Pages.Market
         IMapManager MapManager { get; set; } = null!;
         [Inject]
         IProductionManager ProductionManager { get; set; } = null!;
+        [Inject]
+        IBlueprintManager BlueprintManager { get; set; } = null!; 
 
         #endregion
 
@@ -72,23 +74,27 @@ namespace EveMailHelper.Web.Pages.Market
                 if (cost != null && cost.EveType != null && cost.EveType.EveId != 0)
                 {
                     // npc --> blueprint ??
-                    // 
-                    //var newplan = await ProductionManager.GetProductionPlan(
-                    //    blueprint, new List<int>() { 11 },
-                    //    RegionId, SystemCostIndex, StructureBonuses, FacilityTax, MaterialConsumption,
-                    //    IsAlphaClone);
-                    //ProdPlan.ShallowCopy(newplan);
-                    //ProductionPlanAnalyzer analyzer = new(newplan, MaterialConsumption);
-                    //NumberOfRunsMin = analyzer.GetMinNumberOfRuns(true);
-                    //if (NumberOfRuns < NumberOfRunsMin)
-                    //    NumberOfRuns = NumberOfRunsMin;
-                    //var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
-                    //    newplan, NumberOfRuns, MaterialConsumption);
-                    //ToBuyList.CopyShallow(newBuyList);
-                    //var newprodcost = ProductionManager.DeriveProductionCost(
-                    //    newplan, NumberOfRuns, MaterialConsumption);
-                    //NormalizedProdCost.CopyShallow(newprodcost);
-                    //RefreshSubComponents();
+                    //
+                    var blueprint = await BlueprintManager.GetBlueprint(cost.EveType.EveId);
+                    if (blueprint != null)
+                    {
+                        var newplan = await ProductionManager.GetProductionPlan(
+                            blueprint, new List<int>() { 11 },
+                            RegionId, SystemCostIndex, StructureBonuses, FacilityTax, MaterialConsumption,
+                            IsAlphaClone);
+                        ProdPlan.ShallowCopy(newplan);
+                        ProductionPlanAnalyzer analyzer = new(newplan, MaterialConsumption);
+                        NumberOfRunsMin = analyzer.GetMinNumberOfRuns(true);
+                        if (NumberOfRuns < NumberOfRunsMin)
+                            NumberOfRuns = NumberOfRunsMin;
+                        var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
+                            newplan, NumberOfRuns, MaterialConsumption);
+                        ToBuyList.CopyShallow(newBuyList);
+                        var newprodcost = ProductionManager.DeriveProductionCost(
+                            newplan, NumberOfRuns, MaterialConsumption);
+                        NormalizedProdCost.CopyShallow(newprodcost);
+                        RefreshSubComponents();
+                    }
                 }
             }
             catch (Exception ex)

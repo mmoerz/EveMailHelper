@@ -36,6 +36,11 @@ namespace EveMailHelper.ServiceLayer.Managers
             _industryActivityDbAccess = new(_dbContext);
         }
 
+        public async Task<IndustryBlueprint?> GetBlueprint(int EveId)
+        {
+            return await _blueprintDbAccess.GetByIdAsync(EveId);
+        }
+
         public async Task<TableData<IndustryBlueprint>> GetBlueprintsPaginated(
             string marketGroupFilter, string searchString, TableState state)
         {
