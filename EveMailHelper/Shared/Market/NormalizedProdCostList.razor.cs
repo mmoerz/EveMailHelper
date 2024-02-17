@@ -120,12 +120,13 @@ namespace EveMailHelper.Web.Shared.Market
 
         private string SelectedRowClassFunc(NormalizedProductionCost rmodel, int rowNumber)
         {
-            if (selectedRowNumber == rowNumber)
-            {
-                selectedRowNumber = -1;
-                return string.Empty;
-            }
-            else if (table?.SelectedItem != null && table.SelectedItem.Equals(rmodel))
+            //if (selectedRowNumber == rowNumber)
+            //{
+            //    selectedRowNumber = -1;
+            //    return string.Empty;
+            //}
+            //else
+            if (table?.SelectedItem != null && table.SelectedItem.Equals(rmodel))
             {
                 selectedRowNumber = rowNumber;
                 model = rmodel;
