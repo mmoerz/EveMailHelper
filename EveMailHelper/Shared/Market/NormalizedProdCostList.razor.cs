@@ -13,7 +13,7 @@ namespace EveMailHelper.Web.Shared.Market
     public partial class NormalizedProdCostList : ComponentBase
     {
         #region injections
-        //[Inject] IBlueprintManager BlueprintManager { get; set; } = null!;
+        [Inject] IMapManager MapManager { get; set; } = null!;
 
         [Inject] IProductionManager ProductionManager { get; set; } = null!;
 
@@ -53,9 +53,16 @@ namespace EveMailHelper.Web.Shared.Market
 
         protected override async Task OnInitializedAsync()
         {
-            await ProductionManager.PreprocessBlueprintsForActivity(11, 18, 60,
+            // hmm region by parameter is -1 ...
+            var region = await MapManager.GetRegionByName("The Forge");
+            _ = region ?? throw new Exception("Jita region not found");
+            RegionId = region.EveId;
+
+            await ProductionManager.PreprocessBlueprintsForActivity(11, 20, 60,
                 RegionId, SystemCostIndex, StructureBonuses, FacilityTax, MaterialConsumptionModifier, false);
-            initfinished = true;
+            //initfinished = true;
+
+            //table?.ReloadServerData();
         }
 
         /// <summary>
@@ -65,16 +72,16 @@ namespace EveMailHelper.Web.Shared.Market
         {
 
             TableData<NormalizedProductionCost> onePage;
-            if (initfinished)
+            //if (initfinished)
                 onePage = await ProductionManager.GetPaginatedNormalizedProductionCostAsync(searchString, state);
-            else
-            {
-                onePage = new()
-                {
-                    Items = new List<NormalizedProductionCost>(),
-                    TotalItems = 0
-                };
-            }
+            //else
+            //{
+            //    onePage = new()
+            //    {
+            //        Items = new List<NormalizedProductionCost>(),
+            //        TotalItems = 0
+            //    };
+            //}
 
             return onePage;
         }

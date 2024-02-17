@@ -112,14 +112,13 @@ namespace EveMailHelper.ServiceLayer.Managers
                 // and add it as a subcomponent
                 var producedBy = await _industryActivityDbAccess.FindForProduct(
                     material.MaterialType.EveId, filterActivityId);
-                if (producedBy.Any())
+                if (producedBy != null)
                 {
-                    var first = producedBy.First();
-                    var result = first.Products.Where(x => x.ProductTypeId == material.MaterialType.EveId).First();
+                    var result = producedBy.Products.Where(x => x.ProductTypeId == material.MaterialType.EveId).First();
 
                     component.QuantityFromBlueprint = result.Quantity;
 
-                    var resultList = await GetBlueprintComponentsForActivity(first, filterActivityId);
+                    var resultList = await GetBlueprintComponentsForActivity(producedBy, filterActivityId);
                     component.AddRange(resultList);
                 }
 

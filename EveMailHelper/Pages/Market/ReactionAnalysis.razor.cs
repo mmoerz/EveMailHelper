@@ -63,31 +63,32 @@ namespace EveMailHelper.Web.Pages.Market
 
         private double MaterialConsumption { get; set; } = -2.6;
 
-        private async void BlueprintSelected(IndustryBlueprint blueprint)
+        private async void BlueprintSelected(NormalizedProductionCost cost)
         {
             _ = ProductionPlanDisplay ?? throw new NullReferenceException("Buildplan");
 
             try
             {
-                if (blueprint != null && blueprint.TypeId != 0)
+                if (cost != null && cost.EveType != null && cost.EveType.EveId != 0)
                 {
-                    selectedBlueprint.CopyShallow(blueprint);
-                    var newplan = await ProductionManager.GetProductionPlan(
-                        blueprint, new List<int>() { 11 },
-                        RegionId, SystemCostIndex, StructureBonuses, FacilityTax, MaterialConsumption,
-                        IsAlphaClone);
-                    ProdPlan.ShallowCopy(newplan);
-                    ProductionPlanAnalyzer analyzer = new(newplan, MaterialConsumption);
-                    NumberOfRunsMin = analyzer.GetMinNumberOfRuns(true);
-                    if (NumberOfRuns < NumberOfRunsMin)
-                        NumberOfRuns = NumberOfRunsMin;
-                    var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
-                        newplan, NumberOfRuns, MaterialConsumption);
-                    ToBuyList.CopyShallow(newBuyList);
-                    var newprodcost = ProductionManager.DeriveProductionCost(
-                        newplan, NumberOfRuns, MaterialConsumption);
-                    NormalizedProdCost.CopyShallow(newprodcost);
-                    RefreshSubComponents();
+                    // npc --> blueprint ??
+                    // 
+                    //var newplan = await ProductionManager.GetProductionPlan(
+                    //    blueprint, new List<int>() { 11 },
+                    //    RegionId, SystemCostIndex, StructureBonuses, FacilityTax, MaterialConsumption,
+                    //    IsAlphaClone);
+                    //ProdPlan.ShallowCopy(newplan);
+                    //ProductionPlanAnalyzer analyzer = new(newplan, MaterialConsumption);
+                    //NumberOfRunsMin = analyzer.GetMinNumberOfRuns(true);
+                    //if (NumberOfRuns < NumberOfRunsMin)
+                    //    NumberOfRuns = NumberOfRunsMin;
+                    //var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
+                    //    newplan, NumberOfRuns, MaterialConsumption);
+                    //ToBuyList.CopyShallow(newBuyList);
+                    //var newprodcost = ProductionManager.DeriveProductionCost(
+                    //    newplan, NumberOfRuns, MaterialConsumption);
+                    //NormalizedProdCost.CopyShallow(newprodcost);
+                    //RefreshSubComponents();
                 }
             }
             catch (Exception ex)
@@ -133,16 +134,16 @@ namespace EveMailHelper.Web.Pages.Market
 
         public async Task OnNumberOfRunsChanged(int newValue) 
         {
-            NumberOfRuns = newValue;
-            ProductionPlanAnalyzer analyzer = new(ProdPlan, MaterialConsumption);
-            NumberOfRunsMin = analyzer.GetMinNumberOfRuns(true);
-            if (NumberOfRuns < NumberOfRunsMin)
-                NumberOfRuns = NumberOfRunsMin;
-            var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
-                ProdPlan, NumberOfRuns, MaterialConsumption);
-            ToBuyList.CopyShallow(newBuyList);
+            //NumberOfRuns = newValue;
+            //ProductionPlanAnalyzer analyzer = new(ProdPlan, MaterialConsumption);
+            //NumberOfRunsMin = analyzer.GetMinNumberOfRuns(true);
+            //if (NumberOfRuns < NumberOfRunsMin)
+            //    NumberOfRuns = NumberOfRunsMin;
+            //var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
+            //    ProdPlan, NumberOfRuns, MaterialConsumption);
+            //ToBuyList.CopyShallow(newBuyList);
 
-            RefreshSubComponents();
+            //RefreshSubComponents();
         }
     }
 }

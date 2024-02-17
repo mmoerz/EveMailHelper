@@ -29,7 +29,14 @@
 </MudItem>
 </MudStack>
 
-<ReactionList OnBlueprintSelected="BlueprintSelected"></ReactionList>
+<NormalizedProdCostList OnBlueprintSelected="BlueprintSelected"
+                        RegionId="RegionId"
+                        SystemCostIndex="SystemCostIndex"
+                        StructureBonuses="StructureBonuses"
+                        FacilityTax="FacilityTax"
+                        MaterialConsumptionModifier="MaterialConsumption"
+    />
+
 <MudItem Class="mt-4"></MudItem>
 
 <MudGrid>

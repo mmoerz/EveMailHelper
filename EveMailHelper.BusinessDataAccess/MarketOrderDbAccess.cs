@@ -79,15 +79,11 @@ namespace EveMailHelper.BusinessDataAccess
                 };
             var result = await query.AsNoTracking().ToListAsync();
 
-            //var result = await _context.MarketOrders
-            //    .Where(x => x.TypeId == eveTypeId)
-            //    .GroupBy(x => x.IsBuyOrder
-            //        //,resultSelector: (key, list) => new { IsBuyOrder = key, min = list.Min(), max = list.Max()}
-            //        )
-            //    .Select(x => x.Min)
-            //    .ToListAsync();
-            double buyMax = result.Where(x => x.IsBuyOrder == true).Single().max;
-            double sellMin = result.Where(x => x.IsBuyOrder == false).Single().min;
+            // there may not be any buy / sell orders
+            double buyMax = result.Where(x => x.IsBuyOrder == true)
+                .FirstOrDefault(new {IsBuyOrder = true, min = 0.0, max = 0.0}).max;
+            double sellMin = result.Where(x => x.IsBuyOrder == false)
+                .FirstOrDefault(new { IsBuyOrder = true, min = 0.0, max = 0.0 }).min;
 
             return new SellBuyPriceDTO(sellMin, buyMax);
         }

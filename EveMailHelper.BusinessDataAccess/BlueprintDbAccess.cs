@@ -43,7 +43,9 @@ namespace EveMailHelper.BusinessDataAccess
             IQueryable<IndustryBlueprint> query =
                 from blueprint in _context.IndustryBlueprints
                 join activity in _context.IndustryActivities on blueprint.TypeId equals activity.TypeId
+                join evetype in _context.EveTypes on blueprint.TypeId equals evetype.EveId
                 where activity.ActivityId == activityId
+                where !evetype.TypeName.Contains("Test")
                 select blueprint;
             return await query.ToListAsync();
         }

@@ -4,9 +4,7 @@
     {
         public void CopyShallow(NormalizedProductionCost cost)
         {
-            EveTypeId = cost.EveTypeId;
             EveType = cost.EveType;
-            ActivityId = cost.ActivityId;
             IndustryActivity = cost.IndustryActivity;
             NumberOfRuns = cost.NumberOfRuns;
             DirectJobCost = cost.DirectJobCost;
@@ -15,7 +13,6 @@
             BestPriceJobCost = cost.BestPriceJobCost;
             BestPriceComponentCost = cost.BestPriceComponentCost;
             BestPriceSum = cost.BestPriceSum;
-            ProductId = cost.ProductId;
             ProductQuantity = cost.ProductQuantity;
             ProductPricePerUnit = cost.ProductPricePerUnit;
             ProductCostSum = cost.ProductCostSum;

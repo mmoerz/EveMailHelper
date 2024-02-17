@@ -40,7 +40,7 @@ namespace EveMailHelper.BusinessDataAccess
                 .ToListAsync();
         }
 
-        public async Task<List<IndustryActivity>> FindForProduct(int EveId, int industryActivityId)
+        public async Task<IndustryActivity?> FindForProduct(int EveId, int industryActivityId)
         {
             IQueryable<IndustryActivity> query;
 
@@ -59,7 +59,7 @@ namespace EveMailHelper.BusinessDataAccess
                 .Include(i => i.Probabilities)
                 .Include(i => i.Products)
                 .ThenInclude(p => p.ProductType)
-                .ToListAsync();
+                .FirstOrDefaultAsync();
         }
 
         public async Task<IndustryActivity?> GetByNameAsync(string blueprintName)

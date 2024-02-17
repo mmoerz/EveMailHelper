@@ -37,13 +37,21 @@ namespace EveMailHelper.BusinessDataAccess
         public async Task<NormalizedProductionCost> AddOrUpdateAsync(NormalizedProductionCost prodCost)
         {
             var found = await _context.NormalizeProductionCosts
-                .Where(x => x.EveTypeId == prodCost.EveTypeId && x.ActivityId == prodCost.ActivityId)
+                .Where(x => x.EveTypeId == prodCost.EveType.EveId && x.ActivityId == prodCost.IndustryActivity.ActivityId)
                 .AsNoTracking()
-                .SingleAsync();
+                .FirstOrDefaultAsync();
+
+            prodCost.EveTypeId = prodCost.EveType.EveId;
+            prodCost.ActivityId = prodCost.IndustryActivity.ActivityId;
+            prodCost.ProductId = prodCost.Product.EveId;
+            prodCost.EveType = null;
+            prodCost.Product = null;
+            prodCost.IndustryActivity = null;
+
             if (found != null)
-                await AddAsync(prodCost);
+                Update(prodCost); 
             else
-                Update(prodCost);
+                await AddAsync(prodCost);
             return prodCost;
         }
 

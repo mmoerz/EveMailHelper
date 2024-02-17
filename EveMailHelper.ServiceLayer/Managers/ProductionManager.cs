@@ -38,6 +38,10 @@ namespace EveMailHelper.ServiceLayer.Managers
 
         private readonly EveMailHelperContext _dbContext;
 
+        private readonly BlueprintDbAccess _blueprintDbAccess;
+        private readonly IndustryActivityDbAccess _industryActivityDbAccess;
+        private readonly EveTypeDbAccess _eveTypeDbAccess;    
+
         private readonly NormalizedProductionCostDbAccess _normalizedProdcutionCostDbAccess;
 
         private int MaxAgeInMinutes = 60;
@@ -61,6 +65,9 @@ namespace EveMailHelper.ServiceLayer.Managers
             _blueprintManager = blueprintManager;
             _dbContext = dbContextFactory.CreateDbContext();
             _normalizedProdcutionCostDbAccess = new NormalizedProductionCostDbAccess(_dbContext);
+            _blueprintDbAccess = new BlueprintDbAccess(_dbContext);
+            _industryActivityDbAccess = new IndustryActivityDbAccess(_dbContext);
+            _eveTypeDbAccess = new EveTypeDbAccess(_dbContext);
         }
 
         public async Task<ProductionPlan> GetProductionPlan(
@@ -239,11 +246,11 @@ namespace EveMailHelper.ServiceLayer.Managers
             ProductionPlan plan, int NumberOfRuns, double materialModifier, int MaxAgeInMinutes)
         {
             double age = await _normalizedProdcutionCostDbAccess.GetAgeForId(plan.Blueprint.Type.EveId);
-            //Todo: check if the db already contains this data ??
 
             if (age == 0 || age > MaxAgeInMinutes)
             {
                 var result = DeriveProductionCost(plan, NumberOfRuns, materialModifier);
+
                 await _normalizedProdcutionCostDbAccess.AddOrUpdateAsync(result);
             }
 
@@ -342,6 +349,7 @@ namespace EveMailHelper.ServiceLayer.Managers
 
                 await CacheProductionCostAsync(prodplan, NumberOfRuns, materialModifier, MaxAgeInMinutes);
             }
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<TableData<NormalizedProductionCost>> GetPaginatedNormalizedProductionCostAsync(string searchString, TableState state)
