@@ -11,7 +11,7 @@ using static MudBlazor.Icons;
 
 namespace EveMailHelper.ServiceLayer.Models
 {
-    
+
     //public class BlueprintComponentTreeNode : BlueprintComponent, IBlueprintComponentTreeNode, IEnumerable
     //{
     //    public BlueprintComponentTreeNode(BlueprintComponentTreeNode? parent, double materialConsumptionModifier)
@@ -23,7 +23,7 @@ namespace EveMailHelper.ServiceLayer.Models
     //        }
     //        else
     //        {
-    //            productionDepth = parent.productionDepth +1;
+    //            productionDepth = parent.productionDepth + 1;
     //            parent.SubComponents.Add(this);
     //        }
     //        this.materialConsumptionModifier = materialConsumptionModifier;
@@ -49,19 +49,22 @@ namespace EveMailHelper.ServiceLayer.Models
     //    public bool IsIncludedInProductionPath
     //    { get { return _isIncludedInProdcutionPath; } }
 
+    //    /// <summary>
+    //    /// if node has no subnodes, then true, otherwise false
+    //    /// </summary>
     //    public bool IsEndNode
     //    { get { return SubComponents.Count() == 0; } }
-        
+
     //    public double ForcedQuantityMultiplier
     //    {
     //        get
     //        {
     //            if (Quantity == 0)
     //                throw new Exception("Quantity must not be 0.");
-                
+
     //            if (SubComponents.Count() == 0)
     //                return 1.0;
-                
+
     //            if (QuantityFromBlueprint == 0)
     //                throw new Exception("QuantityFromBlueprint must not be 0.");
 
@@ -69,13 +72,24 @@ namespace EveMailHelper.ServiceLayer.Models
     //        }
     //    }
 
+    //    /// <summary>
+    //    /// Sum for all costs of all subcomponents
+    //    /// </summary>
+    //    /// <remarks>depends on materialmodifier</remarks>
     //    public double SubComponentCosts;
+
+    //    /// <summary>
+    //    /// Sum for all volumes of all subcomponents
+    //    /// </summary>
+    //    public double SubComponentVolume;
+
+    //    public double SubComponentJobCosts;
 
     //    #endregion
 
     //    public double ProductionCost()
     //    {
-    //        return JobCost + SubComponentCosts;
+    //        return JobCost + SubComponentJobCosts + SubComponentCosts;
     //    }
 
     //    public int ModifiedQuantity()
@@ -137,7 +151,8 @@ namespace EveMailHelper.ServiceLayer.Models
     //        {
     //            var newNode = new BlueprintComponentTreeNode(this, materialConsumptionModifier);
     //            BlueprintComponent? sourceItem = item as BlueprintComponent;
-    //            if (sourceItem != null) {
+    //            if (sourceItem != null)
+    //            {
     //                newNode.CopyDeep(sourceItem);
     //            }
     //        }
@@ -151,23 +166,59 @@ namespace EveMailHelper.ServiceLayer.Models
     //        ResetTreeNode(this);
     //        foreach (var node in this)
     //        {
-    //            if (node.parent != null)
-    //            {
-    //                if (node.IsProduced())
-    //                {
-    //                    node.parent.SubComponentCosts += node.SubComponentCosts;
-    //                    node.parent.SubJobCosts += node.SubJobCosts + JobCost;
-    //            }
+                
+    //        }
+    //    }
 
-    //                node.parent.SubComponentCosts += node.BuyPriceSum();
+    //    private class ReturnCost
+    //    {
+    //        public double JobCost;
+    //        public double Volume;
+    //        public double TotalComponentCosts;
+    //    }
+
+    //    protected void InitializeSubTree(BlueprintComponentTreeNode node)
+    //    {
+    //        foreach (var child in node.SubComponents)
+    //        {
+    //            var childNode = child as BlueprintComponentTreeNode
+    //                ?? throw new Exception("childnode is not a BlueprintComponentTreenode.");
+
+    //            if (childNode.IsEndNode)
+    //            {
+    //                // Endnode never has any jobcosts
+    //                SubComponentCosts += childNode.BuyPriceSum();
+    //                SubComponentVolume += childNode.VolumeSum();
     //            }
+    //            else // ok, this node has children
+    //            {
+    //                InitializeSubTree(childNode);
+    //                SubComponentJobCosts += childNode.
+    //                SubComponentCosts += childNode.BuyPriceSum();
+    //                SubComponentVolume += childNode.VolumeSum();
+    //            }
+    //        }
+
+    //        if (node.IsEndNode)
+    //        {
+    //            return new ReturnCost()
+    //            {
+    //                JobCost = 0, // endnodes have no Jobcost
+    //                Volume = node.VolumeSum(),
+
+    //            }
+    //            node.parent.SubComponentCosts += node.SubComponentCosts;
+    //            node.parent.SubJobCosts += node.SubJobCosts + JobCost;
+    //        }
+
+    //            node.parent.SubComponentCosts += node.BuyPriceSum();
     //        }
     //    }
 
     //    protected void ResetTreeNode(BlueprintComponentTreeNode node)
     //    {
     //        node.SubComponentCosts = 0;
-    //        foreach(var child in node.SubComponents)
+    //        foreach (var child in node.SubComponents)
     //        {
     //            var childNode = child as BlueprintComponentTreeNode;
     //            if (childNode == null)

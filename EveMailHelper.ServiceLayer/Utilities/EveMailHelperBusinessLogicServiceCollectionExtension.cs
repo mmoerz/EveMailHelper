@@ -35,6 +35,7 @@ namespace EveMailHelper.ServiceLayer.Utilities
             services.AddTransient<IMarketManager, ArchiverMarketManager>();
             services.AddTransient<IEveTypeManager, EveTypeManager>();
             services.AddTransient<IProductionManager, ProductionManager>();
+            services.AddTransient<ITaxManager, TaxManager>();
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ using EveMailHelper.ServiceLayer.Interfaces;
 using EveMailHelper.DataModels.Sde;
 using EveMailHelper.ServiceLayer.Managers;
 using EveMailHelper.DataModels.Market;
+using System.Security.Permissions;
 
 namespace EveMailHelper.Web.Shared.Market
 {
@@ -53,6 +54,7 @@ namespace EveMailHelper.Web.Shared.Market
         protected int PreprocessProgress = 0;
 
         protected bool Loading = true;
+        protected bool readOnly = true;
 
         protected override async Task OnInitializedAsync()
         {
@@ -126,6 +128,20 @@ namespace EveMailHelper.Web.Shared.Market
         {
             double onepercent = cost.DirectCostSum / 100;
             return (cost.ProductCostSum - cost.DirectCostSum) / onepercent;
+        }
+
+        public string GetColorForDirectPrice(NormalizedProductionCost cost)
+        {
+            if (GetDirectPriceWinningsInPercent(cost) > 1.0)
+                return Colors.Green.Accent4;
+            return Colors.Red.Accent4;
+        }
+
+        public string GetColorForBestPrice(NormalizedProductionCost cost)
+        {
+            if (GetBestPriceWinningsInPercent(cost) > 1.0)
+                return Colors.Green.Accent1;
+            return Colors.Red.Accent4;
         }
     }
 }

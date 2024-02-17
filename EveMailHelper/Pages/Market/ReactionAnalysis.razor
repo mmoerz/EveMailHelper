@@ -117,6 +117,14 @@
                             <MudItem>bestpricebuildcost:</MudItem>
                             <MudItem>@($"{@Cost.BestPriceSum:#,##0.00}")</MudItem>
                         </MudStack>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem>direct componentcost:</MudItem>
+                            <MudItem>@($"{@Cost.BestPriceComponentCost:#,##0.00}")</MudItem>
+                        </MudStack>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween">
+                            <MudItem>bestprice jobcosts:</MudItem>
+                            <MudItem>@($"{@Cost.BestPriceJobCost:#,##0.00}")</MudItem>
+                        </MudStack>
                     </ProductionCostContent>
                 </ProductionCostDetails>
             </MudCardContent>

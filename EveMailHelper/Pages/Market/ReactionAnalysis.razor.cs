@@ -14,6 +14,7 @@ using EveMailHelper.DataModels.Market;
 using EveMailHelper.Web.Shared.Market;
 using EveMailHelper.ServiceLayer.Utilities;
 using MudBlazor;
+using Microsoft.Extensions.Hosting;
 
 namespace EveMailHelper.Web.Pages.Market
 {
@@ -29,7 +30,9 @@ namespace EveMailHelper.Web.Pages.Market
         [Inject]
         IProductionManager ProductionManager { get; set; } = null!;
         [Inject]
-        IBlueprintManager BlueprintManager { get; set; } = null!; 
+        IBlueprintManager BlueprintManager { get; set; } = null!;
+        [Inject]
+        ITaxManager TaxManager { get; set; } = null!;
 
         #endregion
 
@@ -61,7 +64,8 @@ namespace EveMailHelper.Web.Pages.Market
 
         private int NumberOfRuns { get; set; } = 1;
         private int NumberOfRunsMin { get; set; } = 1;
-        
+
+        private int AccountSkillLevel { get; set; } = 5;
 
         private double MaterialConsumption { get; set; } = -2.6;
 
@@ -71,7 +75,8 @@ namespace EveMailHelper.Web.Pages.Market
 
             try
             {
-                if (cost != null && cost.EveType != null && cost.EveType.EveId != 0)
+                if (cost != null && cost.EveType != null && cost.EveType.EveId != 0 &&
+                    NormalizedProdCost.EveTypeId != cost.EveTypeId)
                 {
                     // npc --> blueprint ??
                     //
@@ -93,6 +98,7 @@ namespace EveMailHelper.Web.Pages.Market
                         var newprodcost = ProductionManager.DeriveProductionCost(
                             newplan, NumberOfRuns, MaterialConsumption);
                         NormalizedProdCost.CopyShallow(newprodcost);
+                        NormalizedProdCost.EveType = cost.EveType;
                         RefreshSubComponents();
                     }
                 }
@@ -142,16 +148,40 @@ namespace EveMailHelper.Web.Pages.Market
 
         public async Task OnNumberOfRunsChanged(int newValue) 
         {
-            //NumberOfRuns = newValue;
-            //ProductionPlanAnalyzer analyzer = new(ProdPlan, MaterialConsumption);
-            //NumberOfRunsMin = analyzer.GetMinNumberOfRuns(true);
-            //if (NumberOfRuns < NumberOfRunsMin)
-            //    NumberOfRuns = NumberOfRunsMin;
-            //var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
-            //    ProdPlan, NumberOfRuns, MaterialConsumption);
-            //ToBuyList.CopyShallow(newBuyList);
+            NumberOfRuns = newValue;
+            if (NormalizedProdCost == null || NormalizedProdCost.EveType == null)
+                return;
 
-            //RefreshSubComponents();
+            var blueprint = await BlueprintManager.GetBlueprint(NormalizedProdCost.EveType.EveId);
+            if (blueprint != null)
+            {
+                var newplan = await ProductionManager.GetProductionPlan(
+                    blueprint, new List<int>() { 11 },
+                    RegionId, SystemCostIndex, StructureBonuses, FacilityTax, MaterialConsumption,
+                    IsAlphaClone);
+                ProdPlan.ShallowCopy(newplan);
+                ProductionPlanAnalyzer analyzer = new(newplan, MaterialConsumption);
+                NumberOfRunsMin = analyzer.GetMinNumberOfRuns(true);
+                if (NumberOfRuns < NumberOfRunsMin)
+                    NumberOfRuns = NumberOfRunsMin;
+                var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
+                    newplan, NumberOfRuns, MaterialConsumption);
+                ToBuyList.CopyShallow(newBuyList);
+                var newprodcost = ProductionManager.DeriveProductionCost(
+                    newplan, NumberOfRuns, MaterialConsumption);
+                NormalizedProdCost.CopyShallow(newprodcost);
+                RefreshSubComponents();
+            }
+        }
+
+        public double DirectCostSumWithTax(NormalizedProductionCost cost)
+        {
+            return TaxManager.AddSalesTax(cost.DirectCostSum, AccountSkillLevel);
+        }
+
+        public double BestPriceSumWithTax(NormalizedProductionCost cost)
+        {
+            return TaxManager.AddSalesTax(cost.BestPriceSum, AccountSkillLevel);
         }
     }
 }

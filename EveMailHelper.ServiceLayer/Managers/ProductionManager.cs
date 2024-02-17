@@ -275,7 +275,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 Product = plan.Product,
                 ProductQuantity = plan.ProductQuantity,
                 ProductPricePerUnit = plan.ProductPricePerUnit,
-                DirectJobCost = plan.JobCost,
+                DirectJobCost = plan.JobCost * NumberOfRuns,
             };
 
             foreach (var subComponent in plan.Root.SubComponents)
@@ -293,7 +293,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 if (!analyzer.NumberOfRunsIsValid(NumberOfRuns, onlyUseBestPricePath: true, 
                     out minimumNumberOfRuns))
                     throw new Exception($"Number of Runs must be a multiple of {minimumNumberOfRuns}");
-                //result.BestPriceJobCost = 0;
+                result.BestPriceJobCost = plan.JobCost * NumberOfRuns;
                 //result.BestPriceComponentCost = 0;
                 foreach (var component in plan.Root.SubComponents)
                 {

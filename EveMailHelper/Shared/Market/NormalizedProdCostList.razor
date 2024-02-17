@@ -27,7 +27,6 @@
           FixedHeader="true"
           FixedFooter="true"
           Loading="Loading"
-          
           ReadOnly="@readOnly"
           OnRowClick="RowClickEvent"
           RowClassFunc="@SelectedRowClassFunc"
@@ -67,10 +66,18 @@
     <RowTemplate>
         <MudTd DataLabel="ProductName">@context.Product.TypeName</MudTd>
         <MudTd Style="text-align:right" DataLabel="ProductCostSum">@($"{context.ProductCostSum:#,##0.00}")</MudTd>
-        <MudTd Style="text-align:right" DataLabel="DirectCostSum">@($"{@context.DirectCostSum:#,##0.00}")</MudTd>
-        <MudTd Style="text-align:right" DataLabel=" DC Winnings">@($"{GetDirectPriceWinningsInPercent(context):0.00}%")</MudTd>
-        <MudTd Style="text-align:right" DataLabel=" BestPriceSum">@($"{@context.BestPriceSum:#,##0.00}")</MudTd>
-        <MudTd Style="text-align:right" DataLabel=" DC Winnings">@($"{GetBestPriceWinningsInPercent(context):0.00}%")</MudTd>
+        <MudTd Style="@($"text-align:right; color:{GetColorForDirectPrice(context)};")" DataLabel="DirectCostSum">
+            @($"{@context.DirectCostSum:#,##0.00}")
+        </MudTd>
+        <MudTd Style="@($"text-align:right; color:{GetColorForDirectPrice(context)};")" DataLabel="DC Winnings">
+            @($"{GetDirectPriceWinningsInPercent(context):0.00}%")
+        </MudTd>
+        <MudTd Style="@($"text-align:right; color:{GetColorForBestPrice(context)};")" DataLabel="BestPriceSum">
+            @($"{@context.BestPriceSum:#,##0.00}")
+        </MudTd>
+        <MudTd Style="@($"text-align:right; color:{GetColorForBestPrice(context)};")" DataLabel="DC Winnings">
+            @($"{GetBestPriceWinningsInPercent(context):0.00}%")
+        </MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager HidePageNumber="false" />

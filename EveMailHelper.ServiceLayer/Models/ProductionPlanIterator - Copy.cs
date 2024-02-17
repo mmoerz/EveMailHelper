@@ -34,8 +34,8 @@ namespace EveMailHelper.ServiceLayer.Models
 
     //        // initially ignores the root node in the enumeration
     //        _navTree = new NavTree(root)
-    //        { 
-    //            SubComponentIndex = 0 
+    //        {
+    //            SubComponentIndex = 0
     //        };
     //    }
 
@@ -45,7 +45,7 @@ namespace EveMailHelper.ServiceLayer.Models
     //    }
 
     //    object IEnumerator.Current
-    //    { get { return (BlueprintComponentTreeNode)_currentComponent; } }      
+    //    { get { return (BlueprintComponentTreeNode)_currentComponent; } }
 
     //    /// <summary>
     //    /// starts in the lowest level in the endnodes
@@ -98,7 +98,7 @@ namespace EveMailHelper.ServiceLayer.Models
 
     //        return nav;
     //    }
-    
+
 
     //    public void Reset()
     //    {
