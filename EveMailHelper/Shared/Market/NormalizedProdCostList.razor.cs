@@ -36,11 +36,8 @@ namespace EveMailHelper.Web.Shared.Market
         #endregion
 
         #region pagination stuff
-        private readonly bool readOnly = false;
 
-        //private IEnumerable<Report> pagedData = null!;
         private MudTable<NormalizedProductionCost>? table = null!;
-        //private int totalItems;
         private string searchString = "";
         #endregion
 
@@ -59,7 +56,6 @@ namespace EveMailHelper.Web.Shared.Market
 
         protected override async Task OnInitializedAsync()
         {
-            // hmm region by parameter is -1 ...
             var region = await MapManager.GetRegionByName("The Forge");
             _ = region ?? throw new Exception("Jita region not found");
             RegionId = region.EveId;
@@ -90,16 +86,7 @@ namespace EveMailHelper.Web.Shared.Market
         {
 
             TableData<NormalizedProductionCost> onePage;
-            //if (initfinished)
-                onePage = await ProductionManager.GetPaginatedNormalizedProductionCostAsync(searchString, state);
-            //else
-            //{
-            //    onePage = new()
-            //    {
-            //        Items = new List<NormalizedProductionCost>(),
-            //        TotalItems = 0
-            //    };
-            //}
+            onePage = await ProductionManager.GetPaginatedNormalizedProductionCostAsync(searchString, state);
 
             return onePage;
         }
@@ -109,7 +96,6 @@ namespace EveMailHelper.Web.Shared.Market
             searchString = text;
             table?.ReloadServerData();
         }
-
         
         private void RowClickEvent(TableRowClickEventArgs<NormalizedProductionCost> tableRowClickEventArgs)
         {
@@ -120,12 +106,6 @@ namespace EveMailHelper.Web.Shared.Market
 
         private string SelectedRowClassFunc(NormalizedProductionCost rmodel, int rowNumber)
         {
-            //if (selectedRowNumber == rowNumber)
-            //{
-            //    selectedRowNumber = -1;
-            //    return string.Empty;
-            //}
-            //else
             if (table?.SelectedItem != null && table.SelectedItem.Equals(rmodel))
             {
                 selectedRowNumber = rowNumber;
@@ -135,7 +115,6 @@ namespace EveMailHelper.Web.Shared.Market
             }
             return string.Empty;
         }
-
 
         public double GetBestPriceWinningsInPercent(NormalizedProductionCost cost)
         {
