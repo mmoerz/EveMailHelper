@@ -138,6 +138,8 @@ namespace EveMailHelper.Web.Pages.Market
                 ProductionCostDetails.Refresh();
         }
 
+        
+
         public async Task OnNumberOfRunsChanged(int newValue) 
         {
             //NumberOfRuns = newValue;

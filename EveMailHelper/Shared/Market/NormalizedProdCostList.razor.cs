@@ -116,6 +116,18 @@ namespace EveMailHelper.Web.Shared.Market
             }
             return string.Empty;
         }
-        
+
+
+        public double GetBestPriceWinningsInPercent(NormalizedProductionCost cost)
+        {
+            double onepercent = cost.BestPriceSum / 100;
+            return (cost.ProductCostSum - cost.BestPriceSum) / onepercent;
+        }
+
+        public double GetDirectPriceWinningsInPercent(NormalizedProductionCost cost)
+        {
+            double onepercent = cost.DirectCostSum / 100;
+            return (cost.ProductCostSum - cost.DirectCostSum) / onepercent;
+        }
     }
 }

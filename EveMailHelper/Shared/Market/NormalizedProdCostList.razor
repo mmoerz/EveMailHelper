@@ -37,25 +37,29 @@
         </MudTextField>
     </ToolBarContent>
     <ColGroup>
-        <col style="width:220px" />
-        <col style="width:200px" />
-        <col style="width:220px" />
-        <col style="width:200px" />
-        <col />
+        <col style="width:170px" />
+        <col style="width:170px" />
+        <col style="width:80px" />
+        <col style="width:170px" />
+        <col style="width:80px"/>
         <col />
     </ColGroup>
     <HeaderContent>
         <MudTh><MudTableSortLabel SortLabel="ProductName" T="NormalizedProductionCost">Product Name</MudTableSortLabel> </MudTh>
-        <MudTh><MudTableSortLabel SortLabel="ProductCostSum" T="NormalizedProductionCost">Marketbuy</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="DirectCostSum" T="NormalizedProductionCost">DirectCostSum</MudTableSortLabel></MudTh>
+        <MudTh Style="text-align:center"><MudTableSortLabel SortLabel="ProductCostSum" T="NormalizedProductionCost">Marketbuy</MudTableSortLabel></MudTh>
+        <MudTh Style="text-align:center"><MudTableSortLabel SortLabel="DirectCostSum" T="NormalizedProductionCost">DirectCostSum</MudTableSortLabel></MudTh>
+        <MudTh>DC Winnings</MudTh>
         <MudTh><MudTableSortLabel SortLabel="BestPriceSum" T="NormalizedProductionCost">BestPriceSum</MudTableSortLabel></MudTh>
+        <MudTh>BP Winnings</MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="ProductName">@context.Product.TypeName</MudTd>
-        <MudTd DataLabel="ProductCostSum">@($"{context.ProductCostSum:#,##0.00}")</MudTd>
-        <MudTd DataLabel="DirectCostSum">@($"{@context.DirectCostSum:#,##0.00}")</MudTd>
-        <MudTd DataLabel="BestPriceSum">@($"{@context.BestPriceSum:#,##0.00}")</MudTd>
+        <MudTd Style="text-align:right" DataLabel="ProductCostSum">@($"{context.ProductCostSum:#,##0.00}")</MudTd>
+        <MudTd Style="text-align:right" DataLabel="DirectCostSum">@($"{@context.DirectCostSum:#,##0.00}")</MudTd>
+        <MudTd Style="text-align:right" DataLabel=" DC Winnings">@($"{GetDirectPriceWinningsInPercent(context):0.00}%")</MudTd>
+        <MudTd Style="text-align:right" DataLabel=" BestPriceSum">@($"{@context.BestPriceSum:#,##0.00}")</MudTd>
+        <MudTd Style="text-align:right" DataLabel=" DC Winnings">@($"{GetBestPriceWinningsInPercent(context):0.00}%")</MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager HidePageNumber="false" />
