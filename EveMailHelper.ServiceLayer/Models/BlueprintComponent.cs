@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 
+using EveMailHelper.DataModels.Dto;
 using EveMailHelper.DataModels.Sde;
 
 using EVEStandard.Models;
@@ -34,7 +35,7 @@ namespace EveMailHelper.ServiceLayer.Models
         public string Name { get; set; } = null!;
         public double Volume { get; set; }
         public int Quantity { get; set; }
-        public double PricePerUnit { get; set; }
+        public SellBuyPriceDTO PricePerUnit { get; set; }
         public int QuantityFromBlueprint { get; set; }
         public double JobCost { get; set; }
         public IList<BlueprintComponent> SubComponents { get; set; }

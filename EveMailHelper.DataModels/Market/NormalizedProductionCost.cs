@@ -27,7 +27,8 @@ namespace EveMailHelper.DataModels.Market
         public double BestPriceSum { get; set; }
         public int ProductId { get; set; }
         public int ProductQuantity { get; set; }
-        public double ProductPricePerUnit {  get; set; }
+        public double ProductSellPricePerUnit {  get; set; }
+        public double ProductBuyPricePerUnit { get; set; }
         public double ProductCostSum { get; set; }
 
         public DateTime LastUpdatedFromEve { get; set; } = DateTime.UtcNow;

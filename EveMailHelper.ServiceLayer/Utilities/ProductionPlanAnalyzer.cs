@@ -33,14 +33,14 @@ namespace EveMailHelper.ServiceLayer.Utilities
         public double BestPriceSum()
         {
             var JobAndComponentPrice = _plan.JobCost + ComponentBestPriceSum();
-            if (JobAndComponentPrice < _plan.ProductPriceSum)
+            if (JobAndComponentPrice < _plan.ProductPriceSum.SellPrice)
                 return JobAndComponentPrice;
-            return _plan.ProductPriceSum;
+            return _plan.ProductPriceSum.SellPrice;
         }
 
         public bool IsProducingBetter()
         {
-            return BestPriceSum() < _plan.PriceSum;
+            return BestPriceSum() < _plan.ProductPriceSum.SellPrice;
         }
 
         public bool IsBuyingBetter() 

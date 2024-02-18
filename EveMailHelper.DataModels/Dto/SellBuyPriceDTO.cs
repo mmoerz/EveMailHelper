@@ -15,7 +15,15 @@ namespace EveMailHelper.DataModels.Dto
             BuyPrice = buyPrice;
         }
 
+        /// <summary>
+        /// realistic price minimum for a sell order to set
+        /// </summary>
+        /// <remarks>is the current min value found in the market orders</remarks>
         public double SellPrice { get; set;}
+        /// <summary>
+        /// realistic price to set for a buy order
+        /// </summary>
+        /// <remarks>is the current max value found in the market orders</remarks>
         public double BuyPrice { get; set;}
 
     }

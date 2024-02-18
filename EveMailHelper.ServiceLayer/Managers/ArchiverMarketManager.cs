@@ -81,7 +81,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             return await _marketorderDbAccess.GetSellBuyForTypeIdAsync(eveTypeId);
         }
 
-        public async new Task<MarketPrice> GetMarketPrice(int eveTypeId, int maxAgeInMinutes)
+        public async new Task<MarketPrice> ArchivedMarketPrice(int eveTypeId, int maxAgeInMinutes)
         {
             List<MarketPrice> marketPrices;
             var age = await _marketpriceDbAccess.GetAgeForIdAsync(eveTypeId);

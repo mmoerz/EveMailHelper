@@ -42,7 +42,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             throw new NotImplementedException();
         }
 
-        public Task<MarketPrice> GetMarketPrice(int eveTypeId, int maxAgeInMinutes)
+        public Task<MarketPrice> ArchivedMarketPrice(int eveTypeId, int maxAgeInMinutes)
         {
             throw new NotImplementedException();
         }

@@ -14,7 +14,7 @@
             BestPriceComponentCost = cost.BestPriceComponentCost;
             BestPriceSum = cost.BestPriceSum;
             ProductQuantity = cost.ProductQuantity;
-            ProductPricePerUnit = cost.ProductPricePerUnit;
+            ProductSellPricePerUnit = cost.ProductSellPricePerUnit;
             ProductCostSum = cost.ProductCostSum;
             LastUpdatedFromEve = cost.LastUpdatedFromEve;
             Product = cost.Product;

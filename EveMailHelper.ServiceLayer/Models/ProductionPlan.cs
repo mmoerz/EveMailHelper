@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using EveMailHelper.DataModels.Dto;
 using EveMailHelper.DataModels.Sde;
 using EveMailHelper.ServiceLayer.Utilities;
 
@@ -27,12 +28,19 @@ namespace EveMailHelper.ServiceLayer.Models
         { get { return Product?.TypeName ?? string.Empty; } }
         public double ProductVolume
         { get { return Product?.Volume ?? 0.0; } }
-        public double ProductPriceSum
-        { get { return ProductPricePerUnit * ProductQuantity; } }
+        public SellBuyPriceDTO ProductPriceSum
+        {
+            get
+            {
+                return new()
+                {
+                    SellPrice = ProductPricePerUnit.SellPrice * ProductQuantity,
+                    BuyPrice = ProductPricePerUnit.BuyPrice * ProductQuantity
+                };
+            }
+        }
         public int ProductionDepth
         { get { return 0; } }
-        public double PriceSum
-        { get { return ProductQuantity * ProductPricePerUnit; } }
 
         public IndustryBlueprint Blueprint { get; set; } = null!;
         public IndustryActivity Activity { get; set; } = null!;
@@ -44,10 +52,18 @@ namespace EveMailHelper.ServiceLayer.Models
                 Root.QuantityFromBlueprint = value;
             }
         }
-        public double ProductPricePerUnit { 
+        //protected SellBuyPriceDTO _productPricePerUnit;
+        /// <summary>
+        /// price for a sell order to set
+        /// </summary>
+        public SellBuyPriceDTO ProductPricePerUnit { 
             get { return Root.PricePerUnit; }
             set { Root.PricePerUnit = value; } 
         }
+        /// <summary>
+        /// price to set for a buy order
+        /// </summary>
+        public double ProductBuyPricePerUnit { get; set; }
         public double JobCost { 
             get { return Root.JobCost; }
             set { Root.JobCost = value; } 

@@ -31,7 +31,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     new BlueprintComponent(null) {
                         Name = "TopLevel",
                         Quantity = 100,
-                        PricePerUnit = 300,
+                        PricePerUnit = new() { SellPrice = 300, BuyPrice = 200 },
                         Volume = 100,
                         QuantityFromBlueprint = 200,
                     }
@@ -48,35 +48,35 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     new BlueprintComponent {
                         Name = "TopLevel",
                         Quantity = 100,
-                        PricePerUnit = 20,
+                        PricePerUnit = new() { SellPrice = 20, BuyPrice = 18 },
                         Volume = 100,
                         QuantityFromBlueprint = 30,
                     },
                     new BlueprintComponent {
                         Name = "TopLevel",
                         Quantity = 200,
-                        PricePerUnit = 50,
+                        PricePerUnit = new() { SellPrice = 50, BuyPrice = 45 },
                         Volume = 200,
                         QuantityFromBlueprint = 8,
                     },
                     new BlueprintComponent {
                         Name = "TopLevel",
                         Quantity = 1000,
-                        PricePerUnit = 80,
+                        PricePerUnit = new() { SellPrice = 80, BuyPrice = 77 },
                         Volume = 300,
                         QuantityFromBlueprint = 25,
                     },
                     new BlueprintComponent {
                         Name = "TopLevel",
                         Quantity = 3000,
-                        PricePerUnit = 80,
+                        PricePerUnit = new() { SellPrice = 80, BuyPrice = 69 },
                         Volume = 400,
                         QuantityFromBlueprint = 25,
                     },
                     new BlueprintComponent {
                         Name = "TopLevel",
                         Quantity = 5000,
-                        PricePerUnit = 80,
+                        PricePerUnit = new() { SellPrice = 80, BuyPrice = 77 },
                         Volume = 500,
                         QuantityFromBlueprint = 25,
                     }
@@ -84,7 +84,7 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     new BlueprintComponent {
                         Name = "TopLevel",
                         Quantity = 10000,
-                        PricePerUnit = 80,
+                        PricePerUnit = new() { SellPrice = 80, BuyPrice = 57 },
                         Volume = 600,
                         QuantityFromBlueprint = 25,
                     }
@@ -101,34 +101,34 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     new BlueprintComponent {
                         Name = "TopLevel",
                         Quantity = 200,
-                        PricePerUnit = 300,
+                        PricePerUnit = new() { SellPrice = 300, BuyPrice = 200 },
                         QuantityFromBlueprint = 200,
                     },
                     new()
                     {
                         Name = "L1 item1",
                         Quantity = 10,
-                        PricePerUnit = 30,
+                        PricePerUnit = new() { SellPrice = 30, BuyPrice = 20 },
                         QuantityFromBlueprint = 20,
                     },
                     new()
                     {
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 2,
                         Name = "L2-1 item1"
                     },
                     new()
                     {
                         Quantity = 2,
-                        PricePerUnit = 4,
+                        PricePerUnit = new() { SellPrice = 4, BuyPrice = 3 },
                         QuantityFromBlueprint = 4,
                         Name = "L2-1 item2"
                     },
                     new()
                     {
                         Quantity = 3,
-                        PricePerUnit = 5,
+                        PricePerUnit = new() { SellPrice = 5, BuyPrice = 4 },
                         QuantityFromBlueprint = 6,
                         Name = "L2-1 item3"
                     },
@@ -136,28 +136,28 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     {
                         Name = "L1 item2",
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 4, // well this makes producing an item feasible
                                                    // (4 output at the price of 3 (9)
                     },
                     new()
                     {
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 2,
                         Name = "L2-2 item1"
                     },
                     new()
                     {
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 2,
                         Name = "L2-2 item2"
                     },
                     new()
                     {
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 2,
                         Name = "L2-2 item3"
                     }
@@ -183,34 +183,34 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     new BlueprintComponent {
                         Name = "TopLevel",
                         Quantity = 200,
-                        PricePerUnit = 300,
+                        PricePerUnit = new() { SellPrice = 300, BuyPrice = 280 },
                         QuantityFromBlueprint = 200,
                     },
                     new()
                     {
                         Name = "L1 item1",
                         Quantity = 10,
-                        PricePerUnit = 30,
+                        PricePerUnit = new() { SellPrice = 30, BuyPrice = 27 },
                         QuantityFromBlueprint = 20,
                     },
                     new()
                     {
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 2,
                         Name = "L2-1 item1"
                     },
                     new()
                     {
                         Quantity = 2,
-                        PricePerUnit = 4,
+                        PricePerUnit = new() { SellPrice = 4, BuyPrice = 3 },
                         QuantityFromBlueprint = 4,
                         Name = "L2-1 item2"
                     },
                     new()
                     {
                         Quantity = 3,
-                        PricePerUnit = 5,
+                        PricePerUnit = new() { SellPrice = 5, BuyPrice = 4 },
                         QuantityFromBlueprint = 6,
                         Name = "L2-1 item3"
                     },
@@ -218,27 +218,27 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     {
                         Name = "L1 item2",
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 3,
                     },
                     new()
                     {
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 1,
                         Name = "L2-2 item1"
                     },
                     new()
                     {
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 2,
                         Name = "L2-2 item2"
                     },
                     new()
                     {
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 2,
                         Name = "L2-2 item3"
                     } ,
@@ -246,27 +246,27 @@ namespace EveMailHelper.Test.UnitTests.DataGenerators
                     {
                         Name = "L1 item3",
                         Quantity = 1,
-                        PricePerUnit = 300,
+                        PricePerUnit = new() { SellPrice = 300, BuyPrice = 200 },
                         QuantityFromBlueprint = 4,
                     },
                     new()
                     {
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 2,
                         Name = "L2-3 item1"
                     },
                     new()
                     {
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 2,
                         Name = "L2-3 item2"
                     },
                     new()
                     {
                         Quantity = 1,
-                        PricePerUnit = 3,
+                        PricePerUnit = new() { SellPrice = 3, BuyPrice = 2 },
                         QuantityFromBlueprint = 2,
                         Name = "L2-3 item3"
                     }

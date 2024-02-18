@@ -88,12 +88,12 @@ namespace EveMailHelper.ServiceLayer.Managers
             {
                 var sellbuyPrice = await _marketManager.ArchivedBuySellPrice(
                     regionId, plan.Product.EveId, MaxAgeInMinutes);
-                plan.ProductPricePerUnit = sellbuyPrice.SellPrice;
+                plan.ProductPricePerUnit = sellbuyPrice;
                 foreach (var item in plan)
                 {
                     sellbuyPrice = await _marketManager.ArchivedBuySellPrice(
                         regionId, item.EveType.EveId, MaxAgeInMinutes);
-                    item.PricePerUnit = sellbuyPrice.SellPrice;
+                    item.PricePerUnit = sellbuyPrice;
                 }
                 await AddProductionCosts(plan, systemCostIndex, structureBonuses, facilityTax,
                     materialModifier,  isAlphaClone);
@@ -164,7 +164,7 @@ namespace EveMailHelper.ServiceLayer.Managers
             foreach (var subcomponent in component.SubComponents)
             {
                 var marketPrice =
-                    await _marketManager.GetMarketPrice(subcomponent.EveType.EveId, MaxAgeInMinutes);
+                    await _marketManager.ArchivedMarketPrice(subcomponent.EveType.EveId, MaxAgeInMinutes);
                 estimatedItemValue += subcomponent.Quantity * marketPrice.AdjustedPrice;
             }
 
@@ -261,7 +261,9 @@ namespace EveMailHelper.ServiceLayer.Managers
         // Bestprice build - replacing buying components by building them if this is cheaper
         // compare to quantity * current marketprice
         public NormalizedProductionCost DeriveProductionCost(
-            ProductionPlan plan, int NumberOfRuns, double materialModifier)
+            ProductionPlan plan, int NumberOfRuns, double materialModifier
+            //,int AccountSkillLevel, double BrokerRelationsLevel, double FactionStanding, double CorpStanding
+            )
         {
             _ = plan.Product ?? throw new Exception("ProductionPlan with empty product");
 
@@ -275,7 +277,8 @@ namespace EveMailHelper.ServiceLayer.Managers
                 NumberOfRuns = NumberOfRuns,
                 Product = plan.Product,
                 ProductQuantity = plan.ProductQuantity,
-                ProductPricePerUnit = plan.ProductPricePerUnit,
+                ProductSellPricePerUnit = plan.ProductPricePerUnit.SellPrice,
+                ProductBuyPricePerUnit = plan.ProductPricePerUnit.BuyPrice,
                 DirectJobCost = plan.JobCost * NumberOfRuns,
             };
 
@@ -308,12 +311,13 @@ namespace EveMailHelper.ServiceLayer.Managers
             // now artificially set the sums (normally loaded from db)
             result.DirectCostSum = result.DirectJobCost + result.DirectComponentCost;
             result.BestPriceSum = result.BestPriceJobCost + result.BestPriceComponentCost;
-            result.ProductCostSum = result.ProductQuantity * result.ProductPricePerUnit * NumberOfRuns;
+            result.ProductCostSum = result.ProductQuantity * result.ProductSellPricePerUnit * NumberOfRuns;
 
-            return AddTax(result);
+            //return AddSellTax(result, AccountSkillLevel, BrokerRelationsLevel, FactionStanding, CorpStanding);
+            return result;
         }
 
-        protected ProductionCost AddSellTax(NormalizedProductionCost cost,
+        protected ProductionCostExtended AddSellTax(NormalizedProductionCost cost,
             int AccountSkillLevel, double BrokerRelationsLevel, double FactionStanding, double CorpStanding)
         {
             //
@@ -323,7 +327,7 @@ namespace EveMailHelper.ServiceLayer.Managers
                 AccountSkillLevel, BrokerRelationsLevel, FactionStanding, CorpStanding);
             costExt.Profit.ImmediateSellTaxes = _taxManager.CalculateImmediateSellTaxes(costExt.Profit.MarketValue,
                 BrokerRelationsLevel, FactionStanding, CorpStanding);
-
+            return costExt;
         }
 
         protected ProductionCost RecursiveBestPriceProductionCost(

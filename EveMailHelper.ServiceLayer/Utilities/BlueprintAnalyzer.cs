@@ -29,7 +29,7 @@ namespace EveMailHelper.ServiceLayer.Utilities
 
         public double PriceSum()
         {
-            return ModifiedQuantity() * component.PricePerUnit;
+            return ModifiedQuantity() * component.PricePerUnit.SellPrice;
         }
 
         public double VolumeSum()
