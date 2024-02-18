@@ -35,6 +35,7 @@ namespace EveMailHelper.ServiceLayer.Managers
     {
         private readonly IMarketManager _marketManager;
         private readonly IBlueprintManager _blueprintManager;
+        private readonly ITaxManager _taxManager;
 
         private readonly EveMailHelperContext _dbContext;
 
@@ -309,7 +310,20 @@ namespace EveMailHelper.ServiceLayer.Managers
             result.BestPriceSum = result.BestPriceJobCost + result.BestPriceComponentCost;
             result.ProductCostSum = result.ProductQuantity * result.ProductPricePerUnit * NumberOfRuns;
 
-            return result;
+            return AddTax(result);
+        }
+
+        protected ProductionCost AddSellTax(NormalizedProductionCost cost,
+            int AccountSkillLevel, double BrokerRelationsLevel, double FactionStanding, double CorpStanding)
+        {
+            //
+            ProductionCostExtended costExt = new();
+            costExt.CopyShallow(cost);
+            costExt.Profit.MarketValueTaxes = _taxManager.CalculateSellOrderTaxes(costExt.Profit.MarketValue,
+                AccountSkillLevel, BrokerRelationsLevel, FactionStanding, CorpStanding);
+            costExt.Profit.ImmediateSellTaxes = _taxManager.CalculateImmediateSellTaxes(costExt.Profit.MarketValue,
+                BrokerRelationsLevel, FactionStanding, CorpStanding);
+
         }
 
         protected ProductionCost RecursiveBestPriceProductionCost(

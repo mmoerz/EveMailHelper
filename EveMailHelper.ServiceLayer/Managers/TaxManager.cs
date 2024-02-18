@@ -49,5 +49,18 @@ namespace EveMailHelper.ServiceLayer.Managers
         {
             return isk + CalculateSalesTax(isk, AccountSkillLevel);
         }
+
+        public double CalculateImmediateSellTaxes(
+            double isk, double BrokerRelationsLevel, double FactionStanding, double CorpStanding)
+        {
+            return CalculateBrokerTax(isk, BrokerRelationsLevel, FactionStanding, CorpStanding);
+        }
+
+        public double CalculateSellOrderTaxes(
+            double isk, int AccountSkillLevel, double BrokerRelationsLevel, double FactionStanding, double CorpStanding)
+        {
+            return CalculateBrokerTax(isk, BrokerRelationsLevel, FactionStanding, CorpStanding) +
+                CalculateSalesTax(isk, AccountSkillLevel);
+        }
     }
 }
