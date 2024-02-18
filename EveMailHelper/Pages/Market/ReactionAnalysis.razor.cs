@@ -54,7 +54,7 @@ namespace EveMailHelper.Web.Pages.Market
 
         private BuyList ToBuyList { get; set; } = new();
 
-        private NormalizedProductionCost NormalizedProdCost = new();
+        private ProductionCostExtended NormalizedProdCost = new();
 
         private int RegionId { get; set; } = -1;
         private double SystemCostIndex { get; set; } = 4.51;
@@ -66,17 +66,19 @@ namespace EveMailHelper.Web.Pages.Market
         private int NumberOfRunsMin { get; set; } = 1;
 
         private int AccountSkillLevel { get; set; } = 5;
+        private int BrokerRelationsLevel { get; set; } = 5;
+        private double FactionStanding { get; set; } = 1.0;
+        private double CorpStanding { get; set; } = 0;
 
         private double MaterialConsumption { get; set; } = -2.6;
 
-        private async void BlueprintSelected(NormalizedProductionCost cost)
+        private async void BlueprintSelected(ProductionCostExtended cost)
         {
             _ = ProductionPlanDisplay ?? throw new NullReferenceException("Buildplan");
 
             try
             {
-                if (cost != null && cost.EveType != null && cost.EveType.EveId != 0 &&
-                    NormalizedProdCost.EveTypeId != cost.EveTypeId)
+                if (cost != null && cost.EveType != null && cost.EveType.EveId != 0)
                 {
                     // npc --> blueprint ??
                     //
@@ -95,9 +97,11 @@ namespace EveMailHelper.Web.Pages.Market
                         var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
                             newplan, NumberOfRuns, MaterialConsumption);
                         ToBuyList.CopyShallow(newBuyList);
-                        var newprodcost = ProductionManager.DeriveProductionCost(
-                            newplan, NumberOfRuns, MaterialConsumption);
-                        NormalizedProdCost.CopyShallow(newprodcost);
+                        var newprodcost = ProductionManager.DeriveProductionCostWithTax(
+                            newplan, NumberOfRuns, MaterialConsumption, AccountSkillLevel, BrokerRelationsLevel,
+                            FactionStanding, CorpStanding
+                            );
+                        NormalizedProdCost.CopyDeep(newprodcost);
                         NormalizedProdCost.EveType = cost.EveType;
                         RefreshSubComponents();
                     }
@@ -144,8 +148,6 @@ namespace EveMailHelper.Web.Pages.Market
                 ProductionCostDetails.Refresh();
         }
 
-        
-
         public async Task OnNumberOfRunsChanged(int newValue) 
         {
             NumberOfRuns = newValue;
@@ -167,21 +169,13 @@ namespace EveMailHelper.Web.Pages.Market
                 var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
                     newplan, NumberOfRuns, MaterialConsumption);
                 ToBuyList.CopyShallow(newBuyList);
-                var newprodcost = ProductionManager.DeriveProductionCost(
-                    newplan, NumberOfRuns, MaterialConsumption);
-                NormalizedProdCost.CopyShallow(newprodcost);
+                var newprodcost = ProductionManager.DeriveProductionCostWithTax(
+                       newplan, NumberOfRuns, MaterialConsumption, AccountSkillLevel, BrokerRelationsLevel,
+                       FactionStanding, CorpStanding
+                       );
+                NormalizedProdCost.CopyDeep(newprodcost);
                 RefreshSubComponents();
             }
-        }
-
-        public double DirectCostSumWithTax(NormalizedProductionCost cost)
-        {
-            return TaxManager.AddSalesTax(cost.DirectCostSum, AccountSkillLevel);
-        }
-
-        public double BestPriceSumWithTax(NormalizedProductionCost cost)
-        {
-            return TaxManager.AddSalesTax(cost.BestPriceSum, AccountSkillLevel);
         }
     }
 }

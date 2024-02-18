@@ -8,16 +8,17 @@ namespace EveMailHelper.ServiceLayer.Models
 {
     public class ProductionProfits
     {
+        public ProductionProfits(ProductionCosts directProductionCosts, ProductionCosts bestPriceProductionCosts)
+        {
+            DirectProduction = new(directProductionCosts);
+            BestPrice = new(bestPriceProductionCosts);
+        }
+
         protected double _marketValue;
         public double MarketValue
         {
             get { return _marketValue; }
-            set
-            {
-                _marketValue = value;
-                DirectProduction.SetMarketValue(_marketValue);
-                BestPrice.SetMarketValue(MarketValue);
-            }
+
         }
         protected double _marketValueTaxes;
         public double MarketValueTaxes
@@ -34,12 +35,7 @@ namespace EveMailHelper.ServiceLayer.Models
         public double ImmediateSellValue
         {
             get { return _immediateSellValue; }
-            set
-            {
-                _immediateSellValue = value;
-                DirectProduction.ImmediateSellValue = _immediateSellValue;
-                BestPrice.ImmediateSellValue = _immediateSellValue;
-            }
+
         }
         protected double _immediateSellTaxes;
         public double ImmediateSellTaxes
@@ -53,8 +49,22 @@ namespace EveMailHelper.ServiceLayer.Models
             }
         }
 
-        public Profit DirectProduction { get; set; } = new();
-        public Profit BestPrice { get; set; } = new();
+        public void SetMarketValue(double value)
+        {
+            _marketValue = value;
+            DirectProduction.SetMarketValue(_marketValue);
+            BestPrice.SetMarketValue(MarketValue);
+        }
+
+        public void SetImmediateSellValue(double value)
+        {
+            _immediateSellValue = value;
+            DirectProduction.ImmediateSellValue = _immediateSellValue;
+            BestPrice.ImmediateSellValue = _immediateSellValue;
+        }
+
+        public Profit DirectProduction { get; set; }
+        public Profit BestPrice { get; set; }
 
     }
 }

@@ -49,7 +49,7 @@ namespace EveMailHelper.Web.Pages.Market
 
         private BuyList ToBuyList { get; set; } = new();
 
-        private NormalizedProductionCost NormalizedProdCost = new();
+        private ProductionCostExtended ProdCost = new();
 
         private int RegionId { get; set; } = -1;
         private double SystemCostIndex { get; set; } = 4.51;
@@ -59,7 +59,11 @@ namespace EveMailHelper.Web.Pages.Market
 
         private int NumberOfRuns { get; set; } = 1;
         private int NumberOfRunsMin { get; set; } = 1;
-        
+
+        private int AccountSkillLevel { get; set; } = 5;
+        private int BrokerRelationsLevel { get; set; } = 5;
+        private double FactionStanding { get; set; } = 1.0;
+        private double CorpStanding { get; set; } = 0;
 
         private double MaterialConsumption { get; set; } = -2.6;
 
@@ -84,9 +88,10 @@ namespace EveMailHelper.Web.Pages.Market
                     var newBuyList = ProductionManager.DeriveBestPriceBuyListFromPlan(
                         newplan, NumberOfRuns, MaterialConsumption);
                     ToBuyList.CopyShallow(newBuyList);
-                    var newprodcost = ProductionManager.DeriveProductionCost(
-                        newplan, NumberOfRuns, MaterialConsumption);
-                    NormalizedProdCost.CopyShallow(newprodcost);
+                    var newprodcost = ProductionManager.DeriveProductionCostWithTax(
+                        newplan, NumberOfRuns, MaterialConsumption, AccountSkillLevel, BrokerRelationsLevel,
+                            FactionStanding, CorpStanding);
+                    ProdCost.CopyDeep(newprodcost);
                     RefreshSubComponents();
                 }
             }

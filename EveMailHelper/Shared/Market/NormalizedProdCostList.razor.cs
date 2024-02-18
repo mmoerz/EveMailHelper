@@ -8,6 +8,7 @@ using EveMailHelper.DataModels.Sde;
 using EveMailHelper.ServiceLayer.Managers;
 using EveMailHelper.DataModels.Market;
 using System.Security.Permissions;
+using EveMailHelper.ServiceLayer.Models;
 
 namespace EveMailHelper.Web.Shared.Market
 {
@@ -23,7 +24,7 @@ namespace EveMailHelper.Web.Shared.Market
 
         #region parameters
         [Parameter]
-        public EventCallback<NormalizedProductionCost> OnBlueprintSelected { get; set; }
+        public EventCallback<ProductionCostExtended> OnBlueprintSelected { get; set; }
         [Parameter]
         public int RegionId { get; set; }
         [Parameter]
@@ -34,17 +35,25 @@ namespace EveMailHelper.Web.Shared.Market
         public double FacilityTax { get; set; }
         [Parameter]
         public double MaterialConsumptionModifier { get; set; }
+        [Parameter]
+        public int AccountSkillLevel { get; set; } = 5;
+        [Parameter]
+        public int BrokerRelationsLevel { get; set; } = 5;
+        [Parameter]
+        public double FactionStanding { get; set; } = 1.0;
+        [Parameter]
+        public double CorpStanding { get; set; } = 0;
         #endregion
 
         #region pagination stuff
 
-        private MudTable<NormalizedProductionCost>? table = null!;
+        private MudTable<ProductionCostExtended>? table = null!;
         private string searchString = "";
         #endregion
 
         #region rowselection
         private int selectedRowNumber = -1;
-        private NormalizedProductionCost model = null!;
+        private ProductionCostExtended model = null!;
         #endregion
 
         bool initfinished = false;
@@ -84,11 +93,13 @@ namespace EveMailHelper.Web.Shared.Market
         /// <summary>
         /// Here we simulate getting the paged, filtered and ordered data from the server
         /// </summary>
-        private async Task<TableData<NormalizedProductionCost>> ServerReload(TableState state)
+        private async Task<TableData<ProductionCostExtended>> ServerReload(TableState state)
         {
 
-            TableData<NormalizedProductionCost> onePage;
-            onePage = await ProductionManager.GetPaginatedNormalizedProductionCostAsync(searchString, state);
+            TableData<ProductionCostExtended> onePage;
+            onePage = await ProductionManager.GetPaginatedNormalizedProductionCostAsync(searchString, state,
+                AccountSkillLevel, BrokerRelationsLevel, FactionStanding, CorpStanding
+                );
 
             return onePage;
         }
@@ -99,14 +110,14 @@ namespace EveMailHelper.Web.Shared.Market
             table?.ReloadServerData();
         }
         
-        private void RowClickEvent(TableRowClickEventArgs<NormalizedProductionCost> tableRowClickEventArgs)
+        private void RowClickEvent(TableRowClickEventArgs<ProductionCostExtended> tableRowClickEventArgs)
         {
             if (tableRowClickEventArgs == null)
                 return;
             OnBlueprintSelected.InvokeAsync(tableRowClickEventArgs.Item);
         }
 
-        private string SelectedRowClassFunc(NormalizedProductionCost rmodel, int rowNumber)
+        private string SelectedRowClassFunc(ProductionCostExtended rmodel, int rowNumber)
         {
             if (table?.SelectedItem != null && table.SelectedItem.Equals(rmodel))
             {
@@ -118,28 +129,16 @@ namespace EveMailHelper.Web.Shared.Market
             return string.Empty;
         }
 
-        public double GetBestPriceWinningsInPercent(NormalizedProductionCost cost)
+        public string GetColorForDirectPrice(ProductionCostExtended cost)
         {
-            double onepercent = cost.BestPriceSum / 100;
-            return (cost.ProductCostSum - cost.BestPriceSum) / onepercent;
-        }
-
-        public double GetDirectPriceWinningsInPercent(NormalizedProductionCost cost)
-        {
-            double onepercent = cost.DirectCostSum / 100;
-            return (cost.ProductCostSum - cost.DirectCostSum) / onepercent;
-        }
-
-        public string GetColorForDirectPrice(NormalizedProductionCost cost)
-        {
-            if (GetDirectPriceWinningsInPercent(cost) > 1.0)
+            if (cost.Profit.DirectProduction.ProfitMarginSellOrderInPercent  > 1.0)
                 return Colors.Green.Accent4;
             return Colors.Red.Accent4;
         }
 
-        public string GetColorForBestPrice(NormalizedProductionCost cost)
+        public string GetColorForBestPrice(ProductionCostExtended cost)
         {
-            if (GetBestPriceWinningsInPercent(cost) > 1.0)
+            if (cost.Profit.BestPrice.ProfitMarginSellOrderInPercent > 1.0)
                 return Colors.Green.Accent1;
             return Colors.Red.Accent4;
         }

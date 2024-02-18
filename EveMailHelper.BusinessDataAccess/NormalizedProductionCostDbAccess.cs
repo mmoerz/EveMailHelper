@@ -76,7 +76,7 @@ namespace EveMailHelper.BusinessDataAccess
         }
 
 
-        public async Task<TableData<NormalizedProductionCost>> GetPaginatedAsync(string searchString, TableState state)
+        public async Task<IList<NormalizedProductionCost>> GetAsync(string searchString)
         {
             IQueryable<NormalizedProductionCost> query = 
                 from nprodcost in _context.NormalizeProductionCosts
@@ -91,29 +91,12 @@ namespace EveMailHelper.BusinessDataAccess
                 x.Product.TypeName.Contains(searchString));
             }
 
-            query = state.SortLabel switch
-            {
-                "DirectCostSum" => query.OrderByDirection(state.SortDirection, x => x.DirectCostSum),
-                "BestPriceSum" => query.OrderByDirection(state.SortDirection, x => x.BestPriceSum),
-                "ProductCostSum" => query.OrderByDirection(state.SortDirection, x => x.ProductCostSum),
-                _ => query.OrderByDirection(state.SortDirection, x => x.Product.TypeName),
-            };
-            var totalItems = query.Count();
-
-            //if (state.Page > 0)
-            //    query = query.Skip(state.Page * state.PageSize);
-            //query = query.Take(state.PageSize);
-
-            return new TableData<NormalizedProductionCost>()
-            {
-                Items = await query
-                .Page(state.Page, state.PageSize)
+            return await query
                 .AsNoTracking()
                 .Include(cost => cost.EveType)
                 .Include(cost => cost.Product)
-                .ToListAsync(),
-                TotalItems = totalItems,
-            };
+                .Include(cost => cost.IndustryActivity)
+                .ToListAsync();
         }
 
     }

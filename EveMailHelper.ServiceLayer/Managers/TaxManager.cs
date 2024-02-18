@@ -14,19 +14,19 @@ namespace EveMailHelper.ServiceLayer.Managers
         public TaxManager() { }
 
         public double GetBrokerTaxPercent(
-             double BrokerRelationsLevel, double FactionStanding, double CorpStanding)
+             int BrokerRelationsLevel, double FactionStanding, double CorpStanding)
         {
             return 3.0 - (0.3 * BrokerRelationsLevel) - (0.03 * FactionStanding) - (0.02 * CorpStanding);
         }
 
         public double CalculateBrokerTax(
-            double isk, double BrokerRelationsLevel, double FactionStanding, double CorpStanding)
+            double isk, int BrokerRelationsLevel, double FactionStanding, double CorpStanding)
         {
             return isk / 100 * GetBrokerTaxPercent(BrokerRelationsLevel, FactionStanding, CorpStanding);
         }
 
         public double AddBrokerTax(
-            double isk, double BrokerRelationsLevel, double FactionStanding, double CorpStanding)
+            double isk, int BrokerRelationsLevel, double FactionStanding, double CorpStanding)
         {
             return isk + CalculateBrokerTax(isk, BrokerRelationsLevel, FactionStanding, CorpStanding);
         }
@@ -51,13 +51,13 @@ namespace EveMailHelper.ServiceLayer.Managers
         }
 
         public double CalculateImmediateSellTaxes(
-            double isk, double BrokerRelationsLevel, double FactionStanding, double CorpStanding)
+            double isk, int BrokerRelationsLevel, double FactionStanding, double CorpStanding)
         {
             return CalculateBrokerTax(isk, BrokerRelationsLevel, FactionStanding, CorpStanding);
         }
 
         public double CalculateSellOrderTaxes(
-            double isk, int AccountSkillLevel, double BrokerRelationsLevel, double FactionStanding, double CorpStanding)
+            double isk, int AccountSkillLevel, int BrokerRelationsLevel, double FactionStanding, double CorpStanding)
         {
             return CalculateBrokerTax(isk, BrokerRelationsLevel, FactionStanding, CorpStanding) +
                 CalculateSalesTax(isk, AccountSkillLevel);

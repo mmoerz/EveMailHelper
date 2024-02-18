@@ -9,13 +9,10 @@
             NumberOfRuns = cost.NumberOfRuns;
             DirectJobCost = cost.DirectJobCost;
             DirectComponentCost = cost.DirectComponentCost;
-            DirectCostSum = cost.DirectCostSum;
             BestPriceJobCost = cost.BestPriceJobCost;
             BestPriceComponentCost = cost.BestPriceComponentCost;
-            BestPriceSum = cost.BestPriceSum;
             ProductQuantity = cost.ProductQuantity;
             ProductSellPricePerUnit = cost.ProductSellPricePerUnit;
-            ProductCostSum = cost.ProductCostSum;
             LastUpdatedFromEve = cost.LastUpdatedFromEve;
             Product = cost.Product;
         }

@@ -4,6 +4,7 @@ using EveMailHelper.DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EveMailHelper.DataAccessLayer.Migrations
 {
     [DbContext(typeof(EveMailHelperContext))]
-    partial class EveMailHelperContextModelSnapshot : ModelSnapshot
+    [Migration("20240218153925_normalizedProductionCost7")]
+    partial class normalizedProductionCost7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -385,11 +387,11 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         new
                         {
                             Id = new Guid("11110000-0000-0000-0000-000011110000"),
-                            DateFounded = new DateTime(2024, 2, 18, 16, 41, 25, 153, DateTimeKind.Local).AddTicks(4950),
+                            DateFounded = new DateTime(2024, 2, 18, 16, 39, 25, 563, DateTimeKind.Local).AddTicks(6651),
                             Description = "Noname Default",
                             EveDeletedInGame = false,
                             EveId = 0,
-                            EveLastUpdated = new DateTime(2024, 2, 18, 15, 41, 25, 153, DateTimeKind.Utc).AddTicks(4926),
+                            EveLastUpdated = new DateTime(2024, 2, 18, 15, 39, 25, 563, DateTimeKind.Utc).AddTicks(6627),
                             MemberCount = 0,
                             Name = "Noname Default",
                             TaxRate = 0f,
@@ -764,9 +766,6 @@ namespace EveMailHelper.DataAccessLayer.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
                         .HasColumnName("PeriodStart");
-
-                    b.Property<double>("ProductBuyPricePerUnit")
-                        .HasColumnType("float");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");

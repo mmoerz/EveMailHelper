@@ -250,84 +250,83 @@ namespace EveMailHelper.ServiceLayer.Managers
 
             if (age == 0 || age > MaxAgeInMinutes)
             {
-                var result = DeriveProductionCost(plan, NumberOfRuns, materialModifier);
+                var result = DeriveProductionCostWithOutTax(plan, NumberOfRuns, materialModifier);
 
-                await _normalizedProdcutionCostDbAccess.AddOrUpdateAsync(result);
+                await _normalizedProdcutionCostDbAccess.AddOrUpdateAsync(result.ToNormalizedProductionCost());
             }
-
         }
 
         // Direct build using the top level blueprint and it's required components
         // Bestprice build - replacing buying components by building them if this is cheaper
         // compare to quantity * current marketprice
-        public NormalizedProductionCost DeriveProductionCost(
+        public ProductionCostExtended DeriveProductionCostWithOutTax(
             ProductionPlan plan, int NumberOfRuns, double materialModifier
-            //,int AccountSkillLevel, double BrokerRelationsLevel, double FactionStanding, double CorpStanding
             )
         {
             _ = plan.Product ?? throw new Exception("ProductionPlan with empty product");
 
             ProductionPlanAnalyzer analyzer = new(plan, materialModifier);
 
-            NormalizedProductionCost result = new()
+            var result = new ProductionCostExtended()
             {
+                NumberOfRuns = NumberOfRuns,
+                ProductQuantity = plan.ProductQuantity,
+                
                 // MUST BE SET!!!
                 EveType = plan.Activity.Type, // connection to activity
                 IndustryActivity = plan.Activity,
-                NumberOfRuns = NumberOfRuns,
                 Product = plan.Product,
-                ProductQuantity = plan.ProductQuantity,
-                ProductSellPricePerUnit = plan.ProductPricePerUnit.SellPrice,
-                ProductBuyPricePerUnit = plan.ProductPricePerUnit.BuyPrice,
-                DirectJobCost = plan.JobCost * NumberOfRuns,
             };
+            result.DirectProduction.JobCosts = plan.JobCost * NumberOfRuns;
+            result.SetProductSellPricePerUnit(plan.ProductPricePerUnit.SellPrice);
+            result.SetProductBuyPricePerUnit(plan.ProductPricePerUnit.BuyPrice);
 
             foreach (var subComponent in plan.Root.SubComponents)
             {
                 BlueprintAnalyzer blueprintAnalyzer = new(subComponent, materialModifier);
-                result.DirectComponentCost += blueprintAnalyzer.PriceSum() * NumberOfRuns;
+                result.DirectProduction.ComponentCosts += blueprintAnalyzer.PriceSum() * NumberOfRuns;
             }
             // here comes the complex part, selecting the best price articles
             // we are aggregating information (throwing away details about how the price was calculated)
-            result.BestPriceJobCost = result.DirectJobCost;
+            result.BestPriceProduction.JobCosts = result.DirectProduction.JobCosts;
             //result.BestPriceComponentCost = result.BestPriceComponentCost;
             if (analyzer.IsProducingBetter())
             {
                 int minimumNumberOfRuns;
-                if (!analyzer.NumberOfRunsIsValid(NumberOfRuns, onlyUseBestPricePath: true, 
+                if (!analyzer.NumberOfRunsIsValid(NumberOfRuns, onlyUseBestPricePath: true,
                     out minimumNumberOfRuns))
                     throw new Exception($"Number of Runs must be a multiple of {minimumNumberOfRuns}");
-                result.BestPriceJobCost = plan.JobCost * NumberOfRuns;
+                result.BestPriceProduction.JobCosts = plan.JobCost * NumberOfRuns;
                 //result.BestPriceComponentCost = 0;
                 foreach (var component in plan.Root.SubComponents)
                 {
-                    var subresult = 
+                    var subresult =
                         RecursiveBestPriceProductionCost(component, NumberOfRuns, materialModifier);
-                    result.BestPriceJobCost += subresult.JobCost;
-                    result.BestPriceComponentCost += subresult.ComponentCost;
+                    result.BestPriceProduction.JobCosts += subresult.JobCost;
+                    result.BestPriceProduction.ComponentCosts += subresult.ComponentCost;
                 }
             }
-
-            // now artificially set the sums (normally loaded from db)
-            result.DirectCostSum = result.DirectJobCost + result.DirectComponentCost;
-            result.BestPriceSum = result.BestPriceJobCost + result.BestPriceComponentCost;
-            result.ProductCostSum = result.ProductQuantity * result.ProductSellPricePerUnit * NumberOfRuns;
-
-            //return AddSellTax(result, AccountSkillLevel, BrokerRelationsLevel, FactionStanding, CorpStanding);
             return result;
         }
 
-        protected ProductionCostExtended AddSellTax(NormalizedProductionCost cost,
-            int AccountSkillLevel, double BrokerRelationsLevel, double FactionStanding, double CorpStanding)
+        public ProductionCostExtended DeriveProductionCostWithTax(
+            ProductionPlan plan, int NumberOfRuns, double materialModifier,
+            int AccountSkillLevel, int BrokerRelationsLevel, double FactionStanding, double CorpStanding
+            )
         {
-            //
-            ProductionCostExtended costExt = new();
-            costExt.CopyShallow(cost);
-            costExt.Profit.MarketValueTaxes = _taxManager.CalculateSellOrderTaxes(costExt.Profit.MarketValue,
+            var result = DeriveProductionCostWithOutTax(plan, NumberOfRuns, materialModifier);            
+
+            return AddSellTax(result, AccountSkillLevel, BrokerRelationsLevel, FactionStanding, CorpStanding);
+        }
+
+        protected ProductionCostExtended AddSellTax(ProductionCostExtended cost,
+            int AccountSkillLevel, int BrokerRelationsLevel, double FactionStanding, double CorpStanding)
+        {
+            cost.Profit.MarketValueTaxes = _taxManager.CalculateSellOrderTaxes(cost.Profit.MarketValue,
                 AccountSkillLevel, BrokerRelationsLevel, FactionStanding, CorpStanding);
-            costExt.Profit.ImmediateSellTaxes = _taxManager.CalculateImmediateSellTaxes(costExt.Profit.MarketValue,
+            cost.Profit.ImmediateSellTaxes = _taxManager.CalculateImmediateSellTaxes(cost.Profit.MarketValue,
                 BrokerRelationsLevel, FactionStanding, CorpStanding);
-            return costExt;
+            return cost;
         }
 
         protected ProductionCost RecursiveBestPriceProductionCost(
@@ -376,9 +375,39 @@ namespace EveMailHelper.ServiceLayer.Managers
             progressAndMax.Report(new Tuple<int, int>(blueprintList.Count(), blueprintList.Count()));
         }
 
-        public async Task<TableData<NormalizedProductionCost>> GetPaginatedNormalizedProductionCostAsync(string searchString, TableState state)
+        public async Task<TableData<ProductionCostExtended>> GetPaginatedNormalizedProductionCostAsync(
+            string searchString, TableState state,
+            int AccountSkillLevel, int BrokerRelationsLevel, double FactionStanding, double CorpStanding)
         {
-            return await _normalizedProdcutionCostDbAccess.GetPaginatedAsync(searchString, state);
+            var cost = await _normalizedProdcutionCostDbAccess.GetAsync(searchString);
+
+            List<ProductionCostExtended> costExtList = new();
+            foreach (var prod in cost)
+            {
+                var costExt = new ProductionCostExtended().CopyDeep(prod);
+                costExt = AddSellTax(costExt, AccountSkillLevel, BrokerRelationsLevel, FactionStanding, CorpStanding);
+                costExtList.Add(costExt);
+            }
+
+            var query = costExtList.AsQueryable();
+
+            query = state.SortLabel switch
+            {
+                "MarketValue" => query.OrderByDirection(state.SortDirection, x => x.Profit.MarketValue),
+                "DirectPrice" => 
+                    query.OrderByDirection(state.SortDirection, x => x.Profit.DirectProduction.ProfitMarginSellOrder),
+                "BestPrice" => query.OrderByDirection(state.SortDirection, x => x.Profit.BestPrice.ProfitMarginSellOrder),
+                _ => query.OrderByDirection(state.SortDirection, x => x.EveType.TypeName),
+            };
+            var totalItems = query.Count();
+
+            return new TableData<ProductionCostExtended>()
+            {
+                Items = await query
+                .Page(state.Page, state.PageSize)
+                .ToListAsync(),
+                TotalItems = totalItems,
+            };
         }
     }
 }

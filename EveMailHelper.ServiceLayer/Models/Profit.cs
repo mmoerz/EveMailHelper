@@ -7,12 +7,18 @@ namespace EveMailHelper.ServiceLayer.Models
 {
     public class Profit
     {
-        public double ProductionCost { get; set; }
+        public Profit(ProductionCosts productionCosts)
+        {
+            ProductionCosts = productionCosts;
+        }
+
+        public ProductionCosts ProductionCosts { get; }
 
         protected double _marketValue;
         /// <summary>
-        /// aka. realistic sellorder price - current minimum value of sellorders
+        /// aka. realistic sellorder price - current minimum value of sellorders.
         /// </summary>
+        /// <remarks>can be set via Profit.SetMarketValue</remarks>
         public double MarketValue { get { return _marketValue; } }
         public double MarketValueTaxes { get; set; }
         
@@ -23,7 +29,15 @@ namespace EveMailHelper.ServiceLayer.Models
         {
             get
             {
-                return MarketValue - ProductionCost - MarketValueTaxes;
+                return MarketValue - ProductionCosts.SumOfCosts() - MarketValueTaxes;
+            }
+        }
+        
+        public double ProfitMarginSellOrderInPercent
+        {
+            get
+            {
+                return ProfitMarginSellOrder / MarketValue / 100;
             }
         }
 
@@ -31,7 +45,14 @@ namespace EveMailHelper.ServiceLayer.Models
         {
             get
             {
-                return ImmediateSellValue - ProductionCost - ImmediateSellTaxes;
+                return ImmediateSellValue - ProductionCosts.SumOfCosts() - ImmediateSellTaxes;
+            }
+        }
+        public double ProfitMarginImmediateSellInPercent
+        {
+            get
+            {
+                return ProfitMarginImmediateSell / ImmediateSellValue / 100;
             }
         }
 

@@ -21,15 +21,12 @@ namespace EveMailHelper.DataModels.Market
         public int NumberOfRuns { get; set; }
         public double DirectJobCost { get; set; }
         public double DirectComponentCost {get; set; }
-        public double DirectCostSum { get; set; }
         public double BestPriceJobCost { get; set; }
         public double BestPriceComponentCost { get; set; }
-        public double BestPriceSum { get; set; }
         public int ProductId { get; set; }
         public int ProductQuantity { get; set; }
         public double ProductSellPricePerUnit {  get; set; }
         public double ProductBuyPricePerUnit { get; set; }
-        public double ProductCostSum { get; set; }
 
         public DateTime LastUpdatedFromEve { get; set; } = DateTime.UtcNow;
         public virtual EveType EveType { get; set; } = null!;
